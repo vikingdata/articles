@@ -37,7 +37,10 @@ Steps:
             * Choose the md file. 
         * Record link to file.     
       * Put file on LinkedIn
-        * 
+        * Click on the Home button
+        * Click on "Start a post"
+        * Put in content and link to article. 
+        
                 
                 
                 

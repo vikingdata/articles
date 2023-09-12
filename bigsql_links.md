@@ -1,4 +1,6 @@
-
+---
+title: Snowflake, SQL, DPT, and other links
+---
 
 ## DPT
 * [https://docs.getdbt.com/docs/introduction](https://docs.getdbt.com/docs/introduction) 

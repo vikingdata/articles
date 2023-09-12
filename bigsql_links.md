@@ -15,17 +15,23 @@
 
 ## Better SQL
 * [https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1])
- 
-
-* [https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT](https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT])
+* [https://modern-sql.com/](https://modern-sql.com/)
+* {https://stackdiary.com/sql-2023-is-released/#:~:text=SQL%3A2023%20now%20officially%20includes,JSON%20capabilities%20with%20modern%20JavaScript.](https://stackdiary.com/sql-2023-is-released/#:~:text=SQL%3A2023%20now%20officially%20includes,JSON%20capabilities%20with%20modern%20JavaScript.)
+* [https://www.stratascratch.com/blog/best-practices-to-write-sql-queries-how-to-structure-your-code/](https://www.stratascratch.com/blog/best-practices-to-write-sql-queries-how-to-structure-your-code/)
 
 ## Snowflake
 * [https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates](https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates)
 
-## Pythong
+## Python
 * [https://dlthub.com/](https://dlthub.com/)
 
 
 ## Data Warehouse
 * [https://docs.getdbt.com/terms/dimensional-modeling](https://docs.getdbt.com/terms/dimensional-modeling)
 * [https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf](https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf)
+
+## Terms
+* CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.
+* UDF -- user defined functions. Like in SnowFlake, you make a UDF python function. Snowflake can make python scripts. The reason why Python can be used is for analytics. Python in a database for web applications
+  might have performance issues. In analytics you are not spawning lots of python scripts (normally).
+* DBT -- Is a transformtion flow for your data.  Its the "T" in ETL. Actually, ELT -- extract, load data, and then transform.  For more info, [https://docs.getdbt.com/docs/introduction](https://docs.getdbt.com/docs/introduction)

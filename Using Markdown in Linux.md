@@ -8,6 +8,7 @@ title: Using Markdown in Linux
 The purpose of this document is to use a program to make markdown sysntax, use a converter to create html content, upload md to github, upload HTML to LinkedIn. 
 
 Links
+
     * https://linuxhint.com/convert-markdown-files-linux/
     * https://github.com/mundimark/awesome-markdown-editors
     * https://www.markdownguide.org/basic-syntax/
@@ -26,13 +27,17 @@ Steps:
             * pandoc file.md -f markdown -t html -s -o file.html
                 * Replace the input and output filenames. 
                 * I choose pandoc because it can convert to other formats.
+         * Look at the html and determine if it looks good. 
+         * We will NOT be uploading the file. 
+         
       * Save to github
         * Login into your github account. 
         * Switch to your Respository. 
         * Click on "Add File"
             * Choose the md file. 
-      * Upload file to LinkedIn
-        * Click on  "Add File"
+        * Record link to file.     
+      * Put file on LinkedIn
+        * 
                 
                 
                 

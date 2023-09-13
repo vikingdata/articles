@@ -1,8 +1,4 @@
-# Improve Document, Leave Code
 
-## PROMPT 1
-
-Make the below document sound better. Leave code alone. 
 
 Snowflake Python
 - python and sql datatpes

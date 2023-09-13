@@ -1,7 +1,7 @@
 
 
 Snowflake Python
-- python and sql datatpes
+- python and sql datatypes
   - https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-designing.html#label-sql-python-data-type-mappings
 
 Snowflake recently introduced Event Tables.  This allows python developers to log errors. 
@@ -35,7 +35,7 @@ Snowflake recently introduced Event Tables.  This allows python developers to lo
     - Show SQL and UDF examples. 
   - Tying it together
     - Run the UDF so it errors out. 
-    - Look at execptions table. 
+    - Look at exceptions table. 
     - Look at events table.
 
 #  python basics

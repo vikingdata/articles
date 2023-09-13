@@ -208,9 +208,6 @@ $$;
 
 ```
 
-TODO: execute function
-TODO: view events table
-TODO: look at events caught with eception. 
 
 # Python UDF for non-greedy regex
 

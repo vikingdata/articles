@@ -118,12 +118,6 @@ alter ACCOUNT set log_level = INFO;
 alter ACCOUNT set trace_level = ON_EVENT;
 SHOW PARAMETERS LIKE 'event_table' IN ACCOUNT;
 SHOW EVENT TABLES;
-
-select  regexp_substr('The 1quick brown fox plays in kentucky','q.k' ) as result1,
-  regexp_substr('The 2quick brown fox plays in kentucky','q.?k' ) as result2,
-  pyudf('The 3quick brown fox plays in kentucky','q.k' ) as result3,
-  pyudf('The 4quick brown fox plays in kentucky','q.?k' ) as result4;
-
 ```
 
 ### Write to Event table
@@ -271,6 +265,11 @@ select  regexp_substr('The quick brown fox plays in kentucky','q.*k' ) as result
 select  regexp_substr('The quick brown fox plays in kentucky','q.*?k' ) as result;
 select  pyudf('The quick brown fox plays in kentucky','q.*k' ) as result;
 select  pyudf('The quick brown fox plays in kentucky','q.*?k' ) as result;
+
+select  regexp_substr('The 1quick brown fox plays in kentucky','q.k' ) as result1,
+  regexp_substr('The 2quick brown fox plays in kentucky','q.?k' ) as result2,
+  pyudf('The 3quick brown fox plays in kentucky','q.k' ) as result3,
+  pyudf('The 4quick brown fox plays in kentucky','q.?k' ) as result4;
 
 Make the function error out. 
 select  pyudf('The quick brown fox plays in kentucky','[[[&lt;&lt;&lt;****' ) as result;

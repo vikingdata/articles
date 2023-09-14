@@ -5,6 +5,9 @@
 # Introduction
 A Snowflake dynamic table is a new type of table that switches from an imperative to declarative approach. This saves managing dependencies and scheduling and allows chaining together of multiple dynamic tables.
 
+## Reference
+- [https://docs.snowflake.com/en/sql-reference/sql/alter-dynamic-table](https://docs.snowflake.com/en/sql-reference/sql/alter-dynamic-table)
+
 ## Advantages of dynamic tables
 
 - You can define the target table as a dynamic table with a SQL statement 

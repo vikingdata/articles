@@ -53,6 +53,9 @@ Do the following:
   * Click on "Billing and Terms"
   * Click on Enable under Anaconda and accept terms. 
 
+For the rest of this article, your must execute these commands in a worksheet.
+  * Click on WrokSheets
+  * Click on "+"
 
 # simple function
 

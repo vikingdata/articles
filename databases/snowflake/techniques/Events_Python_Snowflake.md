@@ -266,11 +266,19 @@ select  regexp_substr('The quick brown fox plays in kentucky','q.*?k' ) as resul
 select  pyudf('The quick brown fox plays in kentucky','q.*k' ) as result;
 select  pyudf('The quick brown fox plays in kentucky','q.*?k' ) as result;
 
+
+select  regexp_substr('The quick brown fox plays in kentucky','q.*k' ) as result1,
+  regexp_substr('The quick brown fox plays in kentucky','q.*?k' ) as result2,
+  pyudf('The quick brown fox plays in kentucky','q.*k' ) as result3,
+  pyudf('The quick brown fox plays in kentucky','q.*?k' ) as result4;
+
+
+
 select  regexp_substr('The 1quick brown fox plays in kentucky','q.k' ) as result1,
   regexp_substr('The 2quick brown fox plays in kentucky','q.?k' ) as result2,
   pyudf('The 3quick brown fox plays in kentucky','q.k' ) as result3,
   pyudf('The 4quick brown fox plays in kentucky','q.?k' ) as result4;
-
+  
 Make the function error out. 
 select  pyudf('The quick brown fox plays in kentucky','[[[&lt;&lt;&lt;****' ) as result;
 

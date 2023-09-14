@@ -3,7 +3,7 @@
 
 
 # Introduction
-A Snowflake dynamic table is a new type of table that switches from an imperative to declarative approach. This saves managing dependencies and scheduling and allows chaining together og multiple dynamic tables.
+A Snowflake dynamic table is a new type of table that switches from an imperative to declarative approach. This saves managing dependencies and scheduling and allows chaining together of multiple dynamic tables.
 
 ## Advantages of dynamic tables
 
@@ -68,7 +68,7 @@ The output of this function is a table with the following columns:
 # Setup Tables
 
 ```sql
-create database pytutorial
+create database pytutorial;
 use schema pytutorial.public
 
 CREATE or REPLACE TABLE Customers (
@@ -116,7 +116,6 @@ When running the sequence of queries below, the first query fails fails because 
 A manual way to send data to the dynamic table is to use:  `ALTER DYNAMIC TABLE ... REFRESH` command. After that is run you will see 5 rows have been inserted and can query the table. You can use `INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY` function to get information about the refresh actions and triggers for the dynamic table.
 
 ```sql
-select * from CustomerPurchases; --
 alter dynamic table CustomerPurchases refresh;
 select * from CustomerPurchases;
 select * from table(information_schema.dynamic_table_refresh_history());
@@ -159,7 +158,12 @@ is SCHEDULED instead of MANUAL.
 ```sql
 alter dynamic table CustomerPurchases set target_lag='1 minute';
 INSERT INTO Purchases (purchase_id, customer_id, product_name, purchase_date, amount)
-VALUES(1, 1, 'Product D', '2023-09-20', 1.00)
+VALUES(1, 1, 'Product D', '2023-09-20', 1.00);
+```
+
+Wait a minute. 
+
+```sql
 select * from CustomerPurchases;
 select * from table(information_schema.dynamic_table_refresh_history());
 ```

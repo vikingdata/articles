@@ -44,6 +44,9 @@ title: Snowflake, SQL, DBT, and other links
   might have performance issues. In analytics you are not spawning lots of python scripts (normally).
 * DBT -- Is a transformtion flow for your data.  Its the "T" in ETL. Actually, ELT -- extract, load data, and then transform.  For more info, [https://docs.getdbt.com/docs/introduction](https://docs.getdbt.com/docs/introduction)
 
+## Techniques
+* Dynamic Tables [https://docs.snowflake.com/en/user-guide/dynamic-tables-comparison?ssp=1&darkschemeovr=1&setlang=en-US&safesearch=moderate](https://docs.snowflake.com/en/user-guide/dynamic-tables-comparison?ssp=1&darkschemeovr=1&setlang=en-US&safesearch=moderate)
+
 
 ## Terms
 * A CTE is a temporary result set that you can reference within a SELECT, INSERT, UPDATE, or DELETE statement.

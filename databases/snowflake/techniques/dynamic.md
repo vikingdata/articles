@@ -22,7 +22,7 @@ A Snowflake dynamic table is a new type of table that switches from an imperativ
 ## Important notes on Dynamic tables
 - Although you can't directly do data changes, a refresh does the data changes for you. 
 - When the source table changes, the data is stale and should be refreshed. 
-  - If you data need up to date, have it refresh automatically. 
+  - If you data need up to date, have it refresh automatically, every second. 
   - If you just need data every 30 minutes, have it refresh every 30 minutes. 
 
 # Summary of useful commands

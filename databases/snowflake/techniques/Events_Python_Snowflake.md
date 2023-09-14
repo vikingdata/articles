@@ -84,8 +84,23 @@ https://docs.snowflake.com/developer-guide/logging-tracing/event-table-columns#l
 
 ### Create Event Table
 
-The ACCOUNTADMIN role is needed to execute this. An account can only have 1 active event table.
+The ACCOUNTADMIN role is needed to execute this. An account can only have 1 active event table. When executing commands, creating the database, schema, and table must be done one at  a time.
 
+Create database. 
+```sql
+create schema tutorial.test;
+```
+Create Schema. 
+
+```sql
+create schema tutorial.test;
+```
+Create Event table.
+
+```sql
+CREATE EVENT TABLE tutorial.test.pyudf_log;
+```
+The rest of the commands. 
 ```sql
 create database tutorial;
 create schema tutorial.test;

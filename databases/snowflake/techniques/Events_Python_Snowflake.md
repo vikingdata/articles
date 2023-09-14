@@ -46,6 +46,13 @@ Snowflake recently introduced Event Tables.  This allows python developers to lo
     - for read-only shared state initialize it in the module instead of the handler function.
     - Relying on state shared between invocations can result in unexpected behavior,
 
+Now you must accept anaconda to create Pythong UDFs.
+Look at : https://docs.snowflake.com/en/developer-guide/udf/python/udf-python-packages.html#using-third-party-packages-from-anaconda
+Do the following:
+  * Click on Admin on the left hand menu.
+  * Click on "Billing and Terms"
+  * Click on Enable under Anaconda and accept terms. 
+
 
 # simple function
 

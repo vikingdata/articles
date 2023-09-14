@@ -88,7 +88,7 @@ The ACCOUNTADMIN role is needed to execute this. An account can only have 1 acti
 
 Create database. 
 ```sql
-create schema tutorial.test;
+create database tutorial;
 ```
 Create Schema. 
 

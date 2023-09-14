@@ -102,9 +102,6 @@ CREATE EVENT TABLE tutorial.test.pyudf_log;
 ```
 The rest of the commands. 
 ```sql
-create database tutorial;
-create schema tutorial.test;
-CREATE EVENT TABLE tutorial.test.pyudf_log;
 -- set active event table
 ALTER ACCOUNT SET EVENT_TABLE = tutorial.test.pyudf_log;
 alter ACCOUNT set log_level = INFO;

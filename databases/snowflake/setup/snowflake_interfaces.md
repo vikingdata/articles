@@ -220,7 +220,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
         *   Edit .dbt/profiles.yml  
             The account is, is from the url you are using.  
             For example, https://app.snowflake.com/fntrtms/abc123/worksheets, the id is "abc123".
-            
+```           
             dbt_test_sf:
               target: dev
               outputs:
@@ -230,7 +230,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
             
                   # User/password auth
                   user: dbt_user
-                  password: \[password\]   # Put in your password
+                  password: [password]   # Put in your password
             
                   role: ACCOUNTADMIN
                   database: dbt_test
@@ -239,7 +239,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
                   threads: 1
                   client_session_keep_alive: False
                   query_tag: test
-
+```
 
     * * *
 
@@ -250,9 +250,9 @@ We will practice a little bit with the gui. We will set up a DBT database.
 
     *   git is ignored for now
     *   The connection string to postgresql should be working.
-    *   ~/.dbt/profiles.yml
-    *   ~/.dbt/dbt_project.yml
-    *   ~/dbt/dbt_test1 directory
+    *   ```~/.dbt/profiles.yml```
+    *   ```~/.dbt/dbt_project.yml```
+    *   ```~/dbt/dbt_test1 directory```
 
 
     * * *

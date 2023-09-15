@@ -153,7 +153,7 @@ PostgreSQL
     *   Change to working directory, it will search for dbt_project.yml  
         cd ~/dbt/dbt_test1
     *   Execute, and there should be no errors: dbt debug
-    *   Lastly, add ''' DBT_PROJECT_DIR=~/dbt/dbt_test1''' to your .bashrc file. No matter what directory you are in it will find the file after you log in.  
+    *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.  
         echo "export DBT_PROJECT_DIR=~/dbt/dbt_test1" >> ~/.bashrc
     *   also : export DBT_PROJECT_DIR=~/dbt/dbt_test1 to your current session.  
         export DBT_PROJECT_DIR=~/dbt/dbt_test1

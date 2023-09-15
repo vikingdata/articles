@@ -10,13 +10,13 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 
 1.  [Links](#links)
 2.  [PostgreSQL Install](#pginstall)
-3.  [PostgreSQL DBT](#pg)
+3.  [PostgreSQL DBT](#pgdbt)
 4.  [Snowflake signup](#sfsignup)
-5.  [Snowfake web GUI and DBT setup](#sfgui)
-7.  [Snowflake CLI - ](#sfcli)
+6.  [Snowfake web GUI and DBT setup](#sfgui)
+7.  [Snowflake CLI - ](#cli)
 8.  [Snowflake VSCode](#vscode)
-9.  [DBT First Project](#project1)
-
+9.  [Setting up first project in PostgreSQL](#project1)
+10. [Setting up second project in Snowflake](#project2)
 
   
 
@@ -192,6 +192,13 @@ cd ~/
         *   Get a 30 day trial snowflake account.
             Sign in or sign up for a 30 day trial : https://app.snowflake.com/
 
+
+* * *
+
+<a name=sfdbt></a>Snowflake DBT
+----------
+
+
 * * *
 <a name=sfgui></a>     Snowflake Web GUI and DBT Setup
 ---------
@@ -260,10 +267,10 @@ We will practice a little bit with the gui. We will set up a DBT database.
 
 * * *
 
-<a name=project1></a>Setting up a project
+<a name=project1></a>Setting up first project in PostgreSQL
 --------------------
 
-    The project is already setup called "dbt_test1". This is finished.
+    DBT is setup ready to be used. 
 
     *   git is ignored for now
     *   The connection string to postgresql should be working.
@@ -271,5 +278,39 @@ We will practice a little bit with the gui. We will set up a DBT database.
     *   ```~/.dbt/dbt_project.yml```
     *   ```~/dbt/dbt_test1 directory```
 
+    Setup source data. Login into psql : sudo -u postgresql psql
 
+```sql
+
+--- need source queries
+```
+
+```sql
+
+-- need destination setup
+
+````
+
+Now setup the DBT Queries and run them.
+
+
+
+* * *
+
+<a name=project1></a>Setting up seocond project in Snowflake
+--------------------
+
+
+```sql
+
+--- need source queries
+```
+
+```sql
+
+-- need destination setup
+
+````
+
+Now setup the DBT Queries and run them.
 

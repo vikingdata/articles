@@ -65,7 +65,8 @@ Why are we setting up PostgreSQL dbt?
 *   Setup dbt and postgresql
     
     	# you might need to execute this
-    
+
+```
     mkdir dbt
     cd dbt
     apt install python3.10-venv
@@ -102,7 +103,7 @@ Why are we setting up PostgreSQL dbt?
     
     	  # log out of root
     exit
-    
+```    
     	# This is very bad for security, just for this article. Do not do this on a prod system.
 ```bash
 export PGPASSWORD=mark

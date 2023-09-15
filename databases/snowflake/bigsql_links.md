@@ -56,6 +56,7 @@ title: Snowflake, SQL, DBT, and other links
 * [https://www.snowflake.com/thedatacloudpodcast/](https://www.snowflake.com/thedatacloudpodcast/])
 * [https://www.snowflake.com/trending/](https://www.snowflake.com/trending/])
 * [https://training.snowflake.com/lmt/!clmsbrowsev2.prMain?site=sf&in_region=us&in_lang=en-us&in_category_id=1687](Free online classes)
+* [https://learn.snowflake.com/dashboard](Your free classes dashboard)
 
 
 ## Terms

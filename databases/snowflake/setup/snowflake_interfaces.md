@@ -12,11 +12,10 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 2.  [PostgreSQL Install](#pginstall)
 3.  [PostgreSQL DBT](#pg)
 4.  [Snowflake signup](#sfsignup)
-5.  [Snowfake web gui](#sfgui)
-6.  [Snowflake dbt](#sfdbt)
+5.  [Snowfake web GUI and DBT setup](#sfgui)
 7.  [Snowflake CLI - ](#sfcli)
-8.  [Snowflake VSCode](#sfvs)
-9.  [DBT First Project](#dbtfirst)
+8.  [Snowflake VSCode](#vscode)
+9.  [DBT First Project](#project1)
 
 
   
@@ -54,7 +53,7 @@ For installation, refer [PostgreSQL Install](http://odendata.com/docs/database/p
 
 * * *
 
-<a name=pgdbt></a>PPostgreSQL DBT
+<a name=pgdbt></a>PostgreSQL DBT
 ----------
 
 Why are we setting up PostgreSQL dbt?
@@ -63,7 +62,7 @@ Why are we setting up PostgreSQL dbt?
 * Basically, think of PostgreSQL as your own playground before Snowflake. 
 
 *   Setup dbt and postgresql
-    
+'/cygdrive/c/Users/Public/Desktop/Winaero Tweaker.lnk'    
     	# you might need to execute this
 
 ```
@@ -185,17 +184,17 @@ cd ~/
     
       
     
-    
-<a name=sfsignup></a>    Snowflake
-    ---------
+* * *    
+<a name=sfsignup></a>    Snowflake SignUp
+---------
 
     *   Snowflake
         *   Get a 30 day trial snowflake account.
             Sign in or sign up for a 30 day trial : https://app.snowflake.com/
 
-
-<a name=sfgui></a>     Snowflake
-    ---------
+* * *
+<a name=sfgui></a>     Snowflake Web GUI and DBT Setup
+---------
 
 We will practice a little bit with the gui. We will set up a DBT database. 
 
@@ -242,10 +241,27 @@ We will practice a little bit with the gui. We will set up a DBT database.
                   query_tag: test
 ```
 
-    * * *
+* * *
 
-    Setting up a project
-    --------------------
+<a name=cli></a>Setup CLI environment
+---------------------
+
+    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+
+
+* * *
+
+<a name=vscode></a>VScode
+---------------------
+
+    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+
+
+
+* * *
+
+<a name=project1></a>Setting up a project
+--------------------
 
     The project is already setup called "dbt_test1". This is finished.
 
@@ -256,11 +272,4 @@ We will practice a little bit with the gui. We will set up a DBT database.
     *   ```~/dbt/dbt_test1 directory```
 
 
-    * * *
 
-    Setup CLI environment
-    ---------------------
-
-    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
-
-    * * *

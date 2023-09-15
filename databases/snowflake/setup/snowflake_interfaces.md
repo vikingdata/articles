@@ -104,33 +104,35 @@ Why are we setting up PostgreSQL dbt?
     exit
     
     	# This is very bad for security, just for this article. Do not do this on a prod system.
-    export PGPASSWORD=mark
-    echo 'export PGPASSWORD=mark' > ~/.bashrc
+```bash
+export PGPASSWORD=mark
+echo 'export PGPASSWORD=mark' > ~/.bashrc
     	
-    psql -U mark -h 127.0.0.1 -c "create table test1 (i int);"
+psql -U mark -h 127.0.0.1 -c "create table test1 (i int);"
     
-    mkdir ~/.dbt
-    cd ~/
-    	
+mkdir ~/.dbt
+cd ~/
+```    	
           
     
 *   Setup in config file for postgresql. Run dbt init and edit file.
     
     *   Download https://github.com/dbt-labs/dbt-starter-project  
-        \> or https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip  
+         or https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip  
         Execute:
-        
+```bash        
         wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
         unzip main.zip
         mv dbt-starter-project-main ~/dbt/dbt_test1
         cd ~/
-        
+```        
     *   Run dbt init and edit file.  
         Execute: dbt init
     *   name : dbt_test1  
         This will make a directory called "db1_test1", but since it already exists, it will just use it.
     *   database : postgres
-    *   Now edit ~/.dbt/profiles and make changes
+    *   Now edit
+    ``` ~/.dbt/profiles ``` and make changes
         
         * * *
         
@@ -158,7 +160,7 @@ Why are we setting up PostgreSQL dbt?
         
           target: dev
         
-    *   Edit ~/dbt/dbt_test1/dbt_project.yml  
+    *   Edit ``` ~/dbt/dbt_test1/dbt_project.yml```  
         Change : profile: 'default'  
         to : profile: 'dbt_test1'  
         And change  
@@ -173,12 +175,12 @@ Why are we setting up PostgreSQL dbt?
           dbt_test1:
         
     *   Change to working directory, it will search for dbt_project.yml  
-        cd ~/dbt/dbt_test1
+        ```cd ~/dbt/dbt_test1```
     *   Execute, and there should be no errors: dbt debug
     *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.  
-        echo "export DBT_PROJECT_DIR=~/dbt/dbt_test1" >> ~/.bashrc
+        ```echo "export DBT_PROJECT_DIR=~/dbt/dbt_test1" >> ~/.bashrc```
     *   also : export DBT_PROJECT_DIR=~/dbt/dbt_test1 to your current session.  
-        export DBT_PROJECT_DIR=~/dbt/dbt_test1
+        ```export DBT_PROJECT_DIR=~/dbt/dbt_test1```
     
       
     

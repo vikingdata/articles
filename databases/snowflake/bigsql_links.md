@@ -29,6 +29,13 @@ title: Snowflake, SQL, DBT, and other links
 * [https://learn.snowflake.com/en/courses/](https://learn.snowflake.com/en/courses/)
 * [https://docs.snowflake.com/en/release-notes/new-features](https://docs.snowflake.com/en/release-notes/new-features)
 
+## Smowflake Community & Resources
+* [https://community.snowflake.com/s/](https://community.snowflake.com/s/)
+* [https://docs.snowflake.com/](https://docs.snowflake.com/)
+* [https://www.snowflake.com/resource/snowflake-dummies-guides/](https://www.snowflake.com/resource/snowflake-dummies-guides/)
+* [https://www.snowflake.com/en/resources/](https://www.snowflake.com/en/resources/)
+
+
 ## Python
 * [https://dlthub.com/](https://dlthub.com/)
 
@@ -37,6 +44,19 @@ title: Snowflake, SQL, DBT, and other links
 * [https://docs.getdbt.com/terms/dimensional-modeling](https://docs.getdbt.com/terms/dimensional-modeling)
 * [https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf](https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf)
 * [https://www.getdbt.com/blog/future-of-the-modern-data-stack](https://www.getdbt.com/blog/future-of-the-modern-data-stack)
+* [https://quickstarts.snowflake.com/](https://quickstarts.snowflake.com/)
+* [https://www.snowflake.com/virtual-hands-on-lab/](https://www.snowflake.com/virtual-hands-on-lab/)
+* [https://www.snowflake.com/en/resources/learn/training/](https://www.snowflake.com/en/resources/learn/training/)
+* [https://www.snowflake.com/en/resources/learn/certifications/](https://www.snowflake.com/en/resources/learn/certifications/)
+* [https://www.snowflake.com/guides/](https://www.snowflake.com/guides/)
+* [https://www.snowflake.com/blog/](https://www.snowflake.com/blog/)
+* [https://community.snowflake.com/s/](https://community.snowflake.com/s/)
+* [https://www.snowflake.com/about/events/](https://www.snowflake.com/about/events/)
+* [https://www.snowflake.com/about/webinars/](https://www.snowflake.com/about/webinars/)
+* [https://www.snowflake.com/thedatacloudpodcast/](https://www.snowflake.com/thedatacloudpodcast/])
+* [https://www.snowflake.com/trending/](https://www.snowflake.com/trending/])
+* [https://training.snowflake.com/lmt/!clmsbrowsev2.prMain?site=sf&in_region=us&in_lang=en-us&in_category_id=1687](Free online classes)
+
 
 ## Terms
 * CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.

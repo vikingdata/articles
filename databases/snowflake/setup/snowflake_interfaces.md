@@ -1,24 +1,29 @@
-DPT install : CLI and Adapters
+DBT install : CLI and Adapters
 ==============================
 
 _**by Mark Nielsen  
-Copyright Jan 2022**_
+Original Copyright Jan 2022**_
 
   
   
-Just basic DPT for ELT processing. We assume mysql are both installed.
+Just basic DBT for ELT processing. We assume mysql are both installed.
 
 1.  [Links](#links)
-2.  [PostgreSQL](#pg)
-3.  [First Project](#project1)
-4.  [Setup CLI environment](#cli)
-5.  [Snowflake](#snowflake)
+2.  [PostgreSQL Install](#pginstall)
+3.  [PostgreSQL DBT](#pg)
+4.  [Snowflake signup](#sfsignup)
+5.  [Snowfake web gui](#sfgui)
+6.  [Snowflake dbt](#sfdbt)
+7.  [Snowflake CLI - ](#sfcli)
+8.  [Snowflake VSCode](#sfvs)
+9.  [DBT First Project](#dbtfirst)
+
 
   
 
 * * *
 
-Links
+<a name=links></a>Links
 -----
 
 *   https://docs.getdbt.com/docs/introduction
@@ -33,14 +38,31 @@ Links
 *   https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates
 *   https://docs.getdbt.com/reference/dbt-commands
 
-  
 
 * * *
 
-PostgreSQL
+<a name=pginstall></a>PostgreSQL Install
 ----------
 
-*   Setup dpt and postgresql
+Why are we setting up PostgreSQL dbt?
+* By installing PostgreSQL you already have "psql" as a CLI.
+* By installing dbt for PostgreSQL, you can play with before you use dbt for Snowflake.
+* Basically, think of PostgreSQL as your own playground before Snowflake.
+
+For installation, refer [PostgreSQL Install](http://odendata.com/docs/database/pg/pg15_install.html)
+
+
+* * *
+
+<a name=pgdbt></a>PPostgreSQL DBT
+----------
+
+Why are we setting up PostgreSQL dbt?
+* By installing PostgreSQL you already have "psql" as a CLI.
+* By installing dbt for PostgreSQL, you can play with before you use dbt for Snowflake.
+* Basically, think of PostgreSQL as your own playground before Snowflake. 
+
+*   Setup dbt and postgresql
     
     	# you might need to execute this
     
@@ -87,7 +109,7 @@ PostgreSQL
     	
     psql -U mark -h 127.0.0.1 -c "create table test1 (i int);"
     
-    mkdir ~/.dpt
+    mkdir ~/.dbt
     cd ~/
     	
           
@@ -160,45 +182,31 @@ PostgreSQL
     
       
     
-    * * *
     
-    Setting up a project
-    --------------------
-    
-    The project is already setup called "dbt_test1". This is finished.
-    
-    *   git is ignored for now
-    *   The connection string to postgresql should be working.
-    *   ~/.dpt/profiles.yml
-    *   ~/.dpt/dpt_project.yml
-    *   ~/dbt/dbt_test1 directory
-    
-      
-    
-    * * *
-    
-    Setup CLI environment
-    ---------------------
-    
-    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243  
-    
-    * * *
-    
-    Snowflake
+<a name=sfsignup></a>    Snowflake
     ---------
-    
+
     *   Snowflake
-        *   Get a 30 day trial snowflake account.  
+        *   Get a 30 day trial snowflake account.
             Sign in or sign up for a 30 day trial : https://app.snowflake.com/
-        *   Log into your snowflake environment. In new, I suggest the tutorials.
+
+
+<a name=sfgui></a>     Snowflake
+    ---------
+
+We will practice a little bit with the gui. We will set up a DBT database. 
+
+    *   Snowflake
+        *   After you signup, you should have received an email with the url to log into. 
+        *   Log into your snowflake environment. If you are new, I suggest the tutorials. 
         *   Click on "Data"
         *   Click on "+ Database" in the upper right hand corner.  
-            Enter in "dpt_test" for the database.
-        *   Click on "dpt_test"
+            Enter in "dbt_test" for the database.
+        *   Click on "dbt_test"
         *   Click on "+ schema". Enter test_schema
         *   Create a user.  
             Click on Admin, then User & Roles, then "+ user"  
-            Enter in dpt_user, give it a password  
+            Enter in dbt_user, give it a password  
             Give a role by clicking on "Grant role" in the lower left-hand corner.  
             Select "AccountAdmin" role
     *   Linux
@@ -207,11 +215,11 @@ PostgreSQL
         		pip install dbt-snowflake
         		
         
-        *   Edit .dpt/profiles.yml  
+        *   Edit .dbt/profiles.yml  
             The account is, is from the url you are using.  
             For example, https://app.snowflake.com/fntrtms/abc123/worksheets, the id is "abc123".
             
-            dpt_test_sf:
+            dbt_test_sf:
               target: dev
               outputs:
                 dev:
@@ -219,13 +227,37 @@ PostgreSQL
                   account: abd123 # Put in your account id
             
                   # User/password auth
-                  user: dpt_user
+                  user: dbt_user
                   password: \[password\]   # Put in your password
             
                   role: ACCOUNTADMIN
-                  database: dpt_test
+                  database: dbt_test
                   warehouse: COMPUTER_WH  # default warehouse
                   schema: test_schema
                   threads: 1
                   client_session_keep_alive: False
                   query_tag: test
+
+
+    * * *
+
+    Setting up a project
+    --------------------
+
+    The project is already setup called "dbt_test1". This is finished.
+
+    *   git is ignored for now
+    *   The connection string to postgresql should be working.
+    *   ~/.dbt/profiles.yml
+    *   ~/.dbt/dbt_project.yml
+    *   ~/dbt/dbt_test1 directory
+
+
+    * * *
+
+    Setup CLI environment
+    ---------------------
+
+    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+
+    * * *

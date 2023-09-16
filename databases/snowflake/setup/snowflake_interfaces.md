@@ -36,7 +36,7 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 *   https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT
 *   https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates
 *   https://docs.getdbt.com/reference/dbt-commands
-
+*   https://docs.snowflake.com/en/user-guide/snowsql-config
 
 * * *
 
@@ -253,7 +253,56 @@ We will practice a little bit with the gui. We will set up a DBT database.
 <a name=cli></a>Setup CLI environment
 ---------------------
 
-    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+    https://docs.snowflake.com/en/user-guide/snowsql-config
+
+This installs the cli in the ~/bin directory and adds it to your path and things in ~/.snowconfig directory. 
+
+```
+mkdir snowinstall
+cd snowinstall
+curl  -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash 
+ln -s snowsql-1.2.28-linux_x86_64.bash snowsql-linux_x86_64.bash
+bash snowsql-linux_x86_64.bash
+source ~/.profile
+  # If it worked, this will show the version.
+snowsql -v
+cd ~/.snowconfig
+```
+
+Now edit the config file and change these  lines
+```
+
+accountname = [ Your account name ]
+username = [ Your username ]
+password = [ Your password ]
+
+  # optional, default database, schema, warehouse
+
+dbname = TUTORIAL
+schemaname = PUBLIC
+warehousename = COMPUTE_WH
+
+
+
+```
+   * The account name you can get from the url sent to you in the email. 
+      * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
+      * The accountname is everything upto snowflakecomputing.
+      * The account name is thus fntrtms-lobABCD
+      * Click on "+" and then choose "SQL Worksheet"
+      * In the config, it says account name, really its the account identifier.
+   * Use the same username and password you use to log into the web gui.
+      * Or you create a user and password. 
+   * To test, enter "select current_timestamp;" and you should get a result.
+
+Notes:
+   * You should connect to a database, schema, and warehouse. If you didn't put the defaults in your config file, execute this : 
+   ```
+use database TUTORIAL;
+use schema PUBLIC;
+use  warehouse COMPUTE_WH;
+
+```
 
 
 * * *
@@ -297,7 +346,7 @@ Now setup the DBT Queries and run them.
 
 * * *
 
-<a name=project1></a>Setting up seocond project in Snowflake
+<a name=project2></a>Setting up second project in Snowflake
 --------------------
 
 

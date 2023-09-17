@@ -183,8 +183,8 @@ dbt_pg:
     *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.  
 
     ```bash
-echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
-echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
+       echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
+       echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
     ```
     *   also : export DBT_PROJECT_DIR=~/dbt/dbt_pg to your current session.  
         ```export DBT_PROJECT_DIR=~/dbt/dbt_pg```

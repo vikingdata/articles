@@ -233,14 +233,9 @@ We will practice a little bit with the gui. We will set up a DBT database.
           *   name : dbt_sf
           *   database : snowflake, should be "2".
 	  * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
-    *   Now edit
-    ``` ~/.dbt/profiles ``` and make changes
 
-
-        *   Edit .dbt/profiles.yml  
-            The account is, is from the url you are using.  
-            For example, https://app.snowflake.com/fntrtms/abc123/worksheets, the id is "abc123".
-```           
+        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
+```bash           
 dbt_sf:
   outputs:
 
@@ -275,7 +270,7 @@ dbt_sf:
            * You should see the messsage "1 Acccount in <ORG NAME>"
            * Under that, is a list of accounts.
            * The name of the first entry is the one you want.
-           * So let's say The org name is "abc" and the account is "xyz". The account name would be abc-xzy
+           * So let's say The org ame is "abc" and the account is "xyz". The account name would be abc-xzy
         * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
         * Use the same username and password you use to log into the web gui.
         * Or you create a user and password.
@@ -283,7 +278,8 @@ dbt_sf:
         ```cd ~/dbt/dbt_sf```
     *   Execute, and there should be no errors: dbt debug
     *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.
-        ```
+
+```bash
         echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
         echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
 ```

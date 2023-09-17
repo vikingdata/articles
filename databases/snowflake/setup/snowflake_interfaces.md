@@ -235,7 +235,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
 	   * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
 
        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
-```bash           
+           ```bash           
 dbt_sf:
   outputs:
 
@@ -257,7 +257,7 @@ dbt_sf:
 
   target: dev
 
-```
+           ```
        * The account name in the config file is really the account identifier. There are at least two values you can put in there.
        * The account name you can get from the url sent to you in the email.
            * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com

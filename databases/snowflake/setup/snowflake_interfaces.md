@@ -173,7 +173,7 @@ dbt_pg:
           
         to
 
-models:
+        models:
           dbt_pg:
 
         

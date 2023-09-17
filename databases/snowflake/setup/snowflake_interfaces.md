@@ -207,34 +207,34 @@ dbt_pg:
 
 We will practice a little bit with the gui. We will set up a DBT database. 
 
-    *   Snowflake
-        *   After you signup, you should have received an email with the url to log into. 
-        *   Log into your snowflake environment. If you are new, I suggest the tutorials. 
-        *   Click on "Data"
-        *   Click on "+ Database" in the upper right hand corner.  
-            Enter in "dbt_source" for the database.
-        *   Click on "dbt_source"
-        *   Click on "+ schema". Enter test_schema
-        *   Create a user.  
-            Click on Admin, then User & Roles, then "+ user"  
-            Enter in dbt_user, give it a password  
-            Give a role by clicking on "Grant role" in the lower left-hand corner.  
-            Select "AccountAdmin" role
-    *   Linux
-        Enter python environment: env_dbt
-        
-        		pip install dbt-snowflake
+*   Snowflake
+    *   After you signup, you should have received an email with the url to log into. 
+    *   Log into your snowflake environment. If you are new, I suggest the tutorials. 
+    *   Click on "Data"
+    *   Click on "+ Database" in the upper right hand corner.  
+        Enter in "dbt_source" for the database.
+    *   Click on "dbt_source"
+    *   Click on "+ schema". Enter test_schema
+    *   Create a user.  
+        Click on Admin, then User & Roles, then "+ user"  
+        Enter in dbt_user, give it a password  
+        Give a role by clicking on "Grant role" in the lower left-hand corner.  
+        Select "AccountAdmin" role
+*   Linux
+     Enter python environment: env_dbt
+   * Execute:     
+     pip install dbt-snowflake
         		
-    *   Setup in config file for postgresql. Run dbt init and edit file.
+   *   Setup in config file for postgresql. Run dbt init and edit file.
 
-        $ Execute : cd ~/dbt
-        *   Run dbt init and edit file.
-            Execute: dbt init
-          *   name : dbt_sf
-          *   database : snowflake, should be "2".
-	  * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
+       * Execute : cd ~/dbt
+       *   Run dbt init and edit file.
+           Execute: dbt init
+           *   name : dbt_sf
+           *   database : snowflake, should be "2".
+	   * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
 
-        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
+       * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
 ```bash           
 dbt_sf:
   outputs:

@@ -66,3 +66,14 @@ title: Snowflake, SQL, DBT, and other links
 
 These concepts play significant roles in data management, analytics, and ETL processes, and they are commonly used in data-centric applications and data warehousing solutions.tps://streamlit.io/gallery](https://streamlit.io/gallery)
 
+
+
+## Markdown
+* [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
+* [Markdown CheetSheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+* 
+
+
+
+
+

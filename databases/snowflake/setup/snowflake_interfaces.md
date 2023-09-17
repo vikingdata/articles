@@ -165,7 +165,7 @@ dbt_pg:
 ```
 *   Edit ``` ~/dbt/dbt_pg/dbt_project.yml```  
         Change : profile: 'default'  
-        to : profile: 'dbt_pg'  
+        to : profile: dbt_pg  
         And change  
         
         models:

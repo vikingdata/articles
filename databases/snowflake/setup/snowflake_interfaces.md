@@ -236,26 +236,26 @@ We will practice a little bit with the gui. We will set up a DBT database.
 
        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
            ```bash           
-dbt_sf:
-  outputs:
+           dbt_sf:
+             outputs:
 
-    dev:
-      type: snowflake
-      account: [account id]
+              dev:
+                type: snowflake
+                account: [account id]
 
-      # User/password auth
-      user: [username]
-      password: [password]
+                # User/password auth
+                user: [username]
+                password: [password]
 
-      role: ACCOUNTADMIN
-      database: TUTORIAL
-      warehouse: COMPUTER_WH
-      schema: PUBLIC
-      threads: 1
-      client_session_keep_alive: False
-      query_tag: ABCD
+                role: ACCOUNTADMIN
+                database: TUTORIAL
+                warehouse: COMPUTER_WH
+                schema: PUBLIC
+                threads: 1
+                client_session_keep_alive: False
+                query_tag: ABCD
 
-  target: dev
+            target: dev
 
            ```
        * The account name in the config file is really the account identifier. There are at least two values you can put in there.

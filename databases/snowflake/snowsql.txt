@@ -1,0 +1,8 @@
+
+
+https://docs.snowflake.com/en/user-guide/snowsql-use
+https://docs.snowflake.com/en/user-guide/snowsql-config
+
+!set echo=True
+!set output_file=testlog
+select CURRENT_TIMESTAMP;

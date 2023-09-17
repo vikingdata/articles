@@ -37,6 +37,7 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 *   https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates
 *   https://docs.getdbt.com/reference/dbt-commands
 *   https://docs.snowflake.com/en/user-guide/snowsql-config
+*   https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/#5_How_to_use_variables_in_SnowSQL
 
 * * *
 
@@ -62,8 +63,6 @@ Why are we setting up PostgreSQL dbt?
 * Basically, think of PostgreSQL as your own playground before Snowflake. 
 
 *   Setup dbt and postgresql
-'/cygdrive/c/Users/Public/Desktop/Winaero Tweaker.lnk'    
-    	# you might need to execute this
 
 ```
     mkdir dbt
@@ -117,70 +116,77 @@ cd ~/
     
 *   Setup in config file for postgresql. Run dbt init and edit file.
     
-    *   Download https://github.com/dbt-labs/dbt-starter-project  
-         or https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip  
-        Execute:
-```bash        
-        wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
-        unzip main.zip
-        mv dbt-starter-project-main ~/dbt/dbt_test1
-        cd ~/
-```        
     *   Run dbt init and edit file.  
         Execute: dbt init
-    *   name : dbt_test1  
-        This will make a directory called "db1_test1", but since it already exists, it will just use it.
+    *   name : dbt_pg
     *   database : postgres
     *   Now edit
     ``` ~/.dbt/profiles ``` and make changes
         
-        * * *
+```
         
-        default:
-          outputs:
-            dev:
-              type: postgres
-              threads: 1
-              host: 127.0.0.1
-              port: 5432
-              user: mark
-              pass: mark
-              dbname: mark_dev
-              schema: public
-        
-            prod:
-              type: postgres
-              threads: 1
-              host: 127.0.0.1
-              port: 5432
-              user: mark
-              pass: mark
-              dbname: mark_prod
-              schema: public
-        
-          target: dev
-        
-    *   Edit ``` ~/dbt/dbt_test1/dbt_project.yml```  
+dbt_pg:
+  outputs:
+
+    dev:
+      type: postgres
+      threads: 1
+      host: 127.0.0.1
+      port: 5432
+      user: mark
+      pass: mark
+      dbname: mark_dev
+      schema: public
+
+    prod:
+      type: postgres
+      threads: 1
+      host: 127.0.0.1
+      port: 5432
+      user: mark
+      pass: mark
+      dbname: mark_prod
+      schema: public
+
+  target: dev
+
+```        
+
+    *   Download https://github.com/dbt-labs/dbt-starter-project
+         or https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
+        Execute:
+```bash
+        cd -/dbt
+        wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
+        unzip main.zip
+        rm -rf dbt_pg
+        mv dbt-starter-project-main dbt_pg
+        cd ~/
+```
+*   Edit ``` ~/dbt/dbt_pg/dbt_project.yml```  
         Change : profile: 'default'  
-        to : profile: 'dbt_test1'  
+        to : profile: 'dbt_pg'  
         And change  
         
         models:
           my_new_project:
-        
           
         to
-        
-        models:
-          dbt_test1:
+
+models:
+          dbt_pg:
+
         
     *   Change to working directory, it will search for dbt_project.yml  
-        ```cd ~/dbt/dbt_test1```
+        ```cd ~/dbt/dbt_pg```
     *   Execute, and there should be no errors: dbt debug
     *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.  
-        ```echo "export DBT_PROJECT_DIR=~/dbt/dbt_test1" >> ~/.bashrc```
-    *   also : export DBT_PROJECT_DIR=~/dbt/dbt_test1 to your current session.  
-        ```export DBT_PROJECT_DIR=~/dbt/dbt_test1```
+        ```
+	echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
+        echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
+```
+    *   also : export DBT_PROJECT_DIR=~/dbt/dbt_pg to your current session.  
+        ```export DBT_PROJECT_DIR=~/dbt/dbt_pg```
     
       
     
@@ -192,11 +198,6 @@ cd ~/
         *   Get a 30 day trial snowflake account.
             Sign in or sign up for a 30 day trial : https://app.snowflake.com/
 
-
-* * *
-
-<a name=sfdbt></a>Snowflake DBT
-----------
 
 
 * * *
@@ -210,8 +211,8 @@ We will practice a little bit with the gui. We will set up a DBT database.
         *   Log into your snowflake environment. If you are new, I suggest the tutorials. 
         *   Click on "Data"
         *   Click on "+ Database" in the upper right hand corner.  
-            Enter in "dbt_test" for the database.
-        *   Click on "dbt_test"
+            Enter in "dbt_source" for the database.
+        *   Click on "dbt_source"
         *   Click on "+ schema". Enter test_schema
         *   Create a user.  
             Click on Admin, then User & Roles, then "+ user"  
@@ -223,30 +224,72 @@ We will practice a little bit with the gui. We will set up a DBT database.
         
         		pip install dbt-snowflake
         		
-        
+    *   Setup in config file for postgresql. Run dbt init and edit file.
+
+        $ Execute : cd ~/dbt
+        *   Run dbt init and edit file.
+            Execute: dbt init
+          *   name : dbt_sf
+          *   database : snowflake, should be "2".
+	  * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
+    *   Now edit
+    ``` ~/.dbt/profiles ``` and make changes
+
+
         *   Edit .dbt/profiles.yml  
             The account is, is from the url you are using.  
             For example, https://app.snowflake.com/fntrtms/abc123/worksheets, the id is "abc123".
 ```           
-            dbt_test_sf:
-              target: dev
-              outputs:
-                dev:
-                  type: snowflake
-                  account: abd123 # Put in your account id
-            
-                  # User/password auth
-                  user: dbt_user
-                  password: [password]   # Put in your password
-            
-                  role: ACCOUNTADMIN
-                  database: dbt_test
-                  warehouse: COMPUTER_WH  # default warehouse
-                  schema: test_schema
-                  threads: 1
-                  client_session_keep_alive: False
-                  query_tag: test
+dbt_sf:
+  outputs:
+
+    dev:
+      type: snowflake
+      account: [account id]
+
+      # User/password auth
+      user: [username]
+      password: [password]
+
+      role: ACCOUNTADMIN
+      database: TUTORIAL
+      warehouse: COMPUTER_WH
+      schema: PUBLIC
+      threads: 1
+      client_session_keep_alive: False
+      query_tag: ABCD
+
+  target: dev
+
 ```
+        * The account name in the config file is really the account identifier. There are at least two values you can put in there.
+        * The account name you can get from the url sent to you in the email.
+           * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
+           * The accountname is everything upto snowflakecomputing.
+           * The account name would thus be fntrtms-lobABCD
+        * Also, you can find out what to put in "account name" by
+           * Login into the web gui
+           * Select Admin
+           * Select Accounts
+           * You should see the messsage "1 Acccount in <ORG NAME>"
+           * Under that, is a list of accounts.
+           * The name of the first entry is the one you want.
+           * So let's say The org name is "abc" and the account is "xyz". The account name would be abc-xzy
+        * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
+        * Use the same username and password you use to log into the web gui.
+        * Or you create a user and password.
+    *   Change to working directory, it will search for dbt_project.yml
+        ```cd ~/dbt/dbt_sf```
+    *   Execute, and there should be no errors: dbt debug
+    *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.
+        ```
+        echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
+        echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
+```
+    *   also : export DBT_PROJECT_DIR=~/dbt/dbt_pg to your current session.
+        ```export DBT_PROJECT_DIR=~/dbt/dbt_pg```
+
+
 
 * * *
 
@@ -282,18 +325,30 @@ dbname = TUTORIAL
 schemaname = PUBLIC
 warehousename = COMPUTE_WH
 
-
+[options]
+variable_substitution = True
 
 ```
-   * The account name you can get from the url sent to you in the email. 
-      * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
-      * The accountname is everything upto snowflakecomputing.
-      * The account name is thus fntrtms-lobABCD
-      * Click on "+" and then choose "SQL Worksheet"
-      * In the config, it says account name, really its the account identifier.
+   * The account name in the config file is really the account identifier. There are at least two values you can put in there. 
+      * The account name you can get from the url sent to you in the email.
+         * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
+         * The accountname is everything upto snowflakecomputing.
+         * The account name would thus be fntrtms-lobABCD
+      * Also, you can find out what to put in "account name" by
+         * Login into the web gui
+	 * Select Admin
+	 * Select Accounts
+	 * You should see the messsage "1 Acccount in <ORG NAME>"
+	 * Under that, is a list of accounts.
+	 * The name of the first entry is the one you want.
+	 * So let's say The org name is "abc" and the account is "xyz". The account name would be abc-xzy
+      * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
    * Use the same username and password you use to log into the web gui.
       * Or you create a user and password. 
-   * To test, enter "select current_timestamp;" and you should get a result.
+   * To test,
+      * start snowsql : snowsql
+      * enter : select current_timestamp;
+         * and you should get a result.
 
 Notes:
    * You should connect to a database, schema, and warehouse. If you didn't put the defaults in your config file, execute this : 
@@ -303,63 +358,4 @@ use schema PUBLIC;
 use  warehouse COMPUTE_WH;
 
 ```
-
-
-* * *
-
-<a name=vscode></a>VScode
----------------------
-
-    We will be following the stuff on this url : https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
-
-
-
-* * *
-
-<a name=project1></a>Setting up first project in PostgreSQL
---------------------
-
-    DBT is setup ready to be used. 
-
-    *   git is ignored for now
-    *   The connection string to postgresql should be working.
-    *   ```~/.dbt/profiles.yml```
-    *   ```~/.dbt/dbt_project.yml```
-    *   ```~/dbt/dbt_test1 directory```
-
-    Setup source data. Login into psql : sudo -u postgresql psql
-
-```sql
-
---- need source queries
-```
-
-```sql
-
--- need destination setup
-
-````
-
-Now setup the DBT Queries and run them.
-
-
-
-* * *
-
-<a name=project2></a>Setting up second project in Snowflake
---------------------
-
-
-```sql
-
---- need source queries
-```
-
-```sql
-
--- need destination setup
-
-````
-
-Now setup the DBT Queries and run them.
 

@@ -46,7 +46,7 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 
 Why are we setting up PostgreSQL dbt?
 * By installing PostgreSQL you already have "psql" as a CLI.
-   * To install PostgreSQL, refer to my older articl (PostgreSQL 15 install : Ubuntu)[http://odendata.com/docs/database/pg/pg15_install.html]
+   * To install PostgreSQL, refer to my older article [http://odendata.com/docs/database/pg/pg15_install.html](PostgreSQL 15 install : Ubuntu)
 * By installing dbt for PostgreSQL, you can play with before you use dbt for Snowflake.
 * Basically, think of PostgreSQL as your own playground before Snowflake.
 

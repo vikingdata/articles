@@ -258,22 +258,22 @@ dbt_sf:
   target: dev
 
 ```
-       * The account name in the config file is really the account identifier. There are at least two values you can put in there.
-       * The account name you can get from the url sent to you in the email.
-           * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
-           * The accountname is everything upto snowflakecomputing.
-           * The account name would thus be fntrtms-lobABCD
-       * Also, you can find out what to put in "account name" by
-           * Login into the web gui
-           * Select Admin
-           * Select Accounts
-           * You should see the messsage "1 Acccount in <ORG NAME>"
-           * Under that, is a list of accounts.
-           * The name of the first entry is the one you want.
-           * So let's say The org ame is "abc" and the account is "xyz". The account name would be abc-xzy
-       * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
-       * Use the same username and password you use to log into the web gui.
-       * Or you create a user and password.
+        * The account name in the config file is really the account identifier. There are at least two values you can put in there.
+        * The account name you can get from the url sent to you in the email.
+            * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
+            * The accountname is everything upto snowflakecomputing.
+            * The account name would thus be fntrtms-lobABCD
+        * Also, you can find out what to put in "account name" by
+            * Login into the web gui
+            * Select Admin
+            * Select Accounts
+            * You should see the messsage "1 Acccount in <ORG NAME>"
+            * Under that, is a list of accounts.
+            * The name of the first entry is the one you want.
+            * So let's say The org ame is "abc" and the account is "xyz". The account name would be abc-xzy
+        * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
+        * Use the same username and password you use to log into the web gui.
+        * Or you create a user and password.
     *   Change to working directory, it will search for dbt_project.yml
         ```cd ~/dbt/dbt_sf```
     *   Execute, and there should be no errors: dbt debug

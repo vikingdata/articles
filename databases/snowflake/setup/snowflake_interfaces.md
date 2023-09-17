@@ -195,8 +195,8 @@ dbt_pg:
 <a name=sfsignup></a>    Snowflake SignUp
 ---------
 
-    *   Snowflake
-        *   Get a 30 day trial snowflake account.
+*   Snowflake
+   *   Get a 30 day trial snowflake account.
             Sign in or sign up for a 30 day trial : https://app.snowflake.com/
 
 

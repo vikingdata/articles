@@ -74,7 +74,7 @@ These concepts play significant roles in data management, analytics, and ETL pro
 ## Markdown
 * [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
 * [Markdown CheetSheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-* [GitHub Writing](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax){target="other"}
+* <A href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax" target-"test">GitHub Writing</a>
 
 ```markdown
 Title:    A Sample MultiMarkdown Document  

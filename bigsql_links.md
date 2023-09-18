@@ -2,7 +2,7 @@
 title: Snowflake, SQL, DBT, and other links
 Author: Mark Nielsen
 Date: Sept 2023
-Copyright: @Sept 2023
+Copyright: \@Sept 2023
 ---
 
 ## DBT

@@ -396,7 +396,7 @@ This is for both PosgreSQL and Snowflake.
    * If you have connection problems to a remote system, look at (remote conncection to postgresql)[https://www.thegeekstuff.com/2014/02/enable-remote-postgresql-connection/]
       * For me
          * Edited : sudo emacs -nw  /etc/postgresql/15/main/pg_hba.conf
-	 and added it
+	 and added    
 	 ``` host    all             all         192.168.1.1/24           password ```
          * Edited : sudo emacs -nw /etc/postgresql/15/main/postgresql.conf
 	 and added it

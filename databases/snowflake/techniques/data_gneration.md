@@ -34,8 +34,6 @@ To be effective in their role, data engineers need access to sample data that en
       * Use sequences and generators to help generate random data.
 
 
-## Snowflake
-
 ### Functions, sequences, and generators
 * A Generator returns empty rows as though it was a table. The columns are defined in the select from functions that produce a result. Like the following query:
 ```sql

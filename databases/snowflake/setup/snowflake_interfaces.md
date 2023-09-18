@@ -399,7 +399,7 @@ This is for both PosgreSQL and Snowflake.
 	 and added    
 	 ``` host    all             all         192.168.1.1/24           password ```
          * Edited : sudo emacs -nw /etc/postgresql/15/main/postgresql.conf
-	 and added it
+	 and added  
 	 ```listen_addresses = '*'```
 	 * And restarted postgresql: sudo service postgresql restart
    * Clicck on "Create Another " or On The button "SQL Tools" click on "Add New Connections."

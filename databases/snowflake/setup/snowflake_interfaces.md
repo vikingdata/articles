@@ -2,7 +2,6 @@
 title : DBT install : CLI and Adapters
 author : Mark Nielsen
 copyright : Jan 2022 to Sept 2023
-
 ---
 
 
@@ -44,6 +43,7 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 *   https://docs.getdbt.com/reference/dbt-commands
 *   https://docs.snowflake.com/en/user-guide/snowsql-config
 *   https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/#5_How_to_use_variables_in_SnowSQL
+*   (snowflake instructions for VSCode)[https://docs.snowflake.com/en/user-guide/vscode-ext]
 
 * * *
 
@@ -370,26 +370,6 @@ use  warehouse COMPUTE_WH;
 This is for both PosgreSQL and Snowflake.
   
   
-Just basic DBT for ELT processing. We assume mysql are both installed.
-
-1.  [Links](#links)
-2.  [VSCode Install](#install)
-
-* * *
-
-<a name=links></a>Links
------
-
-
-*   (snowflake instructions for VSCode)[https://docs.snowflake.com/en/user-guide/vscode-ext]
-
-
-* * *
-
-<a name=install></a> Install
-----------
-
-
 * (Download and Install)[https://code.visualstudio.com/] VSCode. Its free.
    * If Windows, it should start the executable. Otherwise run VSCodeUserSetup-x64-1.82.2.exe
 * Follow the instructions fo extension installation, but it was a little different for me.

@@ -67,7 +67,8 @@ Copyright: \@Sept 2023
   * DBT is known for its ease of use, flexibility, and integration with popular data warehouse platforms like Snowflake, BigQuery, and Redshift.
   * It allows data analysts and engineers to collaborate effectively on data transformations and ensures that data is transformed consistently and reliably.
 
-These concepts play significant roles in data management, analytics, and ETL processes, and they are commonly used in data-centric applications and data warehousing solutions.tps://streamlit.io/gallery](https://streamlit.io/gallery)
+These concepts play significant roles in data management, analytics, and ETL processes, and they are commonly used in data-centric applications and data warehousing solutions.
+[tps://streamlit.io/gallery](https://streamlit.io/gallery)
 
 
 

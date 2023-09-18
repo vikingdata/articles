@@ -43,7 +43,7 @@ Just basic DBT for ELT processing. We assume mysql are both installed.
 *   https://docs.getdbt.com/reference/dbt-commands
 *   https://docs.snowflake.com/en/user-guide/snowsql-config
 *   https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/#5_How_to_use_variables_in_SnowSQL
-*   (snowflake instructions for VSCode)[https://docs.snowflake.com/en/user-guide/vscode-ext]
+*   [Snowflake instructions for VSCode](https://docs.snowflake.com/en/user-guide/vscode-ext])
 
 * * *
 

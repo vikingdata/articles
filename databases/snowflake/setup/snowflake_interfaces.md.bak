@@ -237,7 +237,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
            Execute: dbt init
            *   name : dbt_sf
            *   database : snowflake, should be "2".
-	   * It will ask you a bunch of other questions, other than account_id, username, and password use the values below when you edit .dbt/profiles.yml
+	   * It will ask you a bunch of other questions, other than accont_id, username, and password use the values below when you edit .dbt/profiles.yml
 
        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
            ```bash           
@@ -266,16 +266,16 @@ We will practice a little bit with the gui. We will set up a DBT database.
        * The account name in the config file is really the account identifier. There are at least two values you can put in there.
        * The account name you can get from the url sent to you in the email.
            * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
-           * The accountname is everything up to snowflakecomputing.
+           * The accountname is everything upto snowflakecomputing.
            * The account name would thus be fntrtms-lobABCD
        * Also, you can find out what to put in "account name" by
            * Login into the web gui
            * Select Admin
            * Select Accounts
-           * You should see the message "1 Account in <ORG NAME>"
+           * You should see the messsage "1 Acccount in <ORG NAME>"
            * Under that, is a list of accounts.
            * The name of the first entry is the one you want.
-           * So let's say The org ame is "name" and the account is "xyz". The account name would be abc-xzy
+           * So let's say The org ame is "abc" and the account is "xyz". The account name would be abc-xzy
        * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
        * Use the same username and password you use to log into the web gui.
        * Or you create a user and password.
@@ -340,7 +340,7 @@ variable_substitution = True
          * Login into the web gui
 	 * Select Admin
 	 * Select Accounts
-	 * You should see the message "1 Account in <ORG NAME>"
+	 * You should see the messsage "1 Acccount in <ORG NAME>"
 	 * Under that, is a list of accounts.
 	 * The name of the first entry is the one you want.
 	 * So let's say The org name is "abc" and the account is "xyz". The account name would be abc-xzy

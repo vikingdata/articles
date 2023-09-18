@@ -27,8 +27,8 @@ In all these cases, the key is to use random data as a representative substitute
 
 
 ## Purpose
-      * Given bicyclists and locations (states) give a random list of time and distance for the cyclists.
-      * Use sequences and generators to help generate random data.
+   * Given bicyclists and locations (states) give a random list of time and distance for the cyclists.
+   * Use sequences and generators to help generate random data.
 
 
 ### Functions, sequences, and generators

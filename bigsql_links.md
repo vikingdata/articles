@@ -1,5 +1,8 @@
 ---
 title: Snowflake, SQL, DBT, and other links
+Author: Mark Nielsen
+Date: Sept 2023
+Copyright: @Sept 2023
 ---
 
 ## DBT
@@ -71,7 +74,16 @@ These concepts play significant roles in data management, analytics, and ETL pro
 ## Markdown
 * [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
 * [Markdown CheetSheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-* 
+* [GitHub Writing](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+
+```markdown
+Title:    A Sample MultiMarkdown Document  
+Author:   Fletcher T. Penney  
+Date:     February 9, 2011  
+
+
+
+```
 
 
 

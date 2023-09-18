@@ -24,6 +24,8 @@ Copyright: \@Sept 2023
 * {https://stackdiary.com/sql-2023-is-released/#:~:text=SQL%3A2023%20now%20officially%20includes,JSON%20capabilities%20with%20modern%20JavaScript.](https://stackdiary.com/sql-2023-is-released/#:~:text=SQL%3A2023%20now%20officially%20includes,JSON%20capabilities%20with%20modern%20JavaScript.)
 * [https://www.stratascratch.com/blog/best-practices-to-write-sql-queries-how-to-structure-your-code/](https://www.stratascratch.com/blog/best-practices-to-write-sql-queries-how-to-structure-your-code/)
 * [https://youtu.be/MnEDHFOqqno?si=2DhLIeum2NoWZkX1](https://youtu.be/MnEDHFOqqno?si=2DhLIeum2NoWZkX1)
+* [SQL joins}(https://www.devart.com/dbforge/sql/sqlcomplete/sql-join-statements.html)
+
 
 ## Snowflake
 * [https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates](https://docs.snowflake.com/en/release-notes/2023/7_22#sql-updates)
@@ -76,6 +78,7 @@ These concepts play significant roles in data management, analytics, and ETL pro
 * [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
 * [Markdown CheetSheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 * <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax" target="test">GitHub Writing</a>
+* [Online markdown converter](https://www.w3docs.com/nx/marked)
 
 ```markdown
 Title:    A Sample MultiMarkdown Document  

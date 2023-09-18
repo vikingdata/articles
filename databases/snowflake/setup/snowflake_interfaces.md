@@ -374,20 +374,13 @@ This is for both PosgreSQL and Snowflake.
    * If Windows, it should start the executable. Otherwise run VSCodeUserSetup-x64-1.82.2.exe
 * Follow the instructions fo extension installation, but it was a little different for me.
    * There was an EXtensions button on he middle left menu.
-   * I searched for Snowflake.
-   * clicked on install
-   * A snowflake icon will appear in the left hand menu.
-   * Click on the Snowflake icon.
-   * Put in the account identified as you did for SnowSQL.
-   * Put in the username and password.
-   * You should be connected now. It should list the number of databases you have.
-* Again, Click on the Extensions button
-   * search for SQLTools
-   * Install it.
-   * In Extensions, search for "Snowflake Driver for SQLTools"
-   * Install it
-   * In Extensions, search for "SQLTools PostgreSQL/Cockroach Driver"
-   * Install it
+   * Click on the Extensions button on the left
+      * search for SQLTools
+      * Install it.
+      * In Extensions, search for "Snowflake Driver for SQLTools"
+      * Install it
+      * In Extensions, search for "SQLTools PostgreSQL/Cockroach Driver"
+      * Install it
 * Quit VsCode
 * Start VSCode. This reloads the drivers installed. 
    * On The button "SQL Tools" click on "Add New Connections."

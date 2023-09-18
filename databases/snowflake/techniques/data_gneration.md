@@ -113,7 +113,7 @@ LIMIT
     100;
 ```
 
-The output is the following. Someone can mark down information for each bicycle ride for each bycyclist and each location. 
+The output is the following. Someone can mark down information for each bicycle ride for each bicyclist and each location. 
 
 ```sql
 

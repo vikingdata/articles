@@ -402,7 +402,7 @@ This is for both PosgreSQL and Snowflake.
 	 and added  
 	 ```listen_addresses = '*'```
 	 * And restarted postgresql: sudo service postgresql restart
-   * Clicck on "Create Another " or On The button "SQL Tools" click on "Add New Connections."
+   * Click on "Create Another " or on the button "SQL Tools" click on "Add New Connections."
    * Select Snowflake
       * Connection Name : Snowflake 
       * Account : [ same as you used for snowsql ]

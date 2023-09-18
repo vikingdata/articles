@@ -11,13 +11,27 @@ _**by Mark Nielsen
 Copyright june 2023**_
 
 * * *
+
+# Sample Data Requirements for a Snowflake Data Engineer
+
+
+Data engineering plays a pivotal role in the modern data-driven world. Organizations rely on skilled data engineers to design, build, and maintain data pipelines that facilitate the flow of data from source to destination, enabling informed decision-making and driving business growth. Snowflake, a cloud-based data warehousing platform, has gained significant popularity due to its scalability, performance, and ease of use. To be effective in managing data within Snowflake, data engineers need access to sample data that reflects the real-world scenarios they'll encounter. In this article, we will explore the types of sample data that are essential for a Snowflake data engineer.
+
+## Understanding Snowflake
+
+Before delving into the sample data requirements, let's briefly understand what Snowflake is and why it's essential for data engineers:
+
+Snowflake is a cloud-based data warehousing platform known for its unique architecture and scalability. It separates storage and compute, allowing users to scale these resources independently. Snowflake's features include automatic scaling, data sharing, and support for both structured and semi-structured data. It is particularly well-suited for handling large volumes of data and complex analytics workloads.
+
+## The Role of a Data Engineer in Snowflake
+Data engineers working with Snowflake are responsible for creating and maintaining data pipelines, integrating data from various sources, and optimizing data storage and retrieval processes. Their role is critical in ensuring data quality, consistency, and availability for data analysts, data scientists, and other stakeholders.
+
+To be effective in their role, data engineers need access to sample data that encompasses different aspects of Snowflake's capabilities and challenges they may encounter in real-world scenarios. Here is one way to make sample data.
+
 ## Purpose
    * Snowflake
-      * Use sequences to help generate random data.
-      * Explain generators, sequences, and functions in query. 
-   * PosregSQL
-      * Use sequences in PostgreSQL to generate random data.
-
+      * Given bicyclists and locations (states) give a random list of time and distance for the cyclists.
+      * Use sequences and generators to help generate random data.
 
 
 ## Snowflake
@@ -54,8 +68,12 @@ drop table if exists B_temp;
 drop table if exists S_temp;
 drop table if exists both_temp;
 
+
+  # Create bicyclist and states (locations) tables in two different methods. 
 create temporary table B_temp as SELECT VALUE::integer as bicyclist_id FROM TABLE(SPLIT_TO_TABLE('1,2,3,4,5,6', ','));
 create temporary table S_temp as SELECT column1 as state_id, column2 as trip_id FROM values ('California', 1), ('Nevada', 2), ('Arizona', 3);
+
+  # Merge the two tables and give each row a unique number from a seq. 
 create temporary table both_temp as
   select  s.state_id, b.BICYCLIST_ID, seq1(1) as no, s.trip_id
     from S_temp as s left join  B_temp as b
@@ -63,8 +81,15 @@ create temporary table both_temp as
 set row_count = (select count(*) from both_temp);
 select $row_count;
 
+  # Use a CTE format for the finary query.
+  # Create a trips table based on a sequence and a generator.
+  # The generator makes empty rows and the columns are determined by what the select statement has
+  # and which functions it uses in each column. 
+
 WITH
-    both AS (select * from both_temp)
+    both AS (
+    	 select * from both_temp
+    )
     , trips AS (
         SELECT
             seq1(0) AS no
@@ -90,7 +115,7 @@ LIMIT
     100;
 ```
 
-The ouput is
+The ouput is thw following. Someone can mark down information for each bicycle ride for each bycyclist and each location. 
 
 ```sql
 

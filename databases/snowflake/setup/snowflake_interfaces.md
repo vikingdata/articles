@@ -1,5 +1,5 @@
 ---
-title : DBT install : CLI and Adapters
+title : DBT install  CLI and Adapters
 author : Mark Nielsen
 copyright : Jan 2022 to Sept 2023
 ---

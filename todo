@@ -1,13 +1,13 @@
 snowflake
 
-cli and dpt setup - done, post it
-vscode setup
+DONE cli and dpt setup - done, post it
+DONE vscode setup
   https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
-snowsql setup
-events
+DONE snowsql setup
+DONE events
 simple dpt
 object versus dict
-data generation
+DONE data generation
 streamlit
 events versus cpt and cronjobs
 

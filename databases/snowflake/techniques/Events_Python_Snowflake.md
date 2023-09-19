@@ -6,11 +6,6 @@ Snowflake Python
 
 Snowflake recently introduced Event Tables.  This allows python developers to log errors. 
 
-- Links
-  - snowflake Python sandbox -- explanation
-  - UDF
-  - Event tables
-  - Python regular expressions and snowflake regular expressions
 
 - Purpose
   - Create an event table for writing log messages. 
@@ -184,7 +179,7 @@ select RECORD
 ```
 
 
-The following sql will show an exceptions caught and logged by python udf.
+The following sql will show an exception caught and logged by python udf. You cannot write to the "home" directory. It should catch the error. 
 
 
 ```sql
@@ -229,6 +224,15 @@ $$;
 
 ```
 
+Run the fuction and look at errors.
+
+```sql
+select pyudf();
+-- wait a minute
+
+--select all records
+select * from tutorial.test.pyudf_log;
+```
 
 # Python UDF for non-greedy regex
 
@@ -279,8 +283,14 @@ select  regexp_substr('The 1quick brown fox plays in kentucky','q.k' ) as result
   pyudf('The 3quick brown fox plays in kentucky','q.k' ) as result3,
   pyudf('The 4quick brown fox plays in kentucky','q.?k' ) as result4;
   
-Make the function error out. 
+-- Make the function error out. 
 select  pyudf('The quick brown fox plays in kentucky','[[[&lt;&lt;&lt;****' ) as result;
+
+-- Look at errors
+
+--select all records
+select * from tutorial.test.pyudf_log;
+
 
 
 ```

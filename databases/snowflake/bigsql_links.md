@@ -9,11 +9,11 @@ title: Snowflake, SQL, DBT, and other links
 * [https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT](https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT])
 * [https://docs.getdbt.com/docs/core/connect-data-platform/mysql-setup](https://docs.getdbt.com/docs/core/connect-data-platform/mysql-setup)
 * [https://docs.getdbt.com/docs/core/connect-data-platform/postgres-setup](https://docs.getdbt.com/docs/core/connect-data-platform/postgres-setup)
-
 * [https://github.com/dbt-labs/dbt-starter-project](https://github.com/dbt-labs/dbt-starter-project)
-
 * [https://youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT&si=6s7Og5oAnuuf2Bf0](https://youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT&si=6s7Og5oAnuuf2Bf0
 * or [https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT](https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT)
+* [https://github.com/Snowflake-Labs/sf-samples/tree/main/samples/sap_accounts_receivable_dbt](https://github.com/Snowflake-Labs/sf-samples/tree/main/samples/sap_accounts_receivable_dbt)
+* [https://github.com/Snowflake-Labs/sf-samples/blob/main/samples/ML%20Powered%20Functions/June%202023%20MLPF%20Demos.sql](https://github.com/Snowflake-Labs/sf-samples/blob/main/samples/ML%20Powered%20Functions/June%202023%20MLPF%20Demos.sql)
 
 ## Better SQL
 * [https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1])

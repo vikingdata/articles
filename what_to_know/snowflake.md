@@ -51,6 +51,14 @@
 
 * [3 layers of Snowflake: Cloud, Query Processing - warehouse, Storage](https://docs.snowflake.com/en/user-guide/intro-key-concepts)
 
+* Resizing warehouse. Larger for for complex workloads. More warehouses for more users or concurrent queries.
+
+* (Reader accounts)[https://docs.snowflake.com/en/user-guide/data-sharing-reader-create]
+are made for other people to accesss your data wihtout having an account. You are charged for uages.
+
+* test
+
+
 
 
 

@@ -30,3 +30,27 @@
 * (COPY command needs a file format)[https://interworks.com/blog/hcalder/2018/07/26/the-basics-of-loading-data-into-snowflake/]
 
 * ["user waerhouse WH1" : to set a session](https://docs.snowflake.com/en/user-guide/warehouses-tasks.html)
+
+* [Certain items can be clone](https://docs.snowflake.com/en/sql-reference/sql/create-clone)
+  Data Containment Objects  
+  Databases  
+  Schemas  
+  Tables  
+  Streams  
+  Data Configuration and Transformation Objects  
+  Stages  
+  File Formats  
+  Sequences  
+  Tasks  
+  and NOT users, shares
+
+* [Resource Monitor](https://docs.snowflake.com/en/user-guide/resource-monitors) can use used to limit credits for
+  resources.
+
+* [Workloads in Snowflake : OLAP and OLTP](https://www.snowflake.com/guides/olap-vs-oltp)
+
+* [3 layers of Snowflake: Cloud, Query Processing - warehouse, Storage](https://docs.snowflake.com/en/user-guide/intro-key-concepts)
+
+
+
+

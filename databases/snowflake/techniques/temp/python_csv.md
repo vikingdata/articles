@@ -13,13 +13,14 @@ Original Copyright Jan 2022**_
 
 1.  [Links](#links)
 2.  [Setup](#setup)
+3.  [Install Python connector](#installpython)
 3.  [Load csv file with Python](#load)
 4.  [Python Methods](#method)
 5.  [Loading different files](#files)
 
 * * *
 
-<a name=links></a>Links
+# <a name=links></a>Links
 -----
 
 
@@ -74,7 +75,7 @@ Verify schema can be inferred from csv by executing following command.
 Several datatypes should be inferred TEXT,NUMBER,BOOLEAN,DATE
 
 ```sql
-SELECT * FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'basic_csv'));
+SELECT * FROM TABLE (INFER_SCHEMA(LOCATION => '@LOAD/customer.csv', FILE_FORMAT => 'BASIC_CSV'));
 ```
 
 Expected results
@@ -97,12 +98,19 @@ CREATE or REPLACE TABLE mytable USING TEMPLATE (
   SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
   FROM TABLE (
     INFER_SCHEMA(
-      LOCATION=>'@~/customer.csv',
-      FILE_FORMAT=>'basic_csv'
+      LOCATION=>'@LOAD/customer.csv',
+      FILE_FORMAT=>'BASIC_CSV'
     )
   )
 );
 ```
+* * *
+
+# <a name=installpython></a>Install Python connector
+-----
+
+
+* pip install snowflake-connector-python
 
 * * *
 

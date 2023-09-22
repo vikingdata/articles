@@ -12,12 +12,15 @@ streamlit
 events versus cpt and cronjobs
 different stages examples, user, table, named
 
+pipe example, internal and external
+
 different guis, vscode, and other
 1st dpt project in postgresql
   copy data to snowflake
   execute in snowflake
   compare reports
 
+t and l and i between mysql and snowflake. 
 
 articles
    using odp, how to make books, youtube videos

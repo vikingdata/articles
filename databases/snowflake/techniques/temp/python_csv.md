@@ -12,9 +12,10 @@ Original Copyright Jan 2022**_
 
 
 1.  [Links](#links)
-2.  [Load csv file with Python(#load)
-3.  [Python Methods](#method)
-4.  [Loading different files](#files)
+2.  [Setup](#setup)
+3.  [Load csv file with Python](#load)
+4.  [Python Methods](#method)
+5.  [Loading different files](#files)
 
 * * *
 
@@ -24,7 +25,7 @@ Original Copyright Jan 2022**_
 
 * * *
 
-# <a name=load></a>Load csv file with python
+# <a name=load></a>Setup
 -----
 
 
@@ -39,7 +40,7 @@ There is also a helpful metadata function called generate_column_description
 https://docs.snowflake.com/en/sql-reference/functions/generate_column_description
 
 
-# Create CSV
+## Create CSV
 
 Create an example customer.csv file like the following.  This example has different types
 of data which will be inferred by INFER_SCHEMA.
@@ -52,7 +53,7 @@ customer_id,name,email,phone,age,balance,premium,join_date
 1004,Alice Maple,alice.maple@example.com,555-9876,32,900.25,false,2021-04-05
 ```
 
-# Step by Step with Snowsight
+## Step by Step with Snowsight
 
 ## Load into Stage
 
@@ -66,9 +67,9 @@ Data -> Databases->Tutoral->Test->Stages->LOAD->Files (upper right)
 Then drag and drog csv and click Upload.
 In a few moments the file should be loaded into the Stage.
 
-## Load into Table
+### Load into Table
 
-### INFER_SCHEMA
+#### INFER_SCHEMA
 Verify schema can be inferred from csv by executing following command.
 Several datatypes should be inferred TEXT,NUMBER,BOOLEAN,DATE
 
@@ -90,7 +91,7 @@ premium	BOOLEAN	TRUE	$7::BOOLEAN	@~/customer.csv.gz	6
 join_date	DATE	TRUE	$8::DATE	@~/customer.csv.gz	7
 ```
 
-### CREATE Table
+#### CREATE Table
 ```sql
 CREATE or REPLACE TABLE mytable USING TEMPLATE (
   SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
@@ -105,11 +106,11 @@ CREATE or REPLACE TABLE mytable USING TEMPLATE (
 
 * * *
 
-<a name=method></a>Load csv file with python
+# <a name=python></a>Load csv file with Python
 -----
 
 
-# Python Program to match manual load
+## Python Program to match manual load
 
 This program program roughly follow the steps that was manually run earlier.
 
@@ -169,12 +170,12 @@ print(result)
 
 * * *
 
-<a name=method></a>Python Methods
+# <a name=method></a>Python Methods
 -----
 Ideally, if used many times, we would want to make Python methods for this. 
 
 
-# Updated Python Program
+## Updated Python Program
 
 This program program provides a rough general template for loading csv files. 
 It could be incorporated with Streamlit to further enhance the loading process.
@@ -251,5 +252,5 @@ if __name__=='__main__':
 
 * * *
 
-<a name=files></a>Loading different files
+# <a name=files></a>Loading different files
 -----

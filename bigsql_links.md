@@ -95,3 +95,7 @@ Date:     February 9, 2011
 
 
 
+Later links
+* [https://www.snowflake.com/blog/how-foundationdb-powers-snowflake-metadata-forward/](https://www.snowflake.com/blog/how-foundationdb-powers-snowflake-metadata-forward/)
+* [https://www.linkedin.com/pulse/snowflake-architecture-overview-minzhen-yang/](https://www.linkedin.com/pulse/snowflake-architecture-overview-minzhen-yang/)
+

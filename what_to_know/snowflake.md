@@ -102,6 +102,95 @@ in clone.
 
 * Size of warehouse is 1,2,4,8,16, etc to x-small, small, medium, large, x-large etc
 
+* Shared data is read-only and can't be shared with other people.
+
+* For hsaring, you pay for storage, they pay  computing. 53
+
+* Data cahe is 24 hours on a compute node
+
+* If a role is dropped, objects and tables become the property of the role that dropped them.
+  https://docs.snowflake.com/en/sql-reference/sql/drop-role.html
+
+* For connestors: https://docs.snowflake.com/en/user-guide/connecting.html
+
+* Snowflake doesn't have upset, just insert, update, delete, merge, and truncate table.
+
+* Query history is kept for one year 60
+
+* Multi-Cluster Warehouse in auto-scale mode needs a mninimum and maxiumum for warehouses.
+  https://docs.snowflake.com/en/user-guide/warehouses-multicluster
+
+* snowflake is best described as a shared multi-cluster
+  https://docs.snowflake.com/en/user-guide/intro-key-concepts.html
+ https://www.snowflake.com/product/architecture/  
+
+* warehouses can have auto resume and suspend, https://help.pentaho.com/Documentation/9.1/Products/Create_Snowflake_warehouse
+
+* temporary and transient tables don't have fail safe, provisional tables do not exit, only permenent has fail-safe.
+
+* some data is cashed that don't need a warehouse to execute
+  https://blog.ippon.tech/innovative-snowflake-features-caching/
+
+
+* snowpipe uses it own internal warehouses, keep tracks of files,
+  https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro
+
+* At minimum ACCOUNTADMIN should have MFA enabled.
+
+* Users cannot see the output of queries of other users
+  https://docs.snowflake.com/en/user-guide/security-access-control-considerations.html
+
+* Pipes can be suspended and resumed
+  https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro.html
+
+* UDF are sql, python, java, or javascript
+  https://docs.snowflake.com/en/sql-reference/user-defined-functions.html
+
+* warehouse should have auto suspend turned off when you need a steady workload or no delay or lag time is needed
+  https://docs.snowflake.com/en/user-guide/warehouses-considerations.html
+
+* loading : Builk from internal or external stages, snowpipe, or the web gui, or a connector
+  https://docs.snowflake.com/en/user-guide/data-load-overview.html
+
+* auto suspend for a warehouse is after a certain time of inactivity
+
+* Number of queries a warehouse can do is determined bvy size and no of queries.
+  https://docs.snowflake.com/en/user-guide/warehouses-overview.html
+
+* VALIDATION is an option of the COPY command, it validates and does not load data. 81
+
+* tasks must have access to schema and Create Task privileges
+   https://docs.snowflake.com/en/sql-reference/sql/create-task.html
+
+* Scaling out if for concurency rather than performance,
+  https://docs.snowflake.com/en/user-guide/warehouses-considerations#scaling-up-vs-scaling-out  
+  But improvig concurrency does improve performance.
+
+* Sharing is available on all tiers, standard, premeir, enterprise, business critical
+
+* Exteral tables exist as reference in snowflake, and snowflake can query those tables.
+https://docs.snowflake.com/en/user-guide/tables-external-intro.html
+
+* Flatten converts a json formatted files to a dictionary.
+  https://docs.snowflake.com/en/user-guide/querying-semistructured.html
+  It makes pulling out fields easily. Can work on nested data.
+
+* AWS Private Link does allow you to connect to snowflake securely
+  https://docs.snowflake.com/en/user-guide/admin-security-privatelink.html
+
+* Where is table statistics stored? SOme, min, max are in Global Services Layer. It does not store all column stats in services layer
+
+* 90 day time travel , minimum is enterprise
+  https://docs.snowflake.com/en/user-guide/intro-editions
+
+* resizing a warehouse has no effect on running queries
+  https://docs.snowflake.com/en/user-guide/warehouses-tasks.html
+
+
+* The smalletst object in time travel is table 100
+https://docs.snowflake.com/en/user-guide/data-time-travel.html#data-retention-period
+
+
 
 
 

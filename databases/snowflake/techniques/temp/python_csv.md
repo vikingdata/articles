@@ -112,6 +112,11 @@ CREATE or REPLACE TABLE mytable USING TEMPLATE (
 
 * pip install snowflake-connector-python
 
+In addition, I had to
+*  pip3 uninstall pyarrow
+* sudo  pip3 uninstall pyarrow
+* sudo  pip3 install pip3 install pyarrow==10.0.1
+
 * * *
 
 # <a name=python></a>Load csv file with Python
@@ -120,67 +125,131 @@ CREATE or REPLACE TABLE mytable USING TEMPLATE (
 
 ## Python Program to match manual load
 
-This program program roughly follow the steps that was manually run earlier.
+## This program program roughly follow the steps that was manually run earlier.
+
 
 ```python
+
+import snowflake.connector
+from snowflake.connector import DictCursor
+import sys
+import os
+
+vars = os.environ
+
+TABLENAME="TUTORIAL.TEST.MY_TABLE"
+
+if 'SF_USER' not in vars:
+    print ('SF_USER not defined in env, exiting.\n')
+    sys.exit()
+
+if not 'SF_PASS' in vars:
+    print ('SF_PASS not defined in env, exiting.\n')
+    sys.exit()
+
+if vars.get("SF_ACCOUNT") is None:
+    print ('SF_ACCOUNT not defined in env, exiting.\n')
+    sys.exit()
+
+
 # Create a connection object
 ctx = snowflake.connector.connect(
-    user='XXXXXXX',
-    password='YYYYYY',
-    account='AAAAA-BBBBBB',
+    user=vars['SF_USER'],
+    password=vars['SF_PASS'],
+    account=vars['SF_ACCOUNT'],
     warehouse='compute_wh',
     database='tutorial',
     schema='test'
     )
 
+
 # Create a cursor object
 cur = ctx.cursor(DictCursor)
 
 # Stage file
-result=cur.execute("PUT file:///c:/temp/customer.csv @~/").fetchall()[0]
+# Windows
+#result=cur.execute("PUT file:///c:/temp/customer.csv @~/").fetchall()[0]
+#print(result)
+
+
+
+try :
+    result=cur.execute("REMOVE @~/customer.csv").fetchall()[0]
+    print(result)
+except:
+    print ("customer.csv doesn't exist, that is ok, not removed.")
+
+# Linue
+result=cur.execute("PUT file://customer.csv @~/ AUTO_COMPRESS = FALSE").fetchall()[0]
 print(result)
+
+FF_options = " SKIP_HEADER=0 FIELD_DELIMITER=',' FIELD_OPTIONALLY_ENCLOSED_BY=NONE TYPE=csv PARSE_HEADER=true"
 
 # Create a file format object
-result=cur.execute("CREATE OR REPLACE FILE FORMAT basic_csv TYPE = csv PARSE_HEADER = true").fetchall()[0]
+result=cur.execute("CREATE OR REPLACE FILE FORMAT basic_csv " + FF_options).fetchall()[0]
 print(result)
 
+# IF this errors out, you might have an empty line at the beginning ot end of the file.
+# Make sure there are no empty lines.
 # Show inferred schema
-sql = "SELECT * FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'basic_csv'))"
+sql = "SELECT * FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'BASIC_CSV'))"
 result=cur.execute(sql).fetchall()[0]
 print(result)
 
+#sys.exit()
 # Useful for MANUAL creation
-sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table') 
-    AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'basic_csv'))
+sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table')
+    AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'BASIC_CSV'))
 '''
 result=cur.execute(sql).fetchall()[0]
 print(result)
 
+
 # Automatic creation with TEMPLATE
-sql ='''
-CREATE or REPLACE TABLE mytable USING TEMPLATE (
+# INNER_SCHMEA only deal with columns, not data
+sql ="""
+CREATE or REPLACE TABLE """ + TABLENAME + """ USING TEMPLATE (
   SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
   FROM TABLE (
     INFER_SCHEMA(
       LOCATION=>'@~/customer.csv',
-      FILE_FORMAT=>'basic_csv'
+      FILE_FORMAT=>'BASIC_CSV'
     )
   )
 )
-'''
+"""
 result=cur.execute(sql).fetchall()[0]
 print(result)
 
-sql = """select get_ddl('table', 'mytable')"""
+sql = """select get_ddl('table', '""" + TABLENAME + """')"""
 result=cur.execute(sql).fetchall()[0]
 print(result)
-```
 
-* * *
+FF_options = " SKIP_HEADER=1 FIELD_DELIMITER=',' FIELD_OPTIONALLY_ENCLOSED_BY=NONE TYPE=csv "
 
-# <a name=method></a>Python Methods
------
-Ideally, if used many times, we would want to make Python methods for this. 
+# Create a file format object
+result=cur.execute("CREATE OR REPLACE FILE FORMAT load_csv " + FF_options).fetchall()[0]
+print(result)
+
+
+sql = """COPY INTO """ + TABLENAME + """
+FROM '@~'
+FILES = ('customer.csv')
+FILE_FORMAT = 'load_csv'
+ON_ERROR=ABORT_STATEMENT
+PURGE=TRUE;"""
+
+result=cur.execute(sql).fetchall()[0]
+print (result)
+
+sql = "select count(1) from " + TABLENAME
+result=cur.execute(sql).fetchall()[0]
+print (result)
+
+### If everything worked out, you should get a count of 4
+
+
+````
 
 
 ## Updated Python Program

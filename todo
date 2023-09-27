@@ -1,21 +1,25 @@
 snowflake
 
-DONE cli and dpt setup - done, post it
-DONE vscode setup
-  https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
-DONE snowsql setup
-DONE events
-simple dpt
+  DONE cli and dpt setup - done, post it
+  DONE vscode setup
+    https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+  DONE snowsql setup
+  DONE events
+  DONE simple dpt
 object versus dict
-DONE data generation
+  DONE data generation
 streamlit
 events versus cpt and cronjobs
 different stages examples, user, table, named
 flatten and queryng json files
+sci anaconda -- use external app, in virtual env
+window fuctions rank, important for data enginners -- include mysql and postgresql if there are any differences. 
+uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
+different stages
 
 pipe example, internal and external
 
-different guis, vscode, and other
+DONE different guis, vscode, and other
 1st dpt project in postgresql
   copy data to snowflake
   execute in snowflake

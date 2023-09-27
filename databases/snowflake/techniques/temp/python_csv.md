@@ -271,35 +271,6 @@ It could be incorporated with Streamlit to further enhance the loading process.
 
 ```python
 
-from pathlib import Path
-
-
-import snowflake.connector
-from snowflake.connector.cursor import DictCursor
-
-import os
-
-vars = os.environ
-
-TABLENAME="TUTORIAL.TEST.MY_TABLE"
-
-if 'SF_USER' not in vars:
-    print ('SF_USER not defined in env, exiting.\n')
-    sys.exit()
-
-if not 'SF_PASS' in vars:
-    print ('SF_PASS not defined in env, exiting.\n')
-    sys.exit()
-
-if vars.get("SF_ACCOUNT") is None:
-    print ('SF_ACCOUNT not defined in env, exiting.\n')
-    sys.exit()
-
-
-def stage_csv(cur,fpath,stage='@~/'):
-    ''' could check for status of SKIPPED or UPLOADED '''
-    result=cur.execute(f"PUT file:///{fpath} {stage}").fetchall()[0]
-    print(f"STAGED {fpath} to {stage} {result['status']}")
 
 from pathlib import Path
 

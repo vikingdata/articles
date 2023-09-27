@@ -11,22 +11,17 @@ _**by Mark Nielsen
 Original Copyright Jan 2022**_
 
 
-1.  [Links](#links)
-2.  [Setup](#setup)
-3.  [Install Python connector](#installpython)
-3.  [Load csv file with Python](#load)
+1.  [Setup](#setup)
+2.  [Install Python connector](#installpython)
+3.  [Load csv file with Python](#python)
 4.  [Python Methods](#method)
-5.  [Loading different files](#files)
 
-* * *
 
-# <a name=links></a>Links
------
 
 
 * * *
 
-# <a name=load></a>Setup
+# <a name=setup></a>Setup
 -----
 
 
@@ -263,6 +258,11 @@ print (result)
 
 ````
 
+* * *
+
+# <a name=method></a>Python methods
+-----
+
 
 ## Updated Python Program
 
@@ -281,8 +281,6 @@ from snowflake.connector.cursor import DictCursor
 import os
 
 vars = os.environ
-
-TABLENAME="TUTORIAL.TEST.MY_TABLE"
 
 if 'SF_USER' not in vars:
     print ('SF_USER not defined in env, exiting.\n')
@@ -385,7 +383,4 @@ if __name__=='__main__':
 ```
 
 
-* * *
 
-# <a name=files></a>Loading different files
------

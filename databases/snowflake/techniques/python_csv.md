@@ -341,6 +341,12 @@ def load_table(cur,fname,table,stage='@~'):
     print(f"LOADED {fname} to {result['status']}")
 
 
+    FF_options = " SKIP_HEADER=1 FIELD_DELIMITER=',' FIELD_OPTIONALLY_ENCLOSED_BY=NONE TYPE=csv "
+
+    # Create a file format object
+    result=cur.execute("CREATE OR REPLACE FILE FORMAT load_csv " + FF_options).fetchall()[0]
+    print(result)
+
     sql = """COPY INTO TUTORIAL.TEST.""" + table+ """
       FROM '@~'
       FILES = ('""" + table + """.csv')

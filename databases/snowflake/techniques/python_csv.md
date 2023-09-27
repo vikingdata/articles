@@ -54,6 +54,10 @@ customer_id,name,email,phone,age,balance,premium,join_date
 ## Load into Stage
 
 ```sql
+create database if not exists TUTORIAL;
+use TUTORIAL;
+create schema if not exists TEST;
+
 use schema TUTORIAL.TEST;
 CREATE OR REPLACE FILE FORMAT basic_csv TYPE = csv PARSE_HEADER = true;
 CREATE STAGE load DIRECTORY = ( ENABLE = true );

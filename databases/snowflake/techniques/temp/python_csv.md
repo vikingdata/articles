@@ -270,11 +270,60 @@ This program program provides a rough general template for loading csv files.
 It could be incorporated with Streamlit to further enhance the loading process.
 
 ```python
+
 from pathlib import Path
 
 
 import snowflake.connector
 from snowflake.connector.cursor import DictCursor
+
+import os
+
+vars = os.environ
+
+TABLENAME="TUTORIAL.TEST.MY_TABLE"
+
+if 'SF_USER' not in vars:
+    print ('SF_USER not defined in env, exiting.\n')
+    sys.exit()
+
+if not 'SF_PASS' in vars:
+    print ('SF_PASS not defined in env, exiting.\n')
+    sys.exit()
+
+if vars.get("SF_ACCOUNT") is None:
+    print ('SF_ACCOUNT not defined in env, exiting.\n')
+    sys.exit()
+
+
+def stage_csv(cur,fpath,stage='@~/'):
+    ''' could check for status of SKIPPED or UPLOADED '''
+    result=cur.execute(f"PUT file:///{fpath} {stage}").fetchall()[0]
+    print(f"STAGED {fpath} to {stage} {result['status']}")
+
+from pathlib import Path
+
+
+import snowflake.connector
+from snowflake.connector.cursor import DictCursor
+
+import os
+
+vars = os.environ
+
+TABLENAME="TUTORIAL.TEST.MY_TABLE"
+
+if 'SF_USER' not in vars:
+    print ('SF_USER not defined in env, exiting.\n')
+    sys.exit()
+
+if not 'SF_PASS' in vars:
+    print ('SF_PASS not defined in env, exiting.\n')
+    sys.exit()
+
+if vars.get("SF_ACCOUNT") is None:
+    print ('SF_ACCOUNT not defined in env, exiting.\n')
+    sys.exit()
 
 
 def stage_csv(cur,fpath,stage='@~/'):
@@ -284,12 +333,19 @@ def stage_csv(cur,fpath,stage='@~/'):
 
 def load_table(cur,fname,table,stage='@~'):
 
+
+    sql = 'PUT file://' + table + '.csv @~/ AUTO_COMPRESS = FALSE'
+#    print (sql)
+    result=cur.execute(sql).fetchall()[0]
+    print(result)
+
+
     sql="CREATE OR REPLACE FILE FORMAT basic_csv TYPE = csv PARSE_HEADER = true"
     result=cur.execute(sql).fetchall()
     print (result)
 
-    sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table') 
-        AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'basic_csv'))
+    sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table')
+        AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/''' + table + '''.csv', FILE_FORMAT => 'basic_csv'))
     '''
 
     print('Using following inferred schema:')
@@ -297,7 +353,7 @@ def load_table(cur,fname,table,stage='@~'):
     print(result['COLUMNS'])
 
     sql =f'''
-    CREATE or REPLACE TABLE {table} USING TEMPLATE (
+    CREATE or REPLACE TABLE TUTORIAL.TEST.{table} USING TEMPLATE (
     SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
     FROM TABLE (
         INFER_SCHEMA(
@@ -312,12 +368,13 @@ def load_table(cur,fname,table,stage='@~'):
     print(f"LOADED {fname} to {result['status']}")
 
 
-    sql = """COPY INTO {table} """
+    sql = """COPY INTO TUTORIAL.TEST.""" + table+ """
       FROM '@~'
-      FILES = ('customer.csv')
+      FILES = ('""" + table + """.csv')
       FILE_FORMAT = 'load_csv'
       ON_ERROR=ABORT_STATEMENT
-      PURGE=TRUE;"""
+      PURGE=FALSE;"""
+    print (sql)
 
     result=cur.execute(sql).fetchall()[0]
     print (result)
@@ -326,12 +383,12 @@ def load_table(cur,fname,table,stage='@~'):
     result=cur.execute(sql).fetchall()[0]
     print (result)
 
-def connect():
+def connect(vars=None):
     # Create a connection object
     ctx = snowflake.connector.connect(
-        user='XXXXXXX',
-        password='YYYYYY',
-        account='AAAAA-BBBBBB',
+       user=vars['SF_USER'],
+       password=vars['SF_PASS'],
+       account=vars['SF_ACCOUNT'],
         warehouse='compute_wh',
         database='tutorial',
         schema='test'
@@ -342,17 +399,20 @@ def connect():
 
     return ctx,cur
 
-def main():
-    ctx,cur=connect()
-    csv_path=Path('customer2.csv')
+def main(vars=None):
+    ctx,cur=connect(vars=vars)
+    csv_path=Path(vars['PWD'] + '/customer2.csv')
 
-    stage_csv(cur,csv_path,stage='@~/')       
+    stage_csv(cur,csv_path,stage='@~/')
     load_table(cur,csv_path.name,csv_path.stem)
 
 if __name__=='__main__':
-    main()
+    main(vars=vars)
+
+
+
 ```
-O[O
+
 
 * * *
 

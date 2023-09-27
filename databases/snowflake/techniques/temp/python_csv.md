@@ -44,7 +44,7 @@ https://docs.snowflake.com/en/sql-reference/functions/generate_column_descriptio
 ## Create CSV
 
 Create an example customer.csv file like the following.  This example has different types
-of data which will be inferred by INFER_SCHEMA.
+of data which will be inferred by INFER_SCHEMA. Create a duplicate file called "customer2.csv".
 
 ```
 customer_id,name,email,phone,age,balance,premium,join_date
@@ -196,7 +196,6 @@ sql = "SELECT * FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FOR
 result=cur.execute(sql).fetchall()[0]
 print(result)
 
-#sys.exit()
 # Useful for MANUAL creation
 sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table')
     AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'BASIC_CSV'))
@@ -242,6 +241,19 @@ PURGE=TRUE;"""
 result=cur.execute(sql).fetchall()[0]
 print (result)
 
+result=cur.execute(sql).fetchall()[0]
+print (result)
+JOB_ID = result['ID']
+print ("job id is " + str(JOB_ID))
+
+## now validate.
+sql = "SELECT * FROM TABLE(VALIDATE(" + TABLENAME + ", JOB_ID=>'" + JOB_ID + "'));"
+print (sql)
+result=cur.execute(sql).fetchall()
+## If nothing is returned, then no errors. 
+print (result)
+
+
 sql = "select count(1) from " + TABLENAME
 result=cur.execute(sql).fetchall()[0]
 print (result)
@@ -274,7 +286,7 @@ def load_table(cur,fname,table,stage='@~'):
 
     sql="CREATE OR REPLACE FILE FORMAT basic_csv TYPE = csv PARSE_HEADER = true"
     result=cur.execute(sql).fetchall()
-
+    print (result)
 
     sql = '''SELECT GENERATE_COLUMN_DESCRIPTION(ARRAY_AGG(OBJECT_CONSTRUCT(*)), 'table') 
         AS columns FROM TABLE (INFER_SCHEMA(LOCATION => '@~/customer.csv', FILE_FORMAT => 'basic_csv'))
@@ -299,6 +311,21 @@ def load_table(cur,fname,table,stage='@~'):
     result=cur.execute(sql).fetchall()[0]
     print(f"LOADED {fname} to {result['status']}")
 
+
+    sql = """COPY INTO {table} """
+      FROM '@~'
+      FILES = ('customer.csv')
+      FILE_FORMAT = 'load_csv'
+      ON_ERROR=ABORT_STATEMENT
+      PURGE=TRUE;"""
+
+    result=cur.execute(sql).fetchall()[0]
+    print (result)
+
+    sql = "select count(1) from " + table
+    result=cur.execute(sql).fetchall()[0]
+    print (result)
+
 def connect():
     # Create a connection object
     ctx = snowflake.connector.connect(
@@ -317,7 +344,7 @@ def connect():
 
 def main():
     ctx,cur=connect()
-    csv_path=Path('c:/temp/customer2.csv')
+    csv_path=Path('customer2.csv')
 
     stage_csv(cur,csv_path,stage='@~/')       
     load_table(cur,csv_path.name,csv_path.stem)
@@ -325,7 +352,7 @@ def main():
 if __name__=='__main__':
     main()
 ```
-
+O[O
 
 * * *
 

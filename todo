@@ -11,11 +11,14 @@ object versus dict
 streamlit
 events versus cpt and cronjobs
 different stages examples, user, table, named
-flatten and queryng json files
+flatten and queryng json files - -nested json queries
 sci anaconda -- use external app, in virtual env
 window fuctions rank, important for data enginners -- include mysql and postgresql if there are any differences. 
 uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
 different stages
+defining and enforcement of contraints -- examples
+   unie, primary, foriegn, not null and not null is only one enforced.
+File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger. 
 
 pipe example, internal and external
 

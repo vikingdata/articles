@@ -190,7 +190,68 @@ https://docs.snowflake.com/en/user-guide/tables-external-intro.html
 * The smalletst object in time travel is table 100
 https://docs.snowflake.com/en/user-guide/data-time-travel.html#data-retention-period
 
+* Virutal warehouse are billed by each second, with a minimum of 60 second startup
+  https://docs.snowflake.com/en/user-guide/credits.html
 
+* Clustering keys should be defined on multi terabyte rnage -- need reference for this.
+
+* Snowpipe calucates costs based on per-second/per-core
+  https://docs.snowflake.com/en/user-guide/data-load-snowpipe-billing
+
+* Federated Authentication, or single sign on, is available on all editions. 
+
+* Objects are owneed by role that created it, not user.
+
+* Loading data can use the file formats: CSV | JSON | AVRO | ORC | PARQUET | XML
+  Unloading can only be csv, json, or parquet
+  https://docs.snowflake.com/en/sql-reference/sql/create-file-format
+
+* For data sharing, it seems like the provider can only share data with consumers
+  https://docs.snowflake.com/en/user-guide/data-sharing-intro
+
+* failsafe is 7 days, not configurable, time travel is 90 days. Timetravel is 1 day, except for Enterprise. 
+  https://docs.snowflake.com/en/user-guide/data-failsafe.html
+
+* Once micro partitions are made, they are immutable
+https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions
+
+* COPY INTO STAGE in the only command to import/export data
+https://docs.snowflake.com/en/user-guide/data-unload-overview
+
+* larger warehouse might take longer to provision
+https://docs.snowflake.com/en/user-guide/warehouses-considerations
+
+* dtermning size of warehouse
+  https://www.chaosgenius.io/blog/snowflake-warehouse-sizes/#:~:text=1)%20Start%20Small%20and%20Scale,SMALL%20warehouse%20and%20run%20workloads.
+  https://www.analytics.today/blog/top-3-snowflake-performance-tuning-tactics
+
+* For storage, look at tables, databases, internal stages 121
+
+* Out of contraints, unique, primary key, foriegn key, not null ONLY not null is enforced
+  https://docs.snowflake.com/en/sql-reference/constraints-overview
+
+* File size load on web interface is 50 MB, but with python connector there is no limitation.
+
+* Data heirarchy : account, database, schema, table
+
+* only permanent table have fail safe, 1 day at least for all accounts
+
+* shares are made by sql or through web gui, which uses sql behind the scene
+
+* fail safe is automatic and can't be turned off
+
+* For uploads, 100 MB to 250 MB compressed, split large files into smaller files, use delimiters with single or duble quotes
+
+* INITIALLY_SUSPENDED, default false, controls if warehouse starts after created
+
+* Cloned objects inherit children and all privs to the children. The cloned object itself does not inherit grants.
+
+* Transient and temprary table have max 1 day for charges, drop temporary tables after a day
+
+* A pipe can reorder columns or imit thme based on select statement.
+
+* https://docs.snowflake.com/en/user-guide/security-column-ext-token-use 149
+   data tokenization integration partner
 
 
 

@@ -14,6 +14,10 @@ Original Copyright Feb 2021**_
 
 This article will grow over time. 
 
+TODO: simple performance_shema queries, information_schema queries
+      Tables without primary or unique keys
+      Indexes not used. 
+
 1. [table files](#files)
 2. [InnooDB buffer pool ratio](#ibpr)
 3. [Size of database/tables](#size)

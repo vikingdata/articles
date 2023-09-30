@@ -21,7 +21,7 @@ TODO: simple performance_shema queries, information_schema queries
 3. [Size of database/tables](#size)
 4. [No index](#noindex)
 5. [Busiest tables](#busy)
-6. (Unused indexes)[#unused)
+6. [Unused indexes](#unused)
 * * *
 
 <a name=files></a>files

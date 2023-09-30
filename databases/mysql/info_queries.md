@@ -27,7 +27,7 @@ TODO: simple performance_shema queries, information_schema queries
 <a name=files></a>files
 -----
 
-This tell you if a table is in its own tablespac, general tablespace, or system tablespace.
+This tell you if a table is in its own tablespace, general tablespace, or system tablespace.
   https://dev.mysql.com/doc/refman/8.0/en/general-tablespaces.html
 
 

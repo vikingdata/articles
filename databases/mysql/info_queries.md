@@ -39,7 +39,7 @@ mysql> select FILE_ID, FILE_NAME, FILE_TYPE, TABLESPACE_NAME
 
 * * *
 
-<a name=ibfr></a>InnooDB buffer pool ratio
+<a name=ibpr></a>InnooDB buffer pool ratio
 -----
 
 This tell how efficient read queries are getting data from memory and not disk.

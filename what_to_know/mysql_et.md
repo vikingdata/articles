@@ -37,10 +37,25 @@ streams.
 
 * Data Dictionary  Holds information about database objects
    * table, view, and stored procedure definitions
-   * server configuration rollback
+   * ??? server configuration rollback
    * triggers
    * NOT users, user groups, privs, roles
    * Physical partitions, files, backups
    * size of tables, indexes, and no of rows
+   * https://dev.mysql.com/doc/refman/8.0/en/data-dictionary-information-schema.html
+   * https://downloads.mysql.com/docs/mysql-infoschema-excerpt-8.0-en.pdf
+
+^ When restoring an innodb cluster, to get rid of the running gitd plugin for updating purge
+  * when dumping, -set-gtid-purged=OFF or Remove the @@GLOBAL.gtid_purged statement from the dump file
+
+* for TDE, the right keyring plugin will keeps keys stored in a central location and table keys can be regenerated fro mmaster key
+
+* innodb_directories=’/innodb_extras’ allows for sacnning other directories for innodb tablespaced.
+
+* mysql_config_editor can be used to store credentials, but it is not foolproof. 
+
+* For DDL changes. a serialized copy is kept in SDI, a copy is stored in tablespace
+
+
 
 

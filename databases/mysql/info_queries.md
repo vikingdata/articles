@@ -200,7 +200,7 @@ LIMIT 10;
 
 * * *
 
-<a name=unused</a>Unused Indexes.
+<a name=unused></a>Unused Indexes.
 -----
 
 

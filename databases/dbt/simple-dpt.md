@@ -116,7 +116,7 @@ The `data-paths` config has been renamed to `seed-paths`. Please update your
 
 Two tables will have been created in mark_dev.
 The first one is "my_first_dbt_model" which has one row.
-The first one is "my_second_dbt_model" which has one row.
+The second one is "my_second_dbt_model" which has one row and was dependent on the first table. 
 
 
 * * *

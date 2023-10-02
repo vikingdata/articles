@@ -139,7 +139,7 @@ The steps are :
        * There is a "ref" that the first table needs to exist.
    * Run the query and create a second table.     
 
-DBT simply runs select statements from source tables and create tables based on the output. But it is more complicated than that. You have 500 tables
+DBT simply runs select statements from source tables and create tables based on the output. But it is more complicated than that. Say you  have 500 tables
 to create based on 1000 source tables. There might be lots of dependencies on which tables to create first because other tables depend on them.
 DBT takes care of all the dependencies. There are also incremental updates you can do to tables instead of recreating them. 
 

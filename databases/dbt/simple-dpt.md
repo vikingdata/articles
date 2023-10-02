@@ -124,10 +124,12 @@ The first one is "my_second_dbt_model" which has one row.
 <a name=explain></a>Explain the process
 -----
 
-The whole point of DBT is to make complicated warehouse tables.  DBT will run any query you give it and make a table with the output.You select data from source tables to create other tables.
+The whole point of DBT is to make complicated warehouse tables.  DBT will run any query you give it and make a table with the output. You select data from source tables to create other tables.
 And you may make more tables that depend on the source tables and tables you just made.
 Normally, the "source" table will have been created with data in it. In this case, we create
-a table with one row. Thus the steps DBT does is:
+a table with one row.
+
+The steps are : 
 * Figure out the dependencies. The second table depends on the first. Do the first table first. 
 * The first thing we do is make a table with a single entry.
    * Compile : projects/models/example/my_first_dbt_model.sql

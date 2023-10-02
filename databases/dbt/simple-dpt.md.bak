@@ -14,7 +14,7 @@ Copyright September 2023**_
 
 1. [Links](#links)
 2. [Install DBT](#install)
-2. [Setup DBT project for PostgreSQL](#simple)
+2. [Setup DBt project for PostgreSQL](#simple)
 3. [Run simple dbt](#run)
 4. [Explain the process](#explain)
 5. [Snowflake example](#sf)
@@ -40,7 +40,7 @@ We will first do this on PostgreSQL and then Snowflake.
 
 * * *
 
-<a name=smple></a>Setup DBT project for PostgreSQL
+<a name=smple></a>Setup DBt project for PostgreSQL
 -----
 
 We Will first do this on our PostgreSQL system.
@@ -127,18 +127,18 @@ The first one is "my_second_dbt_model" which has one row.
 The whole point of DBT is to make complicated warehouse tables. Some tables depend on other tables.  DBT will run
 any query you give it and make a table with the output. Normally, the "source" table will have been created with data in it. In this case, we create
 a table with one row. Thus the steps DBT does is:
-* Figure out the dependencies. The second table depends on the first. Do the first table first. 
+* Figure out the dependecies. The second table depends on the first. Do the first table first. 
 * The first thing we do is make a table with a single entry.
    * Compile : projects/models/example/my_first_dbt_model.sql
    * Run SQL, It creates a table with a single entry. 
 * The second table depends on the first. Run the query and create the 2nd table based on output of the query on the first table.
    * Compile : projects/models/example/my_second_dbt_model.sql
        * There is a "ref" that the first table needs to exist.
-   * Run the query and create a second table.     
+   * Run the query and create a second tbale.     
 
 DBT simply runs select statements from source tables and create tables based on the output. But it is more complicated than that. You have 500 tables
-to create based on 1000 source tables. There might be lots of dependencies on which tables to create first because other tables depend on them.
-DBT takes care of all the dependencies. There are also incremental updates you can do to tables instead of recreating them. 
+to create based on 1000 source tables. There might be lots of dependencies on which tables to create first because other tables depdend on them.
+DBT takes care of all the dependecies. There are also incremental updates you can do to tables instead of recreasting them. 
 
 
 * * *

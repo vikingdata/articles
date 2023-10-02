@@ -1,6 +1,6 @@
 
 ---
-title : DBT install  CLI and Adapters
+title : MySQL Info queries
 author : Mark Nielsen
 copyright : Feb 2021 to Sept 2023
 ---

@@ -6,6 +6,8 @@ Copyright: \@Sept 2023
 ---
 
 ## DBT
+* [Free classes](https://courses.getdbt.com/collections)
+* [Youtube classes](https://courses.getdbt.com/collections)
 * [https://docs.getdbt.com/docs/introduction](https://docs.getdbt.com/docs/introduction) 
 * [https://docs.getdbt.com/docs/core/installation](https://docs.getdbt.com/docs/core/installation )
 * [https://docs.getdbt.com/docs/supported-data-platforms](https://docs.getdbt.com/docs/supported-data-platforms)
@@ -42,6 +44,7 @@ Copyright: \@Sept 2023
 * [https://docs.getdbt.com/terms/dimensional-modeling](https://docs.getdbt.com/terms/dimensional-modeling)
 * [https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf](https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf)
 * [https://www.getdbt.com/blog/future-of-the-modern-data-stack](https://www.getdbt.com/blog/future-of-the-modern-data-stack)
+* [https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf](https://static1.squarespace.com/static/51237d33e4b03a5603cd7aa4/t/57190b477da24f4efb600620/1461259091302/Agile-Data-Warehouse-Design-Sampler.pdf)
 
 ## Terms
 * CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.

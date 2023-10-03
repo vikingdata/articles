@@ -125,7 +125,7 @@ The second one is "my_second_dbt_model" which has one row and was dependent on t
 -----
 
 The primary objective of DBT is to simplify the creation of complex warehouse tables. DBT is capable of executing any query provided to it and generating a table based on the query results. You can select data from source tables to build new tables, and these newly created tables can serve as dependencies for other tables. Typically, the "source" table already contains data, but in some cases, you may create one more more tables with
-select statements that are create comments.
+select statments that are create comments.
  * example : select 'comment1', 245, 'comment 2 this is a long sentence.";
 
 Here's a breakdown of the steps involved:

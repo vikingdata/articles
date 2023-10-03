@@ -250,7 +250,7 @@ https://docs.snowflake.com/en/user-guide/warehouses-considerations
 
 * A pipe can reorder columns or imit thme based on select statement.
 
-* https://docs.snowflake.com/en/user-guide/security-column-ext-token-use 149
+* https://docs.snowflake.com/en/user-guide/security-column-ext-token-use 149O[O
    data tokenization integration partner
 
 

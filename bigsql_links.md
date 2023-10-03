@@ -19,6 +19,7 @@ Copyright: \@Sept 2023
 
 * [https://youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT&si=6s7Og5oAnuuf2Bf0](https://youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT&si=6s7Og5oAnuuf2Bf0
 * or [https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT](https://www.youtube.com/playlist?list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT)
+* [Materializations](https://docs.getdbt.com/docs/build/materializations)
 
 ## Better SQL
 * [https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1](https://www.getdbt.com/blog/write-better-sql-a-defense-of-group-by-1])

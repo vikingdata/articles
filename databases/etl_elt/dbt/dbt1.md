@@ -60,7 +60,10 @@ mkdir logs
 mkdir dbt_packages
 mkdir profiles
 ```
-  * Create  profiles/profile.yml
+
+* Install PostgreSQL, make accounts, and make database described in [DBT install : CLI and Adapters](https://github.com/vikingdata/articles/blob/main/databases/snowflake/setup/snowflake_interfaces.md) , but just for Postgresql. 
+
+* Create  profiles/profile.yml
     Change credentials if necessary. 
 ```bash
 echo "

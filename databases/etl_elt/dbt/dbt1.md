@@ -60,7 +60,7 @@ mkdir logs
 mkdir dbt_packages
 mkdir profiles
 ```
-  * Create profile.yml to profiles/profile.yml
+  * Create  profiles/profile.yml
     Change credentials if necessary. 
 ```bash
 echo "
@@ -124,24 +124,23 @@ The second one is "my_second_dbt_model" which has one row and was dependent on t
 <a name=explain></a>Explain the process
 -----
 
-The whole point of DBT is to make complicated warehouse tables.  DBT will run any query you give it and make a table with the output. You select data from source tables to create other tables.
-And you may make more tables that depend on the source tables and tables you just made.
-Normally, the "source" table will have been created with data in it. In this case, we create
-a table with one row.
+The primary objective of DBT is to simplify the creation of complex warehouse tables. DBT is capable of executing any query provided to it and generating a table based on the query results. You can select data from source tables to build new tables, and these newly created tables can serve as dependencies for other tables. Typically, the "source" table already contains data, but in some cases, you may create one more more tables with
+select statments that are create comments.
+ * example : select 'comment1', 245, 'comment 2 this is a long sentence.";
 
-The steps are : 
-* Figure out the dependencies. The second table depends on the first. Do the first table first. 
-* The first thing we do is make a table with a single entry.
-   * Compile : projects/models/example/my_first_dbt_model.sql
-   * Run SQL, It creates a table with a single entry. 
-* The second table depends on the first. Run the query and create the 2nd table based on output of the query on the first table.
-   * Compile : projects/models/example/my_second_dbt_model.sql
-       * There is a "ref" that the first table needs to exist.
-   * Run the query and create a second table.     
+Here's a breakdown of the steps involved:
 
-DBT simply runs select statements from source tables and create tables based on the output. But it is more complicated than that. Say you  have 500 tables
-to create based on 1000 source tables. There might be lots of dependencies on which tables to create first because other tables depend on them.
-DBT takes care of all the dependencies. There are also incremental updates you can do to tables instead of recreating them. 
+* Identify Dependencies: Determine the dependencies between tables, where the second table relies on the first one. Start by creating the first table.
+
+* Initial Table Creation: Begin by generating a table with a single entry. This involves compiling the SQL script found in "projects/models/example/my_first_dbt_model.sql" and running the SQL to create the initial table with a single row.
+
+* Second Table Creation: The second table depends on the first. Execute the query and create the second table based on the output of the query performed on the first table. Compile the SQL script located in "projects/models/example/my_second_dbt_model.sql."
+
+* Handling Dependencies: Ensure that the first table exists by referencing it ("ref") as required.
+
+* Create the Second Table: Execute the query to generate the second table.
+
+DBT operates by executing select statements from source tables and automatically generating tables based on the query results. However, it becomes more intricate when you have to create 500 tables based on 1000 source tables. In such scenarios, numerous dependencies may determine the order in which tables should be created because other tables rely on them. DBT manages these dependencies efficiently. Additionally, DBT offers the option of incremental updates to tables instead of recreating them from scratch.
 
 
 * * *

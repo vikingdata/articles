@@ -61,7 +61,7 @@ mkdir dbt_packages
 mkdir profiles
 ```
 
-* Install PostgreSQL, make accounts, and make database described in [DBT install : CLI and Adapters](https://github.com/vikingdata/articles/blob/main/databases/snowflake/setup/snowflake_interfaces.md) , but just for Postgresql. 
+* Install PostgreSQL, make accounts, and make database described in [DBT install : CLI and Adapters](https://github.com/vikingdata/articles/blob/main/databases/snowflake/setup/snowflake_interfaces.md),  but just for Postgresql. 
 
 * Create  profiles/profile.yml
     Change credentials if necessary. 
@@ -133,7 +133,7 @@ select statements that are create comments.
 
 Here's a breakdown of the steps involved:
 
-* Identify Dependencies: Determine the dependencies between tables. In this case the second table relies on the first one. Create the to sql models for the tables. In our case, they are already created under "projects/models". 
+* Identify Dependencies: Determine the dependencies between tables. In this case the second table relies on the first one. Create the sql models for the tables. In our case, they are already created under "projects/models". 
 
 * Run dbt
    * DBT initially creates a table with a single entry. This involves compiling the SQL script found in "projects/models/example/my_first_dbt_model.sql".

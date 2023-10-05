@@ -58,6 +58,13 @@ title: Snowflake, SQL, DBT, and other links
 * [https://training.snowflake.com/lmt/!clmsbrowsev2.prMain?site=sf&in_region=us&in_lang=en-us&in_category_id=1687](Free online classes)
 * [https://learn.snowflake.com/dashboard](Your free classes dashboard)
 
+## Warehouse schemas
+* [https://streamsets.com/blog/schemas-data-warehouses-star-galaxy-snowflake/#:~:text=Star%2C%20galaxy%2C%20and%20snowflake%20schema,aggregates%20within%20a%20data%20warehouse.]9https://streamsets.com/blog/schemas-data-warehouses-star-galaxy-snowflake/#:~:text=Star%2C%20galaxy%2C%20and%20snowflake%20schema,aggregates%20within%20a%20data%20warehouse.)
+* [https://www.integrate.io/blog/snowflake-schemas-vs-star-schemas-what-are-they-and-how-are-they-different/](https://www.integrate.io/blog/snowflake-schemas-vs-star-schemas-what-are-they-and-how-are-they-different/)
+* [https://www.alexdebrie.com/posts/dynamodb-single-table/](https://www.alexdebrie.com/posts/dynamodb-single-table/)
+* [https://about.gitlab.com/handbook/business-technology/data-team/platform/edw/](https://about.gitlab.com/handbook/business-technology/data-team/platform/edw/)
+* [https://www.fivetran.com/blog/star-schema-vs-obt](https://www.fivetran.com/blog/star-schema-vs-obt)
+* [https://docs.getdbt.com/blog/kimball-dimensional-model](https://docs.getdbt.com/blog/kimball-dimensional-model)
 
 ## Terms
 * CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.

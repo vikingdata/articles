@@ -57,24 +57,53 @@ as
 $$
 from faker import Faker
 
+from faker.providers import DynamicProvider
+
+products = DynamicProvider(
+     provider_name="product",
+     elements=["lamp", "book", "car", "sock", "pants", "fork", "spoon", "door", "dog", "cat", "chair"],
+)
+
+prices = DynamicProvider(
+     provider_name="price",
+     elements= range(100)
+)
+
 def fake(choice):
   f = Faker()
+  f.add_provider(products)
+  f.add_provider(prices)
+
+
   if choice == "fullname":
     return f.name()
   elif  choice == "address":
     return f.address()
   elif  choice == "phone":
     return f.phone_number()
+  elif  choice == "product":
+    return f.product()
+  elif  choice == "phone":
+    return f.price()
 
   return ''
 $$
 ;
 ```
 
-* Make the products function for fake data.
+## Make the products table.
 
-
-
+```sql
+create or replace table product as (
+  with products as (
+    select seq4() as id
+      , fake('product') as name
+      , fake('price') as price
+    FROM TABLE(GENERATOR(ROWCOUNT => 5))
+  )
+select id, name, price from products
+);
+```
 
 ## Make the customer table.
 ```sql
@@ -95,10 +124,213 @@ select id, name, address, phone from people
 
 ```
 
-## Make the product table.
-
 ## Make the order table.
+```sql
+set (max_customer_id) = (select max(id) from customers);
+create or replace table orders as
+  select seq4() as orders
+    , abs(floor(normal(1, $max_customer_id, RANDOM()))) as customer_id
+    , DATEADD(day, seq4(), TO_DATE('2013-05-08')) AS  date_created
+ FROM TABLE(GENERATOR(ROWCOUNT => 300))
+;
 
-## Make the order_products table.
+```
 
-##
+
+
+## Make the order_product template table and stored procedure, and the order_product table.
+
+```
+create or replace order_product_template (
+  order_id int,
+  product_id int
+);
+
+
+create or replace table order_product_template (
+  order_id int,
+  product_id int
+);
+
+CREATE OR REPLACE PROCEDURE make_order_product()
+  RETURNS string
+as
+$$
+DECLARE
+    V_SQL text;
+    r_random int;
+    c_row CURSOR FOR SELECT order_id from orders;
+    max_product_id int;
+    order_id int;
+    res text;
+
+BEGIN
+    create or replace table TEMP_order_product like order_product_template;
+    select max(id) into :max_product_id from product;
+    open c_row;
+
+    for r_row in c_row do
+        r_random := uniform(1, 5, random());
+        V_SQL := ' insert into TEMP_order_product select '|| r_row.order_id || ' , abs(floor(normal(1, ' || max_product_id || ', R\
+ANDOM())))    FROM TABLE(GENERATOR(ROWCOUNT =>  ' || r_random  || ' ))';
+        EXECUTE IMMEDIATE V_SQL;
+    END FOR;
+    close c_row;
+
+    drop table if exists order_product;
+    ALTER TABLE  TEMP_order_product RENAME TO order_product;
+
+    res := 'Created table order_product';
+    return (res);
+END;
+$$
+;
+
+call  make_order_product();
+
+
+```
+
+## One big file
+
+```sql
+
+create database if not exists tutorial;
+use database tutorial;
+create schema if not exists test;
+use schema test;
+
+CREATE OR REPLACE FUNCTION fake( choice varchar(64))
+  returns string 
+  language python
+  runtime_version = '3.10'
+  packages = ('faker')
+  handler = 'fake'
+as
+$$
+from faker import Faker
+
+from faker.providers import DynamicProvider
+
+products = DynamicProvider(
+     provider_name="product",
+     elements=["lamp", "book", "car", "sock", "pants", "fork", "spoon", "door", "dog", "cat", "chair"],
+)
+
+prices = DynamicProvider(
+     provider_name="price",
+     elements= range(100)
+)
+
+def fake(choice):
+  f = Faker()
+  f.add_provider(products)
+  f.add_provider(prices)
+  if choice == "fullname":
+    return f.name()
+  elif  choice == "address":
+    return f.address()
+  elif  choice == "phone":
+    return f.phone_number()
+  elif  choice == "product":
+    return f.product()
+  elif  choice == "phone":
+    return f.price()
+
+
+  return ''
+$$
+;
+
+create or replace table customers as (
+  with people as ( 
+    select seq4() as id
+      , fake('fullname') as name
+      , fake('address') as address
+      , fake('phone') as phone
+    FROM TABLE(GENERATOR(ROWCOUNT => 10))
+  )
+select id, name, address, phone from people
+
+);
+
+
+create or replace table product as (
+  with products as (
+    select seq4() as id
+      , fake('product') as name
+      , fake('price') as price
+    FROM TABLE(GENERATOR(ROWCOUNT => 5))
+  )
+select id, name, price from products
+);
+
+
+set (max_customer_id) = (select max(id) from customers);
+create or replace table orders as
+  select seq4() as order_id
+    , abs(floor(normal(1, $max_customer_id, RANDOM()))) as customer_id
+    , DATEADD(day, seq4(), TO_DATE('2013-05-08')) AS  date_created
+ FROM TABLE(GENERATOR(ROWCOUNT => 20))
+;
+
+create or replace table order_product_template (
+  order_id int,
+  product_id int
+);
+
+
+create or replace table order_product_template (
+  order_id int,
+  product_id int
+);
+
+
+create or replace table order_product_template (
+  order_id int,
+  product_id int
+);
+
+CREATE OR REPLACE PROCEDURE make_order_product()
+  RETURNS string
+as
+$$
+DECLARE
+    V_SQL text;
+    r_random int;
+    c_row CURSOR FOR SELECT order_id from orders;
+    max_product_id int;
+    order_id int;
+    res text;
+
+BEGIN
+    create or replace table TEMP_order_product like order_product_template;
+    select max(id) into :max_product_id from product;
+    open c_row;
+
+    for r_row in c_row do
+        r_random := uniform(1, 5, random());
+        V_SQL := ' insert into TEMP_order_product select '|| r_row.order_id || ' , abs(floor(normal(1, ' || max_product_id || ', RANDOM())))    FROM TABLE(GENERATOR(ROWCOUNT =>  ' || r_random  || ' ))';
+        EXECUTE IMMEDIATE V_SQL;
+    END FOR;
+    close c_row;
+
+    drop table if exists order_product;
+    ALTER TABLE  TEMP_order_product RENAME TO order_product;
+
+    res := 'Created table order_product';
+    return (res);
+END;
+$$
+;
+
+call  make_order_product();
+-- uniform(1, 5, random())
+--    ALTER TABLE  TEMP_order_product RENAME TO _order_product;
+
+
+```
+
+## Notes
+* The function at the end is SLOW. This needs to be improved.
+* You could ignore the function call with an "EXECUTE IMMEDIATE ". But in case you wanted just to recreate that table, you could call just the function. 

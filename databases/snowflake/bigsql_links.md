@@ -66,6 +66,9 @@ title: Snowflake, SQL, DBT, and other links
 * [https://www.fivetran.com/blog/star-schema-vs-obt](https://www.fivetran.com/blog/star-schema-vs-obt)
 * [https://docs.getdbt.com/blog/kimball-dimensional-model](https://docs.getdbt.com/blog/kimball-dimensional-model)
 
+## Randomized data
+
+
 ## Terms
 * CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.
 * UDF -- user defined functions. Like in SnowFlake, you make a UDF python function. Snowflake can make python scripts. The reason why Python can be used is for analytics. Python in a database for web applications

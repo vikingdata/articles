@@ -333,4 +333,9 @@ call  make_order_product();
 
 ## Notes
 * The function at the end is SLOW. This needs to be improved.
-* You could ignore the function call with an "EXECUTE IMMEDIATE ". But in case you wanted just to recreate that table, you could call just the function. 
+* You could ignore the function call with an "EXECUTE IMMEDIATE ". But in case you wanted just to recreate that table, you could call just the function.
+* You could make one function to take three arguemnts
+   * first argument is first table
+   * second arguement is second table
+   * third arguement is a random number of the amount of ids you want from the second table for each id if the first table.
+* Or you could make a variety of functions to join tables. 

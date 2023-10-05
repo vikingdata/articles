@@ -115,7 +115,7 @@ create or replace table customers as (
       , fake('fullname') as name
       , fake('address') as address
       , fake('phone') as phone
-    FROM TABLE(GENERATOR(ROWCOUNT => 20))
+    FROM TABLE(GENERATOR(ROWCOUNT => 50))
   )
 
 select id, name, address, phone from people
@@ -131,7 +131,7 @@ create or replace table orders as
   select seq4() as orders
     , abs(floor(normal(1, $max_customer_id, RANDOM()))) as customer_id
     , DATEADD(day, seq4(), TO_DATE('2013-05-08')) AS  date_created
- FROM TABLE(GENERATOR(ROWCOUNT => 300))
+ FROM TABLE(GENERATOR(ROWCOUNT => 100))
 ;
 
 ```
@@ -248,7 +248,7 @@ create or replace table customers as (
       , fake('fullname') as name
       , fake('address') as address
       , fake('phone') as phone
-    FROM TABLE(GENERATOR(ROWCOUNT => 10))
+    FROM TABLE(GENERATOR(ROWCOUNT => 50))
   )
 select id, name, address, phone from people
 
@@ -271,7 +271,7 @@ create or replace table orders as
   select seq4() as order_id
     , abs(floor(normal(1, $max_customer_id, RANDOM()))) as customer_id
     , DATEADD(day, seq4(), TO_DATE('2013-05-08')) AS  date_created
- FROM TABLE(GENERATOR(ROWCOUNT => 20))
+ FROM TABLE(GENERATOR(ROWCOUNT => 100))
 ;
 
 create or replace table order_product_template (

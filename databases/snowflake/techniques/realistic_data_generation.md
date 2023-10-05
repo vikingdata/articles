@@ -325,9 +325,6 @@ $$
 ;
 
 call  make_order_product();
--- uniform(1, 5, random())
---    ALTER TABLE  TEMP_order_product RENAME TO _order_product;
-
 
 ```
 

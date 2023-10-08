@@ -36,6 +36,14 @@ In all these cases, the key is to use random data as a representative substitute
     * Random date and random customer.
   * Create a order_products table which is a list of products for each each order. 
 
+* To achieve our purpose
+   * Create a Python UDF to create fake data using the "faker" class.
+   * Try to keep everything SQL
+       * We will need one stored procedure to merge the "ids" of two table.
+       This stored procedure could be rewritten to merge any two tables by giving the names of the tables as arguments.
+   * Make use of the RADNOM snowflake function.
+   * Make use of a generator to make rows. 
+
 We could get more complicated with purchasing, cancellations, etc. For now, we will keep it simple.
 
 ## First make the base python functions.
@@ -182,7 +190,7 @@ $$
 ;
 
 call  make_order_product();
-
+select count(*) from order_product;
 
 ```
 
@@ -310,12 +318,13 @@ $$
 ;
 
 call  make_order_product();
+select count(*) from order_product;
 
 ```
 
 ## Generate order_product faster.
 
-I was unhappy with the speed of the stored procedure. So I made one that does one insert instead if one insert per loop.
+I was unhappy with the speed of the stored procedure. So I made one that does one insert instead of one insert per loop.
 
 ```sql
 
@@ -367,7 +376,7 @@ $$
 ;
 
 call  make_order_product_fast();
- select count(*) from order_product limit 100;
+select count(*) from order_product;
 
 
 ```
@@ -379,4 +388,5 @@ call  make_order_product_fast();
    * third argument is the name of the final table
    * fourth arguement is a random number of the amount of ids you want from the second table for each id of the first table.
 * Or you could make a variety of functions to join tables.
-* Now we can run dpt to create warehouse table examples. 
+* Now we can run dpt to create warehouse table examples.
+* You could create procedure to add random products to the orders.

@@ -1,4 +1,4 @@
----
+u---
 Title : Realistic Data gneration
 Author : Mark Nielsen
 CopyRight : Oct 2023
@@ -47,7 +47,7 @@ use database tutorial;
 create schema if not exists test;
 use schema test;
 
-CREATE OR REPLACE FUNCTION fake( choice varchar(64))
+CREATE OR REPLACE FUNCTION fake( choice text)
   returns string
   language python
   runtime_version = '3.10'
@@ -141,11 +141,6 @@ create or replace table orders as
 ## Make the order_product template table and stored procedure, and the order_product table.
 
 ```
-create or replace order_product_template (
-  order_id int,
-  product_id int
-);
-
 
 create or replace table order_product_template (
   order_id int,
@@ -191,6 +186,7 @@ call  make_order_product();
 
 ```
 
+
 ## One big file
 
 ```sql
@@ -200,7 +196,7 @@ use database tutorial;
 create schema if not exists test;
 use schema test;
 
-CREATE OR REPLACE FUNCTION fake( choice varchar(64))
+CREATE OR REPLACE FUNCTION fake( choice text)
   returns string 
   language python
   runtime_version = '3.10'
@@ -274,17 +270,6 @@ create or replace table orders as
  FROM TABLE(GENERATOR(ROWCOUNT => 100))
 ;
 
-create or replace table order_product_template (
-  order_id int,
-  product_id int
-);
-
-
-create or replace table order_product_template (
-  order_id int,
-  product_id int
-);
-
 
 create or replace table order_product_template (
   order_id int,
@@ -328,11 +313,69 @@ call  make_order_product();
 
 ```
 
+## Make the order table.
+
+I was unhappy with the speed of the stored procedure. So I made one that does one insert instead if one insert per loop.
+
+```sql
+
+
+CREATE OR REPLACE PROCEDURE make_order_product_fast()
+  RETURNS string
+as
+$$
+DECLARE
+    V_SQL text;
+
+    I_list text default '';
+    r_random int;
+    p_random int;
+    c_row CURSOR FOR SELECT order_id from orders;
+    max_product_id int;
+    order_id int;
+    res text;
+
+BEGIN
+    create or replace table TEMP_order_product like order_product_template;
+    select max(id) into :max_product_id from product;
+    open c_row;
+
+    for r_row in c_row do
+        r_random := uniform(1, 5, random());
+        for i in 1 to r_random do
+	  p_random := uniform(1, 5, random());
+          I_list := '' || I_list ||  ' ( ' || r_row.order_id || ', ' || p_random  || '),';
+--	    I_list := '' || I_list ||  ' ( ' || r_row.order_id || ', ' ;
+          END FOR;
+	  
+    END FOR;
+    close c_row;
+
+    I_list := rtrim(I_list, ',');
+    V_SQL := ' insert into TEMP_order_product (order_id, product_id) values ' || I_list || ';';
+    
+--    return (V_SQL);
+   
+    EXECUTE IMMEDIATE V_SQL;
+
+    drop table if exists order_product;
+    ALTER TABLE  TEMP_order_product RENAME TO order_product;
+
+    return ('Tablename order_product reset.');
+END;
+$$
+;
+
+call  make_order_product_fast();
+ select count(*) from order_product limit 100;
+
+
+```
+
 ## Notes
-* The function at the end is SLOW. This needs to be improved.
-* You could ignore the function call with an "EXECUTE IMMEDIATE ". But in case you wanted just to recreate that table, you could call just the function.
-* You could make one function to take three arguemnts
+* You could make one function to join two tables together like order_product by taking take four (or more) arguemnts
    * first argument is first table
    * second arguement is second table
-   * third arguement is a random number of the amount of ids you want from the second table for each id if the first table.
+   * third argument is the name of the final table
+   * fourth arguement is a random number of the amount of ids you want from the second table for each id of the first table.
 * Or you could make a variety of functions to join tables. 

@@ -1,4 +1,4 @@
-u---
+---
 Title : Realistic Data gneration
 Author : Mark Nielsen
 CopyRight : Oct 2023

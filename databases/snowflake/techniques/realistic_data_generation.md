@@ -313,7 +313,7 @@ call  make_order_product();
 
 ```
 
-## Make the order table.
+## Generate order_product faster.
 
 I was unhappy with the speed of the stored procedure. So I made one that does one insert instead if one insert per loop.
 
@@ -378,4 +378,5 @@ call  make_order_product_fast();
    * second arguement is second table
    * third argument is the name of the final table
    * fourth arguement is a random number of the amount of ids you want from the second table for each id of the first table.
-* Or you could make a variety of functions to join tables. 
+* Or you could make a variety of functions to join tables.
+* Now we can run dpt to create warehouse table examples. 

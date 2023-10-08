@@ -388,5 +388,5 @@ select count(*) from order_product;
    * third argument is the name of the final table
    * fourth arguement is a random number of the amount of ids you want from the second table for each id of the first table.
 * Or you could make a variety of functions to join tables.
-* Now we can run dpt to create warehouse table examples.
+* Now we can run DBT to create warehouse table examples.
 * You could create procedure to add random products to the orders.

@@ -43,6 +43,14 @@ Some options:
 
 We could get more complicated with purchasing, cancellations, etc. For now, we will keep it simple.
 
+## Random Generator Links
+I only found one free easy to use realistic data generator. There may be more. There are several articles on data generation but they seem complex. There are also realistic
+generators you have to pay for (not free at all). This article was written to make a fast way to generate random in Snowflake. Other articles for other databases
+might be written too. 
+
+* https://www.mockaroo.com/
+* (random generation with realsitic data and foriegn keys )[https://www.youtube.com/watch?v=S_oYFGhZSkQ]
+
 ## First make the base python function.
 * Make the "fake" method". We need to add two lists, one more Product and Price, since they are not in the Faker class. 
 

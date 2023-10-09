@@ -12,7 +12,7 @@ Copyright Oct 2023**_
 
 * * *
 
-Realistic data testing involves using data that closely resembles what the system will encounter in production, including the volume, variety, and complexity of real-world data. This type of testing helps identify potential bottlenecks, scalability issues, and data integrity problems that might arise when the application goes live. This article is an intrduction
+Realistic data testing involves using data that closely resembles what the system will encounter in production, including the volume, variety, and complexity of real-world data. This type of testing helps identify potential bottlenecks, scalability issues, and data integrity problems that might arise when the application goes live. This article is an introduction
 on how to make realistic fake data in SnowFlake. This data will be ready for DBT to create some basic tables in a warehouse. 
 
 
@@ -50,7 +50,7 @@ might be written too.
 
 * https://www.mockaroo.com/ : Everything seems free with limited rows generated and speed. This seems like a good balance between a free resource and one you want to pay for
 for heavy use. 
-* (random generation with realsitic data and foriegn keys )[https://www.youtube.com/watch?v=S_oYFGhZSkQ]
+* (YouTube video : mockaroo and foreign keys )[https://www.youtube.com/watch?v=S_oYFGhZSkQ]
 
 ## First make the base python function.
 * Make the "fake" method". We need to add two lists, one more Product and Price, since they are not in the Faker class. 

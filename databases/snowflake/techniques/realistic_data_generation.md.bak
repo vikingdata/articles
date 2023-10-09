@@ -1,7 +1,7 @@
 ---
-Title : Realistic Data gneration
+Title : Realistic Data generation
 Author : Mark Nielsen
-CopyRight : Oct 2023
+Copyright : Oct 2023
 ---
 
 Realistic Data Generation
@@ -21,30 +21,40 @@ on how to make realistic fake data in SnowFlake. This data will be ready for DBT
   * Create a simple customer table with realistic data.
     * Random name, phone, address.
   * Create a product table with realistic data
-    * Random price. 
-  * Create an order table which is an order.
+    * Random price.
+  * Create an order table which is an order for random customers.
     * Random date and random customer.
   * Create a order_products table which is a list of products for each each order. 
 
 * To achieve our purpose
    * Create a Python UDF to create fake data using the "faker" class.
    * Try to keep everything SQL
-       * We will need one stored procedure to merge the "ids" of two table.
+       * We will need one stored procedure to merge the "ids" of two tables.
        This stored procedure could be rewritten to merge any two tables by giving the names of the tables as arguments.
-   * Make use of the RADNOM snowflake function.
+   * Make use of the RANDOM snowflake function.
    * Make use of a generator to make rows. 
 
 Some options:
-   * You can make the tables bigger have more rows. 
+   * You can make the tables bigger with more rows or columns. 
    * Create more tables.
    * Write a stored procedure to create a table merging the ids of any two tables, such as order, product, and then order_product.
-   * Add more fields to the Python stored procdure making fake data.
-   * After you create the data, backup the tables or database to recreat later for more uses. 
+   * Add more fields to the Python stored procedure making fake data.
+   * After you create the data, backup the tables or database to make restoration fast. 
 
 We could get more complicated with purchasing, cancellations, etc. For now, we will keep it simple.
 
-## First make the base python functions.
-* Make the "fake" method"
+## Random Generator Links
+I only found one free easy to use realistic data generator. There may be more. There are several articles on data generation but they seem complex. There are also realistic
+generators you have to pay for (not free at all). This article was written to make a fast way to generate random in Snowflake. Other articles for other databases
+might be written too. 
+
+* https://www.mockaroo.com/ : Everything seems free with limited rows generated and speed. This seems like a good balance between a free resource and one you want to pay for
+for heavy use. 
+* (Youtube video : mockaroo and foriegn keys )[https://www.youtube.com/watch?v=S_oYFGhZSkQ]
+
+## First make the base python function.
+* Make the "fake" method". We need to add two lists, one more Product and Price, since they are not in the Faker class. 
+
 
 ```sql
 create database if not exists tutorial;
@@ -143,7 +153,7 @@ create or replace table orders as
 
 
 
-## Make the order_product template table and stored procedure, and the order_product table.
+## Make the order_product template table, stored procedure, and the order_product table.
 
 ```
 
@@ -379,11 +389,11 @@ select count(*) from order_product;
 ```
 
 ## Notes
-* You could make one function to join two tables together like order_product by taking take four (or more) arguemnts
+* You could make one function to join two tables together like order_product by taking take four (or more) arguments
    * first argument is first table
-   * second arguement is second table
+   * second argument is second table
    * third argument is the name of the final table
-   * fourth arguement is a random number of the amount of ids you want from the second table for each id of the first table.
+   * fourth argument is a random number of the amount of ids you want from the second table for each id of the first table.
 * Or you could make a variety of functions to join tables.
 * Now we can run DBT to create warehouse table examples.
 * You could create procedure to add random products to the orders.

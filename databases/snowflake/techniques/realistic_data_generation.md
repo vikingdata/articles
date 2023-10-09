@@ -48,7 +48,8 @@ I only found one free easy to use realistic data generator. There may be more. T
 generators you have to pay for (not free at all). This article was written to make a fast way to generate random in Snowflake. Other articles for other databases
 might be written too. 
 
-* https://www.mockaroo.com/
+* https://www.mockaroo.com/ : Everything seems free with limited rows generated and speed. This seems like a good balance between a free resource and one you want to pay for
+for heavy use. 
 * (random generation with realsitic data and foriegn keys )[https://www.youtube.com/watch?v=S_oYFGhZSkQ]
 
 ## First make the base python function.

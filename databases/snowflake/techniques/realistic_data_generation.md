@@ -35,15 +35,15 @@ on how to make realistic fake data in SnowFlake. This data will be ready for DBT
    * Make use of a generator to make rows. 
 
 Some options:
-   * You can make the tables bigger have more rows. 
+   * You can make the tables bigger with more rows or columns. 
    * Create more tables.
    * Write a stored procedure to create a table merging the ids of any two tables, such as order, product, and then order_product.
    * Add more fields to the Python stored procedure making fake data.
-   * After you create the data, backup the tables or database to recreate later for more uses. 
+   * After you create the data, backup the tables or database to make restoration fast. 
 
 We could get more complicated with purchasing, cancellations, etc. For now, we will keep it simple.
 
-## First make the base python functions.
+## First make the base python function.
 * Make the "fake" method". We need to add two lists, one more Product and Price, since they are not in the Faker class. 
 
 

@@ -21,15 +21,15 @@ on how to make realistic fake data in SnowFlake. This data will be ready for DBT
   * Create a simple customer table with realistic data.
     * Random name, phone, address.
   * Create a product table with realistic data
-    * Random price. 
-  * Create an order table which is an order.
+    * Random price.
+  * Create an order table which is an order for random customers.
     * Random date and random customer.
   * Create a order_products table which is a list of products for each each order. 
 
 * To achieve our purpose
    * Create a Python UDF to create fake data using the "faker" class.
    * Try to keep everything SQL
-       * We will need one stored procedure to merge the "ids" of two table.
+       * We will need one stored procedure to merge the "ids" of two tables.
        This stored procedure could be rewritten to merge any two tables by giving the names of the tables as arguments.
    * Make use of the RANDOM snowflake function.
    * Make use of a generator to make rows. 
@@ -44,7 +44,8 @@ Some options:
 We could get more complicated with purchasing, cancellations, etc. For now, we will keep it simple.
 
 ## First make the base python functions.
-* Make the "fake" method"
+* Make the "fake" method". We need to add two lists, one more Product and Price, since they are not in the Faker class. 
+
 
 ```sql
 create database if not exists tutorial;

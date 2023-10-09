@@ -361,8 +361,7 @@ BEGIN
         for i in 1 to r_random do
 	  p_random := uniform(1, 5, random());
           I_list := '' || I_list ||  ' ( ' || r_row.order_id || ', ' || p_random  || '),';
---	    I_list := '' || I_list ||  ' ( ' || r_row.order_id || ', ' ;
-          END FOR;
+        END FOR;
 	  
     END FOR;
     close c_row;

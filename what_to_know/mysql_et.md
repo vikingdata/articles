@@ -31,7 +31,7 @@ https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1
 * Multi source replication use relay_log_recovery to resolve crashes, does not resolve conflicts between 2 replication
 streams.
 
-* to install audit, mysql < audit_log_filter_linux_install.sql
+[[O* to install audit, mysql < audit_log_filter_linux_install.sql
 
 * ADMIN OPTION with role just grants the ability to give and revoke role to other users. 20
 
@@ -54,8 +54,14 @@ streams.
 
 * mysql_config_editor can be used to store credentials, but it is not foolproof. 
 
-* For DDL changes. a serialized copy is kept in SDI, a copy is stored in tablespace
+* Backup backups up ibd and CSV files. MyISAM, other tables by other engines. FILES: frm, csv, ibd 
+
+* For DDL changes. a serialized copy is kept in SDI in json format, a copy is stored in tablespace for innodb tables
 
 
+* Snapshots: No recovery is usually necessary. If copied into anoher system, can be brought up immediately.
+
+* To run multiple mysql instances: Docker, different systemd settings, use different options for each instance and
+different systemd settings can specify different startup configs.
 
 

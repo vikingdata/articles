@@ -85,7 +85,7 @@ Many of these things for postgresql applies to later versions.
          * initdb -D /usr/local/pgsql/data
 	 * pg_ctrl -D /usr/local/pgsqldata initdb
          * systemctl stop|start|restart postgresql-12
-	 * also pg_ctrl stop and pg_ctrl start
+	 * also pg_ctrl stop and pg_ctrl start and pg_ctrl status
     * shutdown
         * smart : lets connections finish
 	* fast  : kills connection. grcefully shutdown'
@@ -98,4 +98,32 @@ Many of these things for postgresql applies to later versions.
 	* restart linux : system restart postgresql-12
     * pg_controldata -- sees status of cluster
     * 
+* Databases
+    * Create databaase newdb TEMPLATE template0;
+        * This change template1.
+	* Every new database will copy anything in template1.
+	* This resets template1 database.
+    * select datname, oid from pg_databases;
+        This reveals the oid on disk. 
+* Configuration files
+    * postgresql.conf -- confgiure and manage performance of database.
+        * TO see variables
+	    * show max_connections
+	    * select nanem source, boot_val, sourcefile, pending_restart from pg_settings where name='max_connections';
+	* to reload : select * from pg_reload_conf();
+	* select * from pf_file_settings;
+	    * execute this after relead
+	*     
+    * initdb -- creates database
+    * pg catalog
+    * postgresql.auto_conf
+        * Saves settings for "ALTER SYSTEM Set". Overrides postgresql.conf
+    * pg_ident.conf
+        * Which map to use for each individual connection.
+	* Maps user of opertaing system to database name. Used in conjuction with pg_hba.conf
+    * pg_hhba.confg
 
+
+(415) 489-0314
+
+4154890314

@@ -51,8 +51,8 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
         * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)
         * Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
         * Aurora Serverless is available.
-	    * An on demand database.
-	    * Version 1 and 2
+            * An on demand database.
+            * Version 1 and 2
         * Parallel queries are available. Queries are divided among all the servers.
         * Data is copied to 3 Availability Zones, with each Availability Zone persisting 2 copies of each write.
         * Backtrack for Aurora MySQL -- time travel. Lets you go back to a previous state in time of the database.

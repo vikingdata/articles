@@ -4,8 +4,8 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 --------
 
 * Links
-    * (Aurora vs RDS: How to Choose the Right AWS Database Solution) [https://www.percona.com/blog/when-should-i-use-amazon-aurora-and-when-should-i-use-rds-mysql/#:~:text=Aurora%20replicates%20data%20to%20six,process%20is%20slower%20than%20Aurora.]
-    *(HA databases)[https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/]
+    * [Aurora vs RDS: How to Choose the Right AWS Database Solution](https://www.percona.com/blog/when-should-i-use-amazon-aurora-and-when-should-i-use-rds-mysql/#:~:text=Aurora%20replicates%20data%20to%20six,process%20is%20slower%20than%20Aurora.)
+    * (HA databases)[https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/]
     * (AWS RDS MySQL vs. Aurora MySQL) [https://houseofbrick.com/blog/aws-rds-mysql-vs-aurora-mysql/]
     * (Aurora vs. RDS: An Engineer’s Guide to Choosing a Database)[https://www.lastweekinaws.com/blog/aurora-vs-rds-an-engineers-guide-to-choosing-a-database/#:~:text=You%20use%20a%20database%20engine,RDS%20is%20your%20only%20choice.]
 

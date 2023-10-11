@@ -42,5 +42,13 @@ models:
 
 * Naming convetions
     * sources: ways to reference raw tables. Copy data into database.
-    * staging models: modifed tables from source tables, one to one
-    * intermediate models: between source tables and final tables. 
+    * nodels
+        * staging models: modifed tables from source tables, one to one
+            * Refer to staging tables, never source tables.
+	* marts : deliver final models
+    * intermediate models: between source tables and final tables.
+        * You can reference these tables.
+    * Off of intermediate tables, build fact models
+        * things that have occurred
+    * Dimensional models : Things that are that have done stuff in the fact table. 
+	

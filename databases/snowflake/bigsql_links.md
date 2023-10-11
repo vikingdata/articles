@@ -65,9 +65,27 @@ title: Snowflake, SQL, DBT, and other links
 * [https://about.gitlab.com/handbook/business-technology/data-team/platform/edw/](https://about.gitlab.com/handbook/business-technology/data-team/platform/edw/)
 * [https://www.fivetran.com/blog/star-schema-vs-obt](https://www.fivetran.com/blog/star-schema-vs-obt)
 * [https://docs.getdbt.com/blog/kimball-dimensional-model](https://docs.getdbt.com/blog/kimball-dimensional-model)
-
+* Star Schema, Kimball, Data Vault, SnowFlake, One Big Table
+    * [Star)[https://www.geeksforgeeks.org/star-schema-in-data-warehouse-modeling/]
+    * [Kimball](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/)
+    * [databricks data vault](https://www.databricks.com/glossary/data-vault)
+    * [databricks snowflake schema](https://www.databricks.com/glossary/snowflake-schema#:~:text=A%20snowflake%20schema%20is%20a,data%20marts%2C%20and%20relational%20databases.)
+    * [One Big Table](https://dataengineering.wiki/Concepts/One+Big+Table)
+    * [Star vs Snowflake schema](https://www.guru99.com/star-snowflake-data-warehousing.html)
+    * [Datamart vs warehousre](https://panoply.io/data-warehouse-guide/data-mart-vs-data-warehouse/)
+    * [Star vs OBT](https://www.fivetran.com/blog/star-schema-vs-obt)
 ## Randomized data
-
+    * [Kimball vs OBT](https://hightouch.com/blog/data-warehouse-modelling-part-2)
+* [Enterprise Data Warehouse] (https://about.gitlab.com/handbook/business-technology/data-team/platform/edw/#naming-standards)
+* [gitlab data team] (https://about.gitlab.com/handbook/business-technology/data-team/platform/)
+* Agile Analytics or Ad Hoc analytics
+   * [https://www.xenonstack.com/insights/what-is-agile-analytics](https://www.xenonstack.com/insights/what-is-agile-analytics)
+   * [https://www.thoughtworks.com/en-us/insights/blog/introducing-agile-analytics](https://www.thoughtworks.com/en-us/insights/blog/introducing-agile-analytics)
+   * [https://geekflare.com/agile-analytics/](https://geekflare.com/agile-analytics/)
+   * [What is Ad Hoc Analysis and How Does it Work?](https://chartio.com/learn/data-analytics/what-is-ad-hoc-analysis/#:~:text=Ad%20hoc%20analysis%20(aka%20ad,at%20the%20expense%20of%20accuracy).)
+   * [ad hoc analysis](https://www.techtarget.com/searchbusinessanalytics/definition/ad-hoc-analysis)
+   * [Mastering ad hoc analysis and reporting: A guide to efficient and effective data analysis](https://www.thoughtspot.com/data-trends/analytics/ad-hoc-analysis-and-reporting)
+   * [What Is Ad Hoc Reporting? Your Guide To Definition, Meaning, Examples & Benefits](https://www.datapine.com/blog/ad-hoc-reporting-analysis-meaning-benefits-examples/)
 
 ## Terms
 * CTE  -- Common Table Expressions. One thing is to use the "with as " clause to make nested queries simplier to read.

@@ -61,7 +61,12 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
         * Aurora is also PostgreSQL compatible.
         * Can have upto 15 read replicas, while RDS MySQL can have 5.
         * Built For High Availability. Multiple copies in different Availability zones makes it HA along with automatic failover. 
-	
+
+* Future optics
+  * cost
+  * Aurora Serverless versus Aurora
+  * more performance
+  * Links on what to maintain in RDS MySQL and Aurora. 
 
 
 	

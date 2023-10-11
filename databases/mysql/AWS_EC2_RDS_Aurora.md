@@ -5,9 +5,9 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 
 * Links
     * [Aurora vs RDS: How to Choose the Right AWS Database Solution](https://www.percona.com/blog/when-should-i-use-amazon-aurora-and-when-should-i-use-rds-mysql/#:~:text=Aurora%20replicates%20data%20to%20six,process%20is%20slower%20than%20Aurora.)
-    * (HA databases)[https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/]
-    * (AWS RDS MySQL vs. Aurora MySQL) [https://houseofbrick.com/blog/aws-rds-mysql-vs-aurora-mysql/]
-    * (Aurora vs. RDS: An Engineer’s Guide to Choosing a Database)[https://www.lastweekinaws.com/blog/aurora-vs-rds-an-engineers-guide-to-choosing-a-database/#:~:text=You%20use%20a%20database%20engine,RDS%20is%20your%20only%20choice.]
+    * [HA databases](https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/)
+    * [AWS RDS MySQL vs. Aurora MySQL](https://houseofbrick.com/blog/aws-rds-mysql-vs-aurora-mysql/)
+    * [Aurora vs. RDS: An Engineer’s Guide to Choosing a Database}(https://www.lastweekinaws.com/blog/aurora-vs-rds-an-engineers-guide-to-choosing-a-database/#:~:text=You%20use%20a%20database%20engine,RDS%20is%20your%20only%20choice.)
 
 * EC2
     * You install and maintain your own system. It is like a computer in your own data center. You have many operating systems to choose from. 
@@ -42,13 +42,13 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Resizing is allowed.
     * Adding Read Replicas is easy.
     * Caching, like memcache or ElasticCache is available.
-    * Features not supported (5.7)[https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.CompareMySQL57.html
-    and (8.0)[https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.MySQL80.html]
+    * Features not supported [5.7](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.CompareMySQL57.html]
+    and [8.0](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.MySQL80.html)
     * Automatic failover is available
     * Storage auto scaling available.
 
     * Aurora has that RSA MySQL doesn't
-        * Replication is done differently. Instead of normal MySQL replication (Aurora has faster replication0[https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html] because the read replicas are physical copies or primary. (Cluster Volume)[https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage]
+        * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)
 	* Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
 	* Aurora Serverless is available.
 	    * An on demand database.

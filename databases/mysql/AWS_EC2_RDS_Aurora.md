@@ -49,18 +49,18 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 
     * Aurora has that RSA MySQL doesn't
         * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)
-	* Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
-	* Aurora Serverless is available.
+        * Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
+        * Aurora Serverless is available.
 	    * An on demand database.
 	    * Version 1 and 2
-	* Parallel queries are available. Queries are divided among all the servers.
-	* Data is copied to 3 Availability Zones, with each Availability Zone persisting 2 copies of each write.
-	* Backtrack for Aurora MySQL -- time travel. Lets you go back to a previous state in time of the database.
-	* Encryption at rest is available. Affects Backups and snapshots.
-	* Aurora has auto scaling read replicas. It will spin up read replicas if needed automatically.
-	* Aurora is also PostgreSQL compatible.
-	* Can have upto 15 read replicas, while RDS MySQL can have 5.
-	* Built For High Availability. Multiple copies in different Availability zones makes it HA along with automatic failover. 
+        * Parallel queries are available. Queries are divided among all the servers.
+        * Data is copied to 3 Availability Zones, with each Availability Zone persisting 2 copies of each write.
+        * Backtrack for Aurora MySQL -- time travel. Lets you go back to a previous state in time of the database.
+        * Encryption at rest is available. Affects Backups and snapshots.
+        * Aurora has auto scaling read replicas. It will spin up read replicas if needed automatically.
+        * Aurora is also PostgreSQL compatible.
+        * Can have upto 15 read replicas, while RDS MySQL can have 5.
+        * Built For High Availability. Multiple copies in different Availability zones makes it HA along with automatic failover. 
 	
 
 

@@ -26,7 +26,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Point in time recovery (time travel).
     * Caching, like memcache or ElasticCache is available.
     * [Features not supported](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Concepts.FeatureSupport.html#MySQL.Concepts.Features)
-    * (Limitations)[https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.KnownIssuesAndLimitations.html]
+    * [Limitations](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.KnownIssuesAndLimitations.html)
     * Automatic failover is available. 
     * Replication to Read Replica is done by normal MySQL replication.
     * Storage auto scaling available.

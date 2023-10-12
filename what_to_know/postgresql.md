@@ -120,7 +120,7 @@ Many of these things for postgresql applies to later versions.
         * Saves settings for "ALTER SYSTEM Set". Overrides postgresql.conf
     * pg_ident.conf
         * Which map to use for each individual connection.
-	* Maps user of opertaing system to database name. Used in conjuction with pg_hba.conf
+	* Maps user of opertaing system to one or more postgresql_database. Used in conjuction with pg_hba.conf
     * pg_hhba.confg
 
 

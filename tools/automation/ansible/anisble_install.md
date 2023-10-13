@@ -171,9 +171,10 @@ ansible_connection=ssh
 
 # Configure ssh login from control server to target server. 
 
+
+* Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
+    * ansible all --list-hosts
 * Copy the .ssh/id_rsa.pub key from the control server to ~/.ssh/authorized_keys of target server
-    * Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
-        * ansible all --list-hosts
     * EX: From the source computer
         * scp ~/.ssh/id_rsa.pub ansible@192.168.1.7:.ssh/authorized_keys
 	* Entering a password is okay. 

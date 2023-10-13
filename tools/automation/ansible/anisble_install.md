@@ -71,8 +71,11 @@ chmod 644 .ssh/authorized_keys
 ssh -o "StrictHostKeyChecking no" 127.0.0.1 echo "done"
 ```
 
+* * *
 
-# Initial Self Test
+<a name=initial></a>Initial Self Test
+-----
+
 
 ```shell
 cd /etc/ansible
@@ -104,7 +107,7 @@ ansible self -a "uptime"          # Get the uptime for this server
 
 * * *
 
-<a name=playboook></a>Initial Playbook
+<a name=playbook></a>Initial Playbook
 -----
 
 

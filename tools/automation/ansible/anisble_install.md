@@ -172,15 +172,15 @@ ansible_connection=ssh
 # Configure ssh login from control server to target server. 
 
 * Copy the .ssh/id_rsa.pub key from the control server to ~/.ssh/authorized_keys of target server
-      * Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
-          * ansible all --list-hosts
-      * EX: From the source computer
-           * scp ~/.ssh/id_rsa.pub ansible@192.168.1.7:.ssh/authorized_keys
-	   * Entering a password is okay. 
-      * On the control server, ssh to target server and see if everything works
-           * ssh ansible@192.168.1.7 'echo "ssh works"'
-           * If you don't get the response back "ssh works" without having to type in a password, nothing later in this article will work.
-      * This should also work : ansible all -m ping
+    * Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
+        * ansible all --list-hosts
+    * EX: From the source computer
+        * scp ~/.ssh/id_rsa.pub ansible@192.168.1.7:.ssh/authorized_keys
+	* Entering a password is okay. 
+    * On the control server, ssh to target server and see if everything works
+        * ssh ansible@192.168.1.7 'echo "ssh works"'
+        * If you don't get the response back "ssh works" without having to type in a password, nothing later in this article will work.
+    * This should also work : ansible all -m ping
 
 # Test commands on the control server to the target server.
 The default module for ad hoc commands is

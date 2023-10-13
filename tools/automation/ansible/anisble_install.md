@@ -196,15 +196,15 @@ using "-a". If no module is specified, this module is used.
     * ansible all -m shell -a uptime 
 
 But multiple commands will FAIL   
-    * ansible all -a "hostname ; date  "
+* ansible all -a "hostname ; date  "
 
 To issue multiple commands, use "shell"    
-    * ansible all -m  shell -a "ls -la ; echo 'my hostname is '; hostname
+* ansible all -m  shell -a "ls -la ; echo 'my hostname is '; hostname
 
 This response should say "ansible".   
-    *  ansible   all  -a "whoami"
+*  ansible   all  -a "whoami"
 The response to this should be "root".   
-    * ansible --become   all  -a "whoami"
+* ansible --become   all  -a "whoami"
 
 # Gotchas
     * Single or double quote

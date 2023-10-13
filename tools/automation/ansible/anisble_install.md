@@ -264,12 +264,7 @@ ansible all -a "apt autoremove -y" -b
 # detect if it is still installed
 ansible all -m  shell -a 'mongosh --version; mongod --version'
 
-
-* * *
-
-<a name=postgresql></a>Install a version of MySQL
------
-
+```
 
 * * *
 

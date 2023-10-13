@@ -242,10 +242,12 @@ The response to this should be "root".
 
 To do this right,
 * [install](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
-and then uninstall mongodb, and then follow these commands. 
+
+and then uninstall mongodb
 * sudo apt-get remove mongodb-org*
 
-Follow these commands
+and then follow these commands
+
 
 ```shell
   # Detect if mongo is installed

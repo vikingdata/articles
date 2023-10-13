@@ -1,5 +1,5 @@
 --------
-title: Ansible : Install 
+title: Anisble : Install 
 
 --------
 
@@ -156,7 +156,7 @@ ansible_connection=ssh
 * Add ansible user
   * Login as root or sudo on TARGET server
       * If sudo: sudo bash
-  * Add user ansible
+  * Add user anisble
       * useradd -m -s /bin/bash ansible
       * passwd ansible
          * Remember the password
@@ -166,13 +166,13 @@ ansible_connection=ssh
       * su -u ansible
       * Create ssh key on TARGET server
          * ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
-	 * This sets up up the .ssh directory, and we might use the ssh from the target server later. 
+	 * This setupts up the .ssh directory, and we might use the ssh from the target server later. 
 
 
 # Configure ssh login from control server to target server. 
 
 * Copy the .ssh/id_rsa.pub key from the control server to ~/.ssh/authorized_keys of target server
-      * Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
+      * Verfiy your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.
           * ansible all --list-hosts
       * EX: From the source computer
            * scp ~/.ssh/id_rsa.pub ansible@192.168.1.7:.ssh/authorized_keys
@@ -184,7 +184,7 @@ ansible_connection=ssh
 
 # Test commands on the control server to the target server.
 The default module for ad hoc commands is
-[ansible.builtin.command](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html#command-module). We will be executing commands
+[ansible.builtin.command](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html#command-module). We will be excuting commands
 using "-a". If no module is specified, this module is used.
 
 * These commands should work
@@ -197,12 +197,12 @@ using "-a". If no module is specified, this module is used.
 But multiple commands will FAIL
     * ansible all -a "hostname ; date  "
 
-To issue multiple commands, use "shell"
+To issue mutiple commands, use "shell"
     * ansible all -m  shell -a "ls -la ; echo 'my hostname is '; hostname
 
 This response should say "ansible".
     *  ansible   all  -a "whoami"
-The response to this should be "root".
+The response to this sould be "root".
     * ansible --become   all  -a "whoami"
 
 # Gotchas

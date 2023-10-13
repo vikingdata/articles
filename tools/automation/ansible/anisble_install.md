@@ -23,9 +23,10 @@ The purpose of this document is to:
 2. [Install Ansible (Ubuntu)](#install)
 3. [Initial Self Test](#initial)
 4. [Initial Playbook](#playbook)
-5. [Add target server](#target)
-4. [Run some tests](#tests)
-4. [Show Gotchas](#gotcha)
+6. [Add target server](#target)
+7. [Run some tests](#tests)
+8. [Install and Verify MongoDB)[#mongo]
+9. [Show Gotchas](#gotcha)
 
 * * *
 
@@ -236,7 +237,7 @@ The response to this should be "root".
 
 * * *
 
-<a name=mysql></a>Install and Verify MySQL
+<a name=mongo></a>Install and Verify MongoDB
 -----
 
 To do this right,

@@ -96,7 +96,7 @@ inventory = hosts
 host_key_checking = False
         " >> ansible.cfg
 ```
-## Verify the initial "self" commands:
+### Verify the initial "self" commands:
 
 ```shell
 ansible -m ping self               # using the ping module
@@ -126,22 +126,22 @@ echo "
 " >> playbooks/test-package.yml
 ```
 
-## Now run the playbook:
+### Now run the playbook:
 
 ```shell
 ansible-playbook -i "127.0.0.1," playbooks/test-package.yml
 ```
 
-## Re-test the playbook:
+### Re-test the playbook:
 ```shell
 apt-get -y remove htop
 ## Make sure it doesn't exist
 htop
 
-## Then rerun the playbook
+### Then rerun the playbook
 ansible-playbook -i "127.0.0.1," playbooks/test-package.yml
 
-## Then see if it exists
+### Then see if it exists
 htop
 ```
 
@@ -151,7 +151,7 @@ htop
 -----
 
 
-## Configure the control server
+### Configure the control server
 * Edit /etc/ansible/hosts
     * Add host -- change the ip address to the ip address of your target server. 
         * example
@@ -173,7 +173,7 @@ ansible_connection=ssh
 ```
     * Also, remove "[self]"  and "[self:vars]" sections. 
 
-## Configure the other computer
+### Configure the other computer
 * Add ansible user
   * Login as root or sudo on TARGET server
       * If sudo: sudo bash
@@ -190,7 +190,7 @@ ansible_connection=ssh
 	 * This sets up up the .ssh directory, and we might use the ssh from the target server later. 
 
 
-## Configure ssh login from control server to target server. 
+### Configure ssh login from control server to target server. 
 
 
 * Verify your host list on source computer. You should only have one server. You should have removed "[self] from hosts file.

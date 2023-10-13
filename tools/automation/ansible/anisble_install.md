@@ -203,10 +203,22 @@ To issue multiple commands, use "shell"
 
 This response should say "ansible".   
 *  ansible   all  -a "whoami"
+
 The response to this should be "root".   
 * ansible --become   all  -a "whoami"
 
 # Gotchas
+
+Links
+* (Ansible Gotchas, Tricks and Tools)[https://github.com/johnroach/ansible-gotchas]
+* (Error Handling)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_error_handling.html]
+* (YAML gotchas)[https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html]
+* (Ansible gotchas)[https://kyle.io/2015/01/ansible-gotchas/]
+* (JSON gotcha)[https://www.patricelevexier.com/ansible/2018/01/21/ansible-gotchas.html]
+
+Also....
+
+
     * Single or double quote
       Notice this command fails using the get_url module.
         * ansible all   -m get_url -a "url=http://google.com dest=~/a.html"

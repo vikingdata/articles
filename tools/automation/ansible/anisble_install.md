@@ -13,6 +13,9 @@ The purpose of this document is to:
 - Install server and client on the same computer.
 - Run a command for Ansible to do basic commands.
 - Run a very simple playbook.
+- Add a target server.
+- Run some tests.
+- Show Gotcha links and mention other Gotchas 
 
 ---
 
@@ -20,8 +23,15 @@ The purpose of this document is to:
 2. [Install Ansible (Ubuntu)](#install)
 3. [Initial Self Test](#initial)
 4. [Initial Playbook](#playbook)
+5. [Add target server](#target)
+4. [Run some tests](#tests)
+4. [Show Gotchas](#gotcha)
 
-## Links
+* * *
+
+<a name=links></a>Links
+-----
+
 * [https://docs.ansible.com/ansible/latest/getting_started/index.html](https://docs.ansible.com/ansible/latest/getting_started/index.html)
 
 * [10 ansible modules](https://opensource.com/article/19/9/must-know-ansible-modules)
@@ -39,12 +49,10 @@ The purpose of this document is to:
 
 ---
 
-## Install Ansible
+* * *
 
-Please read:
-
-- [Ansible Overview and Architecture](https://docs.ansible.com/ansible/latest/dev_guide/overview_architecture.html)
-- [Installing Ansible on Specific Operating Systems](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-specific-operating-systems)
+<a name=install></a>Install Ansible
+-----
 
 ### Install
 
@@ -94,7 +102,11 @@ ansible self -a "date"            # get date
 ansible self -a "uptime"          # Get the uptime for this server
 ```
 
-# Initial Playbook
+* * *
+
+<a name=playboook></a>Initial Playbook
+-----
+
 
 ```shell
 cd /etc/ansible
@@ -129,6 +141,12 @@ ansible-playbook -i "127.0.0.1," playbooks/test-package.yml
 # Then see if it exists
 htop
 ```
+
+* * *
+
+<a name=target></a>Add target server
+-----
+
 
 # Configure the control server
 * Edit /etc/ansible/hosts
@@ -183,7 +201,12 @@ ansible_connection=ssh
         * If you don't get the response back "ssh works" without having to type in a password, nothing later in this article will work.
     * This should also work : ansible all -m ping
 
-# Test commands on the control server to the target server.
+
+* * *
+
+<a name=tests></a>Test commands on target server
+-----
+
 The default module for ad hoc commands is
 [ansible.builtin.command](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html#command-module). We will be executing commands
 using "-a". If no module is specified, this module is used.
@@ -207,7 +230,11 @@ This response should say "ansible".
 The response to this should be "root".   
 * ansible --become   all  -a "whoami"
 
-# Gotchas
+* * *
+
+<a name=gotcha></a>Gotchas
+-----
+
 
 Links
 * (Ansible Gotchas, Tricks and Tools)[https://github.com/johnroach/ansible-gotchas]

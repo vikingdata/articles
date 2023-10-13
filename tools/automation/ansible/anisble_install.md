@@ -225,13 +225,51 @@ But multiple commands will FAIL
 * ansible all -a "hostname ; date  "
 
 To issue multiple commands, use "shell"    
-* ansible all -m  shell -a "ls -la ; echo 'my hostname is '; hostname
+* ansible all -m  shell -a "ls -la ; echo 'my hostname is '; hostname "
 
 This response should say "ansible".   
 *  ansible   all  -a "whoami"
 
 The response to this should be "root".   
 * ansible --become   all  -a "whoami"
+
+
+* * *
+
+<a name=mysql></a>Install and Verify MySQL
+-----
+
+To do this right,
+* [install](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+and then uninstall mongodb, and then follow these commands. 
+* sudo apt-get remove mongodb-org*
+
+Follow these commands
+
+```shell
+  # Detect if mongo is installed
+ansible all -a 'dpkg -l  mongodb-org '
+  # Install mongo
+  # Should install 7.0.2. 
+ansible all -m apt -a 'name=mongodb-org state=present' -b
+  # Restart mongo
+ansible all -m service -a 'name=mongod state=restarted' -b
+  # Get Version
+ansible all -m  shell -a 'mongosh --version; mongod --version' 
+
+# Uninstall Mongo
+ansible all -m apt -a 'name=mongodb-org state=absent' -b
+ansible all -a "apt autoremove -y" -b
+
+# detect if it is still installed
+ansible all -m  shell -a 'mongosh --version; mongod --version'
+
+
+* * *
+
+<a name=postgresql></a>Install a version of MySQL
+-----
+
 
 * * *
 

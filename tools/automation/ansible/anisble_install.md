@@ -25,7 +25,7 @@ The purpose of this document is to:
 4. [Initial Playbook](#playbook)
 6. [Add target server](#target)
 7. [Run some tests](#tests)
-8. [Install and Verify MongoDB)[#mongo]
+8. [Install and Verify MongoDB](#mongo)
 9. [Show Gotchas](#gotcha)
 
 * * *

@@ -61,7 +61,7 @@ Second thing, understand the different type of variables.
        * Examples
            * "become" variable which will execute commands as root or superuser.
            * "ansible_user" which is the user ansible logs as into the server. 
-   * (Magic Variables)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables]
+   * [Magic Variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables)
        * These are variables which get set when ansible runs. Many come from how the config files are set.
            * Examples  
                * groups : A dictionary of all groups in host file or inventory.

@@ -56,7 +56,7 @@ First thing to do is (understand the precedence of variables)[https://docs.ansib
 Second thing, understand the different type of variables. 
 
 * [Special variables](https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html) are defined by ansible. Ansible will override any attempt by the user to set them.
-   * (Facts)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#ansible-facts] : variables ansible gets from each host it connects to before it does anything. Facts can be turned off.
+   * [Facts](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#ansible-facts) : variables ansible gets from each host it connects to before it does anything. Facts can be turned off.
    * Connection variables : Variables which determine how to execute commands on a host.
        * Examples
            * "become" variable which will execute commands as root or superuser.

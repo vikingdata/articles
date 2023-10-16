@@ -51,7 +51,15 @@ The purpose of this document is to:
 <a name=var></a>Variables
 -----
 
-First thing to do is [understand the precedence of variables](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules)
+First thing to do is [understand the precedence of variables](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules).
+
+For variables defined by user... from [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
+    * Variables defined in role ‘defaults’
+    * Variables defined as group_vars
+    * Variables defined as host_vars
+    * Variables defined in plays
+    * Variables defined in role ‘vars’
+    * Variables defined at runtime with –e switch
 
 Second thing, understand the different type of variables. 
 
@@ -78,4 +86,85 @@ Second thing, understand the different type of variables.
         * Group variables
     * Role variable : Variables can be defined in the role files. 
     * At runtime
+
+
+* * *
+
+<a name=set></a>Set Variables
+-----
+Set a role default roles and role vars. 
+
+```shell
+mkdir -p /etc/ansible/roles/role1/defaults
+mkdir -p /etc/ansible/roles/role1/vars
+
+echo "---" > /etc/ansible/roles/role1/default/main.yml
+echo "role_default1 : ' role default value'" >> /etc/ansible/roles/role1/default/main.yml
+echo "order_var1 : ' role default value'" >> /etc/ansible/roles/role1/default/main.yml
+
+echo "---" > /etc/ansible/roles/role1/vars/main.yml
+echo "role_var1 : ' role vars value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "order_var1 : ' role vars value'" >> /etc/ansible/roles/role1/vars/main.yml
+```
+
+Set a Host and Group variable. Note, change this host to your server. In /etc/ansible/host
+
+```shell
+# NOTE: Change the ip address to the ip address of your target server or its hostname.
+
+echo "[testservers]
+ 192.168.1.7 host_var1='a value'" >> /etc/ansible/hosts
+
+echo ""  >> /etc/ansible/hosts
+
+echo "[testservers:vars]
+group_var1 = 'host 1 value'
+order_var1 = 'group 1 var'" >> /etc/ansible/hosts
+
+
+mkdir -p /etc/ansible/host_vars
+mkdir -p /etc/ansible/group_vars
+
+echo "---" > /etc/ansible/host_vars/192.168.1.7.yml
+echo "host_var2='host var2 value'" >> /etc/ansible/host_vars/192.168.1.7.yml
+
+echo "---" > /etc/ansible/group_vars/testservers.yml
+echo "group_var2='a value'" >> /etc/ansible/host_vars/testservers.yml
+echo "order_order1='a group 2 value'" >> /etc/ansible/host_vars/testservers.yml
+
+```
+
+Set a Playbook variable. Create a file /etc/anisble/mongo.yml
+
+```shell
+
+echo "
+---
+- hosts: testservers
+  roles:
+    - role1
+  vars:
+    playbook_var1: 'a value'
+    order_var1: 'playbook 1 var'
+
+- hosts: 192.168.1.7
+  vars:
+    playbook_var2: 'a value'
+    order_var1 : 'playbook 2 var'
+
+- name: Print variables
+  ansible.builtin.debug:
+    msg: role default : {{ role_default1 }}
+    msg: role var1 : {{ role_var1 }}
+    msg: host_var1 : {{ host_var1 }}
+    msg: host_var2 : {{ host_var2 }}
+    msg: group_var1 : {{ group_var1 }}
+    msg: group_var2 : {{ group_var2 }}
+    msg: playbook_var1 : {{ playbook_var1 }}
+    msg: order_var1 : {{ order_var1 }}
+
+" > /etc/ansible/echo.yml
+
+```
+
 

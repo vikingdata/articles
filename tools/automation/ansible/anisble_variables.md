@@ -65,8 +65,8 @@ Second thing, understand the different type of variables.
        * These are variables which get set when ansible runs. Many come from how the config files are set.
            * Examples  
                * groups : A dictionary of all groups in host file or inventory.
-	       * hostvars : variables assigned to each host.
-	       * inventory_hostname : The current "host" being worked on from the inventory in the host file. Note: "inventory_hostname" may not be the same as the name the host believes it is which is recorded as ansible_hostname from "facts" information. 
+               * hostvars : variables assigned to each host.
+               * inventory_hostname : The current "host" being worked on from the inventory in the host file. Note: "inventory_hostname" may not be the same as the name the host believes it is which is recorded as ansible_hostname from "facts" information. 
 * Defining variables : In any YAML file you can define variables.
     * Playbook variables
         * Variables can be defined

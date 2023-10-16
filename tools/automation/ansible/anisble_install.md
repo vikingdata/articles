@@ -48,6 +48,9 @@ The purpose of this document is to:
 - [Getting Started with Ansible Infrastructure Automation](https://blog.risingstack.com/getting-started-with-ansible-infrastructure-automation/)
 - [Use Passwordless SSH Keys with Ansible to Manage Machines](https://www.ntweekly.com/2020/06/14/use-passwordless-ssh-keys-with-ansible-to-manage-machine/)
 
+For more examples of commands you can execute:
+* [https://www.softwaretestinghelp.com/ansible-tutorial-1/](https://www.softwaretestinghelp.com/ansible-tutorial-1/)
+
 ---
 
 * * *

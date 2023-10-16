@@ -58,13 +58,15 @@ Second thing, understand the different type of variables.
 * [Special variables](https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html) are defined by ansible. Ansible will override any attempt by the user to set them.
    * (Facts)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#ansible-facts] : variables ansible gets from each host it connects to before it does anything. Facts can be turned off.
    * Connection variables : Variables which determine how to execute commands on a host.
-       * "become" variable which will execute commands as root or superuser.
-       * "ansible_user" which is the user ansible logs as into the server. 
+       * Examples
+           * "become" variable which will execute commands as root or superuser.
+           * "ansible_user" which is the user ansible logs as into the server. 
    * (Magic Variables)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables]
        * These are variables which get set when ansible runs. Many come from how the config files are set.
-            * groups : A dictionary of all groups in host file or inventory.
-	    * hostvars : variables assigned to each host.
-	    * inventory_hostname : The current "host" being worked on from the inventory in the host file. Note: "inventory_hostname" may not be the same as the name the host believes it is which is recorded as ansible_hostname from "facts" information. 
+           * Examples  
+               * groups : A dictionary of all groups in host file or inventory.
+	       * hostvars : variables assigned to each host.
+	       * inventory_hostname : The current "host" being worked on from the inventory in the host file. Note: "inventory_hostname" may not be the same as the name the host believes it is which is recorded as ansible_hostname from "facts" information. 
 * Defining variables : In any YAML file you can define variables.
     * Playbook variables
         * Variables can be defined

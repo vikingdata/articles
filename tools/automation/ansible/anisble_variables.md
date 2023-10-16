@@ -16,13 +16,23 @@ The purpose of this document is to:
 
 ---
 
-1. [Links](#links)
-2. [Variables](#var)
-2. [Setup and simple playbooks](simple)
-2. [Mongo (Ubuntu)](#mongo)
-3. [Playbook](#playbook)
-4. [Conditions](#conditions)
+* [Links](#links)
+* [Variables Overview](#var)
+* [Special Variables](#special)
+    * [Facts](#facts)
+    * [Connection](#connection)
+    * [Magic](#magic)
+* [Defining Variables](#define)
+    * [Playbook](#playbook)
+        * [Playbook Definitions](#pbdef)
+	* [Playbook Output Defintions](pbdefoutput] 
+    * [Inventory](#iv)
+        * [Host](#host)
+	* [Group](#group)
 
+    * Role
+    * Runtime
+    
 
 * * *
 

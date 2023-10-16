@@ -25,7 +25,7 @@ The purpose of this document is to:
 * [Defining Variables](#define)
     * [Playbook](#playbook)
         * [Playbook Definitions](#pbdef)
-        * [Playbook Output Defintions](#pbdefoutput] 
+        * [Playbook Output Defintions](#pbdefoutput) 
     * [Inventory](#iv)
         * [Host](#host)
         * [Group](#group)

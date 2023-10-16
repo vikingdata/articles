@@ -51,7 +51,7 @@ The purpose of this document is to:
 <a name=var></a>Variables
 -----
 
-First thing to do is (understand the precedence of variables)[https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules]
+First thing to do is [understand the precedence of variables](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules)
 
 Second thing, understand the different type of variables. 
 

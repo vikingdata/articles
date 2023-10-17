@@ -14,8 +14,8 @@ Links
 
 Other topics:
 * Playbooks
-* registering variables -- might put this into variables article.
-* special variables -- might put this into variables article.
+* DONE registering variables -- might put this into variables article.
+* DONE special variables -- might put this into variables article.
 * library
 * modules
 * filter_plugins

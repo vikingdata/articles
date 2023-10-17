@@ -18,20 +18,8 @@ The purpose of this document is to:
 
 * [Links](#links)
 * [Variables Overview](#var)
-* [Special Variables](#special)
-    * [Facts](#facts)
-    * [Connection](#connection)
-    * [Magic](#magic)
-* [Defining Variables](#define)
-    * [Playbook](#playbook)
-        * [Playbook Definitions](#pbdef)
-        * [Playbook Output Defintions](#pbdefoutput) 
-    * [Inventory](#iv)
-        * [Host](#host)
-        * [Group](#group)
-
-    * Role
-    * Runtime
+* [Set Variables and Run Playbook](#set)
+* [Notes](#notes)
     
 
 * * *
@@ -76,7 +64,7 @@ Second thing, understand the different type of variables.
 * Defining variables : In any YAML file you can define variables.
     * Playbook variables
         * Variables can be defined
-	* Variables can be regisered from output of commands or scripts
+	* Variables can be registered from output of commands or scripts
         * Registering variables
             * You execute a command and then register (record it output)
     * Inventory variables
@@ -219,7 +207,7 @@ ok: [192.168.1.7] => {
         "order_var5    host var 2 value ,should be host var2",
         "order_var6    playbook var 1 ,should be playbook var1",
         "order_var7     role var 1 value ,should be role var1"
-        "order_var8     role var 1 value ,should be line_command"
+        "order_var8    line_command ,should be line_command"
    ]
 }
 

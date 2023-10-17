@@ -110,7 +110,7 @@ echo "order_var6 : ' role default value'" >> /etc/ansible/roles/role1/defaults/m
 
 echo "---" > /etc/ansible/roles/role1/vars/main.yml
 echo "role_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
-echo "order_var6 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "order_var7 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
 ```
 
 Set a Host and Group variable. Note, change this host to your server. In /etc/ansible/host
@@ -134,21 +134,21 @@ mkdir -p /etc/ansible/host_vars
 mkdir -p /etc/ansible/group_vars
 
 echo "---
-host_var2='host var2 value'
-order_var3='host var2 value'
-order_var4 = 'host var 2 value'
-order_var7='host var2 value'" >> /etc/ansible/host_vars/192.168.1.7.yml
+host_var2  : 'host var 2 value'
+order_var3 : 'host var 2 value'
+order_var4 : 'host var 2 value'
+order_var7 : 'host var 2 value'" > /etc/ansible/host_vars/192.168.1.7.yml
 
 echo "---
-group_var2='group var 2 value'
-order_var3='group var 2 value'
-order_var4 = 'group var 2 value'
-order_var5='group 2 value'
-order_var7='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
+group_var2 : 'group var 2 value'
+order_var3 : 'group var 2 value'
+order_var4 : 'group var 2 value'
+order_var5 : 'group 2 value'
+order_var7 : 'group 2 value'" > /etc/ansible/group_vars/testservers.yml
 
 ```
 
-Set a Playbook variable. Create a file /etc/anisble/mongo.yml
+Set a Playbook variable. Create a file /etc/anisble/echo.yml
 
 ```shell
 
@@ -159,9 +159,9 @@ echo "
       - role1
     hosts: testservers
     vars:
-      playbook_var1: 'a value'
-      order_var6: 'playbook 1 var'
-      order_var7: 'playbook 1 var'
+      playbook_var1: 'playbook 1 value'
+      order_var6: 'playbook var 1'
+      order_var7: 'playbook var 1'
 
     tasks:
       - name : print vars
@@ -174,7 +174,16 @@ echo "
             - group_var1    {{ group_var1 }}
             - group_var2    {{ group_var2 }}
             - playbook_var1 {{ playbook_var1 }}
-            - order_var1    {{ order_var1 }}
+
+            - the following values are done by order of precedence
+            - order_var1    {{ order_var1 }} should be role default
+            - order_var2    {{ order_var2 }} should be host var1
+            - order_var3    {{ order_var3 }} should be host var2
+            - order_var4    {{ order_var4 }} should be group var1
+            - order_var5    {{ order_var5 }} should be group var2
+            - order_var6    {{ order_var6 }} should be playbook var1
+            - order_var7    {{ order_var7 }} should be role var1
+
 
 
 " > /etc/ansible/echo.yml

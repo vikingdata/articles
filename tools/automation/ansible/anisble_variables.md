@@ -18,20 +18,8 @@ The purpose of this document is to:
 
 * [Links](#links)
 * [Variables Overview](#var)
-* [Special Variables](#special)
-    * [Facts](#facts)
-    * [Connection](#connection)
-    * [Magic](#magic)
-* [Defining Variables](#define)
-    * [Playbook](#playbook)
-        * [Playbook Definitions](#pbdef)
-        * [Playbook Output Definitions](#pbdefoutput) 
-    * [Inventory](#iv)
-        * [Host](#host)
-        * [Group](#group)
-
-    * Role
-    * Runtime
+* [Set Variables and Run Playbook](#set)
+* [Notes](#notes)
     
 
 * * *

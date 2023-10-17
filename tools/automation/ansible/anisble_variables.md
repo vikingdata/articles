@@ -53,7 +53,7 @@ The purpose of this document is to:
 
 First thing to do is [understand the precedence of variables](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules).
 
-For variables defined by user... from [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
+* For variables defined by user... from [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
     * Variables defined in role ‘defaults’
     * Variables defined as group_vars
     * Variables defined as host_vars
@@ -119,15 +119,15 @@ Set a Host and Group variable. Note, change this host to your server. In /etc/an
 # NOTE: Change the ip address to the ip address of your target server or its hostname.
 
 echo "[testservers]
- 192.168.1.7 host_var1=' host var1 value', order_var2='host var1 value'" >> /etc/ansible/hosts
+ 192.168.1.7 host_var1=' host var1 value', order_var2='host var4 value'" >> /etc/ansible/hosts
 
 echo ""  >> /etc/ansible/hosts
 
 echo "[testservers:vars]
 group_var1 = 'group var 1 value'
+order_var2 = 'group var 1 value'
 order_var3 = 'group var 1 value'
-order_var4 = 'group var 1 value'
-order_var7 = 'group var 1 value'" >> /etc/ansible/hosts
+order_var4 = 'group var 1 value'" >> /etc/ansible/hosts
 
 
 mkdir -p /etc/ansible/host_vars
@@ -135,15 +135,15 @@ mkdir -p /etc/ansible/group_vars
 
 echo "---
 host_var2  : 'host var 2 value'
-order_var3 : 'host var 2 value'
 order_var4 : 'host var 2 value'
+order_var5 : 'host var 2 value'
 order_var7 : 'host var 2 value'" > /etc/ansible/host_vars/192.168.1.7.yml
 
 echo "---
 group_var2 : 'group var 2 value'
+order_var2 : 'group var 2 value'
 order_var3 : 'group var 2 value'
-order_var4 : 'group var 2 value'
-order_var5 : 'group 2 value'
+order_var4 : 'group 2 value'
 order_var7 : 'group 2 value'" > /etc/ansible/group_vars/testservers.yml
 
 ```
@@ -177,10 +177,10 @@ echo "
 
             - the following values are done by order of precedence
             - order_var1    {{ order_var1 }} should be role default
-            - order_var2    {{ order_var2 }} should be host var1
-            - order_var3    {{ order_var3 }} should be host var2
-            - order_var4    {{ order_var4 }} should be group var1
-            - order_var5    {{ order_var5 }} should be group var2
+            - order_var2    {{ order_var2 }} should be group var1
+            - order_var3    {{ order_var3 }} should be group var2
+            - order_var4    {{ order_var4 }} should be host var1
+            - order_var5    {{ order_var5 }} should be host var2
             - order_var6    {{ order_var6 }} should be playbook var1
             - order_var7    {{ order_var7 }} should be role var1
 

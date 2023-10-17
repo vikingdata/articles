@@ -219,7 +219,7 @@ ok: [192.168.1.7] => {
         "order_var5    host var 2 value ,should be host var2",
         "order_var6    playbook var 1 ,should be playbook var1",
         "order_var7     role var 1 value ,should be role var1"
-        "order_var8     role var 1 value ,should be line_command"
+        "order_var8    line_command ,should be line_command"
    ]
 }
 

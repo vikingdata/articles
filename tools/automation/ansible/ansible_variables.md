@@ -20,14 +20,12 @@ The purpose of this document is to:
 * [Variables Overview](#var)
 * [Set Variables and Run Playbook](#set)
 * [Notes](#notes)
-    
 
 * * *
 
 <a name=links></a>Links
 -----
 * [Using Variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html)
-
 * [How to Use Different Types of Ansible Variables](https://spacelift.io/blog/ansible-variables)
 * [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
 * [Sample Ansible setup](https://docs.ansible.com/ansible/latest/tips_tricks/sample_setup.html)
@@ -127,6 +125,7 @@ order_var5 : 'host var 2 value'
 order_var7 : 'host var 2 value'" > /etc/ansible/host_vars/192.168.1.7.yml
 
 echo "---
+ansible_python_interpreter : /usr/bin/python3
 group_var2 : 'group var 2 value'
 order_var3 : 'group var 2 value'
 order_var4 : 'group var 2 value'
@@ -150,26 +149,49 @@ echo "
       order_var7: 'playbook var 1'
 
     tasks:
-      - name : print vars
-        debug:
-          msg:
-            - role default  {{ role_default1 }}
-            - role var1     {{ role_var1 }}
-            - host_var1     {{ host_var1 }}
-            - host_var2     {{ host_var2 }}
-            - group_var1    {{ group_var1 }}
-            - group_var2    {{ group_var2 }}
-            - playbook_var1 {{ playbook_var1 }}
+    - name : print vars
+      debug:
+        msg:
+          - role default  {{ role_default1 }}
+          - role var1     {{ role_var1 }}
+          - host_var1     {{ host_var1 }}
+          - host_var2     {{ host_var2 }}
+          - group_var1    {{ group_var1 }}
+          - group_var2    {{ group_var2 }}
+          - playbook_var1 {{ playbook_var1 }}
+          - the following values are done by order of precedence
+          - order_var1    {{ order_var1 }} ,should be role default
+          - order_var2    {{ order_var2 }} ,should be group var1
+          - order_var3    {{ order_var3 }} ,should be group var2
+          - order_var4    {{ order_var4 }} ,should be host var1
+          - order_var5    {{ order_var5 }} ,should be host var2
+          - order_var6    {{ order_var6 }} ,should be playbook var1
+          - order_var7    {{ order_var7 }} ,should be role var1
+          - order_var8    {{ order_var8 }} ,should be  line_command
 
-            - the following values are done by order of precedence
-            - order_var1    {{ order_var1 }} ,should be role default
-            - order_var2    {{ order_var2 }} ,should be group var1
-            - order_var3    {{ order_var3 }} ,should be group var2
-            - order_var4    {{ order_var4 }} ,should be host var1
-            - order_var5    {{ order_var5 }} ,should be host var2
-            - order_var6    {{ order_var6 }} ,should be playbook var1
-            - order_var7    {{ order_var7 }} ,should be role var1
-            - order_var8    {{ order_var8 }} ,should be  line_command
+    - name : Make registered variable
+      shell: ls /etc | wc -l
+      register: register_test
+
+    - name : print registered
+      register: register_test
+      debug :
+        msg :
+           - Register test. There are {{register_test.stdout }} files in /etc.
+
+    - name : print special variables
+      debug :
+        msg:
+          - From facts. My architecture {{ ansible_facts['architecture']  }}
+          - Magic variable inventory_hostname is {{ inventory_hostname }}
+          - as opposed to fact ansible_facts['hostname'] {{ansible_facts['hostname'] }} or ansible_hostname {{ ansible_hostname }}
+          - Magic vaiable inventory_file is {{ inventory_file }}
+          - The connection variable ansible_connection is {{ ansible_connection }}
+          - Displaying a string, ansible_verbosity is {{ ansible_verbosity }}
+          - Displaying 2nd element in a list, ansible_facts['processor'][1] is {{ ansible_facts['processor'][1] }}
+          - Displaying List, ansible_facts['processor'] is {{ ansible_facts['processor'] }}
+          - Displaying an element in dictionary ansible_facts['cmdline']['BOOT_IMAGE'} is {{ ansible_facts['cmdline']['BOOT_IMAGE'] }}
+          - Displaying dictionary, ansible_facts['cmdline'] is {{ ansible_facts['cmdline'] }}
 
 " > /etc/ansible/echo.yml
 
@@ -179,6 +201,10 @@ Now execute
 ```shell
 ansible-playbook echo.yml -e "order_var8=line_command"
 ```
+It will
+* Show you the hiearchy of variables
+* show you how to register variables from the output of a command
+* show you how to print facts, special variables, connection variables, an element from a dictionary and list, a dictionary, and a list 
 
 and you should get something like
 
@@ -209,6 +235,32 @@ ok: [192.168.1.7] => {
         "order_var7     role var 1 value ,should be role var1"
         "order_var8    line_command ,should be line_command"
    ]
+}
+
+TASK [Make registered variable] ************************************************************************************************
+changed: [192.168.1.7]
+
+TASK [print registered] ********************************************************************************************************
+ok: [192.168.1.7] => {
+    "msg": [
+        "Register test. There are 262 files in /etc."
+    ]
+}
+
+TASK [print special variables] **************************************************************************************************
+ok: [192.168.1.7] => {
+    "msg": [
+        "From facts. My architecture x86_64",
+        "Magic variable inventory_hostname is 192.168.1.7",
+        "as opposed to fact ansible_facts['hostname'] mark-Inspiron-3501 or ansible_hostname mark-Inspiron-3501",
+        "Magic vaiable inventory_file is /etc/ansible/hosts",
+        "The connection variable ansible_connection is ssh",
+        "Displaying a string, ansible_verbosity is 0",
+        "Displaying 2nd element in a list, ansible_facts['processor'][1] is GenuineIntel",
+        "Displaying List, ansible_facts['processor'] is ['0', 'GenuineIntel', '11th Gen Intel(R) Core(TM) i3-1115G4 @ 3.00GHz', '1', 'GenuineIntel', '11th Gen Intel(R) Core(TM) i3-1115G4 @ 3.00GHz', '2', 'GenuineIntel', '11th Gen Intel(R) Core(TM) i3-1115G4 @ 3.00GHz', '3', 'GenuineIntel', '11th Gen Intel(R) Core(TM) i3-1115G4 @ 3.00GHz']",
+        "Displaying an element in dictionary ansible_facts['cmdline']['BOOT_IMAGE'} is /boot/vmlinuz-5.15.0-76-generic",
+        "Displaying dictionary, ansible_facts['cmdline'] is {'BOOT_IMAGE': '/boot/vmlinuz-5.15.0-76-generic', 'root': 'UUID=0a70c609-712e-4849-8c15-ca5972114471', 'ro': True, 'quiet': True, 'splash': True}"
+    ]
 }
 
 PLAY RECAP ********************************************************************************************************************

@@ -101,10 +101,16 @@ mkdir -p /etc/ansible/roles/role1/vars
 echo "---" > /etc/ansible/roles/role1/defaults/main.yml
 echo "role_default1 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
 echo "order_var1 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var2 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var3 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var4 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var5 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var6 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+
 
 echo "---" > /etc/ansible/roles/role1/vars/main.yml
 echo "role_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
-echo "order_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "order_var6 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
 ```
 
 Set a Host and Group variable. Note, change this host to your server. In /etc/ansible/host
@@ -113,25 +119,32 @@ Set a Host and Group variable. Note, change this host to your server. In /etc/an
 # NOTE: Change the ip address to the ip address of your target server or its hostname.
 
 echo "[testservers]
- 192.168.1.7 host_var1=' host var1 value'" >> /etc/ansible/hosts
+ 192.168.1.7 host_var1=' host var1 value', order_var2='host var1 value'" >> /etc/ansible/hosts
 
 echo ""  >> /etc/ansible/hosts
 
 echo "[testservers:vars]
 group_var1 = 'group var 1 value'
-order_var1 = 'group var 1 value'" >> /etc/ansible/hosts
+order_var3 = 'group var 1 value'
+order_var4 = 'group var 1 value'
+order_var7 = 'group var 1 value'" >> /etc/ansible/hosts
 
 
 mkdir -p /etc/ansible/host_vars
 mkdir -p /etc/ansible/group_vars
 
-echo "---" > /etc/ansible/host_vars/192.168.1.7.yml
-echo "host_var2='host var2 value'" >> /etc/ansible/host_vars/192.168.1.7.yml
-echo "order_var1='host var2 value'" >> /etc/ansible/group_vars/testservers.yml
+echo "---
+host_var2='host var2 value'
+order_var3='host var2 value'
+order_var4 = 'host var 2 value'
+order_var7='host var2 value'" >> /etc/ansible/host_vars/192.168.1.7.yml
 
-echo "---" > /etc/ansible/group_vars/testservers.yml
-echo "group_var2='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
-echo "order_var1='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
+echo "---
+group_var2='group var 2 value'
+order_var3='group var 2 value'
+order_var4 = 'group var 2 value'
+order_var5='group 2 value'
+order_var7='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
 
 ```
 
@@ -147,7 +160,8 @@ echo "
     hosts: testservers
     vars:
       playbook_var1: 'a value'
-      order_var1: 'playbook 1 var'
+      order_var6: 'playbook 1 var'
+      order_var7: 'playbook 1 var'
 
     tasks:
       - name : print vars

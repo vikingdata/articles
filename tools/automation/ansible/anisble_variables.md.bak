@@ -25,7 +25,7 @@ The purpose of this document is to:
 * [Defining Variables](#define)
     * [Playbook](#playbook)
         * [Playbook Definitions](#pbdef)
-        * [Playbook Output Definitions](#pbdefoutput) 
+        * [Playbook Output Defintions](#pbdefoutput) 
     * [Inventory](#iv)
         * [Host](#host)
         * [Group](#group)
@@ -76,7 +76,7 @@ Second thing, understand the different type of variables.
 * Defining variables : In any YAML file you can define variables.
     * Playbook variables
         * Variables can be defined
-	* Variables can be registered from output of commands or scripts
+	* Variables can be regisered from output of commands or scripts
         * Registering variables
             * You execute a command and then register (record it output)
     * Inventory variables

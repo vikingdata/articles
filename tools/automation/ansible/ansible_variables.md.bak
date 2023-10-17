@@ -133,7 +133,7 @@ order_var7 : 'group var 2 value'" > /etc/ansible/group_vars/testservers.yml
 
 ```
 
-Set a Playbook variable. Create a file /etc/ansible/echo.yml
+Set a Playbook variable. Create a file /etc/anisble/echo.yml
 
 ```shell
 
@@ -202,7 +202,7 @@ Now execute
 ansible-playbook echo.yml -e "order_var8=line_command"
 ```
 It will
-* Show you the hierarchy of variables
+* Show you the hiearchy of variables
 * show you how to register variables from the output of a command
 * show you how to print facts, special variables, connection variables, an element from a dictionary and list, a dictionary, and a list 
 

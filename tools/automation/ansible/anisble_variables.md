@@ -98,13 +98,13 @@ Set a role default roles and role vars.
 mkdir -p /etc/ansible/roles/role1/defaults
 mkdir -p /etc/ansible/roles/role1/vars
 
-echo "---" > /etc/ansible/roles/role1/default/main.yml
-echo "role_default1 : ' role default value'" >> /etc/ansible/roles/role1/default/main.yml
-echo "order_var1 : ' role default value'" >> /etc/ansible/roles/role1/default/main.yml
+echo "---" > /etc/ansible/roles/role1/defaults/main.yml
+echo "role_default1 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
+echo "order_var1 : ' role default value'" >> /etc/ansible/roles/role1/defaults/main.yml
 
 echo "---" > /etc/ansible/roles/role1/vars/main.yml
-echo "role_var1 : ' role vars value'" >> /etc/ansible/roles/role1/vars/main.yml
-echo "order_var1 : ' role vars value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "role_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "order_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
 ```
 
 Set a Host and Group variable. Note, change this host to your server. In /etc/ansible/host
@@ -113,13 +113,13 @@ Set a Host and Group variable. Note, change this host to your server. In /etc/an
 # NOTE: Change the ip address to the ip address of your target server or its hostname.
 
 echo "[testservers]
- 192.168.1.7 host_var1='a value'" >> /etc/ansible/hosts
+ 192.168.1.7 host_var1=' host var1 value'" >> /etc/ansible/hosts
 
 echo ""  >> /etc/ansible/hosts
 
 echo "[testservers:vars]
-group_var1 = 'host 1 value'
-order_var1 = 'group 1 var'" >> /etc/ansible/hosts
+group_var1 = 'group var 1 value'
+order_var1 = 'group var 1 value'" >> /etc/ansible/hosts
 
 
 mkdir -p /etc/ansible/host_vars
@@ -127,10 +127,11 @@ mkdir -p /etc/ansible/group_vars
 
 echo "---" > /etc/ansible/host_vars/192.168.1.7.yml
 echo "host_var2='host var2 value'" >> /etc/ansible/host_vars/192.168.1.7.yml
+echo "order_var1='host var2 value'" >> /etc/ansible/group_vars/testservers.yml
 
 echo "---" > /etc/ansible/group_vars/testservers.yml
-echo "group_var2='a value'" >> /etc/ansible/host_vars/testservers.yml
-echo "order_order1='a group 2 value'" >> /etc/ansible/host_vars/testservers.yml
+echo "group_var2='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
+echo "order_var1='group 2 value'" >> /etc/ansible/group_vars/testservers.yml
 
 ```
 
@@ -140,31 +141,63 @@ Set a Playbook variable. Create a file /etc/anisble/mongo.yml
 
 echo "
 ---
-- hosts: testservers
-  roles:
-    - role1
-  vars:
-    playbook_var1: 'a value'
-    order_var1: 'playbook 1 var'
+  - name : Sample echo playbook
+    roles :
+      - role1
+    hosts: testservers
+    vars:
+      playbook_var1: 'a value'
+      order_var1: 'playbook 1 var'
 
-- hosts: 192.168.1.7
-  vars:
-    playbook_var2: 'a value'
-    order_var1 : 'playbook 2 var'
+    tasks:
+      - name : print vars
+        debug:
+          msg:
+            - role default  {{ role_default1 }}
+            - role var1     {{ role_var1 }}
+            - host_var1     {{ host_var1 }}
+            - host_var2     {{ host_var2 }}
+            - group_var1    {{ group_var1 }}
+            - group_var2    {{ group_var2 }}
+            - playbook_var1 {{ playbook_var1 }}
+            - order_var1    {{ order_var1 }}
 
-- name: Print variables
-  ansible.builtin.debug:
-    msg: role default : {{ role_default1 }}
-    msg: role var1 : {{ role_var1 }}
-    msg: host_var1 : {{ host_var1 }}
-    msg: host_var2 : {{ host_var2 }}
-    msg: group_var1 : {{ group_var1 }}
-    msg: group_var2 : {{ group_var2 }}
-    msg: playbook_var1 : {{ playbook_var1 }}
-    msg: order_var1 : {{ order_var1 }}
 
 " > /etc/ansible/echo.yml
 
 ```
 
+Now execute
+```shell
+ansible-playbook echo.yml
+```
+
+and you should get something like
+
+```
+
+PLAY [Sample echo playbook] **************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************
+ok: [192.168.1.7]
+
+TASK [print vars] ************************************************************************************************************
+ok: [192.168.1.7] => {
+    "msg": [
+        "role default   role default value",
+        "role var1      role vars value",
+        "host_var1     a value",
+        "host_var2     host var2 value",
+        "group_var1    host 1 value",
+        "group_var2    group 2 value",
+        "playbook_var1 a value",
+        "order_var1     role vars value"
+    ]
+}
+
+PLAY RECAP ********************************************************************************************************************
+192.168.1.7                : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+```
 

@@ -53,13 +53,11 @@ The purpose of this document is to:
 
 First thing to do is [understand the precedence of variables](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#general-precedence-rules).
 
-* For variables defined by user... from [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
-    * Variables defined in role ‘defaults’
-    * Variables defined as group_vars
-    * Variables defined as host_vars
-    * Variables defined in plays
-    * Variables defined in role ‘vars’
-    * Variables defined at runtime with –e switch
+* Order or precedence. It seems a little confusing based on several articles.
+    * [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
+    * [Variable precedence](https://subscription.packtpub.com/book/cloud-and-networking/9781787125681/1/ch01lvl1sec13/variable-precedence)
+    * [Controlling how Ansible behaves: precedence rules](https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html)
+    
 
 Second thing, understand the different type of variables. 
 
@@ -111,6 +109,8 @@ echo "order_var6 : ' role default value'" >> /etc/ansible/roles/role1/defaults/m
 echo "---" > /etc/ansible/roles/role1/vars/main.yml
 echo "role_var1 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
 echo "order_var7 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
+echo "order_var8 : ' role var 1 value'" >> /etc/ansible/roles/role1/vars/main.yml
+
 ```
 
 Set a Host and Group variable. Note, change this host to your server. In /etc/ansible/host
@@ -119,7 +119,7 @@ Set a Host and Group variable. Note, change this host to your server. In /etc/an
 # NOTE: Change the ip address to the ip address of your target server or its hostname.
 
 echo "[testservers]
- 192.168.1.7 host_var1=' host var1 value', order_var2='host var4 value'" >> /etc/ansible/hosts
+192.168.1.7 host_var1='host var 1 value' order_var4='host var 1 value' order_var5='host var 1 value'" >> /etc/ansible/hosts
 
 echo ""  >> /etc/ansible/hosts
 
@@ -135,16 +135,14 @@ mkdir -p /etc/ansible/group_vars
 
 echo "---
 host_var2  : 'host var 2 value'
-order_var4 : 'host var 2 value'
 order_var5 : 'host var 2 value'
 order_var7 : 'host var 2 value'" > /etc/ansible/host_vars/192.168.1.7.yml
 
 echo "---
 group_var2 : 'group var 2 value'
-order_var2 : 'group var 2 value'
 order_var3 : 'group var 2 value'
-order_var4 : 'group 2 value'
-order_var7 : 'group 2 value'" > /etc/ansible/group_vars/testservers.yml
+order_var4 : 'group var 2 value'
+order_var7 : 'group var 2 value'" > /etc/ansible/group_vars/testservers.yml
 
 ```
 
@@ -176,15 +174,14 @@ echo "
             - playbook_var1 {{ playbook_var1 }}
 
             - the following values are done by order of precedence
-            - order_var1    {{ order_var1 }} should be role default
-            - order_var2    {{ order_var2 }} should be group var1
-            - order_var3    {{ order_var3 }} should be group var2
-            - order_var4    {{ order_var4 }} should be host var1
-            - order_var5    {{ order_var5 }} should be host var2
-            - order_var6    {{ order_var6 }} should be playbook var1
-            - order_var7    {{ order_var7 }} should be role var1
-
-
+            - order_var1    {{ order_var1 }} ,should be role default
+            - order_var2    {{ order_var2 }} ,should be group var1
+            - order_var3    {{ order_var3 }} ,should be group var2
+            - order_var4    {{ order_var4 }} ,should be host var1
+            - order_var5    {{ order_var5 }} ,should be host var2
+            - order_var6    {{ order_var6 }} ,should be playbook var1
+            - order_var7    {{ order_var7 }} ,should be role var1
+            - order_var8    {{ order_var8 }} ,should be  line_command
 
 " > /etc/ansible/echo.yml
 
@@ -192,7 +189,7 @@ echo "
 
 Now execute
 ```shell
-ansible-playbook echo.yml
+ansible-playbook echo.yml -e "order_var8=line_command"
 ```
 
 and you should get something like
@@ -208,14 +205,22 @@ TASK [print vars] **************************************************************
 ok: [192.168.1.7] => {
     "msg": [
         "role default   role default value",
-        "role var1      role vars value",
-        "host_var1     a value",
-        "host_var2     host var2 value",
-        "group_var1    host 1 value",
-        "group_var2    group 2 value",
-        "playbook_var1 a value",
-        "order_var1     role vars value"
-    ]
+        "role var1      role var 1 value",
+        "host_var1      host var1 value,",
+        "host_var2     host var 2 value",
+        "group_var1    group var 1 value",
+        "group_var2    group var 2 value",
+        "playbook_var1 playbook 1 value",
+        "the following values are done by order of precedence",
+        "order_var1     role default value ,should be role default",
+        "order_var2    group var 1 value ,should be group var1",
+        "order_var3    group var 2 value ,should be group var2",
+        "order_var4    host var1 value ,should be host var1",
+        "order_var5    host var 2 value ,should be host var2",
+        "order_var6    playbook var 1 ,should be playbook var1",
+        "order_var7     role var 1 value ,should be role var1"
+        "order_var8     role var 1 value ,should be line_command"
+   ]
 }
 
 PLAY RECAP ********************************************************************************************************************
@@ -224,3 +229,8 @@ PLAY RECAP *********************************************************************
 
 ```
 
+* * *
+
+<a name=notes></a>Notes
+-----
+There are more levels to define variables than listed here. 

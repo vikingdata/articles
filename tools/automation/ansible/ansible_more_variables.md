@@ -465,6 +465,12 @@ echo "
 
 ```
 
+Execute
+```shell
+cd /etc/ansible
+ansible-playbook play_with_variables.yml
+```
+
 and our output should be something like
 
 ```shell

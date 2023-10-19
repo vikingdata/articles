@@ -45,8 +45,7 @@ The purpose of this document is to:
 
 
 
-** <a name=2></a>Append to a list and dictionary
-
+```shell 
 echo "
 ---
   - name : Play with variables.
@@ -73,8 +72,11 @@ echo "
           - dictionary is {{ string_dictionary }}
 
 " > /etc/anisble/play_with_variables.yml
+```
 
-** <a name=3></a>Change variables
+** <a name=2></a>Append to a list and dictionary
+
+```shell
 echo "
 
     - name: Change string
@@ -96,6 +98,9 @@ echo "
 
 
 " >>/etc/anisble/play_with_variables.yml
+```
+
+** <a name=3></a>Change variables
 
 ** <a name=4></a>Reset Everything
 

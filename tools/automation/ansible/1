@@ -1,0 +1,48 @@
+
+echo "
+---
+  - name : Play with variables.
+    hosts: testservers
+    vars:
+      string1 : ' Just a string '
+
+      string_list :
+        - 'apple'
+        - 'banana'
+        - 'carrot'
+
+      string_dictionary:
+        person1 : Mark
+        person2 : John
+        person3 : Heidi
+
+    tasks :
+    - name : Display and change variables
+      debug :
+        msg :
+          - string is     {{ string1 }}
+          - list   is     {{ string_list }}
+          - dictionary is {{ string_dictionary }}
+
+    - name: Change string
+      set_fact:
+        string1 : 'Changed string'
+    - name : Append list
+      set_fact:
+        string_list: \"{{ string_list + ['Added string'] }}\"
+    - name : Append key
+      set_fact:
+        string_dictionary: \"{{ string_dictionary | combine({'person4': 'Collin'}) }}\"
+
+    - name : Display changed variables
+      debug :
+        msg :
+          - string is     {{ string1 }}
+          - list   is     {{ string_list }}
+          - dictionary is {{ string_dictionary }}
+
+
+
+" > /etc/ansible/play_with_variables.yml
+
+

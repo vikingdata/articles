@@ -25,10 +25,10 @@ The purpose of this document is to:
 
 <a name=links></a>Links
 -----
-* (Ansible Conditionals)[https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html]
-* (File exists)[https://www.tutorialspoint.com/ansible-check-if-a-file-exists]
-* (File esists)[https://phoenixnap.com/kb/ansible-check-if-file-exists]
-* (fail or assert)[https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html]
+* [Ansible Conditionals](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html)
+* [file exists](https://www.tutorialspoint.com/ansible-check-if-a-file-exists)
+* [file esists](https://phoenixnap.com/kb/ansible-check-if-file-exists)
+* [fail or assert](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html)
 
 
 
@@ -80,15 +80,15 @@ echo "
   - name : Sample custom mysql install
     hosts: testservers
   
-  - tasks :
-    - name define mysql_is_installed variable
-    shell : echo "mysql_is_installed is not defined"
-    vars:
-      mysql_is_installed
-    when : mysql_is_installed is not defined
+    tasks :
+    - name : define mysql_is_installed variable
+      shell : echo "mysql_is_installed is not defined"
+#      vars:
+#        mysql_is_installed
+#      when : mysql_is_installed is not defined
 
-    fail : msg = "mysql_is_installed is not defined "
-    when : mysql_is_installed is not defined
+#      fail : msg = "mysql_is_installed is not defined "
+#      when : mysql_is_installed is not defined
 
 " > /etc/ansible/mysql_custom_install.yml
 

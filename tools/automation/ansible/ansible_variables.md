@@ -25,6 +25,7 @@ The purpose of this document is to:
 
 <a name=links></a>Links
 -----
+* [https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#understanding-variable-precedence](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#understanding-variable-precedence)
 * [Using Variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html)
 * [How to Use Different Types of Ansible Variables](https://spacelift.io/blog/ansible-variables)
 * [Ansible Roles and Variables](https://www.dasblinkenlichten.com/ansible-roles-and-variables/)
@@ -268,7 +269,6 @@ PLAY RECAP *********************************************************************
 192.168.1.7                : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 
-```
 
 * * *
 

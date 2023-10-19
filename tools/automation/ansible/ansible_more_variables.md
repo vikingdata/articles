@@ -101,33 +101,51 @@ echo "
 ```
 
 * <a name=3></a>Change variables
+```shell
+
+echo "
+
+" >>/etc/anisble/play_with_variables.yml
+```
 
 * <a name=4></a>Reset Everything
+```shell
 
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
+```
 
 * <a name=5></a>Merge multiple info to list and dictionary
+
+```shell
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
+```
 
 * <a name=6></a>Merge Mutiple info from other list or dictionary
+
+```shell
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
+```
 
 * <a name=7></a>Make a list from a dictionary
+```shell
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
+```
 
 * <a name=8></a>Make a dictionary from two lists
+
+```shell
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
-
+```
 
 * * *
 <a name=change></a>Change and reset strings, lists, and dictionaries

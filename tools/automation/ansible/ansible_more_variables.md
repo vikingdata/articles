@@ -38,7 +38,7 @@ The purpose of this document is to:
 
 * * *
 
-<a name=change></a>Change Variables
+* <a name=change></a>Change Variables
 -----
 
 ** <a name=1></a> Set variables

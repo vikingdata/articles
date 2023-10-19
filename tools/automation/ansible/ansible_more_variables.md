@@ -36,12 +36,12 @@ The purpose of this document is to:
 -----
 * [Sample Ansible setup](https://docs.ansible.com/ansible/latest/tips_tricks/sample_setup.html)
 
-* * *
 
-* <a name=change></a>Change Variables
+* * *
+<a name=change></a>Change Variables
 -----
 
-** <a name=1></a> Set variables
+* <a name=1></a> Set variables
 
 
 
@@ -74,7 +74,7 @@ echo "
 " > /etc/anisble/play_with_variables.yml
 ```
 
-** <a name=2></a>Append to a list and dictionary
+* <a name=2></a>Append to a list and dictionary
 
 ```shell
 echo "
@@ -100,37 +100,36 @@ echo "
 " >>/etc/anisble/play_with_variables.yml
 ```
 
-** <a name=3></a>Change variables
+* <a name=3></a>Change variables
 
-** <a name=4></a>Reset Everything
+* <a name=4></a>Reset Everything
 
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
 
-** <a name=5></a>Merge multiple info to list and dictionary
+* <a name=5></a>Merge multiple info to list and dictionary
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
 
-
-** <a name=6></a>Merge Mutiple info from other list or dictionary
+* <a name=6></a>Merge Mutiple info from other list or dictionary
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
 
-** <a name=7></a>Make a list from a dictionary
+* <a name=7></a>Make a list from a dictionary
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
 
-** <a name=8></a>Make a dictionary from two lists
+* <a name=8></a>Make a dictionary from two lists
 echo "
 
 " >>/etc/anisble/play_with_variables.yml
+
 
 * * *
-
 <a name=change></a>Change and reset strings, lists, and dictionaries
 -----
 

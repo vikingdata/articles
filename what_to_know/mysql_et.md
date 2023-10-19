@@ -1,5 +1,12 @@
 # What to know : MySQL et
 
+* * *
+
+<a name=et></a>et
+-----
+
+
+
 * persistent stats : optimizer saved acrosss restarts, when innodb_stats_persistent_sample_pages is increased it improves precision on execution plans of transient index statistics
 
 * enterprise firewall can1. read incoming queries to create a whitelist, blocking queries bvy pre approved whitelists
@@ -62,6 +69,104 @@ streams.
 * Snapshots: No recovery is usually necessary. If copied into anoher system, can be brought up immediately.
 
 * To run multiple mysql instances: Docker, different systemd settings, use different options for each instance and
-different systemd settings can specify different startup configs.
+different systemd settings can specify different startup configs. 29
+
+* For a 5 group replication, 3 disconnected and 2 connected, You should hust them all down and writing is down, so you need
+manual commands to remove the 3 non-connected servers and make the group just the 2 nodes. Check first if the 3 nodes are
+truly down and have not gotten data relative to the 2 nodes.
+
+* If the datadir becomes world readable, writable, executable : Data could be altered, config files could be altered.
+
+* TO lock accounts
+    * ALTER USER ... ACCOUNT LOCK;
+    * ALTER USER .... IDENTIFIED WITH mysql_no_login;
+    
+* To convert from normal replication to GTID
+    * Restart MySQL (master and slave) with these options enabled:--gtid_mode=ON –log-bin –log-slave-updates –enforce-gtid-consistency
+    * On the slave, alter the MySQL master connection setting with: CHANGE MASTER TO MASTER_AUTO_POSITION = 1;
+
+* MySQL with -- protocol can have the options 36
+   * TCP, socket
+   * For windows, pipe, memory
+
+* locks from data_locks
+    * lock_type : record or table
+    * lock_mode : S Shared (reads are okay), X is exclusive (everything is blocked) 
+
+* In order to replicat
+    * TCP/IP connections only
+    * Each server must have a unique server ID.
+    * Master must have binary logs turned on. 
+
+* mysql_config_editor
+    * manages configuration of client including storing of other things. 
+    * Uses [client] in config files for user. 
+
+* explain analyze
+    * https://www.percona.com/blog/using-explain-analyze-in-mysql-8/
+    * https://dev.mysql.com/worklog/task/?id=4168
+
+* mysqlpump excludes
+      * Does not dump performance_schema, ndbinfo, or sys, schema_information
 
 
+* to ensure X.509-compliant certificate  use
+   * VERIFY_IDENTITY
+   * VERIFY_CA
+
+* username and password settings
+    * .mylogin.cnf use by mysql_config_editor
+    * $HOME/.my.cnf -- clear teat values
+    * $HOME/.mysqlrc -- maybe-- its not officially documented
+    * NOT /etc/my.cnf or $MYSQL_HOME/my.cnf
+
+* by default roles and internal accounts are locked 49
+
+* locks
+    * shared S -- allows reading of rows
+    * exlcudive X -- row is locked for read and writes
+    * terms
+         * shread_write - shared on table, write on row
+	 * HARED, SHARED_HIGH_PRIO, SHARED_READ, SHARED_WRITE, SHARED_UPGRADABLE, SHARED_NO_WRITE, SHARED_NO_READ_WRITE, or EXCLUSIVE.
+    * https://dev.mysql.com/blog-archive/innodb-data-locking-part-1-introduction/
+    * https://dev.mysql.com/blog-archive/innodb-data-locking-part-2-locks/
+
+56 -- skip
+
+* Mandatory roles
+    * Can't be dropped.
+    * Dropping tow more more rolls will fail for all if one role doesn't exist.
+
+* Proxy : Grant users to masquerade as another user. 58
+   * When defined as proxy, ignore your permissions, you adopt the other account.
+   * SELECT USER(), CURRENT_USER(), @@proxy_user;
+      * user is the account that is logged in
+      * current_user is the proxy user
+      * ''@'' is proxy is used, otherwise NULL 
+
+* TDE keeps the data encrypted in memory until it is needed.
+
+* AFTER RPM installation, you need to initialize data directory, and password can be found in log file. 
+
+
+* * *
+
+<a name=u1></a>u1
+-----
+
+
+
+* * *
+
+<a name=u2></a>u2
+
+-----
+
+
+* * *
+
+<a name=other></a>other
+
+-----
+* performance_schema
+* How locks are assigned

@@ -199,6 +199,7 @@ echo "
 
 Now execute
 ```shell
+cd /etc/ansible
 ansible-playbook echo.yml -e "order_var8=line_command"
 ```
 It will

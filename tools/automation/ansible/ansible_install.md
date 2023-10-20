@@ -60,6 +60,8 @@ For more examples of commands you can execute:
 
 ### Install
 
+* Basic Install
+
 ```shell
 apt update
 apt install software-properties-common
@@ -74,6 +76,33 @@ cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 chmod 644 .ssh/authorized_keys
 ssh -o "StrictHostKeyChecking no" 127.0.0.1 echo "done"
 ```
+
+
+* You might need to do this. 
+
+Also, I had to edit /etc/ansible/ansible.cng and under the "[ssh_connection]" I had to put
+```shell
+[ssh_connection]
+ssh_args = -C -o ControlPath=none
+
+```
+but you might not need to.
+
+* My version info
+
+```shell
+ansible [core 2.15.5]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/marka/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/local/lib/python3.9/site-packages/ansible
+  ansible collection location = /home/mark/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/local/bin/ansible
+  python version = 3.9.16 (main, Mar  8 2023, 22:47:22) [GCC 11.3.0] (/usr/bin/python3.9.exe)
+  jinja version = 3.1.2
+  libyaml = True
+
+```
+
 
 * * *
 

@@ -1,9 +1,9 @@
 --------
-title: Ansible : More Variables 
+title: Ansible : More Variables by example
 
 --------
 
-# Ansible: More Variables
+# Ansible: More Variables by example
 
 *by Mark Nielsen*  
 *Copyright October 2023*

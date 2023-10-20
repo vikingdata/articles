@@ -293,6 +293,9 @@ echo "
 <a name=big></a>One Big File
 -----
 
+* Execute to make the playlist
+
+
 ```shell
 
 echo "
@@ -465,13 +468,13 @@ echo "
 
 ```
 
-Execute
+* Run the playlist
 ```shell
 cd /etc/ansible
 ansible-playbook play_with_variables.yml
 ```
 
-and our output should be something like
+* Output should be something like
 
 ```shell
 

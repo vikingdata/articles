@@ -8,16 +8,12 @@ title: Ansible : More Variables
 *by Mark Nielsen*  
 *Copyright October 2023*
 
-The documentation about manipulating variables is not that straight forward.
-Many articles are confusing on the internet regarding how to change variables. 
-This article deals just with the basics of how to set and change variables including lists and dictionaries.
-It also goes into a few of the advanced ways to create new lists and dictionaries. 
-
+The documentation about manipulating variables in Ansible is a little confusing to the beginner and it seems different ways
+of manpulating data is spread amoung many articles. 
 
 The purpose of this document is to:
 
-- Change and reset strings, lists, and dictionaries
-
+- Describe the basic of data manipulation for strings, lists, and dictionaries in one place. 
 
 ---
 

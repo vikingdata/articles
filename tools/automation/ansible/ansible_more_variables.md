@@ -49,8 +49,6 @@ The purpose of this document is to:
 
 Read my first article on [setting up ansible.](https://github.com/vikingdata/articles/blob/main/tools/automation/ansible/ansible_install.md)
 
-The only thing you really need to do is add a host section to the file "/etc/ansible/hosts".
-
 * * *
 <a name=change></a>Change Variables
 -----

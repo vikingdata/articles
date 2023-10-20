@@ -37,7 +37,7 @@ The purpose of this document is to:
 -----
 * [Sample Ansible setup](https://docs.ansible.com/ansible/latest/tips_tricks/sample_setup.html)
 * [Manipulating data](https://docs.ansible.com/ansible/latest/playbook_guide/complex_data_manipulation.html)
-* [How to merge multiple lists in ansible?)[https://codingpointer.com/ansible/merge-lists]
+* [How to merge multiple lists in ansible?](https://codingpointer.com/ansible/merge-lists)
 * [Merge lists](https://docs.ansible.com/ansible/latest/collections/community/general/docsite/filter_guide_abstract_informations_merging_lists_of_dictionaries.html)
 * [Combining items from multiple lists: zip and zip_longest](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html#combining-and-selecting-data)
 * [Combine dictionaries](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/combine_filter.html)

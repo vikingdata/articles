@@ -148,6 +148,113 @@ truly down and have not gotten data relative to the 2 nodes.
 
 * AFTER RPM installation, you need to initialize data directory, and password can be found in log file. 
 
+* for mysqlpump, ro backup databases that it doesn't normally backup
+   * mysqlpump --include-databases=% > full-backup-$(date +%Y%m$d).sql
+   * or use --databases
+   * Backups done in parallel
+   * database not normally inlcuded : performance_schema, ndbinfo, or sys, information_schema, and mysql accounts
+   * to dump accounts : mysqlpump --exclude-databases=% --users
+
+* binlog dump, is on master. It acquires a lock to send data to slaves.
+
+* Ways to show indexes
+  *  SELECT * FROM information_schema.statistics WHERE table_schema=’?' AND TABLE_NAME=’?’;
+  * SHOW INDEXES FROM TABLE;
+  * show crate table TABLE;
+
+
+* on Windows three ways to connect  Pipe, memory, tcpip.
+
+skip 65
+
+
+* For importing tabls:
+    * MyISAM
+	* cp TBALE.MY* /var/lib/mysql/DB/ # This copies the twp miysam files
+	* import the sdi from backup ; IMPORT TABLE FROM  '/tmp/mysql-files/TABLE.sdi'
+    * Innodb
+        * export tables and cfg file is created(contains meta data).
+        * Copy over ibd and cfg to destination
+        * unlock table on source. 
+        * use DB; ALTER TABLE TABLE1 IMPORT TABLESPACE;
+
+* Global variables : key_buffer_size, table_open_cache,  innodb_buffer_pool_size 77
+
+* MySQLcheck will do a read lock for check, write lock for others, and renaming the binary will do repair. 
+
+
+* MySQL monitoring agentless, query analysis, 
+
+* MySQL clone plugin has limitations. Only Innodb and other limitations. 
+
+* To stop an account from acessing 86
+   * ALTER USER 'user'@'%' ACCOUNT LOCK
+   * ALTER USER 'user'@'%' IDENTIFIED BY '*expired*' PASSWORD EXPIRE
+
+* mysqlbackup with backup_to_image, backs the file to image, and backup_dir holds meta data and other
+
+* mysql --print-defaults hows option files and the order they are read
+
+* mysqld --help --verbose also shows the cnf files and in which order they are read.
+
+* Use on master binlog-ignore-db to reduce traffic to slave. Slave filters will still get the commands, and just not execute them. It doesn't reduce traffic that way.
+
+* --upgrade=FORCE checks everything, do if auto errors out.
+
+* tablspace : innodb temporary tables, undo, data . NOT redo.
+
+* semi stnchronus replication with slave. rpl_semi_sync_master_timeout  not reached and the master crashes
+   * no data loss
+   * slave is ready for reads, and if configured, can take writes 102
+
+* For control plugin, if SET GLOBAL connection_control_min_connection_delay is set higher than SET GLOBAL connection_control_max_connection_delay it errors out.
+
+* mysql enterprise backup does
+    * incemental backups
+    * hot backups, col backups
+    * [https://www.mysql.com/products/enterprise/backup/features.html](https://www.mysql.com/products/enterprise/backup/features.html)
+
+* mysqlbackup with only-known-file-types backups up mysql files and known storage engines
+
+* mysqlbackup with optimistic-busy-tables does not backup redo, ungo log or system tablespaces. Does not tables.
+   * no nonactive tables does not backup redo, ungo log or system tablespaces. Does not lock tables.
+   * busy table are then normally backedup.
+
+* seconds behind - "dNot A, not the last transaction of the master. It deals with the current sql being applied. 
+"difference between the current timestamp on the replica and the original timestamp logged on the source for the event currently being processed on the replica."
+
+* SSL for cluster, SSL must be defined when clsuter is made, or it must be destroyed and reset.
+
+* encrypting binary logs can be set dynamic, and requires keyring plugin
+
+* clean shutdown, if files are deleted, need mysql.ibd and ibdata1
+
+* mysqld-auto.cnf is in jsonb format and read at the end of files, and represents persistent variables
+
+* I you have enough memory, below max connections, and trx is 2, two variables to speed up sync_binlog=0 and innodb_doublewrite=0
+
+* for has joins, The smallest of the tables in the join must fit in memory as set by join_buffer_size.
+
+* data dictionary holds information schema : LRU buffer cache, views, stored procedures. No to performance, access lists, or configuration 128
+
+* MySQL Installer: only for windows, most application installed, gui driven
+
+* For buffer pool
+    * "In general, when setting innodb_buffer_pool_instances, it's a good idea to match the maximum number of MySQL threads that will be running simultaneously."
+
+* indexes on functions
+   * ALTER TABLE TABLE1 ADD INDEX ((MONTH(date)));
+   * ALTER TABLE TABLE1 ADD COLUMN month tinyint unsigned GENERATED ALWAYS AS (MONTH(date)) VIRTUAL NOT NULL, ADD INDEX (_month);
+
+* visiblke is mysql databsae : help topics, timezone,
+
+
+
+
+* Increasing innodb_stats_persistent_sample_pages is better for persistent index stats
+
+
+
 
 * * *
 

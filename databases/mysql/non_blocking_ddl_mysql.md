@@ -25,7 +25,7 @@ Original Copyright Oct 2023**_
 
 * [15.12.1 Online DDL Operations](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html)
 * [15.12 InnoDB and Online DDL](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl.html)
-* [An Overview of DDL Algorithm’s in MySQL -- covers MySQL 8] (https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
+* [An Overview of DDL Algorithm’s in MySQL, covers MySQL 8] (https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
 * [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html#:~:text=pt%2Donline%2Dschema%2Dchange%20emulates%20the%20way%20that%20MySQL,and%20change%20data%20in%20it.)
 * [Understanding How ONLINE DDL (INPLACE) works in MySQL](https://klouddb.io/understanding-how-online-ddl-inplace-works-in-mysql/)
 
@@ -119,11 +119,11 @@ source schema_changes.sql
 
 
 
-* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting is necessary. Verify with the software developers
+* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting if necessary. Verify with the software developers
 that the changes are backwards compatible to the software. Include a backout plan if things go wrong. Give yourself twice as much time
 as you think you need. Four times it took in staging.
 * When you start the meeting at a particular time for the changes
-    * Note the time will be about double what it took in staging. This is because of activity.
+    * Note the time will be about double what it took in staging. This is because of activity. But shedule the time twice that in case you have issues. 
     * Execute as in staging. Use the same exact script. There should be no "drop table" in the script, unless you really want it there. 
     * If everything went as planned record the output in your ticket and close ticket.
     * Otherwise perform backout plan. It may be as simple as finishing it at another time.
@@ -178,11 +178,11 @@ NOTES:
 
 * Verify all tables changing have primary keys.
 * Test all changes on a staging server which has the same schema and at least 90% of the same amount of data.
-* Run through the whole procedure and not the time.
+* Run through the whole procedure and note the time.
     * First use --dry-run on staging server to see if there are any errors.
     * Then use --progress and --execute.
     * Note the time to change. Double the time for production as a rule of thumb.
-* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting is necessary. Verify with the software developers
+* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting if necessary. Verify with the software developers
 that the changes are backwards compatible to the software. Include a backout plan if things go wrong. Give yourself twice as much time
 as you think you need. Four times it took in staging. 
 * When you start the meeting at a particular time for the changes

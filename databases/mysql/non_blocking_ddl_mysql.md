@@ -18,6 +18,7 @@ Original Copyright Oct 2023**_
 3. [Online technique](#otech)
 4. [PT Online Schema Change](#pt)
 5. [PT technique](#pttech)
+6. [Cloud](#cloud)
 
 * * *
 <a name=Links></a>Links
@@ -187,7 +188,7 @@ NOTES:
 that the changes are backwards compatible to the software. Include a backout plan if things go wrong. Give yourself twice as much time
 as you think you need. Four times it took in staging. 
 * When you start the meeting at a particular time for the changes
-    * Note the time will be about double what it took in staging. This is because of activity.
+    * Note the time will be about double what it took in staging. This is because of activity. But give ourself double that amount of time in case there are issues. 
     * Perform steps with dry-run.
     * If everything looks good, --progress and --execute.
     * If it aborts to load or too many resources being used
@@ -195,5 +196,17 @@ as you think you need. Four times it took in staging.
     * If everything went as planned record the output in your ticket and close ticket. 
     * Otherwise perform backout plan. It may be as simple as finishing it at another time.
 
+* * *
+<a name=cloud></a>Cloud
+-----
 
+For the cloud check out the cloud provider notes:
+
+* [AWS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.FastDDL.html)
+* [Old article using PT Schema Change on AWS](https://medium.com/@soomiq/altering-large-mysql-table-using-percona-toolkit-on-aws-aurora-acb6e57a33d4)
+* GCP should be 8.0 compatible and PT Schema Change should also be useable.
+* Azure should be
+    * 8.0 compatible
+    * Use [Ghost]https://techcommunity.microsoft.com/t5/azure-database-for-mysql-blog/performing-online-schema-changes-in-azure-database-for-mysql-by/ba-p/3075844)
+    * PT Schema change should also work. 
 

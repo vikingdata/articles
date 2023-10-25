@@ -25,7 +25,7 @@ Original Copyright Oct 2023**_
 
 * [15.12.1 Online DDL Operations](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html)
 * [15.12 InnoDB and Online DDL](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl.html)
-* [An Overview of DDL Algorithm’s in MySQL, covers MySQL 8] (https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
+* [An Overview of DDL Algorithm’s in MySQL, covers MySQL 8](https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
 * [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html#:~:text=pt%2Donline%2Dschema%2Dchange%20emulates%20the%20way%20that%20MySQL,and%20change%20data%20in%20it.)
 * [Understanding How ONLINE DDL (INPLACE) works in MySQL](https://klouddb.io/understanding-how-online-ddl-inplace-works-in-mysql/)
 

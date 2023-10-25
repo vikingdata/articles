@@ -277,3 +277,59 @@ skip 65
 -----
 * performance_schema
 * How locks are assigned
+
+
+* * *
+<a name=new></a>Whats New
+-----
+
+** [5.0](http://download.nust.na/pub6/mysql/doc/refman/5.0/en/mysql-nutshell.html)
+* I am skipping this list. A lot of the stuff is already assumed to exist in a modern database.
+* (SHOW ENGINE INNODB STATUS)[https://dev.mysql.com/doc/refman/8.0/en/show-engine.html]
+    * SHOW ENGINE INNODB MUTEX
+    * SHOW ENGINE PERFORMANCE_SCHEMA STATUS
+* (show engines)[https://dev.mysql.com/doc/refman/8.0/en/show-engines.html]
+
+** [5.1](http://download.nust.na/pub6/mysql/doc/refman/5.1/en/mysql-nutshell.html#:~:text=MySQL%205.1%20provides%20much%20more,PROCESSLIST%20%2C%20ENGINES%20%2C%20and%20PLUGINS%20.)
+* I am skipping most of this.
+* XML
+
+* [5.4](http://download.nust.na/pub6/mysql/doc/refman/5.4/en/mysql-nutshell.html#:~:text=MySQL%205.4%20takes%20advantage%20of,InnoDB%20I%2FO%20Subsystem%20changes.)
+* I am going to skip mos fo this.
+* innodb_adaptive_flushing
+* innodb_thread_concurrency
+
+** [5.5](https://www.sitepoint.com/whats-new-in-mysql-55/)
+* [Semi-synchronous replication](https://dev.mysql.com/doc/refman/8.0/en/replication-semisync.html)
+
+** [5.6](https://www.percona.com/blog/mysql-5-6-improvements-in-the-nutshell/)
+* GIID replication
+* Separate Tablespaces for Innodb Undo Logs
+* [nline DDL](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html)
+
+** [5.7](https://dev.mysql.com/doc/refman/5.7/en/mysql-nutshell.html)
+* innodb_buffer_pool_size  became dynamic
+* json native support
+* sys database tied to prformance schema
+* multiple triggers allowed
+* multi source replication
+* Group replication - MySQL Cluster
+
+
+* (8.0)[]
+* (SHOW ENGINE INNODB STATUS)[https://dev.mysql.com/doc/refman/8.0/en/show-engine.html]
+    * SHOW ENGINE INNODB MUTEX
+    * SHOW ENGINE PERFORMANCE_SCHEMA STATUS
+* (show engines)[https://dev.mysql.com/doc/refman/8.0/en/show-engines.html]
+*[Stored and virtual columns](https://dev.mysql.com/doc/refman/8.0/en/create-table-generated-columns.html)
+* Data dictionary : transactonal, stores information of database objects,
+* Atomic DDL
+* Automtic upgrades might need force option)
+* Resource management : resources given to defined groups
+* TDE or table encryption
+* Information_schema views on data dictionary
+* "mysql system tables and data dictionary tables are now created in a single InnoDB tablespace file named mysql.ibd"
+* TempTable storage engine supports storage of binary large object (BLOB) type columns.
+    * [temp tables](https://dev.mysql.com/doc/refman/8.0/en/internal-temporary-tables.html)
+         * For engine temptable, when temptable_max_ram is reached, it uses  temptable_max_mmap, until tmp_table_size is reached, which then goes to disk innodb tables. 
+* online DDL improved

@@ -203,7 +203,7 @@ as you think you need. Four times it took in staging.
 For the cloud check out the cloud provider notes:
 
 * [AWS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.FastDDL.html)
-* [Old article using PT Schema Change on AWS](https://medium.com/@soomiq/altering-large-mysql-table-using-percona-toolkit-on-aws-aurora-acb6e57a33d4)
+    * [Old article using PT Schema Change on AWS](https://medium.com/@soomiq/altering-large-mysql-table-using-percona-toolkit-on-aws-aurora-acb6e57a33d4)
 * GCP should be 8.0 compatible and PT Schema Change should also be useable.
 * Azure should be
     * 8.0 compatible

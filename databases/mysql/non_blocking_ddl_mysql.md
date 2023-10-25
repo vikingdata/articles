@@ -1,8 +1,8 @@
 
 ---
-title : MySQL Non blocking DDL
-author : Mark Nielsen
-copyright : Oct 2023
+title : MySQL Non blocking DDL  
+author : Mark Nielsen  
+copyright : Oct 2023  
 ---
 
 

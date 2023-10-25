@@ -15,7 +15,7 @@ Original Copyright Oct 2023**_
 
 1. [Links](#links)
 2. [Online DDL](#online)
-3. [Online technique(#otech)
+3. [Online technique](#otech)
 4. [PT Online Schema Change](#pt)
 5. [PT technique](#pttech)
 
@@ -25,7 +25,7 @@ Original Copyright Oct 2023**_
 
 * [15.12.1 Online DDL Operations](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html)
 * [15.12 InnoDB and Online DDL](https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl.html)
-* [An Overview of DDL Algorithm’s in MySQL ( covers MySQL 8)] (https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
+* [An Overview of DDL Algorithm’s in MySQL -- covers MySQL 8] (https://mydbops.wordpress.com/2020/03/04/an-overview-of-ddl-algorithms-in-mysql-covers-mysql-8/)
 * [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html#:~:text=pt%2Donline%2Dschema%2Dchange%20emulates%20the%20way%20that%20MySQL,and%20change%20data%20in%20it.)
 * [Understanding How ONLINE DDL (INPLACE) works in MySQL](https://klouddb.io/understanding-how-online-ddl-inplace-works-in-mysql/)
 
@@ -33,19 +33,19 @@ Original Copyright Oct 2023**_
 
 <a name=online></a>Online DDL 
 -----
-Online schema changes to MySQL tables can be non-blocking (read and write queries can occur while the schema change happens).
+Online schema changes to MySQL tables can be non-blocking (read and write queries can occur while the schema change happens) when INPLACE is used (or INSTANT or COPY).
 Options for "alter table" for online changes have been getting better and better.
 
-The options are
+The options are INPLACE DDL schema change (and INSTANT and COPY) are
 * LOCK
     * NONE : Permits selects and writes.
     * SHARED : Only allows selects.
     * EXCLUSIVE : All queries are blocked.
     * DEFAULT : Similar to None, allows as much queries and DML.
 * ALGORITHM
-    * INSTANT : Certain actions cam be instant changes. 
-    * INPLACE : If it can't be changed instantly, then INPLACE is the next option. Basically changes happening without copying the entire table. 
-    * COPY: The entire table is copied. This takes the longest. This is MySQL's response to PT online schema change.  Generally, it makes a new table and when the new table has all the data of the old table it switches them.
+    * INSTANT : Certain actions cam be instant changes. This should be a fast change. 
+    * INPLACE : If it can't be changed instantly, then INPLACE is the next option. Basically changes happen inside without copying the entire table. This improves speed. 
+    * COPY : The entire table is copied. This takes the longest. This is MySQL's response to PT online schema change.  Generally, it makes a new table and when the new table has all the data of the old table it switches them.
 
 Example:
 
@@ -78,7 +78,9 @@ NOTES:
 <a name=otech></a>Online technique
 -----
 
-* Create your script which contains the schema change. Create a final script. NOTE : we have a drop table command. This should never be in the script. This is just for testing. 
+* Create your script which contains the schema change. Create a final script. NOTE : we have a drop table command. This should never be in the script. This is just for testing.
+    * NOTE: It is faster if you combine multiple changes for a single table in one command. 
+* Check if the (operations are not blocking)[https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html] for INPLACE, INSTANT, or COPY. 
 * Test all changes on a staging server which has the same schema and at least 90% of the same amount of data.
 * Execute as :
     * Call the file with commands as "schema_changes.sql"
@@ -99,16 +101,17 @@ create table  table3 (i int, PRIMARY KEY (i));
 create table  table300 (i int, PRIMARY KEY (i));
 show tables;
 
-```
+``` 
+            * NOTE: If an error occurs, it will continue. 
         * Log into mysql : mysql -vvv -u USER -p<PASSWORD> DATABASE
             * Make sure you use -vvv option
-	    * example : mysql -vvv -u mark -pmark test1  
+            * example : mysql -vvv -u mark -pmark test1  
         * In MySQL shell :
 ```
 tee tickets/TICKET-NO.output
 source schema_changes.sql
 ```
-   * Or make it abort if an error occurs
+   * Or make it so it aborts if any errors occur
         * mkdir -p tickets
         * mysql -vvv -u USER -P<PASSWORD> DATABASE -e "source schema_changes.sql"
             * ex: mysql -vvv -u mark -pmark test1 -e "source schema_changes.sql" 2> tickets/TICKET-NO.error
@@ -116,14 +119,13 @@ source schema_changes.sql
 
 
 
-* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting is necessary. Verify with the software\
- developers
+* Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting is necessary. Verify with the software developers
 that the changes are backwards compatible to the software. Include a backout plan if things go wrong. Give yourself twice as much time
 as you think you need. Four times it took in staging.
 * When you start the meeting at a particular time for the changes
     * Note the time will be about double what it took in staging. This is because of activity.
     * Execute as in staging. Use the same exact script. There should be no "drop table" in the script, unless you really want it there. 
-    * If everything went as plan record the output in your ticket and close ticket.
+    * If everything went as planned record the output in your ticket and close ticket.
     * Otherwise perform backout plan. It may be as simple as finishing it at another time.
 
 
@@ -188,7 +190,7 @@ as you think you need. Four times it took in staging.
     * If everything looks good, --progress and --execute.
     * If it aborts to load or too many resources being used
         * get approval to do it again and increase the maximum thresholds
-    * If everything went as plan record the output in your ticket and close ticket. 
+    * If everything went as planned record the output in your ticket and close ticket. 
     * Otherwise perform backout plan. It may be as simple as finishing it at another time.
 
 

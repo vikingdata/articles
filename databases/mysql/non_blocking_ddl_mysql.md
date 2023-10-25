@@ -207,6 +207,6 @@ For the cloud check out the cloud provider notes:
 * GCP should be 8.0 compatible and PT Schema Change should also be useable.
 * Azure should be
     * 8.0 compatible
-    * Use [Ghost]https://techcommunity.microsoft.com/t5/azure-database-for-mysql-blog/performing-online-schema-changes-in-azure-database-for-mysql-by/ba-p/3075844)
+    * Use [Ghost](https://techcommunity.microsoft.com/t5/azure-database-for-mysql-blog/performing-online-schema-changes-in-azure-database-for-mysql-by/ba-p/3075844)
     * PT Schema change should also work. 
 

@@ -133,7 +133,8 @@ as you think you need. Four times it took in staging.
 * * *
 <a name=pt></a>PT Online Schema Change
 -----
-Online PT Schema Change changes the schema of a table without blocking (barely so). The approximate sequence of events are:
+Online PT Schema Change is a tool created by Percona to do nonblocking schema changes in MySQL.
+changes the schema of a table without blocking (barely so). The approximate sequence of events are:
 
 * New table is created
 * triggers for insert, update, and delete are made from the old table to the new table. While the new table is being created, changes to

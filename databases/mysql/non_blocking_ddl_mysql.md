@@ -139,7 +139,7 @@ changes the schema of a table without blocking (barely so). The approximate sequ
 * New table is created
 * triggers for insert, update, and delete are made from the old table to the new table. While the new table is being created, changes to
 the old tables are being copied to the new table. Thus, is not blocking.
-* When the new table is done, a brief lock of tables occurs and they are switched,
+* When the new table is done, a brief lock occurs and the tables are switched,
 * Triggers are dropped at some point.
 * The old table is dropped, but you can make it so it won't drop. 
 

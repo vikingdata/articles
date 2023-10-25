@@ -36,14 +36,14 @@ Original Copyright Oct 2023**_
 Online schema changes to MySQL tables can be non-blocking (read and write queries can occur while the schema change happens) when INPLACE is used (or INSTANT or COPY).
 Options for "alter table" for online changes have been getting better and better.
 
-The options are INPLACE DDL schema change (and INSTANT and COPY) are
+The options for online schema for MySQL change are : 
 * LOCK
     * NONE : Permits selects and writes.
     * SHARED : Only allows selects.
     * EXCLUSIVE : All queries are blocked.
     * DEFAULT : Similar to None, allows as much queries and DML.
 * ALGORITHM
-    * INSTANT : Certain actions cam be instant changes. This should be a fast change. 
+    * INSTANT : Certain actions can be instant changes. INSTANT changes are generally fast.
     * INPLACE : If it can't be changed instantly, then INPLACE is the next option. Basically changes happen inside without copying the entire table. This improves speed. 
     * COPY : The entire table is copied. This takes the longest. This is MySQL's response to PT online schema change.  Generally, it makes a new table and when the new table has all the data of the old table it switches them.
 
@@ -88,6 +88,7 @@ NOTES:
         * example script:
 ```
 tee tickets/TICKET-NO.output
+create database if not exists test1;
 use test1;
 
 drop table if exists table3; -- This is dangerous for production.

@@ -86,7 +86,7 @@ NOTES:
     * Call the file with commands as "schema_changes.sql"
         * mkdir -p tickets
         * example script:
-```
+```shell
 tee tickets/TICKET-NO.output
 create database if not exists test1;
 use test1;
@@ -108,7 +108,7 @@ show tables;
             * Make sure you use -vvv option
             * example : mysql -vvv -u mark -pmark test1  
         * In MySQL shell :
-```
+```shell
 tee tickets/TICKET-NO.output
 source schema_changes.sql
 ```

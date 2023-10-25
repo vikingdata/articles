@@ -79,6 +79,7 @@ NOTES:
 <a name=otech></a>Online technique
 -----
 
+* OPTIONAL: monitor locks and have a script inserting one row of data continuously for STAGING -- not production. Record how long each insert takes. After STAGING, look at the log and see if any inserts took a long time. On your monitoring graphs look to see if any locks occurred during the test. 
 * Create your script which contains the schema change. Create a final script. NOTE : we have a drop table command. This should never be in the script. This is just for testing.
     * NOTE: It is faster if you combine multiple changes for a single table in one command. 
 * Check if the (operations are not blocking)[https://dev.mysql.com/doc/refman/8.0/en/innodb-online-ddl-operations.html] for INPLACE, INSTANT, or COPY. 
@@ -125,7 +126,7 @@ source schema_changes.sql
 that the changes are backwards compatible to the software. Include a backout plan if things go wrong. Give yourself twice as much time
 as you think you need. Four times it took in staging.
 * When you start the meeting at a particular time for the changes
-    * Note the time will be about double what it took in staging. This is because of activity. But shedule the time twice that in case you have issues. 
+    * Note the time will be about double what it took in staging. This is because of activity. But schedule the time twice that in case you have issues. 
     * Execute as in staging. Use the same exact script. There should be no "drop table" in the script, unless you really want it there. 
     * If everything went as planned record the output in your ticket and close ticket.
     * Otherwise perform backout plan. It may be as simple as finishing it at another time.
@@ -204,7 +205,7 @@ For the cloud check out the cloud provider notes:
 
 * [AWS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.FastDDL.html)
     * [Old article using PT Schema Change on AWS](https://medium.com/@soomiq/altering-large-mysql-table-using-percona-toolkit-on-aws-aurora-acb6e57a33d4)
-* GCP should be 8.0 compatible and PT Schema Change should also be useable.
+* GCP should be 8.0 compatible and PT Schema Change should also be usable.
 * Azure should be
     * 8.0 compatible
     * Use [Ghost](https://techcommunity.microsoft.com/t5/azure-database-for-mysql-blog/performing-online-schema-changes-in-azure-database-for-mysql-by/ba-p/3075844)

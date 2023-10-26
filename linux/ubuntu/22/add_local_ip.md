@@ -6,7 +6,7 @@ copyright : Oct 2023
 ---
 
 
-MySQL Non blocking DDL
+Add local ip address
 ==============================
 
 _**by Mark Nielsen
@@ -27,7 +27,7 @@ Adding static ip addresses to a Linux system seems cumbersome
 * [How to Set a Static IP Address in Ubuntu](https://www.howtogeek.com/839969/how-to-set-a-static-ip-address-in-ubuntu/)
 * [Aliasing the network interface card or loopback device](https://www.ibm.com/docs/en/was-nd/8.5.5?topic=machines-aliasing-network-interface-card-loopback-device)
 * [Linux ip Command Examples](https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/)
-* [IP cheatshet](https://access.redhat.com/sites/default/files/attachments/rh_ip_command_cheatsheet_1214_jcs_print.pdf)
+* [IP cheatsheet](https://access.redhat.com/sites/default/files/attachments/rh_ip_command_cheatsheet_1214_jcs_print.pdf)
 * [Understanding IP Addressing and CIDR Charts](https://www.ripe.net/about-us/press-centre/understanding-ip-addressing)
 
 

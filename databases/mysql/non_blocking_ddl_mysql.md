@@ -104,17 +104,20 @@ create table  table3 (i int, PRIMARY KEY (i));
 create table  table300 (i int, PRIMARY KEY (i));
 show tables;
 
-``` 
+```
+
             * NOTE: If an error occurs, it will continue. 
         * Log into mysql : mysql -vvv -u USER -p<PASSWORD> DATABASE
             * Make sure you use -vvv option
             * example : mysql -vvv -u mark -pmark test1  
         * In MySQL shell :
+
 ```shell
 tee tickets/TICKET-NO.output
 source schema_changes.sql
 ```
-   * Or make it so it aborts if any errors occur
+
+    * Or make it so it aborts if any errors occur
         * mkdir -p tickets
         * mysql -vvv -u USER -P<PASSWORD> DATABASE -e "source schema_changes.sql"
             * ex: mysql -vvv -u mark -pmark test1 -e "source schema_changes.sql" 2> tickets/TICKET-NO.error

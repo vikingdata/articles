@@ -121,6 +121,24 @@ Many of these things for postgresql applies to later versions.
     * pg_ident.conf
         * Which map to use for each individual connection.
         * Maps user of opertaing system to one or more postgresql_database. Used in conjuction with pg_hba.conf
+        * changes require reload
     * pg_hhba.confg
+        * HBA means host based authentication
+        * lists valid hostname or ip addresses for connections.
+        * enables authentication
+        * Can limit users to connect only from certain hosts.
+    * Passswords
+        * trust -- dont ask for password
+        * MD5 -- ask for passsword
+        * reject -- automatically reject
+        * password -- same as MD5
+        * crypt -- weak encryption
+        * krb4 or 5 : Kerberos
+	* ident -- user the ident map to map the user
 
-
+* Create schema
+    * Create database
+        * Can specify owner,
+        * can't drop if any connection is using database
+            * Restrict database, kill connections, verify with pg_stat_activity the database is not being used by anybody.
+	    

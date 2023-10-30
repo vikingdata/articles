@@ -88,6 +88,7 @@ NOTES:
     * Call the file with commands as "schema_changes.sql"
         * mkdir -p tickets
         * example script:
+    * NOTE: If an error occurs, it will continue.	
 ```shell
 tee tickets/TICKET-NO.output
 create database if not exists test1;
@@ -106,11 +107,10 @@ show tables;
 
 ```
 
-            * NOTE: If an error occurs, it will continue. 
-        * Log into mysql : mysql -vvv -u USER -p<PASSWORD> DATABASE
-            * Make sure you use -vvv option
-            * example : mysql -vvv -u mark -pmark test1  
-        * In MySQL shell :
+* Log into mysql : mysql -vvv -u USER -p<PASSWORD> DATABASE
+    * Make sure you use -vvv option
+    * example : mysql -vvv -u mark -pmark test1  
+    * In MySQL shell :
 
 ```shell
 tee tickets/TICKET-NO.output

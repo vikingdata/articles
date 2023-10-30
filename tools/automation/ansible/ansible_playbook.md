@@ -46,7 +46,7 @@ If you have not setup ansible yet with these articles:
 
 * * *
 
-<a name=conditionals></a>Contitions
+<a name=conditionals></a>Conditionals
 -----
 
 This for an Ubuntu system. One thing that could be added is to check the facts variable for type of operating

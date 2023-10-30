@@ -36,6 +36,7 @@ The purpose of this document is to:
 * [https://docs.ansible.com/ansible/latest/getting_started/index.html](https://docs.ansible.com/ansible/latest/getting_started/index.html)
 
 * [10 ansible modules](https://opensource.com/article/19/9/must-know-ansible-modules)
+- [https://medium.com/@kelom.x/ansible-mysql-installation-2513d0f70faf](Ansible - MYSQL installation)
 - [Ansible Overview and Architecture](https://docs.ansible.com/ansible/latest/dev_guide/overview_architecture.html)
 - [Ansible Installation Guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 - [Installing Ansible - Adam the Automator](https://adamtheautomator.com/install-ansible/)

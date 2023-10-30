@@ -117,12 +117,11 @@ tee tickets/TICKET-NO.output
 source schema_changes.sql
 ```
 
-    * Or make it so it aborts if any errors occur
-        * mkdir -p tickets
-        * mysql -vvv -u USER -P<PASSWORD> DATABASE -e "source schema_changes.sql"
-            * ex: mysql -vvv -u mark -pmark test1 -e "source schema_changes.sql" 2> tickets/TICKET-NO.error
-                 * mysql -vvv -u mark -pmark test1 -e "show tables" 2>&1 | grep -v Password
-
+* Or make it so it aborts if any errors occur
+    * mkdir -p tickets
+    * mysql -vvv -u USER -P<PASSWORD> DATABASE -e "source schema_changes.sql"
+        * ex: mysql -vvv -u mark -pmark test1 -e "source schema_changes.sql" 2> tickets/TICKET-NO.error
+             * mysql -vvv -u mark -pmark test1 -e "show tables" 2>&1 | grep -v Password
 
 
 * Write up your ticket and make a plan for the changes. Notify parties involved and make a meeting if necessary. Verify with the software developers

@@ -135,7 +135,7 @@ gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
 
 ```
 * NOTE: you might want to use a file to hold your password. If you source control the scripts it is a BAD idea to put the
-password in the script. This applied to encryption and decryption.
+password in the script. This applies to encryption and decryption.
 ``` shell
 echo "test" > password_file
 gpg --pinentry-mode loopback -d --passphrase `cat password_file`  test.gpg | tar -zxv

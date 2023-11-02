@@ -49,7 +49,7 @@ rm -f /tmp/test.gpg
 tar -zcv  test_dir |  gpg --output /tmp/test.gpg --symmetric --passphrase "test"
 rm -rf test_dir
 
-gpg --pinentry-mode loopback   -d -o test.tgz /tmp/test.gpg
+gpg --pinentry-mode loopback   -d -o test.tgz --passphrase "test" /tmp/test.gpg
 tar -zxvf test.tgz
 
 ```
@@ -92,7 +92,7 @@ tar -zcv  test_dir |  gpg --output /tmp/test.gpg --symmetric --passphrase "test"
 ```
 * Transfer to another server.
 * Decrypt on oher server ```
-gpg --pinentry-mode loopback -d -o test.tgz test.gpg
+gpg --pinentry-mode loopback -d -o test.tgz --passphrase "test" test.gpg
 tar -zxvf test.tgz
 ```
 
@@ -126,10 +126,10 @@ scp /tmp/test.gpg SOMEUSER@$HOST:/Some/Directory/
 ```
 
 * Example decryption
-    * gpg --pinentry-mode loopback   -d -o test.tgz test.gpg
+    * gpg --pinentry-mode loopback -d -o test.tgz --passphrase "test" test.gpg
     * or to decrypt and untar
         * ```shell
 rm -rf test_dir
-gpg --pinentry-mode loopback   -d  test.gpg | tar -zxv
+gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
 
 ```

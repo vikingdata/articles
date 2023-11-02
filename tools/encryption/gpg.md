@@ -134,3 +134,9 @@ rm -rf test_dir
 gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
 
 ```
+* NOTE: you might want to use a file to hold your password
+``` shell
+echo "test" > password_file
+gpg --pinentry-mode loopback -d --passphrase `cat password_file`  test.gpg | tar -zxv
+
+```

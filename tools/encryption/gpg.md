@@ -3,7 +3,7 @@ title: GPG encryption
 
 --------
 
-* GPG Encryption
+# GPG Encryption
 
 *by Mark Nielsen*  
 *Copyright November 2023*

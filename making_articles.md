@@ -1,19 +1,46 @@
 ---
-title : Making articles
+title: Using Markdown in Linux
 ---
 
-* Linkedin
-   * (The Ultimate LinkedIn Post Type Guide)[https://www.linkedin.com/pulse/ultimate-linkedin-post-type-guide-peter-lowes/]
-   * (How to Upload Documents and Presentations on LinkedIn) [https://blog.hubspot.com/marketing/documents-presentations-linkedin]
-   * Youtube Links:
-       * The best way I found out is, get the shorter link and put it in as the first thing in your post. Go to youtube, under share. copy the text. This gives you the short url. 
-       * (The best way to share YouTube video on LinkedIn and increase your views) [https://www.linkedin.com/pulse/best-way-share-youtube-video-linkedin-increase-your-views-georgieva/]
-       * https://www.youtube.com/watch?v=Jegv1MyJu60
-   * (Linkedin making post with stuff )[https://www.linkedin.com/help/linkedin/answer/a521928/make-your-website-shareable-on-linkedin]
-      * (https://ogp.me/)[https://ogp.me/]
-      * (https://www.linkedin.com/pulse/open-graph-protocol-atoconn-india/)[https://www.linkedin.com/pulse/open-graph-protocol-atoconn-india/)
-      * (https://medium.com/@manrvaldez.92/what-is-open-graph-protocol-d7ecce47937)[https://medium.com/@manrvaldez.92/what-is-open-graph-protocol-d7ecce47937]
+
+# Using Markdown in Linux
+
+The purpose of this document is to use a program to make markdown sysntax, use a converter to create html content, upload md to github, upload HTML to LinkedIn. 
+
+Links
+
+    * https://linuxhint.com/convert-markdown-files-linux/
+    * https://github.com/mundimark/awesome-markdown-editors
+    * https://www.markdownguide.org/basic-syntax/
 
 
-* GitHub
-  * Markdown
+Steps: 
+    
+     * Download and install a markdown editor from https://github.com/mundimark/awesome-markdown-editors
+     * Make a document.
+     * Assumptions: 
+       * You have git setup.
+       * You have a LinkedIn account. 
+     * For Linux Ubuntu : Convert the md file. 
+       * Install Pandoc
+            * sudo apt install pandoc
+            * pandoc file.md -f markdown -t html -s -o file.html
+                * Replace the input and output filenames. 
+                * I choose pandoc because it can convert to other formats.
+         * Look at the html and determine if it looks good. 
+         * We will NOT be uploading the file. 
+         
+      * Save to github
+        * Login into your github account. 
+        * Switch to your Respository. 
+        * Click on "Add File"
+            * Choose the md file. 
+        * Record link to file.     
+      * Put file on LinkedIn
+        * Click on the Home button
+        * Click on "Start a post"
+        * Put in content and link to article. 
+        
+                
+                
+                

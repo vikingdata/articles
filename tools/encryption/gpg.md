@@ -131,6 +131,7 @@ scp /tmp/test.gpg SOMEUSER@$HOST:/Some/Directory/
     * or to decrypt and untar
 ```shell
 rm -rf test_dir
+rm -f test.tgz
 gpg --pinentry-mode loopback -d --passphrase "test" -o test.tgz  test.gpg
 tar -zxvf test.tgz 
 

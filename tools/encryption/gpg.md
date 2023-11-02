@@ -91,7 +91,7 @@ ls ~/ > ~/test_dir/home_list.txt
 cd ~/
 tar -zcv  test_dir |  gpg --output /tmp/test.gpg --symmetric --passphrase "test"
 
-```
+
 * Transfer to another server.
 * Decrypt on oher server ```
 gpg --pinentry-mode loopback -d -o test.tgz --passphrase "test" test.gpg
@@ -104,7 +104,6 @@ tar -zxvf test.tgz
 -----
 
 * Example automation for encryption. 
-
 
 ```shell
 

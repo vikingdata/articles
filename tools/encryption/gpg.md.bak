@@ -1,5 +1,5 @@
 --------
-title: GPG encryption
+title: GGP encryption
 
 --------
 
@@ -17,8 +17,8 @@ GPG has many more capabilities for encryption. This article is just to encrypt a
 ---
 
 1. [Links](#links)
-2. [Simple Test](#simple)
-3. [Issues](#issues)
+2. [Simple Test](#test1)
+3. {Issues](#issues)
 4. [Decrypt on other computer](#other)
 5. [Automation](#automate)
 
@@ -30,7 +30,7 @@ GPG has many more capabilities for encryption. This article is just to encrypt a
 * [Using the GNU Privacy Guard](https://www.gnupg.org/documentation/manuals/gnupg/)
 * [How do I encrypt a file or folder in my home directory?](https://statistics.berkeley.edu/computing/encrypt)
 * [File encryption and decryption made easy with GPG](https://www.redhat.com/sysadmin/encryption-decryption-gpg)
-* [Encrypt and decrypt files in GPG without keys](https://tinyapps.org/blog/201705300700_gpg_without_keys.html)
+* (Encrypt and decrypt files in GPG without keys)[https://tinyapps.org/blog/201705300700_gpg_without_keys.html]
 
 ---
 * * *
@@ -64,7 +64,7 @@ encrypted with a key. It works on the same server because our server has the key
 
 Using GPG can fail in different ways. The instructions don't explain this. 
 
-* GPG now uses an agent for the keys. This has had issues.
+* GGP now uses an agent for the keys. This has had issues.
 * When decrypting a file that DOES NOT use a key, you can get a decrypt error mentioning the key. 
     * [Look at this trouble ticket](https://stackoverflow.com/questions/55780390/how-to-pass-encrypted-message-and-passphrase-when-using-os-system-to-call-gpg)
     * ERROR ```
@@ -101,7 +101,7 @@ tar -zxvf test.tgz
 <a name=automate></a>Automation
 -----
 
-* Example automation for encryption. 
+* Example automation for encyrption. 
 
 
 ```shell

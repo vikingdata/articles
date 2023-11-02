@@ -49,7 +49,7 @@ rm -f /tmp/test.gpg
 tar -zcv  test_dir |  gpg --output /tmp/test.gpg --symmetric --passphrase "test"
 rm -rf test_dir
 
-gpg --pinentry-mode loopback   -d -o test.tgz --passphrase "test" /tmp/test.gpg
+gpg  -d -o test.tgz --passphrase "test" /tmp/test.gpg
 tar -zxvf test.tgz
 
 ```
@@ -67,7 +67,8 @@ Using GPG can fail in different ways. The instructions don't explain this.
 * GPG now uses an agent for the keys. This has had issues.
 * When decrypting a file that DOES NOT use a key, you can get a decrypt error mentioning the key. 
     * [Look at this trouble ticket](https://stackoverflow.com/questions/55780390/how-to-pass-encrypted-message-and-passphrase-when-using-os-system-to-call-gpg)
-    * ERROR ```
+    * ERROR
+```
 gpg: AES.CFB encrypted data
 gpg: problem with the agent: Timeout
 gpg: encrypted with 1 passphrase

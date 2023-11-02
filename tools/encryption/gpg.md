@@ -92,8 +92,8 @@ cd ~/
 tar -zcv  test_dir |  gpg --output /tmp/test.gpg --symmetric --passphrase "test"
 
 
-* Transfer to another server.
-* Decrypt on oher server ```
+  # Transfer to another server.
+  # Decrypt on oher server ```
 gpg --pinentry-mode loopback -d -o test.tgz --passphrase "test" test.gpg
 tar -zxvf test.tgz
 ```
@@ -134,7 +134,8 @@ rm -rf test_dir
 gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
 
 ```
-* NOTE: you might want to use a file to hold your password
+* NOTE: you might want to use a file to hold your password. If you source control the scripts it is a BAD idea to put the
+password in the script. This applied to encryption and decryption.
 ``` shell
 echo "test" > password_file
 gpg --pinentry-mode loopback -d --passphrase `cat password_file`  test.gpg | tar -zxv

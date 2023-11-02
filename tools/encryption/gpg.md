@@ -131,7 +131,8 @@ scp /tmp/test.gpg SOMEUSER@$HOST:/Some/Directory/
     * or to decrypt and untar
 ```shell
 rm -rf test_dir
-gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
+gpg --pinentry-mode loopback -d --passphrase "test" -o test.tgz  test.gpg
+tar -zxvf test.tgz 
 
 ```
 * NOTE: you might want to use a file to hold your password. If you source control the scripts it is a BAD idea to put the

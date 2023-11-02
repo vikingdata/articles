@@ -141,4 +141,5 @@ Many of these things for postgresql applies to later versions.
         * Can specify owner,
         * can't drop if any connection is using database
             * Restrict database, kill connections, verify with pg_stat_activity the database is not being used by anybody.
-	    
+    * Cannot drop users if objects are owned by them.
+    

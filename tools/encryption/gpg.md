@@ -84,7 +84,8 @@ The true test is if you can decrypt a file WITHOUT having any keys. Thus, you ne
 
 * Read: (Pinentry Mode)[https://www.gnupg.org/documentation/manuals/gpgme/Pinentry-Mode.html]
 
-* Encrypt on your server ```
+* Encrypt on your server
+```shell
 mkdir -p ~/test_dir
 ls ~/ > ~/test_dir/home_list.txt
 cd ~/
@@ -129,7 +130,7 @@ scp /tmp/test.gpg SOMEUSER@$HOST:/Some/Directory/
 * Example decryption
     * gpg --pinentry-mode loopback -d -o test.tgz --passphrase "test" test.gpg
     * or to decrypt and untar
-        * ```shell
+```shell
 rm -rf test_dir
 gpg --pinentry-mode loopback -d --passphrase "test"  test.gpg | tar -zxv
 

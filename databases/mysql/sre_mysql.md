@@ -19,16 +19,16 @@ Original Copyright Feb 2021**_
 <a name=links></a>Links
 -----
 
-* (MySQL’s SRE Golden Signals)[https://steve-mushero.medium.com/mysqls-sre-golden-signals-67e2adf88824]
-* (Aurora’s SRE Golden Signals)[https://steve-mushero.medium.com/aws-auroras-sre-golden-signals-d0400c4801b1]
-* (Linux’s SRE Golden Signals)[https://steve-mushero.medium.com/linuxs-sre-golden-signals-af5aaa26ebae]
-* (How to Monitor the SRE Golden Signals)[https://faun.pub/how-to-monitor-the-sre-golden-signals-1391cadc7524]
-* (https://linkedin.github.io/school-of-sre/level101/databases_sql/mysql/)[https://linkedin.github.io/school-of-sre/level101/databases_sql/query_performance/]
-* (MySQL @ Klaviyo Ops Crash Course)[https://klaviyo.tech/mysql-klaviyo-ops-crash-course-71ccecb7f4ef]
-* (A Simple Approach to Troubleshooting High CPU in MySQL)[https://www.percona.com/blog/a-simple-approach-to-troubleshooting-high-cpu-in-mysql/]
-* (pidstat Command Examples in Linux)[https://www.thegeekdiary.com/pidstat-command-examples-in-linux/]
-* (10 pidstat Examples to Debug Performance Issues of Linux Process)[https://www.thegeekstuff.com/2014/11/pidstat-examples/]
-* (How to know which process is eating your hard disk)[https://brundlelab.wordpress.com/2010/02/19/how-to-know-which-process-is-eating-your-hard-disk/]
+* [MySQL’s SRE Golden Signals](https://steve-mushero.medium.com/mysqls-sre-golden-signals-67e2adf88824)
+* [Aurora’s SRE Golden Signals](https://steve-mushero.medium.com/aws-auroras-sre-golden-signals-d0400c4801b1)
+* [Linux’s SRE Golden Signals](https://steve-mushero.medium.com/linuxs-sre-golden-signals-af5aaa26ebae)
+* [How to Monitor the SRE Golden Signals](https://faun.pub/how-to-monitor-the-sre-golden-signals-1391cadc7524)
+* [https://linkedin.github.io/school-of-sre/level101/databases_sql/mysql/](https://linkedin.github.io/school-of-sre/level101/databases_sql/query_performance/)
+* [MySQL @ Klaviyo Ops Crash Course](https://klaviyo.tech/mysql-klaviyo-ops-crash-course-71ccecb7f4ef)
+* [A Simple Approach to Troubleshooting High CPU in MySQL](https://www.percona.com/blog/a-simple-approach-to-troubleshooting-high-cpu-in-mysql/)
+* [pidstat Command Examples in Linux](https://www.thegeekdiary.com/pidstat-command-examples-in-linux/)
+* [10 pidstat Examples to Debug Performance Issues of Linux Process](https://www.thegeekstuff.com/2014/11/pidstat-examples/)
+* [How to know which process is eating your hard disk](https://brundlelab.wordpress.com/2010/02/19/how-to-know-which-process-is-eating-your-hard-disk/)
 
 * * *
 <a name=Basic></a>Basic
@@ -117,7 +117,9 @@ pidstat -C "mysql"
 pidstat -t -C "mysql"
   
 ```
+
         * To sort by -h, cpu
+
 ```
    # First execute this
 pidstat -h | head -n 3 | tail -n 1

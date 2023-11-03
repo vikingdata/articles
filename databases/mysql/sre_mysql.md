@@ -106,9 +106,9 @@ Original Copyright Feb 2021**_
 * Linux IO
 * Linux general
    * pidstat
-
-> PID=`ps auxw | grep mysqld  | grep -v grep  | head -n 1 | sed -e 's/  */ /g' | cut -d ' ' -f2`
-> pidstat -t -p $PID 1
+```shell
+ PID=`ps auxw | grep mysqld  | grep -v grep  | head -n 1 | sed -e 's/  */ /g' | cut -d ' ' -f2`
+ pidstat -t -p $PID 1
 
   # or
 pidstat -C "mysql"

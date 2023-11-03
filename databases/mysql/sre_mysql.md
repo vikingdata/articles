@@ -105,10 +105,10 @@ Original Copyright Feb 2021**_
 * Linux Strace
 * Linux IO
 * Linux general
-    * pidstat
-```
-PID=`ps auxw | grep mysqld  | grep -v grep  | head -n 1 | sed -e 's/  */ /g' | cut -d ' ' -f2`
-pidstat -t -p $PID 1
+   * pidstat
+
+> PID=`ps auxw | grep mysqld  | grep -v grep  | head -n 1 | sed -e 's/  */ /g' | cut -d ' ' -f2`
+> pidstat -t -p $PID 1
 
   # or
 pidstat -C "mysql"
@@ -118,7 +118,7 @@ pidstat -t -C "mysql"
   
 ```
 
-    * To sort by -h, cpu
+   * To sort by -h, cpu
 
 ```
    # First execute this
@@ -140,7 +140,7 @@ pidstat -h | tail -n +4 | sort -nr -k 8 | head -n 4
    # Highest % Total CPU used -- this is probably what you want. 
 pidstat -h | tail -n +4 | sort -nr -k 9 | head -n 4
 ```
-    * IO stats
+   * IO stats
 ```
 pidstat -d | head -n 3 | tail -n 1
 

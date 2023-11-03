@@ -105,7 +105,8 @@ Original Copyright Feb 2021**_
 * Linux Strace
 * Linux IO
 * Linux general
-    * pidstat ```
+    * pidstat
+```
 PID=`ps auxw | grep mysqld  | grep -v grep  | head -n 1 | sed -e 's/  */ /g' | cut -d ' ' -f2`
 pidstat -t -p $PID 1
 
@@ -117,7 +118,7 @@ pidstat -t -C "mysql"
   
 ```
 
-        * To sort by -h, cpu
+   * To sort by -h, cpu
 
 ```
    # First execute this

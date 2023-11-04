@@ -47,7 +47,9 @@ We Will first do this on our PostgreSQL system.
 
 
 * download : https://github.com/dbt-labs/dbt-starter-project      
+
   [https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip](https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip)      
+
   wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
 * uncompress ; unzip main.zip
 * Modify files:

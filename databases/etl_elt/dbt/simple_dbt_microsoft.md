@@ -33,7 +33,7 @@ Copyright November 2023**_
 <a name=ms></a>Install MicroSoft SQL for Linux
 -----
 Refer to 
-(Install MicroSoft SQL for Linux)[]
+[Install MicroSoft SQL for Linux](https://github.com/vikingdata/articles/blob/main/databases/microsoft/linux/Install_microsoft_sql_linux.md)
 
 * * *
 <a name=dbt></a>Install DBT
@@ -42,7 +42,7 @@ Refer to
 Refer to  [DBT with PostgreSQL and Snowflake](dbt1-1.md)
 
 * * *
-<a name=ms></a>Install MicroSoft SQL for Linux
+<a name=msdbt></a>Setup DBT for Microsoft SQL
 -----
 
 * * *

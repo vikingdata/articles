@@ -29,6 +29,8 @@ Original Copyright Feb 2021**_
 * [pidstat Command Examples in Linux](https://www.thegeekdiary.com/pidstat-command-examples-in-linux/)
 * [10 pidstat Examples to Debug Performance Issues of Linux Process](https://www.thegeekstuff.com/2014/11/pidstat-examples/)
 * [How to know which process is eating your hard disk](https://brundlelab.wordpress.com/2010/02/19/how-to-know-which-process-is-eating-your-hard-disk/)
+* [How Percona does a MySQL Performance Audit](https://www.percona.com/blog/how-percona-does-a-mysql-performance-audit/)
+* [What You Can Do With Auto-Failover and Percona Distribution for MySQL (8.0.x)](https://www.percona.com/blog/what-you-can-do-with-auto-failover-and-percona-distribution-for-mysql-8-0-x/)
 
 * * *
 <a name=Basic></a>Basic
@@ -159,3 +161,122 @@ pidstat -d | tail -n +4 | sort -nr -k 7 | head -n 4
 * * *
 <a name=#monitoring></a>Monitoring
 -----
+* On Prem
+* AWS
+* Solar Winds, New Relic
+* Performance Schema
+
+* * *
+<a name=#audit></a>Performance Audit
+-----
+* Performance Schema
+* Analyze Graphs from monitoring
+
+
+* * *
+<a name=#failover></a>Atomatic Failover
+-----
+Can be done usng GTID replication and automatic failover or with a Cluster (Percona Cluster, NDB
+Cluster, or group replication - MySQL Cluster).
+
+
+* * *
+<a name=#failovertesting></a>Failover Testing
+-----
+
+
+
+* * *
+<a name=#slow></a>Slow Logs
+-----
+* (mysqldumpslow)[https://dev.mysql.com/doc/refman/8.0/en/mysqldumpslow.html]
+* (pt-query-digest)[https://docs.percona.com/percona-toolkit/pt-query-digest.html]
+* (Summarizing the MySQL Slow Query log
+)[https://www.stephenrlang.com/2018/12/summarizing-the-mysql-slow-query-log/]
+
+
+* Slow log variables
+
+```
+log_output = FILE
+slow_query_log = ON
+slow_query_log_file = /var/log/mysql/mysql-slow.log
+long_query_time = 1
+log_slow_admin_statements = ON
+log_queries_not_using_indexes = ON
+log_output = FILE
+log_queries_not_using_indexes=5
+
+```
+
+* Executing  pt-query-digest
+
+* Executing mysqldumpslow
+
+```
+
+
+```
+
+* * *
+<a name=#logrotate></a>Logrotate
+-----
+
+* slow log
+
+```
+/var/lib/mysql/mysql-slow.log {
+    size 5G
+    daily
+    dateext
+    compress
+    missingok
+    rotate 5
+    notifempty
+    delaycompress
+    sharedscripts
+    nocopytruncate
+    create 660 mysql mysql
+    postrotate
+        /usr/bin/mysql -e 'select @@global.slow_query_log into @sq_log_save; set global slow_query_log=off; select sleep(1); FLUSH SLOW LOGS; select sleep(1); set global slow_query_log=@sq_log_save;'
+    endscript
+    rotate 150
+}
+
+
+* binlog
+
+In MySQL shell
+
+```mysql
+set GLOBAL expire_logs_days = 14;
+set GLOBAL max_binlog_size=1G;
+```
+
+In my.cnf
+```text
+expire_logs_days = 14
+max_binlog_size=1G
+```
+
+
+* * *
+<a name=#ansible></a>ANisble sysctl
+-----
+
+
+* * *
+<a name=#ptesting></a>Performance Testing
+-----
+* (How to Benchmark MySQL Performance)[https://blog.purestorage.com/purely-informational/how-to-benchmark-mysql-performance/]
+* (HammerDB)[https://www.hammerdb.com/about.html]
+* (mysqlslap)[https://dev.mysql.com/doc/refman/8.0/en/mysqlslap.html]
+* (How To Measure MySQL Query Performance with mysqlslap)[https://www.digitalocean.com/community/tutorials/how-to-measure-mysql-query-performance-with-mysqlslap]
+* (How to Benchmark Replication Performance in MySQL)[https://www.percona.com/blog/how-to-benchmark-replication-performance-in-mysql/]
+
+
+
+* * *
+<a name=#todo></a>ToDos
+-----
+* MicroSoft Doc, Python, get data from system and integrate. 

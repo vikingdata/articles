@@ -4,7 +4,7 @@ Author : Mark Nielsen
 Copyright : Nov 2023
 ---
 
-Using Simple DBT : MicroSoft
+Using Simple DBT : MiciroSoft
 ===============
 
 _**by Mark Nielsen  
@@ -57,7 +57,7 @@ sqlcmd -S localhost -U sa -P $MSPASS -No -Q "create  database DBT_DB"
 sqlcmd -S localhost -U sa -P $MSPASS -No -Q "ALTER AUTHORIZATION ON DATABASE::DBT_DB TO DBT;"
 ```
 
-Install DBT for MicroSoft.
+Install DBT for microsoft.
 
 ```bash
 cd ~/

@@ -1,7 +1,5 @@
-
-
 ---
-Title : Using simple dbt : MicroSoft
+Title : Using simple dbt - MicroSoft
 Author : Mark Nielsen
 Copyright : Nov 2023
 ---
@@ -14,9 +12,6 @@ Copyright November 2023**_
 
 * * *
 
-
-
-
 1. [Links](#links)
 2. [Install DBT](#dbt)
 3. [Install MicroSoft SQL for Linux](#ms)
@@ -26,7 +21,6 @@ Copyright November 2023**_
 
 <a name=links></a>Links
 -----
-
 
 * [Quickstart: Install SQL Server and create a database on Ubuntu](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004)
 * [DBT: Microsoft SQL Server setup](https://docs.getdbt.com/docs/core/connect-data-platform/mssql-setup)

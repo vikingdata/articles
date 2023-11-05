@@ -1,4 +1,3 @@
-
 ---
 title : MicroSoft SQL Install for Linux
 author : Mark Nielsen

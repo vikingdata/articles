@@ -18,10 +18,10 @@ Original Copyright November 2023**_
 * * *
 <a name=links></a>Linux
 -----
-* (DBT : Microsoft SQL Server setup)[https://docs.getdbt.com/docs/core/connect-data-platform/mssql-setup]
-* (Quickstart: Install SQL Server and create a database on Ubuntu)[https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004]
-* (How to Install SQL Server on Linux Ubuntu)[https://blog.devart.com/how-to-install-sql-server-on-linux-ubuntu.html]
-* (Working with the SQL Server command line sqlcmd)[https://www.sqlshack.com/working-sql-server-command-line-sqlcmd/]
+* [DBT : Microsoft SQL Server setup](https://docs.getdbt.com/docs/core/connect-data-platform/mssql-setup)
+* [Quickstart: Install SQL Server and create a database on Ubuntu](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004)
+* [How to Install SQL Server on Linux Ubuntu](https://blog.devart.com/how-to-install-sql-server-on-linux-ubuntu.html)
+* [Working with the SQL Server command line sqlcmd](https://www.sqlshack.com/working-sql-server-command-line-sqlcmd/)
 
 * * *
 <a name=ms></a>MicroSoft SQL Install for Linux

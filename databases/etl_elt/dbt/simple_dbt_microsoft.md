@@ -12,6 +12,9 @@ Copyright November 2023**_
 
 * * *
 
+
+
+
 1. [Links](#links)
 2. [Install DBT](#dbt)
 3. [Install MicroSoft SQL for Linux](#ms)
@@ -24,8 +27,6 @@ Copyright November 2023**_
 
 
 * [Quickstart: Install SQL Server and create a database on Ubuntu](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004)
-
-
 * [DBT: Microsoft SQL Server setup](https://docs.getdbt.com/docs/core/connect-data-platform/mssql-setup)
 * [What is DBT?](https://www.getdbt.com/blog/what-exactly-is-dbt)
 * [https://medium.com/@suffyan.asad1/getting-started-with-dbt-data-build-tool-a-beginners-guide-to-building-data-transformations-28e335be5f7e](https://medium.com/@suffyan.asad1/getting-started-with-dbt-data-build-tool-a-beginners-guide-to-building-data-transformations-28e335be5f7e)

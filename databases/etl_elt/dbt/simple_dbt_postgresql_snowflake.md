@@ -46,16 +46,18 @@ We will first do this on PostgreSQL and then Snowflake.
 We Will first do this on our PostgreSQL system.
 
 
-* download : https://github.com/dbt-labs/dbt-starter-project
-    * [https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip](https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip)
-    * wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
+* download : https://github.com/dbt-labs/dbt-starter-project      
+    * [https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip](https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip)      
+    *  wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
 * uncompress ; unzip main.zip
 * Modify files:
   * Put everything in one directory
 ```bash
-mkdir -p dbt-simple
-mv dbt-starter-project-main dbt-simple/projects
-cd dbt-simple
+
+
+mkdir -p dbt-simple-pg
+mv dbt-starter-project-main dbt-simple-pg/projects
+cd dbt-simple-pg
 mkdir logs
 mkdir dbt_packages
 mkdir profiles
@@ -148,6 +150,12 @@ DBT operates by executing select statements from source tables and automatically
 <a name=sf></a>Snowflake Example
 -----
 
+* First log into snowflake and make a database "test".
+    * [Tutorial](https://www.tutorialspoint.com/snowflake/snowflake_database.htm#:~:text=Creating%20a%20Database&text=Click%20the%20Create%20button%20above,then%20click%20the%20Finish%20button.)
+    * [https://docs.snowflake.com/en/sql-reference/sql/create-database](https://docs.snowflake.com/en/sql-reference/sql/create-database)
+
+* NOTE: Change credentials. Change account, user, passsword. The database "test" should exist and the schema "PUBLIC".
+
 ```bash
 cd ~/
 wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
@@ -161,7 +169,7 @@ mkdir dbt_packages
 mkdir profiles
 
    ##  Create profile.yml to profiles/profile.yml
-   ## NOTE: Change credentials. Change account, user, passsword. The database "tutorial" should exist and the schema "test". 
+   ## NOTE: Change credentials. Change account, user, passsword. The database "test" should exist and the schema "PUBLIC". 
    ## You can edit the file last and change the credentials before you run it. 
 echo "
 default: 
@@ -173,9 +181,9 @@ default:
       user: theloginxxxxx
       password: thepaswordxxxxx
       role: accountadmin  
-      database: tutorial  
+      database: test  
       warehouse: compute_wh 
-      schema: test 
+      schema: PUBLIC 
       threads: 4 
       client_session_keep_alive: False 
       query_tag: dbt

@@ -74,10 +74,20 @@ sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "create table test1 (i int);" -d DB
 sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "SELECT * FROM INFORMATION_SCHEMA.TABLES;" -d DBT_DB
 sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "insert into test1 values (1)" -d DBT_DB
 sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "select * from test1" -d DBT_DB
+sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "select * from dbo.test1" -d DBT_DB
+sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "select * from DBT_DB.dbo.test1" 
+
+
+sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "select name from sys.databases;" -d DBT_DB
+sqlcmd -S localhost -U DBT -P $MSPASS -No -Q "SELECT SCHEMA_NAME(1);" -d DBT_DB
+
 
 echo "
 insert into test1 values(2);
 select * from test1
+
+
+
 " > test.sql
 sqlcmd -S localhost -U DBT -P $MSPASS -No  -d DBT_DB -i test.sql
 

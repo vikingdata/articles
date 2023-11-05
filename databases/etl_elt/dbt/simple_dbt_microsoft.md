@@ -22,6 +22,7 @@ Copyright November 2023**_
 <a name=links></a>Links
 -----
 
+
 * [Quickstart: Install SQL Server and create a database on Ubuntu](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004)
 
 

@@ -216,12 +216,12 @@ ansible_connection=ssh
       * passwd ansible
          * Remember the password
 * Edit /etc/sudoers.d/ansible and add
-      * ansible     ALL=(ALL)       NOPASSWD: ALL
+    * ansible     ALL=(ALL)       NOPASSWD: ALL
 * Login in as ansible from root
-      * su -u ansible
-      * Create ssh key on TARGET server
-         * ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
-	 * This sets up up the .ssh directory, and we might use the ssh from the target server later. 
+    * su -u ansible
+    * Create ssh key on TARGET server
+       * ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
+       * This sets up up the .ssh directory, and we might use the ssh from the target server later. 
 
 
 ### Configure ssh login from control server to target server. 

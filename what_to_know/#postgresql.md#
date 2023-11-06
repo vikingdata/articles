@@ -154,4 +154,9 @@ Many of these things for postgresql applies to later versions.
 
 * restrict access
     * revoke connect on database DB1 from public;
+* Cannot drop user or role if user owns a table or ojects.
+    * revoke all on all tables in schema public from username;
+       * in every database
+    * REASSIGN OWNED BY user1 TO postgres;
+    
 

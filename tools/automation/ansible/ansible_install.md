@@ -27,6 +27,7 @@ The purpose of this document is to:
 7. [Run some tests](#tests)
 8. [Install and Verify MongoDB](#mongo)
 9. [Show Gotchas](#gotcha)
+10. [Notes](#notes)
 
 * * *
 
@@ -217,6 +218,11 @@ ansible_connection=ssh
          * Remember the password
 * Edit /etc/sudoers.d/ansible and add
     * ansible     ALL=(ALL)       NOPASSWD: ALL
+* WARNING: If you mess up the sudoers file
+     * pkexec visudo -f /etc/sudoers.d/ansible
+     * pkexec visudo 
+     * Also you might want to set the root password for you can login as root.
+         * passwd root
 * Login in as ansible from root
     * su -u ansible
     * Create ssh key on TARGET server
@@ -325,3 +331,17 @@ Also....
         * ansible all   -m get_url -a 'url=http://google.com dest=~/a.html'
       Double quotes doesn't work for this command, but single quotes do.
 
+* * *
+<a name=notes></a>Notes
+-----
+* File Locations
+    * Global files
+         * ansibl.cfg
+    * 
+
+* Global files that apply everywhere at /etc/ansible
+    * anisble.cfg
+    * hosts
+    * group_vars
+    * host_vars
+     

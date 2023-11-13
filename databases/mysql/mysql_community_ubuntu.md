@@ -1,4 +1,3 @@
-
 ---
 title : MySQL Community Ubuntu Install
 author : Mark Nielsen
@@ -14,6 +13,7 @@ Original Copyright November 2023**_
 
 1. [links](#links)
 2. [Install](#install)
+3. [Remove](#remove)
 
 * * *
 <a name=Link></a>Links
@@ -38,9 +38,9 @@ Original Copyright November 2023**_
             * wget https://dev.mysql.com/get/mysql-apt-config_0.8.28-1_all.deb
             * dpkg -i mysql-apt-config_0.8.28-1_all.deb
                * choose everything
-        * Copy this file to /etc/apt/sources.list.d/mysql.list
-	    * NOTE: the gpg package for keyrings in in config dpg package. 
-* Change /etc/apt/sources.list.d/mysql.list if nec essayr
+        * DO NOT DO THIS: Copy this file to /etc/apt/sources.list.d/mysql.list
+	    * NOTE: the gpg package for keyrings in config dpk package is not installed. 
+* Change /etc/apt/sources.list.d/mysql.list if necessary
     * For example, I change "jammy" to "focal".
         * Check the [Ubuntu Releases](https://wiki.ubuntu.com/Releases)
 	

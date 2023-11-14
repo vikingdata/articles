@@ -1,0 +1,115 @@
+
+---
+
+- set_fact:
+    mysqld_exists: 'false'
+    mysql_source_local_exists: ''
+    mysql_source_exists: ''
+
+- name: Ensure group mysql exists
+  ansible.builtin.group:
+      name: mysql
+      state: present
+
+- user:
+    name: mysql
+    comment: "mysql"
+    group: mysql
+    shell: /bin/bash
+
+- name : Make sure source file exists
+  stat:
+    path: "{{dest_home}}/{{mysql_binary_file}}"
+  register: test
+
+#- name : source file status
+#  debug:
+#    msg:
+#      - source file status {{ test.stat.exists }}
+  
+- set_fact:
+    mysql_source_exists: "{{ test.stat.exists }}"
+
+- file:
+    path: "{{dest_home_source}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  when: test.stat.exists == false
+
+- name: Copy file with owner and permission, using symbolic representation
+  block :
+    - ansible.builtin.copy:
+        src: "{{source_home}}/files/{{mysql_binary_file}}"
+        dest: "{{dest_home_source}}/{{mysql_binary_file}}"
+        owner: mysql
+        group: mysql
+  when :
+    -- mysql_source_exists  == False
+
+- name: See if this version is installed
+  stat:
+    path: "{{binaries}}/{{mysql_download_version}}/bin/mysql"
+  register: mysql_binary_status
+
+#- debug:
+#    msg:
+#      - test {{ mysql_binary_status.stat.exists }}
+
+- debug: 
+    msg:
+      - test cd {{binaries}}; tar -xvf  {{dest_home_source}}/{{mysql_binary_file}}
+
+- name : Install if mysql is not previously installed
+  shell : |
+    cd "{{binaries}}"
+    tar -xvf  {{dest_home_source}}/{{mysql_binary_file}}
+  when:  mysql_binary_status.stat.exists == False
+
+- debug:
+    msg:
+      - test {{ mysql_dirs }}
+
+- name: create directory if they don't exist
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0775
+  loop: "{{ mysql_dirs }}"
+  when: mysql_dirs is defined 
+
+- name: Copy config
+  block :
+      # server
+    - ansible.builtin.copy:
+        src:  "{{source_mysql_server_cnf}}"
+        dest: "{{dest_mysql_server_cnf}}"
+        owner: mysql
+        group: mysql
+      #client
+    - ansible.builtin.copy:
+        src:  "{{source_mysql_client_cnf}}"
+        dest: "{{dest_mysql_client_cnf}}"
+        owner: mysql
+        group: mysql
+      # service
+    - ansible.builtin.copy:
+        src:  "{{source_mysql_service_cnf}}"
+        dest: "{{dest_mysql_service_cnf}}"
+        owner: mysql
+        group: mysql
+
+  when :
+    -- mysql_single_installed == 0
+
+# Make certificate files
+
+# install service
+
+# start mysql
+
+# Print instructions to set root password and set my.cnf or secur mysql
+

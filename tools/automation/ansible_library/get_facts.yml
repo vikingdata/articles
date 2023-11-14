@@ -1,0 +1,5 @@
+
+- name : Sample echo playbook
+    hosts : testservers
+    debug :
+       - mesg facts {{ ansible_facts }}

@@ -1,0 +1,20 @@
+
+[Unit]
+Description= 
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+User= A
+
+ExecStop =A
+ExecStart =
+ExecReload=
+
+Type=notify
+
+[Install]
+WantedBy=multi-user.target

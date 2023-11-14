@@ -1,0 +1,61 @@
+
+
+- set_fact:
+    mysql_link_status: False
+    fuser_output: False
+    mysql_link_status: False
+    my_stat_var: False
+    mysql_running : False
+    mysql_single_installed : 0  
+
+
+- name: Check if mysql is running on port 3306
+  ansible.builtin.shell:  fuser 3306/tcp
+  register: fuser_output
+  ignore_errors: true
+  
+- debug:
+    msg:
+      - fuser_output {{ fuser_output }}
+
+- name: Increment variable
+  set_fact: mysql_running={{ mysql_running | int + 1 }}
+  when : fuser_output.rc  == 0
+  
+- debug:
+    msg:
+      - fuser_output {{ mysql_running }}
+
+- name: See mysql link exists
+  stat:
+    path: /TestEnv/binaries/mysql_single
+  register: mysql_link_status
+
+- name: Stat over the files
+  stat:
+    path: "{{ item }}"
+  loop: "{{ mysql_single_list_files }}"
+  register: my_stat_var
+
+#- debug:
+#    msg:
+#      - status {{ my_stat_var }}
+
+#- name: detect mysql files
+#  pause:
+#    seconds : 1
+#    prompt :  facts {{my_stat_var | to_nice_json(indent=2)}}
+
+- name: Ask the to remove files.
+  set_fact : mysql_single_installed = {{mysql_single_installed| inc 1}}
+  when : item.stat.exists
+  loop: "{{ my_stat_var.results }}"
+
+#- debug:
+#   msg:
+#    - test mysql_single_installed {{  mysql_single_installed }} {{ my_stat_var.results }}
+
+- name: Install mysql
+  include_tasks:
+    file: install_mysql_community_single.yml
+  when: mysql_single_installed == 0

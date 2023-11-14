@@ -1,0 +1,25 @@
+
+- name : Set some vars
+  vars : 
+    mysqld_exists: 'false'
+    mysqld_running: 'false'
+
+#  - name: Make sure testenv exists for mysql
+#    ansible.builtin.file:
+#      path: /TestEnv/mysql/source
+#      owner: mysql
+#      group: mysql
+#      mode: '0644'
+
+#  - name : Make sure source file exists
+#    stat:
+#      path: /TestEnv/mysql/source/mysql-8.2.0-linux-glibc2.28-x86_64.tar.xz
+#    register: source_file_mysql
+
+#  - name : print source
+#    debug:
+#      msg:
+#        - source status {{ source_file_mysql }}
+
+# fuser 3306/tcp
+# fuser 3306/tcp

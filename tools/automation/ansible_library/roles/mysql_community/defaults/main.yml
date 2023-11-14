@@ -1,0 +1,89 @@
+
+
+
+   # Download version
+mysql_version          : 8.2.0
+mysql_download_version : mysql-8.2.0-linux-glibc2.17-x86_64
+mysql_download_url     : https://dev.mysql.com/get/Downloads/MySQL-8.2/{{mysql_download_version}}.tar.xz
+   # https://dev.mysql.com/get/Downloads/MySQL-8.2/mysql-8.2.0-linux-glibc2.17-x86_64.tar.xz
+
+dest_home :         /TestEnv
+source_home :       /etc/ansible/roles/mysql_community
+mysql_binary_file : "{{mysql_download_version}}.tar.xz"
+mysql_name:         mysql_single_community
+dest_home_source :  "{{dest_home}}/source/mysql"
+binaries :          "{{dest_home}}/binaries"
+
+# Linux account
+mysql_group: mysql
+mysql_user: mysql
+   
+# dependent variables
+mysql_home: "{{dest_home}}/{{mysql_name}}"
+
+mysql_dirs:
+    - "{{dest_home}}/source/mysql"
+    - "{{dest_home}}/data/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}/relay"
+    - "{{dest_home}}/log/{{mysql_name}}/binlog"
+    - "{{dest_home}}/var/run/mysql"
+    - "{{dest_home}}/etc/mysql/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}/innodb"
+    - "{{dest_home}}/log/{{mysql_name}}/innodb/redo"
+
+  # List to detect if already installed
+mysql_single_list_files : ['log/{{mysql_name}}/mysqld-err.log', 'var/run/mysqld/{{mysql_name}}.pid', 'var/run/mysqld/{{mysql_name}}.socket']
+mysql_single_list_dirs  : ['data/{{mysql_name}}', 'binaries/{{mysql_name}}']
+mysql_single_installed: 0
+
+
+
+
+#dest_home : /TestEnv
+#source_home : /etc/ansible/roles/mysql_community/
+#mysql_binary_file : mysql-8.2.0-linux-glibc2.28-x86_64.tar.xz
+
+source_mysql_binary :       "{{source_home}}/files/{{mysql_binary_file}}"
+source_mysql_server_cnf :   "{{source_home}}/templates/{{mysql_name}}_server.j2"
+source_mysql_service_cnf :  "{{source_home}}/templates/{{mysql_name}}_service.j2"
+source_mysql_client_cnf :   "{{source_home}}/templates/{{mysql_name}}_client.j2"
+
+dest_mysql_binary :         "{{dest_home}}/source/mysql/{{mysql_binary_file}}"
+dest_mysql_server_cnf :     "{{dest_home}}/etc/mysql/{{mysql_name}}/my.cnf"
+
+dest_mysql_service_cnf :    /etc/systemd/system/multi-user.target.wants/{{mysql_name}}.service
+dest_mysql_client_cnf :     /home/mysql/.my/{{mysql_name}}.cnf
+
+
+mysql_server_cnf:        "{{mysql_conf_dir}}/my.cnf"
+
+   # directory definitions
+mysql_datadir:       "{{dest_home}}/data/{{mysql_name}}"
+mysql_log_dir:       "{{dest_home}}/log/{{mysql_name}}"
+mysql_binlog_dir:    "{{mysql_log_dir}}/binlog"
+mysql_relaylog_dir:  "{{mysql_log_dir}}/relay"
+mysql_conf_dir:      "{{dest_home}}/etc/mysql/{{mysql_name}}"
+mysql_run_dir:       "{{dest_home}}/var/run/mysqld"
+
+  # File prefixes
+mysql_binary_log:    "{{mysql_binlog_dir}}/log-bin."
+mysql_relay_log:     "{{mysql_relaylog_dir}}/relay-bin."
+
+  # Specific Files
+mysql_file_pid :         "{{mysql_run_dir}}/{{mysql_name}}.pid"
+mysql_file_socket :      "{{mysql_run_dir}}/{{mysql_name}}.socket"
+
+  # log files and dirs
+mysql_redo:              "{{mysql_log_dir}}/innodb/redo"
+mysql_innodb_home :      "{{mysql_log_dir}}/innodb"
+mysql_file_error_log:    "{{mysql_log_dir}}/mysqld-err.log"
+mysql_file_general_log : "{{mysql_log_dir}}/mysqld.log"
+mysql_file_slow_log:     "{{mysql_log_dir}}/mysqld-slow.log"
+
+  # Default password
+mysql_root_pw: ''
+mysql_authentication: mysql_native_password
+
+
+

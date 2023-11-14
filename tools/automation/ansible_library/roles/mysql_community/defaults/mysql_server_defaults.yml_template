@@ -1,0 +1,31 @@
+
+
+mysql_server_cnf:        "{{mysql_conf_dir}}/my.cnf"
+
+   # directory definitions
+mysql_datadir:       "{{dest_home}}/data/{{mysql_name}}"
+mysql_log_dir:       "{{dest_home}}/log/{{mysql_name}}"
+mysql_binlog_dir:    "{{mysql_log_dir}}/binlog"
+mysql_relaylog_dir:  "{{mysql_log_dir}}/relay"
+mysql_conf_dir:      "{{dest_home}}/etc/mysql/{{mysql_name}}"
+mysql_run_dir:       "{{dest_home}}/var/run/mysqld"
+
+  # File prefixes
+mysql_binary_log:    "{{mysql_binlog_dir}}/log-bin."
+mysql_relay_log:     "{{mysql_relaylog_dir}}/relay-bin."
+
+  # Specific Files
+mysql_file_pid :         "{{mysql_run_dir}}/{{mysql_name}}.pid"
+mysql_file_socket :      "{{mysql_run_dir}}/{{mysql_name}}.socket"
+
+  # log files and dirs
+mysql_redo:              "{{mysql_log_dir}}/innodb/redo"
+mysql_innodb_home :      "{{mysql_log_dir}}/innodb"
+mysql_file_error_log:    "{{mysql_log_dir}}/mysqld-err.log"
+mysql_file_general_log : "{{mysql_log_dir}}/mysqld.log"
+mysql_file_slow_log:     "{{mysql_log_dir}}/mysqld-slow.log"
+
+  # Default password
+mysql_root_pw: ''
+mysql_authentication: mysql_native_password
+

@@ -1,0 +1,27 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+[all:vars]
+ansible_ssh_user=ansible
+
+[testservers]
+127.0.0.1:222 host_var1=' host var 1 value' order_var4='host var 1 value' order_var5='host var 1 value'
+
+[mysql_dev]
+127.0.0.1:222
+
+[testservers:vars]
+group_var1 = 'group var 1 value'
+order_var2 = 'group var 1 value'
+order_var3 = 'group var 1 value'
+order_var4 = 'group var 1 value'
+
+[TestEnv_servers]
+127.0.0.1:222 host_var1=' host var 1 value' order_var4='host var 1 value' order_var5='host var 1 value'

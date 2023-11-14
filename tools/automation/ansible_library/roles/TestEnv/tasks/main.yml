@@ -1,0 +1,16 @@
+
+- name: print facts
+  pause:
+    seconds : 1
+    prompt :  facts {{ansible_facts | to_nice_json(indent=2)}}
+
+- name: create directory if they don't exist
+  file:
+    path: "{{ TestEnv_home }}/{{item}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  loop: "{{ TextEnv_dirs }}"
+  when: TextEnv_dirs is defined and TestEnv_home is defined
+

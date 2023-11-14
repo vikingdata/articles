@@ -1,0 +1,6 @@
+---
+ansible_python_interpreter : /usr/bin/python3
+group_var2 : 'group var 2 value'
+order_var3 : 'group var 2 value'
+order_var4 : 'group var 2 value'
+order_var7 : 'group var 2 value'

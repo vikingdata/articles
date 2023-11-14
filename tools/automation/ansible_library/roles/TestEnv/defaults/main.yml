@@ -1,0 +1,5 @@
+
+
+TestEnv_home : /TestEnv
+
+TextEnv_dirs: ['source', 'var/log', 'var/run', 'etc', 'env','service_init', 'binaries', 'bin', 'data', 'examples', 'source' ]

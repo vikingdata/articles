@@ -1,0 +1,57 @@
+
+---
+  - name : Sample echo playbook
+    roles :
+      - role1
+    hosts: testservers
+    vars:
+      playbook_var1: 'playbook 1 value'
+      order_var6: 'playbook var 1'
+      order_var7: 'playbook var 1'
+
+    tasks:
+    - name : print vars
+      debug:
+        msg:
+          - role default  {{ role_default1 }}
+          - role var1     {{ role_var1 }}
+          - host_var1     {{ host_var1 }}
+          - host_var2     {{ host_var2 }}
+          - group_var1    {{ group_var1 }}
+          - group_var2    {{ group_var2 }}
+          - playbook_var1 {{ playbook_var1 }}
+          - the following values are done by order of precedence
+          - order_var1    {{ order_var1 }} ,should be role default
+          - order_var2    {{ order_var2 }} ,should be group var1
+          - order_var3    {{ order_var3 }} ,should be group var2
+          - order_var4    {{ order_var4 }} ,should be host var1
+          - order_var5    {{ order_var5 }} ,should be host var2
+          - order_var6    {{ order_var6 }} ,should be playbook var1
+          - order_var7    {{ order_var7 }} ,should be role var1
+          - order_var8    {{ order_var8 }} ,should be  line_command
+
+    - name : Make registered variable
+      shell: ls /etc | wc -l
+      register: register_test
+
+    - name : print registered
+      register: register_test
+      debug :
+        msg :
+           - Register test. There are {{register_test.stdout }} files in /etc.
+
+    - name : print special variables
+      debug :
+        msg:
+          - From facts. My architecture {{ ansible_facts['architecture']  }}
+          - Magic variable inventory_hostname is {{ inventory_hostname }}
+          - as opposed to fact ansible_facts['hostname'] {{ansible_facts['hostname'] }} or ansible_hostname {{ ansible_hostname }}
+          - Magic vaiable inventory_file is {{ inventory_file }}
+          - The connection variable ansible_connection is {{ ansible_connection }}
+          - Displaying a string, ansible_verbosity is {{ ansible_verbosity }}
+          - Displaying 2nd element in a list, ansible_facts['processor'][1] is {{ ansible_facts['processor'][1] }}
+          - Displaying List, ansible_facts['processor'] is {{ ansible_facts['processor'] }}
+          - Displaying an element in dictionary ansible_facts['cmdline']['BOOT_IMAGE'} is {{ ansible_facts['cmdline']['BOOT_IMAGE'] }}
+          - Displaying dictionary, ansible_facts['cmdline'] is {{ ansible_facts['cmdline'] }}
+
+

@@ -1,0 +1,15 @@
+# See if mysql is running on 3306
+# If so abort.
+
+
+# fuser 3306/tcp
+# fuser 3306/tcp
+
+
+#- name: untar the source
+#- name: install the configs
+#- name: start mysql
+#- name: make it start at bootup
+
+# bithing
+

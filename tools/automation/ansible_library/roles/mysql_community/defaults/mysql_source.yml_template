@@ -1,0 +1,16 @@
+
+
+#dest_home : /TestEnv
+#source_home : /etc/ansible/roles/mysql_community/
+#mysql_binary_file : mysql-8.2.0-linux-glibc2.28-x86_64.tar.xz
+
+source_mysql_binary :       "{{source_home}}/files/{{mysql_binary_file}}"
+source_mysql_server_cnf :   "{{source_home}}/templates/{{mysql_name}}_server.j2"
+source_mysql_service_cnf :  "{{source_home}}/templates/{{mysql_name}}_service.j2"
+source_mysql_client_cnf :   "{{source_home}}/templates/{{mysql_name}}_client.j2"
+
+dest_mysql_binary :         "{{dest_home}}/source/mysql/{{mysql_binary_file}}"
+dest_mysql_server_cnf :     "{{dest_home}}/etc/mysql/{{mysql_name}}/my.cnf"
+
+dest_mysql_service_cnf :    /etc/systemd/system/multi-user.target.wants/{{mysql_name}}.service
+dest_mysql_client_cnf :     /home/mysql/.my/{{mysql_name}}.cnf

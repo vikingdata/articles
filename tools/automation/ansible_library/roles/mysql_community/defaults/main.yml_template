@@ -1,0 +1,41 @@
+
+
+
+   # Download version
+mysql_version          : 8.2.0
+mysql_download_version : mysql-8.2.0-linux-glibc2.17-x86_64
+mysql_download_url     : https://dev.mysql.com/get/Downloads/MySQL-8.2/{{mysql_download_version}}.tar.xz
+   # https://dev.mysql.com/get/Downloads/MySQL-8.2/mysql-8.2.0-linux-glibc2.17-x86_64.tar.xz
+
+dest_home :         /TestEnv
+source_home :       /etc/ansible/roles/mysql_community
+mysql_binary_file : "{{mysql_download_version}}.tar.xz"
+mysql_name:         mysql_single_community
+dest_home_source :  "{{dest_home}}/source/mysql"
+binaries :          "{{dest_home}}/binaries"
+
+# Linux account
+mysql_group: mysql
+mysql_user: mysql
+   
+# dependent variables
+mysql_home: "{{dest_home}}/{{mysql_name}}"
+
+mysql_dirs:
+    - /home/mysql/.my
+    - "{{dest_home}}/source/mysql"
+    - "{{dest_home}}/data/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}/relay"
+    - "{{dest_home}}/log/{{mysql_name}}/binlog"
+    - "{{dest_home}}/var/run/mysql"
+    - "{{dest_home}}/etc/mysql/{{mysql_name}}"
+    - "{{dest_home}}/log/{{mysql_name}}/innodb"
+    - "{{dest_home}}/log/{{mysql_name}}/innodb/redo"
+
+  # List to detect if already installed
+mysql_single_list_files : ['log/{{mysql_name}}/mysqld-err.log', 'var/run/mysqld/{{mysql_name}}.pid', 'var/run/mysqld/{{mysql_name}}.socket']
+mysql_single_list_dirs  : ['data/{{mysql_name}}', 'binaries/{{mysql_name}}']
+mysql_single_installed: 0
+
+

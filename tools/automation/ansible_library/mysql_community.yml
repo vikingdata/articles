@@ -1,0 +1,11 @@
+---
+  - hosts: mysql_dev
+    become: yes
+    remote_user: ansible
+    roles:
+      - role: TestEnv
+      - role: mysql_community
+    vars:
+      mysql_start: true
+      mysql_boot: true
+

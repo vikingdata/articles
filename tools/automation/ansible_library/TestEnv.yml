@@ -1,0 +1,8 @@
+---
+  - hosts: TestEnv_servers
+    become: yes
+    remote_user: ansible
+    roles:
+      - role: TestEnv
+
+

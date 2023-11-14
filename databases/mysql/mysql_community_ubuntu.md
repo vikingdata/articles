@@ -44,6 +44,33 @@ Original Copyright November 2023**_
     * For example, I change "jammy" to "focal".
         * Check the [Ubuntu Releases](https://wiki.ubuntu.com/Releases)
 	
+* Stop password prompt
+
+[stackflow question]](https://stackoverflow.com/questions/7739645/install-mysql-on-ubuntu-without-a-password-prompt)
+
+````
+  # Set the password
+  # This one worked for me. 
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password CHANGE_ME'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password CHANGE_ME'
+
+  # For specific versions
+sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password password your_password'
+sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password_again password your_password'
+sudo apt-get -y install mysql-server-5.6
+
+  # For community version
+
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/root-pass password your_password'
+sudo debconf-set-selections <<< 'mysql-community-server mysql-community-server/re-root-pass password your_password'
+sudo apt-get -y install mysql-community-server
+
+  # or this, which will leave a blank password. 
+export DEBIAN_FRONTEND=noninteractive
+
+```
+
+
 * Issue the commands
 
 ```
@@ -60,13 +87,13 @@ sudo apt-get install mysql-server
 * To remove mysql but leave configuration files and database.
 ```
 
-apt list --installed | grep -i mysql | cut -d '/' -f1
+sudo apt list --installed | grep -i mysql | cut -d '/' -f1
 
-apt remove`apt list --installed | grep -i mysql | cut -d '/' -f1`
+sudo apt remove`apt list --installed | grep -i mysql | cut -d '/' -f1`
 
 
   # Which is similar to this command. 
-apt-get remove libmysqlclient21 \
+sudo apt-get remove libmysqlclient21 \
 mysql-apt-config                \
 mysql-client                    \
 mysql-common                    \
@@ -77,12 +104,18 @@ mysql-community-server-core     \
 mysql-community-server          \
 mysql-server
 
-apt list --installed | grep -i mysql
+sudo apt list --installed | grep -i mysql
 
 ```
 * To remove files,
 ```
-apt-get purge `apt list --installed | grep -i mysql | cut -d '/' -f1`
+sudo apt-get purge `apt list --installed | grep -i mysql | cut -d '/' -f1`
+
+
+   ### DANGEROUS: remove data files
+sudo rm -rf /var/lib/mysql
+   ### DANGEROUS: remove config files
+sudo rm -rf /etc/mysql/
 
 ```
 

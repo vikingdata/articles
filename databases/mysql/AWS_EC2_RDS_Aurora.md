@@ -27,7 +27,8 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Caching, like memcache or ElasticCache is available.
     * [Features not supported](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Concepts.FeatureSupport.html#MySQL.Concepts.Features)
     * [Limitations](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.KnownIssuesAndLimitations.html)
-    * Automatic failover is available. 
+    * Automatic failover is available.
+        * 60 to 120 seconds
     * Replication to Read Replica is done by normal MySQL replication.
     * Storage auto scaling available.
     * RDS MySQL has that aurora doesn't
@@ -45,9 +46,14 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Features not supported [5.7](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.CompareMySQL57.html]
     and [8.0](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.MySQL80.html)
     * Automatic failover is available
+        * 6B0 seconds, even 30 seconds.
     * Storage auto scaling available.
 
-    * Aurora has that RSA MySQL doesn't
+
+* RDS has that Aurora doesn't
+    * NEW: In Novemeber 2023, RDS has group replication with version 8.0.35 and higher. This makes failover faster than aurora.  
+
+* Aurora has that RSA MySQL doesn't
         * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)
         * Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
         * Aurora Serverless is available.
@@ -61,8 +67,8 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
         * Aurora is also PostgreSQL compatible.
         * Can have upto 15 read replicas, while RDS MySQL can have 5.
         * Built For High Availability. Multiple copies in different Availability zones makes it HA along with automatic failover. 
-
-* Future optics
+        * Except for Group replication, failover in Aurora in faster than RDS.
+* Future topics
   * cost
   * Aurora Serverless versus Aurora
   * more performance

@@ -2,8 +2,14 @@
 
 * * *
 
+* <a name=et></a>et
+* <a name=other></a>other
+-----
+
+* * *
 <a name=et></a>et
 -----
+
 
 
 
@@ -277,7 +283,24 @@ skip 65
 -----
 * performance_schema
 * How locks are assigned
-
+* Master/Slave Failover
+    * General
+       * NOTE : the source code looks OLD for MHA. 
+       * (How to Automatically Manage Failover of the MySQL Database for Moodle) [https://severalnines.com/blog/how-to-automatically-manage-failover-mysql-database-moodle/]
+    * MHA
+        * [https://github.com/yoshinorim/mha4mysql-manager] (https://github.com/yoshinorim/mha4mysql-manager)
+	* [Google MHA] (https://code.google.com/archive/p/mysql-master-ha/wikis)
+        * [Using MHA (Master High Availability)] (https://severalnines.com/blog/how-to-automatically-manage-failover-mysql-database-moodle/#:~:text=Using%20Orchestrator&text=This%20is%20an%20open%20source,can%20be%20easy%20or%20straightforward.)
+        * [A Brief Intro To MHA (Master High Availability)] (https://severalnines.com/blog/top-common-issues-mha-and-how-fix-them/) 
+        * [Replication and auto-failover made easy with MySQL Utilities] (https://dev.mysql.com/blog-archive/replication-and-auto-failover-made-easy-with-mysql-utilities/)
+        * [MHA MySQL Quick Start Guide] (https://www.percona.com/blog/mha-quickstart-guide/)	
+    * KeepAlive
+        * [KeeepAlive] (http://exabig.com/blog/2019/06/16/mysql-auto-failover-using-keepalived/)
+    * ClusterControl
+        * [ClusterControl] (https://docs.severalnines.com/docs/clustercontrol/)
+    * orchestrator
+    
+        * [orchestrator] (https://github.com/openark/orchestrator)
 
 * * *
 <a name=new></a>Whats New

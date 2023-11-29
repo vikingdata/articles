@@ -51,9 +51,12 @@ put mongo and mysql and other docs on github.
 
 
 ansible
-  mysql installlation
+  DONE mysql installlation
   mysql with replication
   mysql with cluster
   mysql with backups, monitoring
   pythn modules
   modult utils, library, filter_plugins
+
+  PostregSQL
+  Mongo with shard and two replica sets

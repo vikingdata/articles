@@ -30,10 +30,8 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Automatic failover is available.
         * 60 to 120 seconds
     * Replication to Read Replica is done by normal MySQL replication.
-    * Storage auto scaling available.
-    * RDS MySQL has that aurora doesn't
-        * It can use more storage engines
-    * RDS has auto-scaling  vertically. 
+    * Storage auto scaling available vertically.
+
 
 * Aurora
     * It is a MySQL service.
@@ -48,11 +46,10 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     and [8.0](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.MySQL80.html)
     * Automatic failover is available
         * 60 seconds, even 30 seconds.
-    * Storage auto scaling available.
-    * Aruora has auto scaling vertically and horizontally.
+    * Aurora has auto scaling vertically and horizontally.
 
 * RDS has that Aurora doesn't
-    * NEW: In November 2023, RDS has group replication with version 8.0.35 and higher. This makes failover faster than aurora.  
+    * NEW: In November 2023, RDS has group replication with version 8.0.35 and higher. This makes failover faster than aurora.     * It can use more storage engines.  
 
 * Aurora has that RSA MySQL doesn't
     * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)

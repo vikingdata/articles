@@ -33,6 +33,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Storage auto scaling available.
     * RDS MySQL has that aurora doesn't
         * It can use more storage engines
+    * RDS has auto-scaling  vertically. 
 
 * Aurora
     * It is a MySQL service.
@@ -48,7 +49,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
     * Automatic failover is available
         * 60 seconds, even 30 seconds.
     * Storage auto scaling available.
-
+    * Aruora has auto scaling vertically and horizontally.
 
 * RDS has that Aurora doesn't
     * NEW: In November 2023, RDS has group replication with version 8.0.35 and higher. This makes failover faster than aurora.  

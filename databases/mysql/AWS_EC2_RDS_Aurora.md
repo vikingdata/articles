@@ -4,6 +4,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 --------
 
 * Links
+    * [Aurora Cheetsheet](https://tutorialsdojo.com/amazon-aurora/)
     * [Aurora vs RDS: How to Choose the Right AWS Database Solution](https://www.percona.com/blog/when-should-i-use-amazon-aurora-and-when-should-i-use-rds-mysql/#:~:text=Aurora%20replicates%20data%20to%20six,process%20is%20slower%20than%20Aurora.)
     * [HA databases](https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/)
     * [AWS RDS MySQL vs. Aurora MySQL](https://houseofbrick.com/blog/aws-rds-mysql-vs-aurora-mysql/)
@@ -51,7 +52,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 * RDS has that Aurora doesn't
     * NEW: In November 2023, RDS has group replication with version 8.0.35 and higher. This makes failover faster than aurora.     * It can use more storage engines.  
 
-* Aurora has that RSA MySQL doesn't
+* Aurora has that RDS MySQL doesn't
     * Replication is done differently. Instead of normal MySQL replication [Aurora has faster replication](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html) because the read replicas are physical copies or primary. [Cluster Volume](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html#Aurora.Overview.Storage)
     * Supposedly x5 faster than MySQL, but heavy write loads may not see the benefit. 
     * Aurora Serverless is available.

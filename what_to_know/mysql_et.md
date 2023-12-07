@@ -11,22 +11,36 @@
 -----
 
 
+* characterstics of role : can be dropped, is locked, granted to users
 
+# to reset GTID replication on slave if someone added data
+   1. reset naster On slave
+   2. SET GLOBAL gtid_purged to the purged values of slave.
+   3. SET GLOBAL gtid_executed to values execued in the thread.
+   4. Make sure the master still has the data.
+
+* With more memeory thena data and no binlog, what improvements an you do? innodb_flush_log_at_trx_commit=2
+    * innodb_doublewrite=0
+    * innodb_undo_directory=/dev/shm --- ubdo logs in memory
+    *  sync_binlog=0 - normally yes, but binlog isn't used.
+    * trx commit is already 2, 0 would be faster.
 
 * persistent stats : optimizer saved acrosss restarts, when innodb_stats_persistent_sample_pages is increased it improves precision on execution plans of transient index statistics
+    * innodb_stats_auto_recalc causes new indexes and if data is changed more then 10% to be updated
 
-* enterprise firewall can1. read incoming queries to create a whitelist, blocking queries bvy pre approved whitelists
+* enterprise firewall can1. read incoming queries to create a whitelist, blocking queries by pre approved whitelists
   https://www.mysql.com/products/enterprise/firewall.html
 
 * Slave can fall behind master, because the slave is configured to be single thread and the master is mutiple queries
-at a time. Master might be too busy, but transferring the binlog is fast. 
+at a time. Master might be too busy, but transferring the binlog is fast. Tables not having primary keys can also cause issues. 
 
 * For --ssl-mode, lowest to highest security, DISABLED, preferrred, required, verify_ca, verify_identity
 
 * kill -9 is bad, kill -15 mysql will tell it to stop and gracefully shutdown
 
 * To stop sql injection, preprared staements, stored procedures, vlidate input, escaped input
-  https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    * https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    * Connection Control plugin liits connections, nothing to do with sql injection
 
 * 15 roles are active by default. They need to be activated or set as default.
 

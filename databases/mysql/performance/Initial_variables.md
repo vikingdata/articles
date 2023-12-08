@@ -44,11 +44,11 @@ Copyright December 2023**_
 * Analyze queries using the most resources by New Relic or Solar Winds or something similar.
     * Use graphing tools to monitor performance schema.
     * Turn on performace schema.
-    * (MySQL Enterprise Query Analyser](https://www.mysql.com/products/enterprise/query.html)
+    * [MySQL Enterprise Query Analyser](https://www.mysql.com/products/enterprise/query.html)
     * Solar Winds -- 30 day trial available. 
         * SolarWinds Database Performance Analyzer
         * SolarWinds Database Performance Monitor
-    * NOTE : new relic has a [free service](https://docs.newrelic.com/docs/accounts/accounts-billing/new-relic-one-pricing-billing/new-relic-one-pricing-billing/#:~:text=Free%20edition%20details,use%20New%20Relic%20free%2C%20forever.] with limitaions. It has slow query tools too and performance monitoring.
+    * NOTE : new relic has a [free service](https://docs.newrelic.com/docs/accounts/accounts-billing/new-relic-one-pricing-billing/new-relic-one-pricing-billing/#:~:text=Free%20edition%20details,use%20New%20Relic%20free%2C%20forever.) with limitaions. It has slow query tools too and performance monitoring.
         * [Monitoring MySQL database performance with New Relic](https://newrelic.com/blog/how-to-relic/how-to-monitor-mysql)
     * AWS
         * RDS Enhanced Monitoring
@@ -69,7 +69,7 @@ Copyright December 2023**_
     * Load balancing read queries amoung slaves
     * Slave delay : For MySQL semi-snyschronous in AWS RDS MySQL or your own managed MySQL.
         * For AWS RDS MySQL or your own managed servers you can use MySQL group cluster and setup a ClusterSet. There is no slave delay.
-        * Aurora Clustering is usually very very fast. But, [How can I resolve common issues when using read replicas in Amazon Aurora?](https://repost.aws/knowledge-center/aurora-mysql-read-replicas]
+        * Aurora Clustering is usually very very fast. But, [How can I resolve common issues when using read replicas in Amazon Aurora?](https://repost.aws/knowledge-center/aurora-mysql-read-replicas)
 * Turn on Audit
 * The total size, memory, cpu, I/O needs. 
 * High Availability needs

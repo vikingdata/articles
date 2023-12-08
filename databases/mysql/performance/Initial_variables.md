@@ -12,9 +12,9 @@ MySQL Initial Vaiables
 _**by Mark Nielsen
 Copyright December 2023**_
 
-1. [Links}(#links)
-2. [Setup)(#setup)
-3. [ariables](#variables)
+1. [Links](#links)
+2. [Setup](#setup)
+3. [Variables](#variables)
     * General
     * AWS Aurora 8.0/8.1
     * AWS RDS MySQL 8.0/8.1
@@ -24,7 +24,7 @@ Copyright December 2023**_
 * * *
 <a name=links></a>Links
 -----
-
+* Links
     * table partitioning
         * [AWS Aurora](https://docs.aws.amazon.com/dms/latest/oracle-to-aurora-mysql-migration-playbook/chap-oracle-aurora-mysql.storage.partition.html)
         * [MySLQL](https://dev.mysql.com/doc/refman/8.0/en/partitioning.html)

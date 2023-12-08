@@ -32,6 +32,22 @@ Copyright December 2023**_
 * TDE - table Encryption on Disk
     * [Enterprise MySQL](https://www.mysql.com/products/enterprise/tde.html)
     * [Percona MySQL](https://www.percona.com/blog/transparent-data-encryption-tde/)
+* Aurora Setup
+    * [Creating an Amazon Aurora DB cluster](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.CreateInstance.html)
+    * [Amazon Aurora MySQL Setup Guide](https://fivetran.com/docs/databases/mysql/aurora-setup-guide)
+* RDS MySQL Setup
+    * [Creating and connecting to a MySQL DB instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
+* Automation
+    * Ansible
+    * Terraform on AWS
+
+* Performance
+    * [MySQL Performance Cheetsheet](https://severalnines.com/blog/mysql-performance-cheat-sheet/)
+    * [Best practices for configuring parameters for Amazon RDS for MySQL, part 1: Parameters related to performance](https://aws.amazon.com/blogs/database/best-practices-for-configuring-parameters-for-amazon-rds-for-mysql-part-1-parameters-related-to-performance/)
+       * [part 2](https://aws.amazon.com/blogs/database/best-practices-for-configuring-parameters-for-amazon-rds-for-mysql-part-2-parameters-related-to-replication/)
+       * [part 3](https://aws.amazon.com/blogs/database/best-practices-for-configuring-parameters-for-amazon-rds-for-mysql-part-3-parameters-related-to-security-operational-manageability-and-connectivity-timeout/)
+* Other
+    * [21 settings for RDS MySQL](https://hackmysql.com/post/21-parameter-group-values-to-change-in-amazon-rds-for-mysql/)
 
 * * *
 <a name=Setup></a>Setup
@@ -75,6 +91,9 @@ Copyright December 2023**_
 * High Availability needs
 * Failover SLA defined and needs. 
 
+* Automation
+     * Ansible
+     * Terraform on AWS
 ## Specific environments
 
 ### MySQL
@@ -101,4 +120,68 @@ Copyright December 2023**_
 * * *
 <a name=variables></a>Variables
 -----
+
+
+## General Variables
+
+### Important Variables
+* innodb_buffer_pool_size
+* innodb_buffer_pool_instances
+* innodb_log_file_size -- redo logs
+    * this changes in 8.0/8.1
+* innodb_file_per_table
+* slow_query_log : turn on
+* lower_case_table_names : turned on
+* GTID replciation turned on (except Aurora)
+   * enforce_gtid_consistency : on
+   * gtid_mode : on
+* performance_schema : Turn on but limited. [Deep dive performance_schema](https://www.percona.com/blog/deep-dive-into-mysqls-performance-schema/)
+
+### Variables to watch
+* table_open_cache -- should equal the number of tables and table partitions you have.
+* max_connections
+* thread_cache_size
+* innodb_log_buffer_size
+* innodb_flush_log_at_trx_commit
+    * changes in 8.0/8.1
+    * Watch if IO is an issue. 
+* innodb_write_io_threads
+* innodb_write_io_threads
+* innodb_purge_threads
+* long_query_time
+    * Recommend 1 sec and rotate logs policy (AWS auromatic otherwise logrotate)
+* innodb_io_capacity - If Innodb_buffer_pool_bytes_dirty stays high.
+* innodb_rollback_on_timeout
+
+### Only if you need to change these
+
+* sort_buffer_size
+* read_buffer_size
+* read_rnd_buffer_size
+* join_buffer_size
+* max_heap_table_size and tmp_table_size
+    * This changes in 8.0/8.1
+* table_open_cache_instances
+* table_definition_cache
+* max_allowed_packet
+* innodb_thread_concurrency
+* innodb_flush_method
+* innodb_stats_on_metadata
+* innodb_io_capacity
+* innodb_adaptive_flushing
+* sync_binlog
+* innodb_change_buffering
+* innodb_io_capacity_max
+* innodb_thread_concurrency
+* slave_parallel_type : If used, slave_preserve_commit_order = 1
+
+## Specific environments
+
+### MySQL
+* slow_log_file
+* general_log
+
+#### Aurora
+* [Aurora parameters](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Reference.ParameterGroups.html)
+* [Best practices for Amazon Aurora MySQL database configuration](https://aws.amazon.com/blogs/database/best-practices-for-amazon-aurora-mysql-database-configuration/)
 

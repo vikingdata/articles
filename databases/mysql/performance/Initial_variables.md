@@ -24,15 +24,14 @@ Copyright December 2023**_
 * * *
 <a name=links></a>Links
 -----
-* Links
-    * table partitioning
-        * [AWS Aurora](https://docs.aws.amazon.com/dms/latest/oracle-to-aurora-mysql-migration-playbook/chap-oracle-aurora-mysql.storage.partition.html)
-        * [MySLQL](https://dev.mysql.com/doc/refman/8.0/en/partitioning.html)
-        * [AWS RDS MySQL] (https://aws.amazon.com/blogs/database/perform-parallel-load-for-partitioned-data-into-amazon-s3-using-aws-dms/)
-        * [Overview and best practices](https://hevodata.com/learn/mysql-partition/)
-    * TDE - table Encryption on Disk
-        * [Enterprise MySQL](https://www.mysql.com/products/enterprise/tde.html)
-	* [Percona MySQL](https://www.percona.com/blog/transparent-data-encryption-tde/)
+* table partitioning
+    * [AWS Aurora](https://docs.aws.amazon.com/dms/latest/oracle-to-aurora-mysql-migration-playbook/chap-oracle-aurora-mysql.storage.partition.html)
+    * [MySLQL](https://dev.mysql.com/doc/refman/8.0/en/partitioning.html)
+    * [AWS RDS MySQL](https://aws.amazon.com/blogs/database/perform-parallel-load-for-partitioned-data-into-amazon-s3-using-aws-dms/)
+    * [Overview and best practices](https://hevodata.com/learn/mysql-partition/)
+* TDE - table Encryption on Disk
+    * [Enterprise MySQL](https://www.mysql.com/products/enterprise/tde.html)
+    * [Percona MySQL](https://www.percona.com/blog/transparent-data-encryption-tde/)
 
 * * *
 <a name=Setup></a>Setup

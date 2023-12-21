@@ -148,7 +148,7 @@ Primary keys depends on the engine.
          * Only one column can have a primacy key constraint
          * Column must not contain NULLS
     * For very large tables TB, data can be optimized with [data clustering](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions)
-
+    * Some [constraints](https://docs.snowflake.com/en/sql-reference/constraints-overview) are NOT enforced.
 
 * * *
 <a name=mongo></a>MongoDB

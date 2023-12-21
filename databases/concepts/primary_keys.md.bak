@@ -32,7 +32,7 @@ Copyright December 2023**_
 * [Postgresql](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-primary-key/)
     * [another link](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-PRIMARY-KEYS)
 * [snowflake](https://docs.snowflake.com/en/sql-reference/constraints-overview)
-    * [Data Clustering](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions)
+    * [Data Clsutering](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions)
 * [MongoDB](https://www.mongodb.com/docs/manual/indexes/)
 
 * * *
@@ -55,7 +55,7 @@ In a relational database, a primary key is a unique identifier for a record in a
 In summary, the primary key is a fundamental concept in relational databases, providing a unique and efficient way to identify and relate records within a table and across tables in a database.
 
 
-Each database has an "engine" or multiple engines that determine the primary keys behaves. 
+Each database has an "engine" or mutltiple engines that determine the primary keys behaves. 
 
 If a database "engine" allows primary key, it is generally just a unique index or key which doesn't allow nulls. 
 
@@ -109,7 +109,7 @@ Primary keys depends on the engine.
     * Changing the auto increment has constraints to it and can be done with Alter Table. Engines will behave slightly different. * InnoDB engine
     * The primary key  is the ONLY [clustered index](https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html)
     in the table. The data is ordered by the Primary Key. Little or no additional diskspace is taken up.
-    * The primary key is a constraint and an index. 
+    * The primary key is a contraint and an index. 
     * If you do not define one, an internal primary key is made. 
     * auto increment 
 * MyISAM or Aria engine
@@ -127,7 +127,7 @@ Primary keys depends on the engine.
 -----
 * PostgreSQL only has one engine.
 * If a primary key is not made, the first unique key without nulls is used, and then an internal one is made.
-* Both a constraint and an index.
+* Both a constaint and an index.
 * Stored as a b-tree index.
 * Auto increment uses [Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html) which [Serials](https://www.postgresql.org/docs/16/datatype-numeric.html#DATATYPE-SERIAL) are equivalent. 
 * The value of the sequence can be changed [through functions](https://www.postgresql.org/docs/current/functions-sequence.html). 
@@ -137,14 +137,14 @@ Primary keys depends on the engine.
 <a name=sf></a>Snowflake
 -----
 
-* We limit these comments to Snowflake as a data warehouse.
+* We limit these coments to Snowflake as a datawarehouse.
     * We are not including [Unistore](https://www.snowflake.com/en/data-cloud/workloads/unistore/), see [pdf](https://www.snowflake.com/wp-content/uploads/2022/11/Unistore-Unites-Transactional-and-Analytical-Data-2.pdf#:~:text=Primary%20keys%20are%20unique%20identifiers,are%20provided%20but%20not%20enforced.&text=The%20constraint%20to%20build%20a,must%20provide%20a%20primary%20key.)
     * Unistore has Primary Keys (which has an index) and other indexes. It behaves more like MySQL or PostgreSQL Primary Keys.
-* Snowflake warehouse
+* Snoflake warehouse
     * Does not have indexes.
     * A primary key is JUST a constraint 
-         * Unique values in column
-         * Only one column can have a primacy key constraint
+         * Unqiue values in column
+         * Only one column can have a primay key constraint
          * Column must not contain NULLS
     * For very large tables TB, data can be optimized with [data clustering](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions)
 
@@ -157,7 +157,7 @@ Primary keys depends on the engine.
     * An "_id"" field is created automatically. By default it is unique.
 * Index takes up additional space.
 * Mongo has 2 engines
-    * WiredTiger
+    * Wirediger
     * memory
 
 

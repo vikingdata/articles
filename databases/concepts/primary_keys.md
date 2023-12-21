@@ -106,12 +106,10 @@ In summary, the role and implementation of primary keys vary based on the databa
 Primary keys depends on the engine.
 * If the engines allows Auto increments
     * [Auto increments](https://dev.mysql.com/doc/refman/8.0/en/example-auto-increment.html)
-    * Changing the auto increment has constraints to it and can be done with Alter Table. Engines will behave slightly different. * InnoDB engine
-    * The primary key  is the ONLY [clustered index](https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html)
-    in the table. The data is ordered by the Primary Key. Little or no additional diskspace is taken up.
+    * Changing the auto increment has constraints to it and can be done with Alter Table. Engines will behave slightly different.* InnoDB engine
+    * The primary key  is the ONLY [clustered index](https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html) in the table. The data is ordered by the Primary Key. Little or no additional diskspace is taken up.
     * The primary key is a constraint and an index. 
     * If you do not define one, an internal primary key is made. 
-    * auto increment 
 * MyISAM or Aria engine
     * The primary index is in its own file and adds diskspace.
     * the primary keys is a constraint and an index. 

@@ -19,6 +19,9 @@ Copyright December 2023**_
 5. [PostgreSQL](#pg)
 6. [snowflake](#sf)
 7. [MongoDB](#mongo)
+8. [SQLlite](#lite)
+9. [Amazon Redshift](#ar)
+10. [Google Bigquery](#bq)
 * * *
 
 <a name=links></a>Links
@@ -34,7 +37,8 @@ Copyright December 2023**_
 * [snowflake](https://docs.snowflake.com/en/sql-reference/constraints-overview)
     * [Data Clustering](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions)
 * [MongoDB](https://www.mongodb.com/docs/manual/indexes/)
-
+* [popular databases](https://db-engines.com/en/ranking)
+* [Google BigQuery](https://cloud.google.com/bigquery/docs/information-schema-table-constraints)
 * * *
 
 <a name=general></a>General : Purpose of Primary Key in a Database
@@ -161,6 +165,36 @@ Primary keys depends on the engine.
 * Mongo has 2 engines
     * WiredTiger
     * memory
+* Indexes are in b-tree format. 
+
+
+
+* * *
+<a name=lite></a>SQLlite
+-----
+* SQLlite Is not networked, or have accounts. It is just a collection of files. 
+* Only one primary key
+* Primary key does not have to exist.
+* Redefining the primary key takes more work compared to Alter Table with MySQL and PostgreSQL
+* It is a constraint and an index.
+* Must be declared NOT NULL column, or it may contain a NULL. 
+
+* * *
+<a name=ar></a>Amazon RedShift
+-----
+* [Primary key is not enforced](https://docs.aws.amazon.com/redshift/latest/dg/t_Defining_constraints.html). It is informational and helps
+the optimizer. 
+
+* * *
+<a name=bq></a>Google Big Query
+-----
+* Primary Ky
+* Only one Primary Key per table.
+* Primary Key must be of a certain table type.
+* PK is an index and constraint.
+* PK may not have nulls.
+* PK cannot have default values.
+* Other restrictions exist.
 
 
 

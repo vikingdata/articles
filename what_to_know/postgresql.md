@@ -4,6 +4,21 @@ title : what to know PostgreSQL 12
 
 Many of these things for postgresql applies to later versions. 
 
+* (general)[#general]
+* (pf)[#pf]
+
+
+* * *
+<a name=other></a>other
+-----
+
+* materialized views
+
+
+* * *
+<a name=general></a>general
+-----
+
 ## Misc
 * ACID : Atomicity, Consistency, Isolation, Durability
 * MVCC  : Multicurreny concurrency control
@@ -91,7 +106,7 @@ Many of these things for postgresql applies to later versions.
         * fast  : kills connection. gracefully shutdown
         * immediate: will need recovery on restart
     * Reload and restart
-        * reload reads configuration without restart
+        * reload reads configuration without restart, only variables that can be reloaded, 
         * restart shutdown, and restart reading new configuration
         * reload linux : system reload postgresql-12
             * pg_ctrl : select pg_reload_conf()
@@ -154,4 +169,104 @@ Many of these things for postgresql applies to later versions.
 
 * restrict access
     * revoke connect on database DB1 from public;
+
+
+* * *
+<a name=pf></a>pf
+-----
+
+* Boolean is NOT: alias for integer, you can use t or f as true or false
+    * https://www.postgresql.org/docs/current/datatype-boolean.html
+* 'PREPARE'/'EXECUTE' iS NOT: can only do select statements.  It is used to opitimize queries.
+    * In command line, you prepare a statement. Then execute the statement with variables.
+    * https://www.postgresql.org/docs/current/sql-prepare.html
+* TO change password, ALTER USER user_name WITH PASSWORD 'new_password';
+
+
+* * *
+<a name=fbd></a>fbd
+
+-----
+
+* for triggers calling  a fucntion with update,
+    * every row that updates calls the function.
+    * Update takes place before calling the function
+    * What the function does does not affect update from being executed.
+* [transaction level](https://www.postgresql.org/docs/current/transaction-iso.html)
+    * read uncommitted, read committed, read repeatable, Serializable
+* False things on indexes:
+    * Always improves queries. No not writes.
+    * Unused index does not affect performance. Can affect select, does affect writes.
+* [Domain](https://www.postgresql.org/docs/current/sql-createdomain.html) creates a datatype based on an exisitng type with constraints. Database specific.
+    * Does not define a nampspace, and functions in and out are not needed,
+    * create domain, can define default and constraints, defined column type.  
+* [data types](https://www.postgresql.org/docs/current/datatype.html)
+    * 'n' represents length somtimes, other times fixed with padding
+    * anything can be in an array,
+    * fields are 1GB size limit [limitations](https://www.postgresql.org/docs/current/limits.html)
+    * geomtric is non stnadard????
+    * There is not unlimited field type
+* [SAVEPOINTS](https://www.postgresql.org/docs/current/sql-savepoint.html) in a transaction, you can rollback and delete everything after a savepoint.
+
+* [Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html)
+    * Create sequnce and drop sequence
+    * nextval is never rolled back
+    * bigint size, not int
+    * setval doesn't set the value, it sets the current value, but the next value will be used in the sequence the nest time its used
+    * sequences can be negative, not just 0 or positive
+
+* [Listen](https://www.postgresql.org/docs/9.1/sql-listen.html) and (notify)[https://www.postgresql.org/docs/current/sql-notify.html]  10
+    * Is inside transction, notify happens at commit.
+* [concat strings](https://www.postgresql.org/docs/9.1/functions-string.html) uses 'x' || 'y'
+* [views](https://www.postgresql.org/docs/current/tutorial-views.html)
+   * The are virtual tables and created mostly to simplify queries.
+   * Create View not declare view, cannot be named the same as a table, view are permanent till dropped.
+* NULL
+   * IS returns t or f
+   * quoting null makes a string
+* EXTRA :: is for (type casting)[https://www.postgresql.org/docs/current/sql-expressions.html]
+* Deletes happen after query is finished if there are conditions. Rows still exist in the query until every row has been examined.
+* select with ~ is equivalent to (contains](https://www.postgresql.org/docs/current/functions-matching.html)
+* (Rules)[https://www.postgresql.org/docs/current/rules.html]
+    * (DO INSTEAD NOTHING)[https://www.postgresql.org/docs/current/sql-createrule.html] means nothing happens. It will never error out.
+    * with DO INSTEAD NOTHING, under a few the original is not updated.
+* [\copy](https://www.postgresql.org/docs/current/app-psql.html) is generally of the format "\copy TABLE FROM FILE WITH DELIMITER ","; 32
+* createlang is for adding a procedurla language
+* ["The information schema consists of a set of views that contain information about the objects defined in the current database"])(https://free-braindumps.com/postgresql/free-pgces-02-braindumps.html?p=10)
+*  SELECT * FROM information_schema.tables;
+    * list tables in defined database
+    * list tables in information_schema schema
+* EXTRA: [diff between database and schema](https://www.educba.com/postgresql-database-vs-schema/)
+* [pg_ctl -m smart stop](https://www.postgresql.org/docs/current/server-shutdown.html)
+    * SIGTERM : stops new connections, allows new connections to fnish
+    * -m fast : SIGINT : stops new connections, aborts current connection
+    * -m immediate : SIGQUIT : Will kill postgresql, bad shutdown, results in recovery of WAL
+* [pg_ctl reload](https://www.postgresql.org/docs/current/app-pg-ctl.html)
+    * sends a SIGHUP to reload config files
+    * Not all variables can be reloaded, things that changes what ip addresses, ports, SSL won't be reloaded, 
+* Character set enconding can be set by client_encoding in [postgresql.conf](https://www.postgresql.org/docs/current/config-setting.html)
+* Databasae cluster are just tables ordered by indexes.
+    * You can copy directory on disk if postregsql is stopped.
+    * Upon restore, must be the same version of postgresql.
+    * If you use tabelspace function, those files need to copied as well.
+* Analyze will collect and save statistical information of a table.
+* Users created to have permission to create other suers will become superusers and is not subject to acccesss restrictions.
+* to grant select on a table to everyone: grant select on TABLE to public
+* For permissions to log in
+    * local refers to the socket file
+    * /24 is 255.255.255.0
+    * /16 is 255.255.0.0
+* pg_ctrl will wait for disconnects with -m smart. ?????
+* [To send logs to syslog](https://www.postgresql.org/docs/current/runtime-config-logging.html), in postgresql.conf: log_destination = syslog 45
+    * other location: stderr, csvlog, jsonlog, and syslog
+* The [locale](https://www.postgresql.org/docs/current/locale.html) is defined at initdb time. It cant be altered with create database.
+* [listen_addresses](https://www.postgresql.org/docs/current/runtime-config-connection.html) will be reloaded when postgresql is restarted, not reloaded, 
+* pg_dump is a command utility. postgresql must be running, can dump all or some of database. 
+* To set encoding, [pg_ctrl init --encoding=VALUE](https://www.postgresql.org/docs/current/app-pg-ctl.html) or [initdb --encoding=VALUE](https://www.postgresql.org/docs/current/app-initdb.html)
+* [vacuum analyze](https://www.postgresql.org/docs/current/sql-vacuum.html) will recover deleted space and reanalyze tables. 
+* [CREATE SEQUENCE](https://www.postgresql.org/docs/current/sql-createsequence.html) s CACHE 20 CYCLE;
+    * cycle just says how many numbers need to precached.
+    * cycle means cycle from beginning when maxvalue is reached
+    * next sequence number is 1
+* [Views](https://www.postgresql.org/docs/current/sql-createview.html) are by default non writable. Insert, update, or delete.
 

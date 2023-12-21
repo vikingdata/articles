@@ -57,3 +57,21 @@ ansible
   mysql with backups, monitoring
   pythn modules
   modult utils, library, filter_plugins
+
+
+postgresql - diff between database and schema
+   rules
+   savepoints in transactions -- does mysql have it?
+
+database festures (mysql, postgresql, snowflake)
+	 primary keys
+	 materialized views
+	 views
+	 window functions --- mysql, postgresql, snowflake
+	 roles -- mysql and posgresql
+	 languages -- mysql and postgresql
+	 sequences -- mysql and postgresql
+	 information_schema - mysql, postrgresql, snowflake
+	 engines -- mysql and postgresql
+	     rules can simulate engines in postgresql
+	     

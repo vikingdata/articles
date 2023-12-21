@@ -58,7 +58,7 @@ https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1
 * Multi source replication use relay_log_recovery to resolve crashes, does not resolve conflicts between 2 replication
 streams.
 
-[[O* to install audit, mysql < audit_log_filter_linux_install.sql
+* to install audit, mysql < audit_log_filter_linux_install.sql
 
 * ADMIN OPTION with role just grants the ability to give and revoke role to other users. 20
 
@@ -81,7 +81,8 @@ streams.
 
 * mysql_config_editor can be used to store credentials, but it is not foolproof. 
 
-* Backup backups up ibd and CSV files. MyISAM, other tables by other engines. FILES: frm, csv, ibd 
+* mysqlbackup only innodb files with backup id and  ib_logfile files.  ib_logfile which contains data if things changes during backup.
+https://dev.mysql.com/doc/mysql-enterprise-backup/4.1/en/meb-files-backed-up-innodb.html  
 
 * For DDL changes. a serialized copy is kept in SDI in json format, a copy is stored in tablespace for innodb tables
 
@@ -104,6 +105,7 @@ truly down and have not gotten data relative to the 2 nodes.
 * To convert from normal replication to GTID
     * Restart MySQL (master and slave) with these options enabled:--gtid_mode=ON –log-bin –log-slave-updates –enforce-gtid-consistency
     * On the slave, alter the MySQL master connection setting with: CHANGE MASTER TO MASTER_AUTO_POSITION = 1;
+    * MAYBE : RESET SLAVE; START SLAVE GTID_NEXT=AUTOMATIC;
 
 * MySQL with -- protocol can have the options 36
    * TCP, socket
@@ -138,9 +140,13 @@ truly down and have not gotten data relative to the 2 nodes.
     * .mylogin.cnf use by mysql_config_editor
     * $HOME/.my.cnf -- clear teat values
     * $HOME/.mysqlrc -- maybe-- its not officially documented
-    * NOT /etc/my.cnf or $MYSQL_HOME/my.cnf
+    * Maybe /etc/my.cnf but not $MYSQL_HOME/my.cnf
 
 * by default roles and internal accounts are locked 49
+
+* binlogs are pulled from master, and just record changes are master.
+
+* mysqlpump --exclude-databases=% --users backups user accounts
 
 * locks
     * shared S -- allows reading of rows
@@ -150,6 +156,8 @@ truly down and have not gotten data relative to the 2 nodes.
 	 * HARED, SHARED_HIGH_PRIO, SHARED_READ, SHARED_WRITE, SHARED_UPGRADABLE, SHARED_NO_WRITE, SHARED_NO_READ_WRITE, or EXCLUSIVE.
     * https://dev.mysql.com/blog-archive/innodb-data-locking-part-1-introduction/
     * https://dev.mysql.com/blog-archive/innodb-data-locking-part-2-locks/
+
+* ibdata1 has table data and primary indexes (primary index is how data is written)
 
 56 -- skip
 
@@ -165,8 +173,13 @@ truly down and have not gotten data relative to the 2 nodes.
       * ''@'' is proxy is used, otherwise NULL 
 
 * TDE keeps the data encrypted in memory until it is needed.
+  Blob type can be encrypted.
+  Does not interfere with transportable tablespaces.
+  data is not decryopted in memory, except temporarily when processed.
+  Data is encrypted on disk, memory, and over network. 
 
-* AFTER RPM installation, you need to initialize data directory, and password can be found in log file. 
+* AFTER RPM installation, you need to initialize data directory, and password can be found in log file.
+  rpm is split many rpms, password might not be in log file. 
 
 * for mysqlpump, ro backup databases that it doesn't normally backup
    * mysqlpump --include-databases=% > full-backup-$(date +%Y%m$d).sql
@@ -199,6 +212,8 @@ skip 65
         * use DB; ALTER TABLE TABLE1 IMPORT TABLESPACE;
 
 * Global variables : key_buffer_size, table_open_cache,  innodb_buffer_pool_size 77
+
+* Memory, MyISAM, and archive don't rollback. 
 
 * MySQLcheck will do a read lock for check, write lock for others, and renaming the binary will do repair. 
 
@@ -237,8 +252,8 @@ skip 65
 * mysqlbackup with only-known-file-types backups up mysql files and known storage engines
 
 * mysqlbackup with optimistic-busy-tables does not backup redo, ungo log or system tablespaces. Does not tables.
-   * no nonactive tables does not backup redo, ungo log or system tablespaces. Does not lock tables.
-   * busy table are then normally backedup.
+   * no nonactive tables, does not backup redo, ungo log or system tablespaces. Does not lock tables.
+   * busy table are then normally backedup, with redo and others,. 
 
 * seconds behind - "dNot A, not the last transaction of the master. It deals with the current sql being applied. 
 "difference between the current timestamp on the replica and the original timestamp logged on the source for the event currently being processed on the replica."
@@ -251,9 +266,11 @@ skip 65
 
 * mysqld-auto.cnf is in jsonb format and read at the end of files, and represents persistent variables
 
-* I you have enough memory, below max connections, and trx is 2, two variables to speed up sync_binlog=0 and innodb_doublewrite=0
+* I you have enough memory, below max connections, and trx is 2, two variables to speed up innodb_log_file_size=1G and innodb_doublewrite=0.
+    * innodb_log_file_size=1G because default is 50 megs 
 
-* for has joins, The smallest of the tables in the join must fit in memory as set by join_buffer_size.
+
+* for hash joins, The smallest of the tables in the join must fit in memory as set by join_buffer_size.
 
 * data dictionary holds information schema : LRU buffer cache, views, stored procedures. No to performance, access lists, or configuration 128
 

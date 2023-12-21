@@ -64,7 +64,7 @@ postgresql - diff between database and schema
    savepoints in transactions -- does mysql have it?
 
 database festures (mysql, postgresql, snowflake)
-	 primary keys
+	 DONE xprimary keys
 	 materialized views
 	   sf has materialze views with dynamic tables
 	 views

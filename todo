@@ -66,6 +66,7 @@ postgresql - diff between database and schema
 database festures (mysql, postgresql, snowflake)
 	 primary keys
 	 materialized views
+	   sf has materialze views with dynamic tables
 	 views
 	 window functions --- mysql, postgresql, snowflake
 	 roles -- mysql and posgresql

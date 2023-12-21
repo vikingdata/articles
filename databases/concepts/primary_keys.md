@@ -116,7 +116,7 @@ Primary keys depends on the engine.
     * If you do not define one, an internal primary key is made. 
 * MyISAM or Aria engine
     * The primary index is in its own file and adds diskspace.
-    * The primary key is a constraint and an index. 
+    * The primary key is a constraint and is an  index. 
 * Archive, blackhole, CSV engines 
     * These engines do not have primary keys.
 
@@ -131,7 +131,7 @@ Primary keys depends on the engine.
 * If a primary key is not made, the first unique key without nulls is used, and then an internal one is made.
 * Both a constraint and an index.
 * Stored as a b-tree index.
-* Auto increment uses [Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html) which [Serials](https://www.postgresql.org/docs/16/datatype-numeric.html#DATATYPE-SERIAL) are equivalent. 
+* Auto increment uses [Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html) where [Serials](https://www.postgresql.org/docs/16/datatype-numeric.html#DATATYPE-SERIAL) can be are equivalent. 
 * The value of the sequence can be changed [through functions](https://www.postgresql.org/docs/current/functions-sequence.html). 
 
 * * *

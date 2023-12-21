@@ -108,6 +108,7 @@ Primary keys depends on the engine.
     * [Auto increments](https://dev.mysql.com/doc/refman/8.0/en/example-auto-increment.html)
     * Changing the auto increment has constraints to it and can be done with Alter Table. Engines will behave slightly different.
     * Only one primary key is allowed. 
+    * Stored as a b-tree index. 
 * InnoDB engine
     * The primary key  is the ONLY [clustered index](https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html) in the table. The data is ordered by the Primary Key.
     * Little or no additional diskspace is taken up.

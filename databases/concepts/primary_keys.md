@@ -14,10 +14,11 @@ Copyright December 2023**_
 
 1. [Links](#links)
 2. [General](#general)
-3. [MySQL](#mysql)
-4. [PostgreSQL](#pg)
-5. [snowflake](#sf)
-6. [Snowflake example](#sf)
+3. [LAP, OLTP, and document based](#o)
+4. [MySQL](#mysql)
+5. [PostgreSQL](#pg)
+6. [snowflake](#sf)
+7. [MongoDB](#mongo)
 * * *
 
 <a name=links></a>Links
@@ -40,7 +41,7 @@ Copyright December 2023**_
 -----
 
 
-## Purpose of Primary Key in a Database
+# Purpose of Primary Key in a Database
 
 In a relational database, a primary key is a unique identifier for a record in a table. Its main purposes are:
 
@@ -70,7 +71,7 @@ If a database "engine" allows primary key, it is generally just a unique index o
 
 
 
-## Primary Key in Different Database Types
+# Primary Key in Different Database Types
 
 ### 1. OLTP (Online Transaction Processing):
 

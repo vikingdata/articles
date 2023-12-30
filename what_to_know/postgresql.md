@@ -4,8 +4,10 @@ title : what to know PostgreSQL 12
 
 Many of these things for postgresql applies to later versions. 
 
-* (general)[#general]
-* (pf)[#pf]
+
+* [other](#other)
+* [general](#general)
+* [pf](#pf)
 
 
 * * *
@@ -255,7 +257,7 @@ Many of these things for postgresql applies to later versions.
 * For permissions to log in
     * local refers to the socket file
     * /24 is 255.255.255.0
-    * /16 is 255.255.0.0
+OA    * /16 is 255.255.0.0
 * pg_ctrl will wait for disconnects with -m smart. ?????
 * [To send logs to syslog](https://www.postgresql.org/docs/current/runtime-config-logging.html), in postgresql.conf: log_destination = syslog 45
     * other location: stderr, csvlog, jsonlog, and syslog

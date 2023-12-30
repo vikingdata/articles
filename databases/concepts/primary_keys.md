@@ -195,7 +195,7 @@ the optimizer.
 * PK may not have nulls.
 * PK cannot have default values.
 * Other restrictions exist.
-
+* Index is in lexicographical order by rowKey
 
 
 * * *

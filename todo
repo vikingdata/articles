@@ -60,8 +60,10 @@ ansible
 
 
 postgresql - diff between database and schema
-   rules
+   rules -- rules for data into tables or views. 
    savepoints in transactions -- does mysql have it?
+   prepare/execute not is stord proecdures, saving variables, sql inbetween.
+   domains -- creates new data types
 
 database festures (mysql, postgresql, snowflake)
 	 DONE xprimary keys

@@ -14,6 +14,7 @@ Many of these things for postgresql applies to later versions.
 <a name=other></a>other
 -----
 
+* [Cheatsheet](https://www.postgresonline.com/special_feature.php?sf_name=postgresql83_psql_cheatsheet&outputformat=html)
 * materialized views
 
 
@@ -266,9 +267,16 @@ OA    * /16 is 255.255.0.0
 * pg_dump is a command utility. postgresql must be running, can dump all or some of database. 
 * To set encoding, [pg_ctrl init --encoding=VALUE](https://www.postgresql.org/docs/current/app-pg-ctl.html) or [initdb --encoding=VALUE](https://www.postgresql.org/docs/current/app-initdb.html)
 * [vacuum analyze](https://www.postgresql.org/docs/current/sql-vacuum.html) will recover deleted space and reanalyze tables. 
-* [CREATE SEQUENCE](https://www.postgresql.org/docs/current/sql-createsequence.html) s CACHE 20 CYCLE;
+* [CREATE SEQUENCE](https://www.postgresql.org/docs/current/sql-createsequence.html) seq_sample CACHE 20 CYCLE;
     * cycle just says how many numbers need to precached.
     * cycle means cycle from beginning when maxvalue is reached
     * next sequence number is 1
 * [Views](https://www.postgresql.org/docs/current/sql-createview.html) are by default non writable. Insert, update, or delete.
+* To add a a week to todays date: "SELECT CURRENT_TIMESTAMP::timestamp + '7 day'::interval;"
+* prepare/execute to execute statements outside a stored procedure.
+* For transction occurs, and error results in all SQL not working until you end the trasnaction
+* Domains, like "create domain", creates new data types which can go into tabels. 62
+* When a function is created, its executes as the person who made it.
+* When inserting into views, create a rule with "do instead" and insert into aa table.
+
 

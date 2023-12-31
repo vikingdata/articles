@@ -7,18 +7,16 @@ List of postgresql sql commads
 
 
 * * *
-<a name=rule></a>[Rule](https://www.postgresql.org/docs/current/sql-createrule.html)
+<a name=rule></a>[Rule](https://www.postgresql.org/docs/current/sql-createrule.html) or [this link](https://dzone.com/articles/postgresql-rewrite-rules)
 -----
 
 In PostgreSQL, a "rule" refers to a database object that defines an action to be taken when a specified event occurs. Rules are used for implementing specific actions or behaviors in response to certain conditions.
 
-
+* Public rules
 ``` sql
-
--- NOTE: ev_action and ev_qual are in node format, which is not nice. 
-
 select n.nspname as rule_schema,
        c.relname as rule_table,
+       r.oid as role_oid,
        case r.ev_type
          when '1' then 'SELECT'
          when '2' then 'UPDATE'
@@ -26,8 +24,7 @@ select n.nspname as rule_schema,
          when '4' then 'DELETE'
          else 'UNKNOWN'
        end as rule_event,
-       r.ev_qual,
-       r.ev_action
+       pg_get_ruledef(r.oid)
 from pg_rewrite r
   join pg_class c on r.ev_class = c.oid
   left join pg_namespace n on n.oid = c.relnamespace
@@ -35,6 +32,26 @@ from pg_rewrite r
 where
   n.nspname = 'public';
 ```
+* All Rules
+```sql
+select n.nspname as rule_schema,
+       c.relname as rule_table,
+       r.oid as role_oid,
+       case r.ev_type
+         when '1' then 'SELECT'
+         when '2' then 'UPDATE'
+         when '3' then 'INSERT'
+         when '4' then 'DELETE'
+         else 'UNKNOWN'
+       end as rule_event,
+       pg_get_ruledef(r.oid)
+from pg_rewrite r
+  join pg_class c on r.ev_class = c.oid
+  left join pg_namespace n on n.oid = c.relnamespace
+  left join pg_description d on r.oid = d.objoid
+```
+
+
 * Example of listing one rule
 ```
 drop view if exists tbl2;
@@ -56,13 +73,15 @@ select * from tbl2;
 
 select n.nspname as rule_schema,
        c.relname as rule_table,
+       r.oid as rule_oid,
        case r.ev_type
          when '1' then 'SELECT'
          when '2' then 'UPDATE'
          when '3' then 'INSERT'
          when '4' then 'DELETE'
          else 'UNKNOWN'
-       end as rule_event
+       end as rule_event,
+       pg_get_ruledef(r.oid)
 from pg_rewrite r
   join pg_class c on r.ev_class = c.oid
   left join pg_namespace n on n.oid = c.relnamespace
@@ -71,7 +90,9 @@ where
   n.nspname = 'public'
   and c.relname = 'tbl2';
 
--- now print out the ugly stuff.
+
+
+-- now print out the ugly stuff if you want to know.
 select n.nspname as rule_schema,
        c.relname as rule_table,
        case r.ev_type

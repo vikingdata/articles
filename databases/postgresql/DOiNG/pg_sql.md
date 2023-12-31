@@ -7,6 +7,15 @@ List of postgresql sql commads
 
 
 * * *
+Links
+-----
+
+* (https://www.postgresql.org/docs/9.1/functions-info.html](https://www.postgresql.org/docs/9.1/functions-info.html)
+* [information_schema](https://www.postgresql.org/docs/current/information-schema.html)
+* [system catalogs](https://www.postgresql.org/docs/current/catalogs.html) which information_schema is a view of. 
+
+
+* * *
 <a name=rule></a>[Rule](https://www.postgresql.org/docs/current/sql-createrule.html) or [this link](https://dzone.com/articles/postgresql-rewrite-rules)
 -----
 
@@ -120,8 +129,18 @@ where
 
 In PostgreSQL, a "domain" refers to a user-defined data type with optional constraints. It allows you to define a set of values that a column can contain and apply constraints to restrict the valid values. Essentially, a domain acts as a wrapper around an existing data type, adding an extra layer of constraints or rules to the values that can be stored in a column.
 * List out domains
-    * \dD is the psql version
-    *
+    * \dD is the psql version -- This displays the constraints.
+    * Equivalent in SQL
+```sql
+select  tt.typname, pg_get_constraintdef(tc.oid) as constraint
+    from    pg_namespace tn
+    join    pg_constraint tc on tn.oid = tc.connamespace
+    join    pg_type tt on tt.oid = tc.contypid
+    where   tn.nspname = 'public'
+    and     tt.typname = 'g50'
+    ;
+```
+    * List out only the ones in "public"
 >     SELECT typname FROM pg_catalog.pg_type
 >      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
 >      WHERE typtype = 'd' AND nspname = 'public'
@@ -135,12 +154,9 @@ create table table2 (i int);
 CREATE DOMAIN g50 AS int
 CHECK(   VALUE > 50 );
 
+\dD
+
 -- This will look ugly.
 select * from pg_type where typname='g50';
-
-
-
-
-
 
 ```

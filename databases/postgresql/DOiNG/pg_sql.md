@@ -1,9 +1,18 @@
 ---
-test
+List of postgresql sql commads
 ---
 
+* [Rule](#rule)
+* [Domain](#domain)
 
-* [List of rules](https://www.postgresql.org/docs/current/sql-createrule.html)
+
+* * *
+<a name=rule></a>[Rule](https://www.postgresql.org/docs/current/sql-createrule.html)
+-----
+
+In PostgreSQL, a "rule" refers to a database object that defines an action to be taken when a specified event occurs. Rules are used for implementing specific actions or behaviors in response to certain conditions.
+
+
 ``` sql
 
 -- NOTE: ev_action and ev_qual are in node format, which is not nice. 
@@ -84,11 +93,14 @@ where
 
 ```
 
+* * *
+<a name=domain></a>[Domain](https://www.postgresql.org/docs/current/sql-createdomain.html)
+-----
 
+In PostgreSQL, a "domain" refers to a user-defined data type with optional constraints. It allows you to define a set of values that a column can contain and apply constraints to restrict the valid values. Essentially, a domain acts as a wrapper around an existing data type, adding an extra layer of constraints or rules to the values that can be stored in a column.
 
-* [List domains](https://www.postgresql.org/docs/current/sql-createdomain.html)
-    * \dD is the psql version
-    *
+* \dD is the psql version
+*
 >     SELECT typname FROM pg_catalog.pg_type
 >      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
 >      WHERE typtype = 'd' AND nspname = 'public'

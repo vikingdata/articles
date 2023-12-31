@@ -98,9 +98,9 @@ where
 -----
 
 In PostgreSQL, a "domain" refers to a user-defined data type with optional constraints. It allows you to define a set of values that a column can contain and apply constraints to restrict the valid values. Essentially, a domain acts as a wrapper around an existing data type, adding an extra layer of constraints or rules to the values that can be stored in a column.
-
-* \dD is the psql version
-*
+* List out domains
+    * \dD is the psql version
+    *
 >     SELECT typname FROM pg_catalog.pg_type
 >      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
 >      WHERE typtype = 'd' AND nspname = 'public'
@@ -117,9 +117,7 @@ CHECK(   VALUE > 50 );
 -- This will look ugly.
 select * from pg_type where typname='g50';
 
-     SELECT typname FROM pg_catalog.pg_type
-      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
-      WHERE typtype = 'd' AND nspname = 'public'
+
 
 
 

@@ -130,14 +130,16 @@ where
 In PostgreSQL, a "domain" refers to a user-defined data type with optional constraints. It allows you to define a set of values that a column can contain and apply constraints to restrict the valid values. Essentially, a domain acts as a wrapper around an existing data type, adding an extra layer of constraints or rules to the values that can be stored in a column.
 * List out domains
     * \dD is the psql version -- This displays the constraints.
-    * Equivalent in SQL
+    * Equivalent in SQL but for all domains
 ```sql
+
+-- to make it just publid add
+-- where   tn.nspname = 'public'
+
 select  tt.typname, pg_get_constraintdef(tc.oid) as constraint
     from    pg_namespace tn
     join    pg_constraint tc on tn.oid = tc.connamespace
     join    pg_type tt on tt.oid = tc.contypid
-    where   tn.nspname = 'public'
-    and     tt.typname = 'g50'
     ;
 ```
     * List out only the ones in "public"
@@ -155,6 +157,15 @@ CREATE DOMAIN g50 AS int
 CHECK(   VALUE > 50 );
 
 \dD
+
+-- Now do the equiv of \dD in sql
+select  tt.typname, pg_get_constraintdef(tc.oid) as constraint
+    from    pg_namespace tn
+    join    pg_constraint tc on tn.oid = tc.connamespace
+    join    pg_type tt on tt.oid = tc.contypid
+    where   tn.nspname = 'public'
+    and     tt.typname = 'g50'
+
 
 -- This will look ugly.
 select * from pg_type where typname='g50';

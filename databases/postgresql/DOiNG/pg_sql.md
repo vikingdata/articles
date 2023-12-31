@@ -33,5 +33,5 @@ select * from information_schema.table_constraints where constraint_schema='publ
 * List domains
     * \dD is the psql version
     * >     SELECT typname FROM pg_catalog.pg_type
-      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
-      WHERE typtype = 'd' AND nspname = 'public'  
+>      JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_type.typnamespace
+>      WHERE typtype = 'd' AND nspname = 'public'  

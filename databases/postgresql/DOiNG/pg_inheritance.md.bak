@@ -33,7 +33,7 @@ Schema Inheritance is pretty simple. When you create a new table called "Table 2
 * Same named fields in the create statements will be "merged". 
 * Indexes and other constraints one Table 1 do not apply to Table 2
 
-Here is an example. Start psql client. I assume PostgreSQL is already installed. 
+Here is an example. Start pgsql client. I assume PostgreSQL is already installed. 
 
 If you already created the tables, drop them. 
 
@@ -241,7 +241,7 @@ Output
 ```
 
 We see table1 has two identical rows in field1 named "2-1". This is not suppose to happen. Let's test primary key
-without inheritance.
+without ingeritance.
 
 ```sql
 drop table if exists table3;
@@ -335,7 +335,7 @@ mark=> select * from table2; select * from table1;
 <a name=d></a> Deletes
 -----
 
-Now let's delete data from the existing tables.
+Now let's delete data from tbe existing tables.
 
 ```sql
 

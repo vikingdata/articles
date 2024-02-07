@@ -7,8 +7,8 @@ PostgreSQL : Schema Inheritance
 * [Schema Change](#sh)
 * [Primary Key](#pk)
 * [Primary Key 2](#pk2)
-* [Updates](#pk)
-* [Deletes](#pk)
+* [Updates](#u)
+* [Deletes](#d)
 
 
 Schema Inheritance may not work the way you think it works. Let's test it out. 
@@ -298,7 +298,13 @@ create table if not exists table2 (field2 text, t2_1 text) inherits (table1);
 
 insert into table2 (field1,field2) values ('test1','test1');
 insert into table2 (field1,field2) values ('test2','test2');
+
 ```
+
+* * *
+<a name=u></a> Updates
+-----
+
 
 Let's do an update on table2 and table1
 

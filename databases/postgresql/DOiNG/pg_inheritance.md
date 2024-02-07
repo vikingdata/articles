@@ -4,7 +4,7 @@ PostgreSQL : Schema Inheritance
 
 * [Links](#links)
 * [Inheritance](#i)
-* [Schema Change](#sh)
+* [Schema Change](#sc)
 * [Primary Key](#pk)
 * [Primary Key 2](#pk2)
 * [Updates](#u)

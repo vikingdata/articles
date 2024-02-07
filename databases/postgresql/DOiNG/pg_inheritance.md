@@ -29,7 +29,7 @@ Schema Inheritance is pretty simple. When you create a new table called "Table 2
 * Table2 will get all the rows (without data) of Table1 and any additional rows you define.
 * Any rows inserted into Table 2 will also end up in Table 1.
 * You cannot drop table1 before dropping table2
-* Changing a field name, changes the name is child tables. 
+* Changing a field name, changes the name in child tables. 
 * Same named fields in the create statements will be "merged". 
 * Indexes and other constraints one Table 1 do not apply to Table 2
 
@@ -87,7 +87,7 @@ Output
 Some things to note:
 * Inserting into table3 ONLY inserted data into table2.
 * Inserting into table2 ONLY inserted data into table1.
-* Field t2_1 is ONLY table2.
+* Field t2_1 is ONLY in table2.
 
 * * *
 <a name=sc></a> Schema Change
@@ -189,7 +189,7 @@ Output
 -----
 
 Let's reset the tables and add a primary key on table1 and then insert the same row into table2 twice.
-The Primary Key doesn't appear to work when Inheritance is used, but does not when not. 
+The Primary Key doesn't appear to work when Inheritance is used, but does when is it not used. 
 
 
 ```sql
@@ -300,11 +300,6 @@ insert into table2 (field1,field2) values ('test1','test1');
 insert into table2 (field1,field2) values ('test2','test2');
 
 ```
-
-* * *
-<a name=u></a> Updates
------
-
 
 Let's do an update on table2 and table1
 

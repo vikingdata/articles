@@ -1,4 +1,18 @@
 ---
+title : PostgreSQL Schema Inheritance
+author : Mark Nielsen
+copyright : Feb 2024
+---
+
+
+PostgreSQL Schema Inheritance
+==============================
+
+_**by Mark Nielsen
+Original Copyright Feb 2024**_
+
+
+---
 PostgreSQL : Schema Inheritance
 ---
 

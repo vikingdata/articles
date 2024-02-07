@@ -6,6 +6,10 @@ PostgreSQL : Schema Inheritance
 * [Inheritance](#i)
 * [Schema Change](#sh)
 * [Primary Key](#pk)
+* [Primary Key 2](#pk2)
+* [Updates](#pk)
+* [Deletes](#pk)
+
 * [Errors](e)
 
 * * *
@@ -139,7 +143,7 @@ Number of child tables: 1 (Use \d+ to list them.)
 We can see "field1" got changed in the child tables.
 
 * * *
-<a name=pc></a> Primary Key
+<a name=pk></a> Primary Key
 -----
 
 
@@ -180,10 +184,11 @@ Output
 ```
 
 * * *
-<a name=pc></a> Primary Key Part 2
+<a name=pk2></a> Primary Key Part 2
 -----
 
-Let's reset the tables and add a primary key on table1 and then insert the same row into table2 twice. The Primary Key doesn't appear to work when Inheritance is used, but does not when not. 
+Let's reset the tables and add a primary key on table1 and then insert the same row into table2 twice.
+The Primary Key doesn't appear to work when Inheritance is used, but does not when not. 
 
 
 ```sql
@@ -269,9 +274,93 @@ mark=> select * from table1;
 
 ```
 
-Now we see the primary key works to prevent duplicates.
+Now we see the primary key works to prevent duplicates when you do NOT use inheritance.
 My version of PostgreSQL is
 
 ```text
 PostgreSQL 15.4 (Ubuntu 15.4-1.pgdg22.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, 64-bit
 ```
+
+* * *
+<a name=u></a> Updates
+-----
+
+Let's reset the tables
+
+```sql
+drop table if exists table3;
+drop table if exists table2;
+drop table if exists table1;
+
+create table if not exists table1 (field1 text, t1_1 text, t1_2 text);
+create table if not exists table2 (field2 text, t2_1 text) inherits (table1);
+
+insert into table2 (field1,field2) values ('test1','test1');
+insert into table2 (field1,field2) values ('test2','test2');
+```
+
+Let's do an update on table2 and table1
+
+```sql
+update table2 set field2 = 'test2_2', field1 = 'test2_1' where field2 = 'test2';
+update table1 set field1 = 'test1_1', field1 = 'test1';
+
+select * from table2;
+select * from table1;
+```
+
+Output
+``` text
+mark=> select * from table2; select * from table1;
+ field1  | t1_1 | t1_2 | field2  | t2_1
+---------+------+------+---------+------
+ test2_1 |      |      | test2_2 |
+ test1_1 |      |      | test1   |
+(2 rows)
+
+ field1  | t1_1 | t1_2
+---------+------+------
+ test2_1 |      |
+ test1_1 |      |
+
+
+```
+
+
+* The data changed in table1 appeared in table2;
+* The data changed in table2 appeared in table1;
+
+* * *
+<a name=d></a> Deletes
+-----
+
+Now let's delete data from tbe existing tables.
+
+```sql
+
+delete from table2 where field2 = 'test2_2';
+delete from table1 where field1 = 'test1_1';
+
+select * from table2;
+select * from table1;
+
+```
+
+Output
+
+```text
+
+DELETE 1
+DELETE 1
+ field1 | t1_1 | t1_2 | field2 | t2_1
+--------+------+------+--------+------
+(0 rows)
+
+ field1 | t1_1 | t1_2
+--------+------+------
+(0 rows)
+
+```
+
+* The data deleted in table1 was deleted in table2;
+* The data deleted in table2 was deleted in table1;

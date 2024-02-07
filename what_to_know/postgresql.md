@@ -276,7 +276,21 @@ OA    * /16 is 255.255.0.0
 * prepare/execute to execute statements outside a stored procedure.
 * For transction occurs, and error results in all SQL not working until you end the trasnaction
 * Domains, like "create domain", creates new data types which can go into tabels. 62
-* When a function is created, its executes as the person who made it.
-* When inserting into views, create a rule with "do instead" and insert into aa table.
-
-
+* When a function is created, its executes as the person who made it not by the person who
+creates it if there is a security definer. .
+* When inserting into views, create a rule with "do instead" and insert into a table.
+* With foriegn keys, if the referencing table contains a value , that value cannot be deleted
+  from referenced table.
+* TODO: investigate "cursor with hold", insenitive cursor, no scroll with cursor hold, cursor without hold
+* inherits :
+  create table if not exists table1 (i int, name text, a text);
+  create table if not exists table2 (phone text, b text) inherits (table1);
+  create table if not exists table3 (state text, c text) inherits (table2);
+  insert into table3 (i,phone,state) values (1,2,3);
+  select * from table3;
+  select * from table2;
+  select * from table1;
+* "create type" creates a new type. Difference between create domain nd create type. Create domain returns one field with constraints. Create type can return mutiple fields in fuctions. 71
+* To crate a new index, add create index. No alter table to add index.
+* EXCEPT is used to select all items in table1 that are not in table2.
+* TODO: explain normal forms

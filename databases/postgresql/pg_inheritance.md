@@ -310,7 +310,7 @@ drop table if exists table1;
 create table if not exists table1 (field1 text, t1_1 text, t1_2 text);
 create table if not exists table2 (field2 text, t2_1 text) inherits (table1);
 
-insert into table2 (field1,field2) values ('test1','test1');
+insert into table1 (field1) values ('test1');
 insert into table2 (field1,field2) values ('test2','test2');
 
 ```
@@ -319,7 +319,7 @@ Let's do an update on table2 and table1
 
 ```sql
 update table2 set field2 = 'test2_2', field1 = 'test2_1' where field2 = 'test2';
-update table1 set field1 = 'test1_1', field1 = 'test1';
+update table1 set field1 = 'test1_1' where field1 = 'test1';
 
 select * from table2;
 select * from table1;
@@ -327,23 +327,24 @@ select * from table1;
 
 Output
 ``` text
-mark=> select * from table2; select * from table1;
+mark=> select * from table2;
  field1  | t1_1 | t1_2 | field2  | t2_1
----------+------+------+---------+------
- test2_1 |      |      | test2_2 |
- test1_1 |      |      | test1   |
-(2 rows)
+ ---------+------+------+---------+------
+  test2_1 |      |      | test2_2 |
+  (1 row)
 
+mark=> select * from table1;
  field1  | t1_1 | t1_2
----------+------+------
- test2_1 |      |
- test1_1 |      |
+ ---------+------+------
+  test1_1 |      |
+  test2_1 |      |
+   
 
 
 ```
 
 
-* The data changed in table1 appeared in table2;
+* The data changed in table1 was fine;
 * The data changed in table2 appeared in table1;
 
 * * *

@@ -20,6 +20,14 @@ title: Terraform : Install
 -----
 * [Install Ubuntu](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
+
+Vagrant
+* [https://www.youtube.com/watch?v=tayQQ_D2Rxc](https://www.youtube.com/watch?v=tayQQ_D2Rxc)
+* [How to Manage Remote Instances with Vagrant & Terraform](https://brev.dev/blog/how-to-create-and-manage-remote-dev-environments-with-infrastructure-as-code)
+
+Virtual Box
+* (Using terraform for automation creating virtualbox virtual machine)[https://blog.opennix.ru/posts/use-terraform-with-virtualbox/]
+
 ---
 
 * * *
@@ -40,7 +48,7 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update && sudo apt install terraform
 ```
 
-Check is terraform is installed.
+Check if terraform is installed.
 
 ```bash
 which terraform
@@ -58,6 +66,14 @@ Verify it is installed
 terraform -help
 ```
 and it should output a help menu
+
+* * *
+
+<a name=create></a>Create something
+-----
+
+
+Install Docker or 
 
 
 * * *

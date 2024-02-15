@@ -379,5 +379,5 @@ DELETE 1
 
 ```
 
-* The data deleted in table1 was deleted in table2;
+* The data deleted in table1 was fine;
 * The data deleted in table2 was deleted in table1;

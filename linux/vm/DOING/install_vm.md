@@ -82,7 +82,7 @@ echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 sudo bash
 apt-get update
 apt-get install emacs screen
-
+apt-get install nmap
 
 
 ```

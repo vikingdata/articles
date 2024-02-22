@@ -1,5 +1,5 @@
 
-[www.odendata.com](www.odendata.com)
+[http://odendata.com/articles/](http://odendata.com/articles/)
 
 [www.markprojects.com](www.markprojects.com)
 

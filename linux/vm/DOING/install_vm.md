@@ -37,7 +37,7 @@ And one that runs containers, which is meant for applications.
 * [Docker](https://www.docker.com/)
 * [Nerdctrl on github](https://github.com/containerd/nerdctl)
 * [Installing/Upgrading Rancher](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade)
-* [Getting Started With Vagrant] (https://phoenixnap.com/kb/vagrant-beginner-tutorial#:~:text=Before%20you%20start%2C%20make%20sure,%2DV%2C%20and%20custom%20solutions.)
+* [Getting Started With Vagrant](https://phoenixnap.com/kb/vagrant-beginner-tutorial#:~:text=Before%20you%20start%2C%20make%20sure,%2DV%2C%20and%20custom%20solutions.)
 * [Getting Started with Vagrant and VirtualBox](https://www.itu.dk/people/ropf/blog/vagrant_install.html#:~:text=Getting%20Started%20with%20Vagrant%20and,%2C%20MacOS%2C%20Windows%2C%20etc.)
 
 * * *
@@ -67,9 +67,25 @@ Do first things:
 * Put your account into sudoers file.
 
 ```text
+
+  # Next time you login it will go to your linux home directory
+  # instead of windows. 
+echo "" >> ~/.bashrc
+echo "cd" >> ~/.bashrc
+
+  # sudo to root
+sudo bash
+
+  # Add yourself to sudoers file passwordless
+echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+sudo bash
 apt-get update
 apt-get install emacs screen
 
+
+
+```
 
 * * *
 <a name=vagrant></a>Vagrant

@@ -112,9 +112,16 @@ sudo apt install percona-server-server
 
   # Create root passwordless login for local user.
   # We assume user is also administrator in windows.
-
 echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > create_user.sql
 echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
+
+
+  # or do this to create a normal account
+  # You can remove the "2" to keep the uername the same. 
+echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH '$SUDO_USER';" > create_user.sql
+echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
+echo "[mysql]\n user='$SUDO_USER' \npassword='$SUDO_USER' \n": > /home/$SUDO_USER.my.cnf
+chown $SUDO_USER /home/$SUDO_USER.my.cnf
 
 
   # If it did not ask for a password, it will authenicate by auth_socket
@@ -123,6 +130,8 @@ sudo bash
 mysql
 
 source create_user.sql
+-- or make a password count
+-- source create_user2.sql
 
   # Then in mysql execute
 CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so';
@@ -142,6 +151,48 @@ select USER();
 
 ### Install MongoDB
 
+### Install Mutiple MySQL and Mongo instances
+https://endjin.com/blog/2021/11/setting-up-multiple-wsl-distribution-instances
+
+### Install Python for MySQL and mongo
+* Download Pythong binary from  : [https://dev.mysql.com/downloads/connector/python/](https://dev.mysql.com/downloads/connector/python/)
+
+
+```bash
+sudo bash
+apt install python3-pip
+pip install mysql-connector-python
+exit
+
+   #Check login through socket for passwordless unix so authentication
+
+   # As normal user
+python3 -c "import mysql.connector; cnx = mysql.connector.connect(unix_socket='/var/run/mysqld/mysqld.sock'); c = cnx.cursor(); c.execute('select user()'); print (c.fetchone()); "
+
+  # or if you made a an account with a password
+python3 -c "import mysql.connector; cnx = mysql.connector.connect(user='$USER', password='$USER'); c = cnx.cursor(); c.execute('select user()'); print (c.fetchone()); "
+
+   # or
+echo '#!/usr/bin/python3 
+
+import mysql.connector; 
+
+vars={'unix_socket':'/var/run/mysqld/mysqld.sock'}
+   # Uncomment if you made an account with a password.
+#vars={'user':'$USER','password':'$USER'}
+
+cnx = mysql.connector.connect(**vars);
+c = cnx.cursor(); 
+c.execute("select user()"); 
+print (c.fetchone()) 
+' > check_connect.py
+
+python3 check_connect.py
+
+   # or as a normal user
+
+
+```
 
 * * *
 <a name=vagrant></a>Vagrant

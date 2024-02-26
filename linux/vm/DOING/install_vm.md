@@ -108,16 +108,34 @@ sudo percona-release setup ps80
   # It will may ask for password for percona mysql
 sudo apt install percona-server-server
 
+  # Create root passwordless login for local user.
+  # We assume user is also administrator in windows.
+
+echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > create_user.sql
+echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
+
+
   # If it did not ask for a password, it will authenicate by auth_socket
   # which you just sudo to root, and it logins automatically
 sudo bash
 mysql
+
+source create_user.sql
 
   # Then in mysql execute
 CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so';
 CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so';
 CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so';
 
+```
+
+* Logout of MySQL
+* Log out of root, sudo, or quit DOS or Powershell.
+* On a new prompt or if you logged out of root, start mysql and execute "select USER()"
+    * The user should NOT be root, but your Windows user.
+```bash
+mysql
+select USER();
 ```
 
 Install MongoDB

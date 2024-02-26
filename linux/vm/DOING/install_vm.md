@@ -95,7 +95,7 @@ apt-get install nmap
 
 ```
 
-Install MySQL
+### Install MySQL
 
 ```bash
   # as root
@@ -138,7 +138,7 @@ mysql
 select USER();
 ```
 
-Install MongoDB
+### Install MongoDB
 
 
 * * *

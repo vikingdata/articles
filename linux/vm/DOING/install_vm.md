@@ -106,6 +106,8 @@ sudo apt update
 sudo percona-release setup ps80
 
   # It will may ask for password for percona mysql
+  # If it does, leave passwored blank and it will allow
+  # root authetication by sudo to root only. 
 sudo apt install percona-server-server
 
   # Create root passwordless login for local user.

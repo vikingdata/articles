@@ -55,8 +55,16 @@ Info Commands is Windows Shell or Powershell
        * It will ask for a username and password
     * If you leave , you can reenter by :
 ```bash
-wsl --distribution Ubuntu-22.0
-   # to get to your home directory in Linux and not the Windows hom directory
+  # This sets the default doe wsl
+wsl --set-default Ubuntu-22.04
+wsl
+
+  # ot if you didn't set the default
+wsl --distribution Ubuntu-22.04
+
+
+   # Once in Linux
+  # to get to your home directory in Linux and not the Windows hom directory
 cd
 ```
 
@@ -67,6 +75,7 @@ Do first things:
 * Put your account into sudoers file.
 
 ```text
+
 
   # Next time you login it will go to your linux home directory
   # instead of windows. 
@@ -84,8 +93,35 @@ apt-get update
 apt-get install emacs screen
 apt-get install nmap
 
+```
+
+Install MySQL
+
+```bash
+  # as root
+apt install curl
+curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+sudo apt update
+sudo percona-release setup ps80
+
+  # It will may ask for password for percona mysql
+sudo apt install percona-server-server
+
+  # If it did not ask for a password, it will authenicate by auth_socket
+  # which you just sudo to root, and it logins automatically
+sudo bash
+mysql
+
+  # Then in mysql execute
+CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so';
+CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so';
+CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so';
 
 ```
+
+Install MongoDB
+
 
 * * *
 <a name=vagrant></a>Vagrant

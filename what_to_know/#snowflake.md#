@@ -63,7 +63,7 @@ are made for other people to accesss your data wihtout having an account. You ar
 * MFA https://docs.snowflake.com/en/user-guide/security-mfa.html
   Web gui, snowsql, Python, ODBC, JDBC
 
-* Snowflake does not charge any differnet between semi-structure or structure data. Just charged for space however used. https://docs.snowflake.com/en/user-guide/cost-understanding-data-storage
+* Snowflake does not charge any differnet between semi-structure or structure data. Just charged for space however used. https://docs.snowflake.com/en/user-guide/cost-understanding-data-storage 20
 
 * Can unload data into structured or semi structured formats. https://docs.snowflake.com/en/user-guide/data-unload-prepare
 

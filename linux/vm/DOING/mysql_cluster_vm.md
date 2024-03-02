@@ -31,8 +31,6 @@ Original Copyright February 2024**_
 
 Info Commands is Windows Shell or Powershell
 
-
-
 * Open Shell as administrator
     * wsl --install --distribution  Ubuntu-22.04
        * It will ask for a username and password
@@ -45,8 +43,7 @@ wsl
   # ot if you didn't set the default
 wsl --distribution Ubuntu-22.04
 
-
-   # Once in Linux
+  # Once in Linux
   # to get to your home directory in Linux and not the Windows hom directory
 cd
 ```
@@ -66,21 +63,47 @@ echo 'nohup sh -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &' > r
 echo 'exit' >> run_continuous.sh
 chmod 755 run_continuous.sh
 
-    
-
   # sudo to root
 sudo bash
 
   # Add yourself to sudoers file passwordless
 echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+echo "I am user $USER"
 sudo bash
 apt-get update
 apt-get install emacs screen
 apt-get install nmap
 apt install net-tools
 apt-get install ssh
- 
+echo "I am user $SUDO_USER"
+
+
+  # Set the default user.
+echo '[user]' >> /etc/wsl.conf
+echo "default = $SUDO_USER" >> /etc/wsl.conf
+
+  # Star ssh, mysql, and command are startup
+echo '[boot]' >> /etc/wsl.conf
+echo 'command = /etc/start_services.sh' >> /etc/wsl.conf
+
+  # Make start script
+echo "#!/usr/bin/bash" > /etc/start_services.sh
+echo "" >> /etc/start_services.sh
+echo 'service ssh start' >> /etc/start_services.sh
+echo "service mysql start' >> /etc/start_services.sh
+echo 'nohup -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &' >> /etc/start_services.sh
+chmod 755 /etc/start_services.sh
+
+
+  # Have root change to the /root when it logs in
+cd /root/
+echo "" >> ~/.bashrc
+echo "cd" >> ~/.bashrc
+
+user]
+default = DemoUser
+
 ```
 
 ### Install MySQL
@@ -106,9 +129,6 @@ echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.s
 
   # or do this to create a normal account
   # You can remove the "2" to keep the uername the same. 
-echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH '$SUDO_USER';" > create_user.sql
-echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
-
 echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED WITH '$SUDO_USER';" > create_user.sql
 echo "grant all privileges on *.* to '$SUDO_USER'@'%';" >> create_user.sql
 

@@ -21,6 +21,10 @@ Original Copyright February 2024**_
 
 Purpose is to install Percona MySQL under WSL2 For Windows. WSL2 is a Linux emulator.
 
+MySQL installed under WSL2 (Windows Subsystem for Linux 2) would typically operate similarly to how it does on a native Linux environment.
+You can install MySQL server on WSL2 just like you would on a regular Linux distribution.
+You can access MySQL running on WSL2 from applications running on your Windows host (if you know the ip address).
+
 Limitations:
 * When you leave wsl, it closes the Linux OS.
 * You normally can only run one environment under wsl2 at a time.

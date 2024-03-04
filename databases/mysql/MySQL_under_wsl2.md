@@ -15,7 +15,7 @@ Original Copyright February 2024**_
 
 1. [Links](#links)
 2. [wls2](#wsl2)
-3. {Install MySQL and Create MySQL image](#mysql)
+3. [Install MySQL and Create MySQL image](#mysql)
 4. [Make final MySQL install](#final)
 5. [Other](#other)
 

@@ -34,6 +34,7 @@ Advantages:
 * [Basic commands for WSL](https://learn.microsoft.com/en-us/windows/wsl/basic-commands)
 * [How To Use Multiple WSL Instances For Development](https://wpclouddeploy.com/how-to-use-multiple-wsl-instances-for-development/)
 * [https://inertz.org/install-windows-subsystem-for-linux-and-setup-clusterssh-to-manage-multiple-ssh/](https://inertz.org/install-windows-subsystem-for-linux-and-setup-clusterssh-to-manage-multiple-ssh/)
+* [Managing Multiple Linux Servers with ClusterSSH](https://www.linux.com/training-tutorials/managing-multiple-linux-servers-clusterssh/#:~:text=Installation,the%20ports%20system%20on%20FreeBSD.)
 
 * * *
 <a name=wsl2>WSL2</a>
@@ -268,7 +269,7 @@ exit
 
 
 * * *
-<a name=duplicate>Duplicate image four times</a>
+<a name=duplicate>Make final MySQL install</a>
 -----
 ```dos
 
@@ -276,16 +277,12 @@ wsl -t mysql_base
 wsl --list --verbose
 
 mkdir c:\mywsl\instances\mysql_node1
-mkdir c:\mywsl\instances\mysql_node2
-mkdir c:\mywsl\instances\mysql_node3
-mkdir c:\mywsl\instances\mysql_router
-
+   # Make an image of your mysql base image
 wsl --export mysql_base c:\mywsl\exports\mysql_base
-
+   # Make your final wsl mysql install
 wsl --import mysql_node1 c:\mywsl\instances\mysql_node1 c:\mywsl\exports\mysql_base
-wsl --import mysql_node2 c:\mywsl\instances\mysql_node2 c:\mywsl\exports\mysql_base
-wsl --import mysql_node3 c:\mywsl\instances\mysql_node3 c:\mywsl\exports\mysql_base
-wsl --import mysql_router c:\mywsl\instances\mysql_router c:\mywsl\exports\mysql_base
+   # Make this your final default OS for WSL
+wsl --set-default mysql_node1
 
 wsl --list --verbose
 
@@ -294,11 +291,8 @@ wsl --list --verbose
 To undo and start again
 
 ```dos
-del  c:\mywsl\exports\mysql_node
+del  c:\mywsl\exports\mysql_base
 wsl --unregister mysql_node1
-wsl --unregister mysql_node2
-wsl --unregister mysql_node3
-wsl --unregister mysql_router
 wsl --list --verbose
 
 
@@ -306,49 +300,28 @@ wsl --list --verbose
 
 
 * * *
-<a name=wsl2>Run MySQL cluster and Router WSL images indepndently </a>
+<a name=wsl2>Other </a>
 -----
-Repeat this for all 3 images.
-Login into image and execute.
+
+You might want to install csshx as well
 
 ```
-wsl -d mysql_node1
-ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3 > /mnt/shared/1_ip
-exit
 
-wsl -d mysql_node2
-ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3 > /mnt/shared/2_ip
-exit
-
-wsl -d mysql_node3
-ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3 > /mnt/shared/3_ip
-exit
-
-wsl -d mysql_router
-ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3 > /mnt/shared/r_ip
-exit
+wsl
 ```
 
-* wsl -d mysql_node1
-    * nohup -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &;
-    * exit
-* wsl -d mysql_node2
-    * run : nohup -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &; exit;
-* wsl -d mysql_node3
-    * run : nohup -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &; exit;
-* wait 10 seconds
-* wsl --list --verbose
-    * and you should see
-    
+In Linux
+```
 
+echo "" >> /etc/ssh/sshd_config
+echo "X11Forwarding yes " >> /etc/ssh/sshd_config
+echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config
+service sshd restart
 
-* * *
-<a name=wsl2>Port forward </a>
------
+mkdir -p .clusterssh/
 
+apt-get install clusterssh -y
 
-* * *
-<a name=wsl2>Setup cluster </a>
------
+```
 
 

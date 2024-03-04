@@ -15,6 +15,9 @@ Original Copyright February 2024**_
 
 1. [Links](#links)
 2. [wls2](#wsl2)
+3. {Install MySQL and Create MySQL image](#mysql)
+4. [Make final MySQL install](#final)
+5. [Other](#other)
 
 Purpose is to install Percona MySQL under WSL2 For Windows. WSL2 is a Linux emulator.
 
@@ -123,7 +126,9 @@ wsl --list --verbose
 
 
 
-### Install MySQL and Create MySQL image
+* * *
+<a name=mysql></a>Install MySQL and Create MySQL image
+-----
 
 Create Base MySQL Image
 
@@ -269,7 +274,7 @@ exit
 
 
 * * *
-<a name=duplicate>Make final MySQL install</a>
+<a name=final>Make final MySQL install</a>
 -----
 ```dos
 
@@ -300,7 +305,7 @@ wsl --list --verbose
 
 
 * * *
-<a name=wsl2>Other </a>
+<a name=other>Other </a>
 -----
 
 You might want to install csshx as well
@@ -325,3 +330,36 @@ apt-get install clusterssh -y
 ```
 
 
+Also, to keep WSL running when you leave it, you need to run a continuous process.
+Start wsl
+
+```dos
+wsl
+  # or
+wsl -d mysql_node1
+```
+
+
+Then inside wsl
+
+```bash
+  # Get ip address
+  # You can use this to connect to mysql from the outside. 
+ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3   
+
+  # Start a process which won't stop and keep wsl running when you leave it. 
+./run_continuous.sh
+  # or
+nohup sh -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &
+
+  # Leave wsl.
+exit
+
+```
+
+Wait 30 seconds and execute
+```dos
+wsl --list --verbose
+```
+
+and see if it is still running. 

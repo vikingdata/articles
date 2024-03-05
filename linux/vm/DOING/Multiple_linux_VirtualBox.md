@@ -28,6 +28,7 @@ MySQL Replication, MySQL Cluster, Cassamdra, etc. Also, Cygwin will be used on t
 -----
 * [VirtualBox images](https://www.virtualbox.org/wiki/Downloads)
 * [Windows Install Guest Additions](https://www.virtualbox.org/manual/ch04.html#additions-windows)
+* [Move VirtualBox VM to other hosts](https://4sysops.com/archives/move-virtualbox-vm-to-other-hosts/#:~:text=If%20you're%20running%20VirtualBox,it%20on%20the%20target%20PC.)
 * [Install Cygwin](https://www.cygwin.com/install.html)
 
 

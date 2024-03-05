@@ -86,7 +86,7 @@ Setup Ubuntu under VirtualBox
 
 * Install cygwin with SSH and make ssh key. We will use this later. 
     *  ssh-keygen -t rsa -N ''
-    * TODO: more on installing cygwin
+    * For more on installing Cygwin with ssh : [5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
     
 * Start up node1 image
     * Under Virtual box Under Devices

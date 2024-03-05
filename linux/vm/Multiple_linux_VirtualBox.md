@@ -195,8 +195,8 @@ Test ssh keys
 
 ```bash
 ssh 192.168.1.11 -l mark "echo ok `hostname`"
-ssh 192.168.1.11 -l mark "echo ok `hostname`"
-ssh 192.168.1.11 -l mark "echo ok `hostname`"
+ssh 192.168.1.12 -l mark "echo ok `hostname`"
+ssh 192.168.1.13 -l mark "echo ok `hostname`"
 
 ```
 

@@ -15,6 +15,10 @@ Original Copyright February 2024**_
 
 1. [Links](#links)
 2. [VirtualBox and Ubuntu](#v)
+3. [Copy VirtualBox Image](#c)
+3. [Test](#t)
+4. [Future][#f]
+
 
 Purpose is to install mutiple Linux installations under VirtualBox. Why mutiple? If you need clusters of servers, like
 MySQL Replication, MySQL Cluster, Cassamdra, etc. Also, Cygwin will be used on the host server to connect to the servers. 
@@ -73,7 +77,8 @@ Setup Ubuntu under VirtualBox
         * Folder Path : c:\vb
         * Folder Name : shared
         * mount Point : /mnt/shared
-        * Make sure you select the directory through the file manager and just don't type it in. 
+             * Make sure you select the directory through the file manager and just don't type it in.
+	* Click on Auto mount     
     * Network
         * In virtual Box, select Network
         * select the first adapter
@@ -81,7 +86,8 @@ Setup Ubuntu under VirtualBox
 
 * Install cygwin and make ssh key. We will use this later. 
     *  ssh-keygen -t rsa -N ''
-
+    * TODO: more on installing cygwin
+    
 * Start up node1 image
     * Under Virtual box Under Devices
         * Select Shared Clipboard, and choose biredirectional. This will let you copy and paste stuff from Windows to your Linux installation.  
@@ -125,7 +131,7 @@ cd /root
 mkdir -p .ssh
 chmod 755 .ssh
          # Change the username mark to whatever you used to install virtualbox
-cp id_rsa.pub /home/mark/.ssh/authorized_keys
+cp /home/mark/id_rsa.pub /root/.ssh/authorized_keys
 
 
   # Change this user 'mark' to the user you installed with virutal box. 
@@ -185,11 +191,17 @@ My ip addresses
 * node2  192.168.1.12
 * node3  192.168.1.13
 
-Setup ssh Keys
-* Start cydwin on the main host
-    * Generate ssh leys
-    * ssh-keygen -t rsa -N '' 
-    * Push the publci key to all 3 servers. Change the ip address and username 'mark'.
-        * scp .ssh/id_rsa.pub mark@192.168.1.11:
-	* scp .ssh/id_rsa.pub mark@192.168.1.12:
-	* scp .ssh/id_rsa.pub mark@192.168.1.13:
+Test ssh keys
+
+```bash
+ssh 192.168.1.11 -l mark "echo ok `hostname`"
+ssh 192.168.1.11 -l mark "echo ok `hostname`"
+ssh 192.168.1.11 -l mark "echo ok `hostname`"
+
+```
+
+* * *
+<a name=f></a>Future
+-----
+* Vagrant
+* Ansible

@@ -6,7 +6,7 @@ copyright : Feburary 2024
 ---
 
 
-MySQL Cluster under VirtualBox
+Mutiple Linus under VirtualBox
 ==============================
 
 _**by Mark Nielsen
@@ -73,14 +73,13 @@ Setup Ubuntu under VirtualBox
 	* Folder Name : shared
 	* mount Point : /mnt/shared
         * Make sure you select the directory through the file manager and just don't type it in. 
-    * Network Port Forwarding
-        * In virtual Box, select Network, and then post fordwaring
-	* Click on advanced
-	* Click on the plus sign
-	    * Host IP: 127.0.0.1
-	    * Guest IP : leave blank
-	    * Host Port : 221
-	    * Guest Port: 22
+    * Network
+        * In virtual Box, select Network
+	* select the first adapter
+        * Change "attached to" to "bridged adapter. This will make so the host and and all instanced can see each other. 
+
+* Install cygwin and make ssh key. We will use this later. 
+    *  ssh-keygen -t rsa -N ''
 
 * Start up node1 image
     * Under Virtual box Under Devices
@@ -105,16 +104,28 @@ ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
 service sshd start
 systemctl enable ssh
 ```
-    * Install [Cygwin](https://www.cygwin.com/install.html) with SSH and node 8
-    * Open a Cygwin shell 
+   * In cygwin, scp the ssh_key to the server
+       * Change the ip address and username 'mark'.
+           * scp .ssh/id_rsa.pub mark@192.168.1.11:
+
     * Connect with ssh
+        * ssh 192.168.1.11 -l mark
+    * After you log in, execute
 ```
-   # Change the user from mark to whatever you used for virtualbox
-ssh 127.0.0.1 -p 221 -l mark
+mkdir -p .ssh
+chmod 755 .ssh
+cp id_rsa.pub .ssh/authorized_keys
 
 
   #after logged in
 su -l # It will ask you for a password
+
+cd /root
+mkdir -p .ssh
+chmod 755 .ssh
+         # Change the username mark to whatever you used to install virtualbox
+cp id_rsa.pub /home/mark/.ssh/authorized_keys
+
 
   # Change this user 'mark' to the user you installed with virutal box. 
 export MY_USER='mark'
@@ -129,7 +140,7 @@ sudo bash
 ```
    
 * * *
-<a name=c>Copy VirtualBox installation twice</a>
+<a name=c>Copy VirtualBox installation twice, or more
 -----
 * Stop the Linux installation
 * In Virtual Box under File, select Export Appliance
@@ -148,15 +159,7 @@ Now import the images twice
     * Name : node2
     * Mac Address Policy : "Generate new"
     * click Finish
-* Select node2 and then right click and choose Settings
-    * Network Port Forwarding
-        * In virtual Box, select Network, and then post fordwaring
-        * Click on advanced
-            * Click on the plus sign
-            * Host IP: 127.0.0.1
-            * Guest IP : leave blank
-            * Host Port : 222
-            * Guest Port: 22
+
 
 Again, make another image
 * In Virtual Box, select Import Appliance
@@ -165,13 +168,27 @@ Again, make another image
     * Name : node3
     * Mac Address Policy : "Generate new"
     * Click Finish
-* Select node3 and then right click and choose Settings
-    * Network Port Forwarding
-        * In virtual Box, select Network, and then post fordwarding
-        * Click on advanced
-            * Click on the plus sign
-            * Host IP: 127.0.0.1
-            * Guest IP : leave blank
-            * Host Port : 223
-            * Guest Port: 22
 
+If you need more images, follow the same steps of renaming the name and generating new mac addresses.
+
+* * *
+<a name=t></a>Test
+-----
+* For node1, node2, and node3
+    * start the node
+    * Record the node
+        * ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
+
+My ip addresses
+* node1  192.168.1.11
+* node2  192.168.1.12
+* node3  192.168.1.13
+
+Setup ssh Keys
+* Start cydwin on the main host
+    * Generate ssh leys
+    * ssh-keygen -t rsa -N '' 
+    * Push the publci key to all 3 servers. Change the ip address and username 'mark'.
+        * scp .ssh/id_rsa.pub mark@192.168.1.11:
+	* scp .ssh/id_rsa.pub mark@192.168.1.12:
+	* scp .ssh/id_rsa.pub mark@192.168.1.13:

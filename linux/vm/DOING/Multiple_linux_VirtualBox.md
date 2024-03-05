@@ -17,7 +17,7 @@ Original Copyright February 2024**_
 2. [VirtualBox and Ubuntu](#v)
 3. [Copy VirtualBox Image](#c)
 3. [Test](#t)
-4. [Future][#f]
+4. [Future](#f)
 
 
 Purpose is to install mutiple Linux installations under VirtualBox. Why mutiple? If you need clusters of servers, like
@@ -28,7 +28,6 @@ MySQL Replication, MySQL Cluster, Cassamdra, etc. Also, Cygwin will be used on t
 -----
 * [VirtualBox images](https://www.virtualbox.org/wiki/Downloads)
 * [Windows Install Guest Additions](https://www.virtualbox.org/manual/ch04.html#additions-windows)
-* [Port Forwarding in VirtualBox](https://www.howtogeek.com/122641/how-to-forward-ports-to-a-virtual-machine-and-use-it-as-a-server/#:~:text=To%20forward%20ports%20in%20VirtualBox%2C%20first%20open%20a%20virtual%20machine's,click%20the%20Port%20Forwarding%20button.)
 * [Install Cygwin](https://www.cygwin.com/install.html)
 
 
@@ -84,7 +83,7 @@ Setup Ubuntu under VirtualBox
         * select the first adapter
         * Change "attached to" to "bridged adapter. This will make so the host and and all instanced can see each other. 
 
-* Install cygwin and make ssh key. We will use this later. 
+* Install cygwin with SSH and make ssh key. We will use this later. 
     *  ssh-keygen -t rsa -N ''
     * TODO: more on installing cygwin
     

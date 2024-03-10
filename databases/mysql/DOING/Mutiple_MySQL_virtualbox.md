@@ -53,12 +53,25 @@ Purpose is to install Multiple installations of MySQL.
         * Name : mysql1
         * Mac Address Policy : "Generate new"
         * click Finish
+* Start mysql1 and get ip address
+  *    # Record this ip address
+      * ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
+  * If you prefer to ssh to the system, log in as a normal user and sudo to root.
+      * When you have mutiple instances, you can have ssh open to each virtual machine under "screen or "tmux".
 * Instal Percona MySQL and other programs
     * Start "mysql1"
     * Sudo to root (this should already be setup)
     * Install software
 ``` bash
 sudo bash
+
+  #Set the hostname to mysql1
+hostnamectl set-hostname mysql1
+
+  # Setup alises in Linux bash so you can ssh to this box
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias mysql1='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+
 
 apt install curl -y
 curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb

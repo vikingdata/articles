@@ -1,22 +1,25 @@
  
 ---
-title : Multiple MySQK Virtualbox
+title : Multiple MySQL Virtualbox
 author : Mark Nielsen  
-copyright : February 2024  
+copyright : March 2024  
 ---
 
 
-Multiple Linux under VirtualBox
+Multiple MySQL VirtualBox
 ==============================
 
 _**by Mark Nielsen
-Original Copyright February 2024**_
+Original Copyright March 2024**_
 
 
 1. [Links](#links)
-2. [Install Link](#)
-3. [Copy VirtualBox Image](#c)
-
+2. [Install Linux](#l)
+3. [Setup MySQL image](#m)
+4. [Export MySQL image](#e)
+5. [Import MySQL image](#i)
+6. [Setup Cluster](#c)
+7. [Setup Master-Master](#mm)
 
 Purpose is to install Multiple installations of MySQL. 
 
@@ -37,6 +40,11 @@ Purpose is to install Multiple installations of MySQL.
     * Make sure bidirectional copy and paste is setup.
     * File sharing of c:\vm\shared to /mnt/shared
     * Network is using "Bridged Adapter"
+
+* * *
+<a name=m>Setup MySQL image</a>
+-----
+
 
 * Created mysql basic image: Copy "node1" to "mysql1"
     * In Virtual Box, select Import Appliance

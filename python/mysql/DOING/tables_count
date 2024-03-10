@@ -1,0 +1,16 @@
+#!/bin/bash
+
+host=$1    # myhost.sub
+domain=$2  # mycompany.net
+subnet=$3  # 10.
+
+if [[ $host =~ "$subnet" ]] ; then
+    echo ""
+elif ! [[ $host =~ "$domain" ]]; then
+#    echo "adding $domain"
+    host=$host".$domain"
+fi
+
+
+mysql -N -h $host -e "source $HOME/bin/sql/tables_count.sql" | cat 
+

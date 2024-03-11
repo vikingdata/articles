@@ -262,13 +262,15 @@ cssh bash
     * [mysql_vm/mmss/setup_mysql_mmss.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh)
     * [mysql_vm/mmss/accounts_mmss.sql](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql)
     * [mysql_vm/mmss/mmss_rep.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh)
+    * [mysqld_mmss_my.cnf](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mysqld_mmss_my.cnf)
 * It is assumed ssh keys to root of each system is setup.
 * execute scripts
 ```bash
 
-wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh
-wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql
-wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mysqld_mmss_my.cnf
 
 
 bash setup_mysql_mmss.sh

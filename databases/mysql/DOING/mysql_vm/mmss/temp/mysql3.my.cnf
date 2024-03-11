@@ -6,9 +6,9 @@ server_uuid = "cc78ef4d-d8e4-4610-a424-3ce62e250c01"
 plugin-load=auth_socket.so
 authentication_policy=caching_sha2_password
 
-server-id=16
+server-id=17
 port=3306
-report_host=mysql1.myguest.virtualbox.org
+report_host=mysql3.myguest.virtualbox.org
 character-set-server=latin1
 collation-server=latin1_bin
 

@@ -57,8 +57,8 @@ Purpose is to install Multiple installations of MySQL.
   *    # Record this ip address
       * ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
   * If you prefer to ssh to the system, log in as a normal user and sudo to root.
-      * When you have multiple instances, you can have ssh open to each virtual machine under "screen or "tmux".
-* Install Percona MySQL and other programs
+      * When you have mutiple instances, you can have ssh open to each virtual machine under "screen or "tmux".
+* Instal Percona MySQL and other programs
     * Start "mysql1"
     * Sudo to root (this should already be setup)
     * Install software
@@ -116,7 +116,7 @@ systemctl enable mysql
 mysql
 ```
 
-* Execute these commands in the mysql shell
+* Execute these commands in the mysql shelll
 
 ```sql
 source create_user.sql
@@ -168,7 +168,7 @@ exit
 -----
 
 To create 3 more images
-* for mysql[l2,3,4]
+* for mysa[l2,3,4]
 
 Now import the images three times
 * In Virtual Box, select Import Appliance
@@ -182,7 +182,7 @@ Now import the images three times
     * sudo bash
 * Set the hostname to mysql1
     * hostnamectl set-hostname mysql2.myguest.virtualbox.org
-* Setup aliases in Linux bash so you can ssh to this box
+* Setup alises in Linux bash so you can ssh to this box
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql2='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
@@ -203,7 +203,7 @@ echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
     * sudo bash
 * Set the hostname to mysql1
     * hostnamectl set-hostname mysql3.myguest.virtualbox.org
-* Setup aliases in Linux bash so you can ssh to this box
+* Setup alises in Linux bash so you can ssh to this box
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql3='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
@@ -222,7 +222,7 @@ echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
     * sudo bash
 * Set the hostname to mysql1
     * hostnamectl set-hostname mysql4.myguest.virtualbox.org
-* Setup aliases in Linux bash so you can ssh to this box
+* Setup alises in Linux bash so you can ssh to this box
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql4='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
@@ -234,7 +234,7 @@ Repeat this procedure if you need more images.
 
 
 * * *
-<a name=main>Maintenance with WSL and cssh</a>
+<a name=main>Maintanence with WSL and ccsh</a>
 -----
 
 * Start wsl
@@ -249,7 +249,7 @@ Repeat this procedure if you need more images.
 ```bash
 echo "dev root@$mysql1_ip root@$mysql2_ip root@$mysql3_ip root@$mysql4_ip" >> .clusterssh/clusters
 ```
-* It is assumed you have already transferred your id_rsa.pub to authorized_hosts on each system.
+* It is assumed you have already trasnferred your id_rsa.pub to authorized_hosts on each system.
 * Connect to each server
 ```bash
 cssh bash

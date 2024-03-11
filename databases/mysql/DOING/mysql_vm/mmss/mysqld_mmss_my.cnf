@@ -1,3 +1,7 @@
+
+[auto]
+server_uuid = "__UUID__"
+
 [mysqld]
 plugin-load=auth_socket.so
 authentication_policy=caching_sha2_password

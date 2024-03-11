@@ -260,8 +260,8 @@ cssh bash
 -----
 * Download these files 
     * [mysql_vm/mmss/setup_mysql_mmss.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql)
-    * [mysql_vm/mmss/accounts_mmss.sql](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh/accounts_mmss.sql)
-    * [mysql_vm/mmss/mmss_rep.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh/mmss_rep.sh)
+    * [mysql_vm/mmss/accounts_mmss.sql](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql)
+    * [mysql_vm/mmss/mmss_rep.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh)
 * It is assumed ssh keys to root of each system is setup.
 * execute scripts
 ```bash

@@ -259,12 +259,18 @@ cssh bash
 <a name=mm>Setup Master-Master</a>
 -----
 * Download these files 
-    * [mysql_vm/mmss/setup_mysql_mmss.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql)
+    * [mysql_vm/mmss/setup_mysql_mmss.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh)
     * [mysql_vm/mmss/accounts_mmss.sql](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql)
     * [mysql_vm/mmss/mmss_rep.sh](https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh)
 * It is assumed ssh keys to root of each system is setup.
 * execute scripts
 ```bash
+
+wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/setup_mysql_mmss.sh
+wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/accounts_mmss.sql
+wget -o https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/mysql_vm/mmss/mmss_rep.sh
+
+
 bash setup_mysql_mmss.sh
 bash mmss_rep.sh
 

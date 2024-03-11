@@ -71,6 +71,8 @@ hostnamectl set-hostname mysql1
   # Setup alises in Linux bash so you can ssh to this box
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql1='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "mysql1_name='mysql1'" >> /mnt/shared/alias_ssh_systems
+echo "mysql1_ip=$ip" >> /mnt/shared/alias_ssh_systems
 
 
 apt install curl -y
@@ -104,6 +106,11 @@ echo "select user,host,plugin,authentication_string from mysql.user where user='
 echo -e "[mysql]\nuser='$SUDO_USER' \npassword='$SUDO_USER' \n" > /home/$SUDO_USER/.my.cnf
 chown $SUDO_USER /home/$SUDO_USER/.my.cnf
 
+   # Make sure stuff starts at boot
+systemctl enable ssh
+systemctl enable mysql
+
+
   # If it did not ask for a password, it will authenicate by auth_socket
   # which you just sudo to root, and it logins automatically
 mysql
@@ -120,7 +127,6 @@ source create_user.sql
 CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so';
 CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so';
 CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so';
-select user,host,authentication_string from mysql.user where user='$SUDO_USER';
 
 exit;
 
@@ -142,4 +148,101 @@ exit
 mysql -e "select USER();"
 exit
 ```
- 
+
+* * *
+<a name=e>Export MySQL image</a>
+-----
+
+* Stop the "mysql1"
+* In Virtual Box under File, select Export Appliance
+* Choose the "mysqld1"
+* For Mac Address Policy, choose "Strip all network adapter Max Addresses"
+* For file chose : C:\vm\shared\mysql_base.ova
+* Click Next
+* Don't change anything on this page.
+* Click Finish. Wait until is is done, may take a while.
+
+
+* * *
+<a name=i>Import MySQL image</a>
+-----
+
+To create 3 more images
+* for mysa[l2,3,4]
+
+Now import the images three times
+* In Virtual Box, select Import Appliance
+* For File, put in  C:\vm\shared\mysql_base.ova
+* Change settings
+    * Name : mysql2
+    * Mac Address Policy : "Generate new"
+    * click Finish
+* start "mysql2"
+* Login as user and sudo to root
+    * sudo bash
+* Set the hostname to mysql1
+    * hostnamectl set-hostname mysql2
+* Setup alises in Linux bash so you can ssh to this box
+```bash
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias mysql2='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "mysql2_name='mysql2'" >> /mnt/shared/alias_ssh_systems
+echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
+```
+
+    
+
+* In Virtual Box, select Import Appliance
+* For File, put in  C:\vm\shared\mysql_base.ova
+* Change settings
+    * Name : mysql3
+    * Mac Address Policy : "Generate new"
+    * click Finish
+* start "mysql3"
+* Login as user and sudo to root
+    * sudo bash
+* Set the hostname to mysql1
+    * hostnamectl set-hostname mysql3
+* Setup alises in Linux bash so you can ssh to this box
+```bash
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias mysql3='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "mysql3_name='mysql3'" >> /mnt/shared/alias_ssh_systems
+echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
+```  
+
+* In Virtual Box, select Import Appliance
+* For File, put in  C:\vm\shared\mysql_base.ova
+* Change settings
+    * Name : mysql4
+    * Mac Address Policy : "Generate new"
+    * click Finish
+* start "mysql4"
+* Login as user and sudo to root
+    * sudo bash
+* Set the hostname to mysql1
+    * hostnamectl set-hostname mysql4
+* Setup alises in Linux bash so you can ssh to this box
+```
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias mysql4='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "mysql4_name='mysql4'" >> /mnt/shared/alias_ssh_systems
+echo "mysql4_ip=$ip" >> /mnt/shared/alias_ssh_systems
+```
+
+Repeat this procedure if you need more images. 
+
+* * *
+<a name=c>Setup Cluster</a>
+-----
+
+
+
+* * *
+<a name=mm>Setup Master-Master</a>
+-----
+
+
+* * *
+<a name=pc>Setup Percona Cluster</a>
+-----

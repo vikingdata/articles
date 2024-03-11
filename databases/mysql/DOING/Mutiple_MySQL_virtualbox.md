@@ -252,7 +252,7 @@ echo "dev root@$mysql1_ip root@$mysql2_ip root@$mysql3_ip root@$mysql4_ip" >> .c
 * It is assumed you have already transferred your id_rsa.pub to authorized_hosts on each system.
 * Connect to each server
 ```bash
-cssh bash
+cssh dev
 ```
 
 * * *

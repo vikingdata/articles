@@ -66,7 +66,7 @@ Purpose is to install Multiple installations of MySQL.
 sudo bash
 
   #Set the hostname to mysql1
-hostnamectl set-hostname mysql1
+hostnamectl set-hostname mysql1.myguest.virtualbox.org
 
   # Setup alises in Linux bash so you can ssh to this box
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
@@ -181,7 +181,7 @@ Now import the images three times
 * Login as user and sudo to root
     * sudo bash
 * Set the hostname to mysql1
-    * hostnamectl set-hostname mysql2
+    * hostnamectl set-hostname mysql2.myguest.virtualbox.org
 * Setup alises in Linux bash so you can ssh to this box
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
@@ -202,7 +202,7 @@ echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
 * Login as user and sudo to root
     * sudo bash
 * Set the hostname to mysql1
-    * hostnamectl set-hostname mysql3
+    * hostnamectl set-hostname mysql3.myguest.virtualbox.org
 * Setup alises in Linux bash so you can ssh to this box
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
@@ -221,7 +221,7 @@ echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
 * Login as user and sudo to root
     * sudo bash
 * Set the hostname to mysql1
-    * hostnamectl set-hostname mysql4
+    * hostnamectl set-hostname mysql4.myguest.virtualbox.org
 * Setup alises in Linux bash so you can ssh to this box
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
@@ -235,12 +235,20 @@ Repeat this procedure if you need more images.
 * * *
 <a name=c>Setup Cluster</a>
 -----
-
+TODO: Need to local DNS for hosts. Basically, the cluster requires hosts to resolve to ip addresses. 
 
 
 * * *
 <a name=mm>Setup Master-Master</a>
 -----
+* Start wsl
+    * Install wsl
+    * wsl --distribution node1
+* Setup cssh to connect to all 4 hosts
+    * install cssh
+        * sudo sudo apt-get install clusterssh       
+    * cd .clusterssh
+    * source /mnt/c/vm/shared/alias_ssh_systems
 
 
 * * *

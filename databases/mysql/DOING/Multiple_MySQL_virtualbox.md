@@ -1,12 +1,12 @@
  
 ---
-title : Multiple MySQL Virtualbox
+title : Multiple MySQL in Linux under VirtualBox under Windows
 author : Mark Nielsen  
 copyright : March 2024  
 ---
 
 
-Multiple MySQL VirtualBox
+Multiple MySQL in Linux under VirtualBox under Windows
 ==============================
 
 _**by Mark Nielsen

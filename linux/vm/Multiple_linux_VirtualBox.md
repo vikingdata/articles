@@ -1,12 +1,12 @@
  
 ---
-title : Multiple Linux Virtualbox
+title : Multiple Linux under VirtualBox under Windows
 author : Mark Nielsen  
 copyright : February 2024  
 ---
 
 
-Multiple Linux under VirtualBox
+Multiple Linux under VirtualBox under Windows
 ==============================
 
 _**by Mark Nielsen
@@ -20,7 +20,7 @@ Original Copyright February 2024**_
 4. [Future](#f)
 
 
-Purpose is to install multiple Linux installations under VirtualBox. Why multiple? If you need clusters of servers, like
+Purpose is to install multiple Linux installations under VirtualBox under Windows. Why multiple? If you need clusters of servers, like
 MySQL Replication, MySQL Cluster, Cassandra, etc. Also, Cygwin will be used on the host server to connect to the vb servers. 
 
 * * *

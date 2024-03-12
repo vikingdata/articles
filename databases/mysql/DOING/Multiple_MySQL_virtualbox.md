@@ -21,7 +21,9 @@ Original Copyright March 2024**_
 6. [Setup Master-Master](#mm)
 7. [Future](#f)
 
-Purpose is to install Multiple installations of MySQL in Linux under VirtualBox running in Windows. To set it up for Mac or Linux is almost trivial. * * *
+Purpose is to install Multiple installations of MySQL in Linux under VirtualBox running in Windows. To set it up for Mac or Linux is almost trivial.
+
+* * *
 <a name=Links></a>Links
 -----
 * [VirtualBox images](https://www.virtualbox.org/wiki/Downloads)

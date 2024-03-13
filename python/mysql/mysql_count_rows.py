@@ -1,13 +1,18 @@
 #!/usr/bin/python3
 
-
-
 """
 File: filename.py
 Author: Mark Nielsen
 Date: 3-12-2024
 Copyright : GPL2
 Description: Count rows of tables in mysql. Used to spot check if replication is working.
+
+Requires mysql connector module to be installed.
+Requires authentication file at ~/.my.cnf de default in the format
+
+[client]
+user=<USER>
+password=<PASSWORD>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -28,10 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import mysql.connector as cpy
 import sys, re, os, argparse
-import subprocess
-from multiprocessing import Process
-import multiprocessing
-
 from concurrent.futures import ThreadPoolExecutor
 import concurrent
 

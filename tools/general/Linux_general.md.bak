@@ -33,7 +33,7 @@ title: Linux general tips
         * On each partition
     * iostat -m 10
         * get data on disk activity every 10 seconds
-    * Use Prometheus, Grafana, New Relic, or Solar Winds to graph the disk activity.
+    * Use Promethesus, rafana, New Relic, or Solar Winds to graph the disk activity.
     * Make a script once a day write 10 gigs at a low point in activity and feed
     it to your graphing or in tabular format. Make are report on ones that are too
     slow. 
@@ -55,7 +55,7 @@ GPL software for Windows, Linux, Mac, etc.
     * Set on drive G: if windows.
         * If using Cygwin and Windows
             * Use /cygdrive/c/GoogleDrive/
-	    * which corresponds to c:\GoogleDrive in Windows
+	    * which correspodnds to c:\GoogleDrive in Windows
     * If Linux, Unix, or Mac, mount the drive wherever,
     * Save the drive in a shell variable "GoogleDrive"
         * ex : export GoogleDrive=/cygdrive/c/GoogleDrive/
@@ -63,7 +63,7 @@ GPL software for Windows, Linux, Mac, etc.
 
 * Install [Butttercup]https://buttercup.pw/)
 * In ButterCup
-    * choose vault
+    * choose valut
     * Then file
     * Save the file in your Google Drive
     * Add a very good password for the vault.

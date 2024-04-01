@@ -57,15 +57,12 @@ GPL software for Windows, Linux, Mac, etc.
             * Use /cygdrive/c/GoogleDrive/
 	    * which corresponds to c:\GoogleDrive in Windows
     * If Linux, Unix, or Mac, mount the drive wherever,
-    * Save the drive in a shell variable "GoogleDrive"
-        * ex : export GoogleDrive=/cygdrive/c/GoogleDrive/
-* In cygwin or Linux make sure "pass" is installed 
 
 * Install [Butttercup]https://buttercup.pw/)
 * In ButterCup
     * choose vault
     * Then file
-    * Save the file in your Google Drive
+    * Save the file in your Google Drive directory. 
     * Add a very good password for the vault.
 * Now you can make groups, add customer entries to groups, and save passwords.
     * Don't forget to name the custom field or it won't let you save. 

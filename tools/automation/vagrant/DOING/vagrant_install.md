@@ -63,10 +63,13 @@ wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/sha
 * Start WSL and use the correct image.
    * Mine was : wsl -d Ubuntu-22.04
    * Use "wsl -l" to see what images you have.
-* Make sure you are at your home directory and install vagrant ```
-cd ~
+* Make sure you are at your home directory and install vagrant
 
- wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+```
+xd ~
+
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 

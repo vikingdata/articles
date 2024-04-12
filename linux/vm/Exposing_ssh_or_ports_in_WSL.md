@@ -131,21 +131,13 @@ Open up PowerShell in windows as administrator and execute
 
 ```
 netsh interface portproxy add v4tov4 listenport=22 listenaddress=0.0.0.0 connectport=8080 connectaddress=[WSL_IP]
-netsh interface portproxy add v4tov4 listenport=8080 listenaddress=0.0.0.0 connectport=8080 connectaddress=[WSL_IP]
+netsh interface portproxy add v4tov4 listenport=8888 listenaddress=0.0.0.0 connectport=8888 connectaddress=[WSL_IP]
 
 ```
 
-and the way you find out your ip address is:
-* [Find your IP address in Windows](https://support.microsoft.com/en-us/windows/find-your-ip-address-in-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9)
-* or one of the entries in
-```
-  # In cygwin in Windows
-ipconfig.exe -all | grep -i "IPv4 address"
-
- # In Windows shell, look for IPV4 in
- ipconfig.exe
-
-```
+and the way you find out your ip address in WSL is:
+* start WSL
+* ifconfig | grep "inet " | grep -v 127.0.0.1
 
 
 * * *

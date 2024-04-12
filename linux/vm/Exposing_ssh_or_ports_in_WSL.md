@@ -27,9 +27,6 @@ computers are given a local ip address from the router. This is meant for home u
 4. [Open up port in Windows Firewall Defender](#p)
 
 
-Purpose is to install multiple Linux installations under VirtualBox under Windows. Why multiple? If you need clusters of servers, like
-MySQL Replication, MySQL Cluster, Cassandra, etc. Also, Cygwin will be used on the host server to connect to the vb servers. 
-
 * * *
 <a name=Links></a>Links
 -----

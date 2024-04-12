@@ -19,6 +19,8 @@ computers are given a local ip address from the router. This is meant for home u
 2. You install WSL (Linux) on a Windows box.
 3. You install services in WSL and expost it ONLY to your local computers. In this case ssh and http proxy.
 
+***
+
 1. [Install wsl](#wsl)
 2. [Install services in WSL](#s)
 3. [port forward to WSL](#f)

@@ -71,8 +71,8 @@ hostnamectl set-hostname mysql1.myguest.virtualbox.org
   # Setup alises in Linux bash so you can ssh to this box
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql1='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql1_name='mysql1'" >> /mnt/shared/alias_ssh_systems
-echo "mysql1_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql1_name='mysql1'" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql1_ip=$ip" >> /mnt/shared/alias_ssh_systems
 
 
 apt install curl -y
@@ -186,8 +186,8 @@ Now import the images three times
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql2='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql2_name='mysql2'" >> /mnt/shared/alias_ssh_systems
-echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql2_name='mysql2'" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
 ```
 
     
@@ -207,8 +207,8 @@ echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
 ```bash
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql3='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql3_name='mysql3'" >> /mnt/shared/alias_ssh_systems
-echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql3_name='mysql3'" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
 ```  
 
 * In Virtual Box, select Import Appliance
@@ -226,8 +226,8 @@ echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "alias mysql4='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql4_name='mysql4'" >> /mnt/shared/alias_ssh_systems
-echo "mysql4_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql4_name='mysql4'" >> /mnt/shared/alias_ssh_systems
+echo "alias mysql4_ip=$ip" >> /mnt/shared/alias_ssh_systems
 ```
 
 Repeat this procedure if you need more images. 
@@ -253,6 +253,14 @@ echo "dev root@$mysql1_ip root@$mysql2_ip root@$mysql3_ip root@$mysql4_ip" >> .c
 * Connect to each server
 ```bash
 cssh dev
+```
+* Also, if you created the ssh keys in cygwin, copy your ssh keys to wsl. Change the username for you. This is how I did it. 
+```
+mkdir -p .ssh
+cd .ssh
+rsync -av /mnt/c/cygwin64/home/marka/.ssh/id_rsa* .
+chmod 600 id_rsa*
+
 ```
 
 * * *

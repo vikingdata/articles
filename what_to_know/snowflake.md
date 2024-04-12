@@ -254,10 +254,22 @@ https://docs.snowflake.com/en/user-guide/warehouses-considerations
 
 * A pipe can reorder columns or imit thme based on select statement.
 
-* https://docs.snowflake.com/en/user-guide/security-column-ext-token-use 149O[O
+* https://docs.snowflake.com/en/user-guide/security-column-ext-token-use 149
    data tokenization integration partner
 
 
 
 --------------------------
 # other
+
+
+* Links
+    * https://youtu.be/xnuv6vr8USE?si=pwvv9CnpEmm-Gi6i
+    * https://youtu.be/bveqnSk15JQ?si=uJ5s845aYYzA3pPJ
+    * AI with snowflake
+        * https://youtube.com/playlist?list=PLaMu-SDt_RB4Ly0xb0qsQVpLwRQcjtOb-&si=WMFSaZ38qc6DAo27
+        * PyTorch for AI
+* Two security acronyms
+   * Discretionary Access Control (DAC) which means "you create it, you own it."
+   * RBAC  Role-based Access Control 
+   

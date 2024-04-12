@@ -62,7 +62,7 @@ wsl
 wsl --distribution Ubuntu-22.04
 
   # Once in Linux
-  # to get to your home directory in Linux and not the Windows hom directory
+  # to get to your home directory in Linux and not the Windows home directory
 cd
 ```
 
@@ -70,17 +70,6 @@ Do first things:
 * Put your account into sudoers file.
 
 ```text
-
-
-  # Next time you login it will go to your linux home directory
-  # instead of windows. 
-echo "" >> ~/.bashrc
-echo "cd" >> ~/.bashrc
-
-echo 'nohup sh -c "  while true; do  sleep 10; done " > /tmp/run.out 2>&1 &' > run_continuous.sh
-echo 'exit' >> run_continuous.sh
-chmod 755 run_continuous.sh
-
   # sudo to root
 sudo bash
 
@@ -120,12 +109,6 @@ echo "cd" >> ~/.bashrc
 
 exit
 exit
-# You should be logged out of Linux and back to DOS or powershell. 
-```
-
-Check it is still running
-```dos
-wsl --list --verbose
 ```
 
 

@@ -254,6 +254,14 @@ echo "dev root@$mysql1_ip root@$mysql2_ip root@$mysql3_ip root@$mysql4_ip" >> .c
 ```bash
 cssh dev
 ```
+* Also, if you created the ssh keys in cygwin, copy your ssh keys to wsl. Change the username for you. This is how I did it. 
+```
+mkdir -p .ssh
+cd .ssh
+rsync -av /mnt/c/cygwin64/home/marka/.ssh/id_rsa* .
+chmod 600 id_rsa*
+
+```
 
 * * *
 <a name=mm>Setup Master-Master</a>

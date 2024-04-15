@@ -164,6 +164,8 @@ To find your windows ip
     * It will be under one of the entries in : ipconfig.exe -all | grep -i "IPv4 address"
 * Or in Windows shell, look for "IPV4" in  : ipconfig.exe 
 
+TODO: DONE test ssh
 
+TODO: test web browser, before posting
 
 

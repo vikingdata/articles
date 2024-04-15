@@ -108,16 +108,19 @@ exit
 -----
 In WSL
 ```
-apt-get install ssh
-sudo service ssh restart
+sudo bash
 
- sudo apt-get install tinyproxy
- sudo apt-get install tinyproxy
+
+apt-get install ssh
+service ssh restart
+
+apt-get install tinyproxy
+apt-get install tinyproxy
 
    # Change the network to yours. 
 echo "Allow 192.168.0.0/16" >> /etc/tinyproxy/tinyproxy.conf
 
-sudo service tinyproxy start
+service tinyproxy start
 
 ```
 
@@ -130,7 +133,7 @@ sudo service tinyproxy start
 Open up PowerShell in windows as administrator and execute
 
 ```
-netsh interface portproxy add v4tov4 listenport=22 listenaddress=0.0.0.0 connectport=8080 connectaddress=[WSL_IP]
+netsh interface portproxy add v4tov4 listenport=22 listenaddress=0.0.0.0 connectport=22 connectaddress=[WSL_IP]
 netsh interface portproxy add v4tov4 listenport=8888 listenaddress=0.0.0.0 connectport=8888 connectaddress=[WSL_IP]
 
 ```

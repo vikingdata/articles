@@ -83,6 +83,8 @@ Setup Ubuntu under VirtualBox
         * In virtual Box, select Network
         * select the first adapter
         * Change "attached to" to "bridged adapter. This will make so the host and and all instanced can see each other. 
+        * Select bidirectional for copy and paste.
+        * File sharing of c:\vm\shared to /mnt/shared
 
 * Install cygwin with SSH and make ssh key. We will use this later. 
     *  ssh-keygen -t rsa -N ''
@@ -122,6 +124,9 @@ systemctl enable ssh
 mkdir -p .ssh
 chmod 755 .ssh
 cp id_rsa.pub .ssh/authorized_keys
+
+   # Set console login, uses less memory
+systemctl set-default multi-user.target
 
 
   #after logged in
@@ -197,8 +202,32 @@ Test ssh keys
 ssh 192.168.1.11 -l mark "echo ok `hostname`"
 ssh 192.168.1.12 -l mark "echo ok `hostname`"
 ssh 192.168.1.13 -l mark "echo ok `hostname`"
+```
+
+On each server check (hostname of each server](https://www.redhat.com/sysadmin/configure-hostname-linux)
 
 ```
+hostname
+
+  ## If you need to set hostname
+  ### <NAME> should be node1, node2, node3, etc 
+hostnamectl set-hostname <NAME>.myguest.virtualbox.org
+
+reboot
+
+```
+
+Now on each of the systems
+
+```
+name=`hostname| cut -d '.' -f1`
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "" >> /mnt/shared/alias_ssh_systems
+```
+
 
 * * *
 <a name=f></a>Future

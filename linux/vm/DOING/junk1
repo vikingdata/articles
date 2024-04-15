@@ -1,0 +1,7 @@
+
+
+name=`hostname| cut -d '.' -f1`
+ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems

@@ -68,11 +68,12 @@ sudo bash
   #Set the hostname to mysql1
 hostnamectl set-hostname mysql1.myguest.virtualbox.org
 
-  # Setup alises in Linux bash so you can ssh to this box
+name=`hostname| cut -d '.' -f1`
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-echo "alias mysql1='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql1_name='mysql1'" >> /mnt/shared/alias_ssh_systems
-echo "mysql1_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "" >> /mnt/shared/alias_ssh_systems
 
 
 apt install curl -y
@@ -146,6 +147,9 @@ exit
 
    # Should be user, for me "mark"
 mysql -e "select USER();"
+
+reboot
+
 exit
 ```
 
@@ -168,7 +172,7 @@ exit
 -----
 
 To create 3 more images
-* for mysql[l2,3,4]
+* for mysql[l,2,3,4]
 
 Now import the images three times
 * In Virtual Box, select Import Appliance
@@ -182,12 +186,18 @@ Now import the images three times
     * sudo bash
 * Set the hostname to mysql1
     * hostnamectl set-hostname mysql2.myguest.virtualbox.org
-* Setup aliases in Linux bash so you can ssh to this box
+* Setup exportes in Linux bash so you can ssh to this box
 ```bash
+hostnamectl set-hostname mysql2.myguest.virtualbox.org
+
+name=`hostname| cut -d '.' -f1`
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-echo "alias mysql2='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql2_name='mysql2'" >> /mnt/shared/alias_ssh_systems
-echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "" >> /mnt/shared/alias_ssh_systems
+
+reboot
 ```
 
     
@@ -205,10 +215,17 @@ echo "mysql2_ip=$ip" >> /mnt/shared/alias_ssh_systems
     * hostnamectl set-hostname mysql3.myguest.virtualbox.org
 * Setup aliases in Linux bash so you can ssh to this box
 ```bash
+
+hostnamectl set-hostname mysql3.myguest.virtualbox.org
+
+name=`hostname| cut -d '.' -f1`
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-echo "alias mysql3='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql3_name='mysql3'" >> /mnt/shared/alias_ssh_systems
-echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "" >> /mnt/shared/alias_ssh_systems
+
+reboot
 ```  
 
 * In Virtual Box, select Import Appliance
@@ -224,10 +241,16 @@ echo "mysql3_ip=$ip" >> /mnt/shared/alias_ssh_systems
     * hostnamectl set-hostname mysql4.myguest.virtualbox.org
 * Setup aliases in Linux bash so you can ssh to this box
 ```
+hostnamectl set-hostname mysql4.myguest.virtualbox.org
+
+name=`hostname| cut -d '.' -f1`
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-echo "alias mysql4='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
-echo "mysql4_name='mysql4'" >> /mnt/shared/alias_ssh_systems
-echo "mysql4_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "alias $name='ssh $ip -l $SUDO_USER '" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_name='$name'" >> /mnt/shared/alias_ssh_systems
+echo "export $name""_ip=$ip" >> /mnt/shared/alias_ssh_systems
+echo "" >> /mnt/shared/alias_ssh_systems
+
+reboot
 ```
 
 Repeat this procedure if you need more images. 

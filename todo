@@ -37,11 +37,9 @@ DONE different guis, vscode, and other
 
 whats this --- t and l and i between mysql and snowflake. 
 
-articles
-   using odp, how to make books, youtube videos
 Better SQL programming, CTE
 
-mysql install and dpt
+DONE mysql install and dpt
 
 certifications
 
@@ -77,4 +75,7 @@ database festures (mysql, postgresql, snowflake)
 	 information_schema - mysql, postrgresql, snowflake
 	 engines -- mysql and postgresql
 	     rules can simulate engines in postgresql
-	     
+
+mongo -- multie replica set on on server
+      Python scripts to display health from status, rs.status, and others
+      	     make library which can be used by Dad or standalone

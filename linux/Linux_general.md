@@ -20,10 +20,10 @@ title: Linux general tips
 <a name=links></a>Links
 -----
 * [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
-* (Introducing pass)[https://www.passwordstore.org/]
-* (https://wiki.archlinux.org/title/Pass)[https://wiki.archlinux.org/title/Pass]
+* [Introducing pass](https://www.passwordstore.org/)
+* [https://wiki.archlinux.org/title/Pass](https://wiki.archlinux.org/title/Pass)
 
-
+ 
 ---
 * * *
 <a name=install></a>Disk Performance

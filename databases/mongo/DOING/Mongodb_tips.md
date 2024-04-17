@@ -21,7 +21,9 @@ Original Copyright April 2024**_
 -----
 * [Replication status](https://www.mongodb.com/docs/v6.0/reference/method/rs.status/)
     * [How to check MongoDB replication status](https://www.dragonflydb.io/faq/how-to-check-mongodb-replication-status)
-    
+
+Mongodb_tips.md
+
 * * *
 <a name=l>Checking Replica Status</a>
 -----

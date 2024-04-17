@@ -96,6 +96,15 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 <a name=c>Setup MongoDB config file</a>
 -----
 
+```
+sudo bash
+cd /etc
+wget
+
+
+
+```
+
 
 
 * * *

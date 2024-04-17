@@ -45,7 +45,7 @@ Info Commands is Windows Shell or Powershell
        * It will ask for a username and password
     * If you leave , you can reenter by :
 ```bash
-  # This sets the default doe wsl
+  # This sets the default for wsl
 wsl --set-default Ubuntu-22.04
 wsl
 
@@ -57,7 +57,7 @@ wsl --distribution Ubuntu-22.04
 cd
 ```
 
-Do first things:
+first things:
 * Put your account into sudoers file.
 
 ```text

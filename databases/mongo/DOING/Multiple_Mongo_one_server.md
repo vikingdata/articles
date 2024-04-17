@@ -10,7 +10,8 @@ Multiple MongoDB on one server
 ==============================
 
 _**by Mark Nielsen
-Original Copyright March 2024**_
+Original Copyright March April
+**_
 
 Since MongoDB doesn't work easily under virutal box, I wanted to make a simple replica set
 on one computer so testing and debugging and be performed. It is not meant for performance
@@ -26,8 +27,7 @@ testing.
 * * *
 <a name=Links></a>Links
 -----
-* TODO Install MongoDB
-
+* [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
 
 * * *
 <a name=i>Install Mongo</a>
@@ -36,6 +36,20 @@ testing.
 ```
 
 sudo bash
+
+mkdir -p /var/lib/mongo
+mkdir -p /data/mongo1/logs
+mkdir -p /data/mongo1/db
+mkdir -p /data/mongo2/logs
+mkdir -p /data/mongo2/db
+mkdir -p /data/mongo3/logs
+mkdir -p /data/mongo3/db
+mkdir -p /data/mongo4/logs
+mkdir -p /data/mongo4/db
+
+useradd mongodb --shell /bin/bash --create-home
+
+
 
 mkdir /data
 ln -s /var/lib/mongodb /data/db

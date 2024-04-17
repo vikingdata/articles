@@ -14,15 +14,16 @@ title: Linux general tips
 1. [Links](#links)
 2. [Disk Performance](#disk)
 3. [password management](#p)
-
+4. [Add user with password](#a)
 * * *
 
 <a name=links></a>Links
 -----
-
-
+* [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
 * (Introducing pass)[https://www.passwordstore.org/]
 * (https://wiki.archlinux.org/title/Pass)[https://wiki.archlinux.org/title/Pass]
+
+
 ---
 * * *
 <a name=install></a>Disk Performance
@@ -33,7 +34,7 @@ title: Linux general tips
         * On each partition
     * iostat -m 10
         * get data on disk activity every 10 seconds
-    * Use Promethesus, rafana, New Relic, or Solar Winds to graph the disk activity.
+    * Use Prometheus, Grafana, New Relic, or Solar Winds to graph the disk activity.
     * Make a script once a day write 10 gigs at a low point in activity and feed
     it to your graphing or in tabular format. Make are report on ones that are too
     slow. 
@@ -55,19 +56,55 @@ GPL software for Windows, Linux, Mac, etc.
     * Set on drive G: if windows.
         * If using Cygwin and Windows
             * Use /cygdrive/c/GoogleDrive/
-	    * which correspodnds to c:\GoogleDrive in Windows
+	    * which corresponds to c:\GoogleDrive in Windows
     * If Linux, Unix, or Mac, mount the drive wherever,
-    * Save the drive in a shell variable "GoogleDrive"
-        * ex : export GoogleDrive=/cygdrive/c/GoogleDrive/
-* In cygwin or Linux make sure "pass" is installed 
 
 * Install [Butttercup]https://buttercup.pw/)
 * In ButterCup
-    * choose valut
+    * choose vault
     * Then file
-    * Save the file in your Google Drive
+    * Save the file in your Google Drive directory. 
     * Add a very good password for the vault.
 * Now you can make groups, add customer entries to groups, and save passwords.
     * Don't forget to name the custom field or it won't let you save. 
 * If you close the program and copy it to another computer, you can open the
-vaults there with ButterCup. 
+vaults there with ButterCup.
+
+* * *
+<a name=a></a>Add user with password
+-----
+
+```
+sudo bash # or su  -l root 
+
+useradd test1 --shell /bin/bash --create-home 
+echo "test1:test1_password" | chpasswd
+
+# or if you want a specified id
+#   useradd test1 --shell /bin/bash --create-home --uid 5000
+
+```
+
+Now test Login with username: test1 and password : test1_password
+```
+su -l test
+```
+
+If you want to remove and test again.
+
+```
+userdel -r test1
+
+```
+
+If you want to remove a password
+```
+passwd -d test1
+
+```
+
+To lock test1's password
+```
+passwd -l test1
+
+```

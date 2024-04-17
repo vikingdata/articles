@@ -15,6 +15,8 @@ title: Linux general tips
 2. [Disk Performance](#disk)
 3. [password management](#p)
 4. [Add user with password](#a)
+5. [Find and remove packages](#pa)
+6. [CheetSheets](#c)
 * * *
 
 <a name=links></a>Links
@@ -22,8 +24,11 @@ title: Linux general tips
 * [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
 * [Introducing pass](https://www.passwordstore.org/)
 * [https://wiki.archlinux.org/title/Pass](https://wiki.archlinux.org/title/Pass)
-
- 
+* Tips and Tricks
+    * (Top 35 Linux Console Tips and Tricks From Practical Experience)[https://hackernoon.com/top-35-linux-console-tips-and-tricks-from-practical-experience]
+    * [6 Linux Terminal Tips and Tricks to Get Things Done Quickl](https://www.makeuseof.com/linux-terminal-tips-and-tricks/)
+    * (10 Linux Terminal Tips and Tricks to Enhance Your Workflow)[https://www.learnlinux.tv/10-linux-terminal-tips-and-tricks-to-enhance-your-workflow/]
+        * I use screen instead of ttmux
 ---
 * * *
 <a name=install></a>Disk Performance
@@ -108,3 +113,25 @@ To lock test1's password
 passwd -l test1
 
 ```
+
+* * *
+<a name=pa></a>Find and remove packages
+-----
+
+To remove all mongodb packages from Ubuntu
+
+```
+apt list --installed | grep mongo | cut -d '/' -f1 | tr '\n' ',' > /tmp/remove_packages.txt
+cat /tmp/remove_packages.txt| apt-get purge --auto-remove -y
+```
+
+* * *
+<a name=c></a>Cheetsheets
+-----
+* MongoDB
+    * This is a very good one [A Performance Cheat Sheet for MongoDB](https://severalnines.com/blog/performance-cheat-sheet-mongodb/)
+    * AWS https://mongodb-devhub-cms.s3.us-west-1.amazonaws.com/Mongo_DB_Shell_Cheat_Sheet_1a0e3aa962.pdf
+    * https://cheatography.com/ovi-mihai/cheat-sheets/mongodb/
+    * https://www.mongodb.com/developer/products/mongodb/cheat-sheet/
+    * https://gist.github.com/bradtraversy/f407d642bdc3b31681bc7e56d95485b6
+    * https://www.interviewbit.com/mongodb-cheat-sheet/ 

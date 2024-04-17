@@ -27,7 +27,8 @@ testing.
 * * *
 <a name=Links></a>Links
 -----
-* [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
+* [MongoBD Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+* Old webpages I have on Mongo (http://www.menprojects.com/public/mongo_help.html)htttp://www.menprojects.com/public/mongo_help.html]
 
 * * *
 <a name=i>Install Mongo</a>
@@ -38,6 +39,8 @@ testing.
 sudo bash
 
 mkdir -p /var/lib/mongo
+mkdir -p /data
+ln -s /var/lib/mongo /data/db
 mkdir -p /data/mongo1/logs
 mkdir -p /data/mongo1/db
 mkdir -p /data/mongo2/logs
@@ -48,7 +51,7 @@ mkdir -p /data/mongo4/logs
 mkdir -p /data/mongo4/db
 
 useradd mongodb --shell /bin/bash --create-home
-
+chown -R mongodb.mongodb /data /var/lib/mongo
 
 
 mkdir /data
@@ -73,11 +76,27 @@ sudo apt-get update
    # Get the latest
 apt-get install -y mongodb-org
 
+
+   # start mongo
+systemctl start mongod
+
+   # Test if it works
+mongosh -eval "db.runCommand({ serverStatus: 1}).host"
+
+   #enable it at boot as a service
+systemctl enable mongod
+
+   # restart it and test again as a service
+service mongod restart
+mongosh -eval "db.runCommand({ serverStatus: 1}).host"
+
 ```
 
 * * *
 <a name=c>Setup MongoDB config file</a>
 -----
+
+
 
 * * *
 <a name=s>Start all instances</a>

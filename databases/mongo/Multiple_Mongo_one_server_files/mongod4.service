@@ -9,7 +9,7 @@ User=mongodb
 Group=mongodb
 EnvironmentFile=-/etc/default/mongod
 Environment="MONGODB_CONFIG_OVERRIDE_NOFORK=1"
-ExecStart=/usr/bin/mongod --config /database/mongo4/mongod4.conf
+ExecStart=/usr/bin/mongod --config /data/mongo4/mongod4.conf
 RuntimeDirectory=mongodb4
 # file size
 LimitFSIZE=infinity

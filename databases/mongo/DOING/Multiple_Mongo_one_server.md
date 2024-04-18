@@ -98,19 +98,31 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 <a name=c>Setup MongoDB config file</a>
 -----
 
+So why did I chose port 3001? I needed 4 servers with their own uniqr ports. In another article I will shard this replica set
+and I will need the default port of 27017 for mongos. 
+
 ```
 sudo bash
+cd /etc
+wget -r https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod.conf
+
+
+
 cd /data/mongo1
+rm -f mongod1.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod1.conf
 cd /data/mongo2
+rm -f mongod2.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod2.conf
 cd /data/mongo3
+rm -f mongod2.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod3.conf
 cd /data/mongo4
+rm -f mongod2.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod4.conf
 
 cd /lib/systemd/system/
-
+rm -f mongod1.service mongod2.service mongod3.service mongod4.service
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod1.service
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod2.service
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod3.service
@@ -125,15 +137,58 @@ wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/
 
 ```
 killall mongod
-sleep(2)
+sleep 2
 
-sudo -u mongodb mongod --config=/etc/mongo1.conf --port 3001 
+sudo -u mongodb mongod --config=/data/mongo1/mongod1.conf & 
+sudo -u mongodb mongod --config=/data/mongo2/mongod2.conf &
+sudo -u mongodb mongod --config=/data/mongo3/mongod3.conf &
+sudo -u mongodb mongod --config=/data/mongo4/mongod4.conf &
+sleep 2
 
-   # start mongo1
-systemctl start mongod1
-mongosh -eval "db.runCommand({ serverStatus: 1}).host"
+   # See if they still running
+jobs
+
+   # test if you can connect
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
+
+killall mongod
+rm /data/mongo*/db/*.lock
+
+   # If so, kill and restart
+systemctl restart mongod1
+systemctl restart mongod2
+systemctl restart mongod3
+systemctl restart mongod4
+
+  # If they don't restart
+# systemctl status --full --lines=50 mongod1
+# systemctl status --full --lines=50 mongod1
+# systemctl status --full --lines=50 mongod1
+# systemctl status --full --lines=50 mongod1
+
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
+
+  # If good, enable at restart, and then restart them
+systemctl daemon-reload
+
 systemctl enable mongod1
-service mongod1 restart
+systemctl enable mongod2
+systemctl enable mongod3
+systemctl enable mongod4
+
+systemctl stop mongod1
+systemctl stop mongod2
+systemctl stop mongod3
+systemctl stop mongod4
+
+
+service mongod1 start
 mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 
 

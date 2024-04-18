@@ -99,7 +99,8 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 -----
 
 So why did I chose port 3001? I needed 4 servers with their own uniqr ports. In another article I will shard this replica set
-and I will need the default port of 27017 for mongos. 
+and I will need the default port of 27017 for mongos. In an future article, I will be exploring replica set, sharding, and other
+things based on the setup here. 
 
 ```
 sudo bash
@@ -158,10 +159,18 @@ killall mongod
 rm /data/mongo*/db/*.lock
 
    # If so, kill and restart
+killall mongod
+rm /data/mongo*/db/*.lock
+
+systemctl daemon-reload
+
 systemctl restart mongod1
 systemctl restart mongod2
 systemctl restart mongod3
 systemctl restart mongod4
+
+  # See if they started
+ps auxw | grep mongod
 
   # If they don't restart
 # systemctl status --full --lines=50 mongod1
@@ -174,29 +183,63 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
 
-  # If good, enable at restart, and then restart them
-systemctl daemon-reload
+  # These next steps may be uncesssary.
 
+  # If good, enable at restart, and then restart them
 systemctl enable mongod1
 systemctl enable mongod2
 systemctl enable mongod3
 systemctl enable mongod4
+
+   # make sure they have stopped
 
 systemctl stop mongod1
 systemctl stop mongod2
 systemctl stop mongod3
 systemctl stop mongod4
 
-
-service mongod1 start
-mongosh -eval "db.runCommand({ serverStatus: 1}).host"
+ps auxw | grep mongod
 
 
-
-
+   # restart them using service service restart mongod1
+service mongod1 restart
+service mongod2 restart
+service mongod3 restart
+service mongod4 restart
 
 ```
 
 * * *
 <a name=r>Setup replica set</a>
 -----
+
+```
+sudo bash 
+cd /usr/bin
+   # I hate sh because it means "shell". Perl is perl, python is Python. Python should be pythonsh then. I don't like it.
+ln -s mongosh mongo
+
+mongo --port 30001 --eval "rs.initiate( { _id: 'rs1', version: 1, members: [ {_id :0, host: 'localhost:30001' } ] } )"
+mongo --port 30001 --eval "rs.add('localhost:30002')"
+mongo --port 30001 --eval "rs.add('localhost:30003')"
+mongo --port 30001 --eval "rs.add('localhost:30004')"
+
+echo "
+cfg = rs.conf();
+cfg.members[0].priority = 3;
+cfg.members[1].priority = 2;
+cfg.members[2].priority = 1;
+cfg.members[3].priority = 0;
+cfg.members[3].hidden = 1;
+rs.reconfig(cfg);
+" >> /tmp/reconfig.js
+
+
+cat /tmp/reconfig.js | mongo --port 30001
+
+  # Let's print out some info
+mongo --port 30001 --eval "rs.status()"
+mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:"
+
+
+```

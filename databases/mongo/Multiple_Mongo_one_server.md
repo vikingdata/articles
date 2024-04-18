@@ -56,8 +56,8 @@ useradd mongodb --shell /bin/bash --create-home
 chown -R mongodb.mongodb /data /var/lib/mongo
 
 
-mkdir /data
-ln -s /var/lib/mongodb /data/db
+ln -s /var/lib/mongodb /data/mongod_old/db
+
    #Install Mongodb and other programs
 
 sudo apt-get install gnupg curl

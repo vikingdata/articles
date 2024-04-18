@@ -198,7 +198,7 @@ systemctl stop mongod4
 ps auxw | grep mongod
 
 
-   # restart them using service service restart mongod1
+   # restart them using service 
 service mongod1 restart
 service mongod2 restart
 service mongod3 restart

@@ -146,7 +146,7 @@ sudo -u mongodb mongod --config=/data/mongo3/mongod3.conf &
 sudo -u mongodb mongod --config=/data/mongo4/mongod4.conf &
 sleep 2
 
-   # See if they still running
+   # See if they are still running
 jobs
 
    # test if you can connect
@@ -154,9 +154,6 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
-
-killall mongod
-rm /data/mongo*/db/*.lock
 
    # If so, kill and restart
 killall mongod
@@ -174,9 +171,9 @@ ps auxw | grep mongod
 
   # If they don't restart
 # systemctl status --full --lines=50 mongod1
-# systemctl status --full --lines=50 mongod1
-# systemctl status --full --lines=50 mongod1
-# systemctl status --full --lines=50 mongod1
+# systemctl status --full --lines=50 mongod2
+# systemctl status --full --lines=50 mongod3
+# systemctl status --full --lines=50 mongod4
 
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
@@ -231,6 +228,8 @@ cfg.members[1].priority = 2;
 cfg.members[2].priority = 1;
 cfg.members[3].priority = 0;
 cfg.members[3].hidden = 1;
+cfg.members[3].votes = 0;
+
 rs.reconfig(cfg);
 " >> /tmp/reconfig.js
 
@@ -240,6 +239,6 @@ cat /tmp/reconfig.js | mongo --port 30001
   # Let's print out some info
 mongo --port 30001 --eval "rs.status()"
 mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:"
-
+mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"
 
 ```

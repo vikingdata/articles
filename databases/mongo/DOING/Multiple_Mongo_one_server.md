@@ -100,11 +100,14 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 
 ```
 sudo bash
-cd /etc
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongo1.conf
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongo2.conf
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongo3.conf
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongo4.conf
+cd /data/mongo1
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod1.conf
+cd /data/mongo2
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod2.conf
+cd /data/mongo3
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod3.conf
+cd /data/mongo4
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod4.conf
 
 cd /lib/systemd/system/
 

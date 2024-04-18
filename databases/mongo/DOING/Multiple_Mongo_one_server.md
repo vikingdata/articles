@@ -124,6 +124,8 @@ wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/
 killall mongod
 sleep(2)
 
+sudo -u mongodb mongod --config=/etc/mongo1.conf --port 3001 
+
    # start mongo1
 systemctl start mongod1
 mongosh -eval "db.runCommand({ serverStatus: 1}).host"

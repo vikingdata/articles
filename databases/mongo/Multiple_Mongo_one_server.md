@@ -98,7 +98,7 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host"
 <a name=c>Setup MongoDB config file</a>
 -----
 
-So why did I chose port 3001? I needed 4 servers with their own uniqr ports. In another article I will shard this replica set
+So why did I chose port 30001? I needed 4 servers with their own uniqr ports. In another article I will shard this replica set
 and I will need the default port of 27017 for mongos. In an future article, I will be exploring replica set, sharding, and other
 things based on the setup here. 
 

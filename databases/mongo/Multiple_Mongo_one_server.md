@@ -221,6 +221,9 @@ mongo --port 30001 --eval "rs.add('localhost:30002')"
 mongo --port 30001 --eval "rs.add('localhost:30003')"
 mongo --port 30001 --eval "rs.add('localhost:30004')"
 
+   # First 3 are the main server, the 4th is hidden and cannot become primary.
+   # Usually, the 4th is for backups or other. 
+
 echo "
 cfg = rs.conf();
 cfg.members[0].priority = 3;
@@ -233,10 +236,10 @@ cfg.members[3].votes = 0;
 rs.reconfig(cfg);
 " >> /tmp/reconfig.js
 
-
 cat /tmp/reconfig.js | mongo --port 30001
 
-  # Let's print out some info
+
+# Let's print out some info
 mongo --port 30001 --eval "rs.status()"
 mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:"
 mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"

@@ -14,7 +14,7 @@ Original Copyright April 2024
 **_
 
 Since MongoDB doesn't work easily under virutal box, I wanted to make a simple replica set
-on one computer so testing and debugging and be performed. It is not meant for performance
+on one computer so testing and debugging can be performed. It is not meant for performance
 testing. 
 
 1. [Links](#links)

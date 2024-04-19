@@ -28,7 +28,7 @@ testing.
 <a name=Links></a>Links
 -----
 * [MongoBD Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
-* Old webpages I have on Mongo (http://www.menprojects.com/public/mongo_help.html)[htttp://www.menprojects.com/public/mongo_help.html]
+* Old webpages I have on Mongo [http://www.menprojects.com/public/mongo_help.html](htttp://www.menprojects.com/public/mongo_help.html)
 
 * * *
 <a name=i>Install Mongo</a>

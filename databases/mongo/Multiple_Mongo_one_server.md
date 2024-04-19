@@ -10,7 +10,7 @@ Multiple MongoDB on one server
 ==============================
 
 _**by Mark Nielsen
-Original Copyright April 2024
+Original Copyright February 2017
 **_
 
 Since MongoDB doesn't work easily under virutal box, I wanted to make a simple replica set

@@ -12,7 +12,7 @@ title: Rundeck : Install
 
 1. [Links](#links)
 2. [Install Rundeck](#install)
-3. [Make first project](#p)
+3. [Make first few projects](#pl)
 
 
 * * *
@@ -91,8 +91,45 @@ service rundeckd start
 
 ----
 * * *
-<a name=pl></a>First project
+<a name=pl></a>First few projects
 -----
+Links
+* (Node Sources and How to Use Them)[https://docs.rundeck.com/docs/learning/getting-started/jobs/node-sources.html#adding-a-static-source]
+* (RESOURCE-YAML)[https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition]
 
-* First login as user admin and password admin
-* Change your password.
+
+
+Steps
+
+* Exceute:
+```
+mkdir -p /etc/rundeck/nodelists
+chown -R rundeck /etc/rundeck/nodelists
+
+```
+* Create Project : Localhost
+* With "Localhost" being displayed on the top. Choose Projects settings below.
+* Create a file with the yaml properties, and call it "/etc/rundeck/nodelists/local.yml":
+```
+localhost:
+  description: Rundeck server node
+  hostname: localhost
+  nodename: localhost
+```
+* Add a node source, this this is a file which contains a list of nodes in yaml format.
+    * Click on "Add new node source "
+    * Choose file
+        * Format : resourceyaml (choose from dropdown box)
+	* File Path : /etc/rundeck/nodelists/local.yml
+* Click  on "Jobs"
+* Create a new job named "ls /etc" Under details.
+    * Under Workflow add click on "add a step"
+    * Choose command
+    * Enter "ls /etc"
+* For Nodes, leave it local.
+* Click on jobs in the left hand menu.
+    * Click on "ls /etc"
+        * Click on "Run Job Now"
+            * Click on Localhost and then Command to see the output.
+	    
+

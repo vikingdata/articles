@@ -9,10 +9,12 @@ import subprocess,os, sys
 
 password=sys.argv[1]
 
-f = open('secret_file')
-secret = f.readline().strip()
-f.close
 
+secret = "secret"
+if os.path.isfile("secret_file"):
+  f = open('secret_file')
+  secret = f.readline().strip()
+  f.close
 
 com = "echo '" + str(password) + "' | openssl enc -k " + str(secret) + " -aes256 -base64  2>/dev/null"
 result = subprocess.run(com, stdout=subprocess.PIPE, shell=True)

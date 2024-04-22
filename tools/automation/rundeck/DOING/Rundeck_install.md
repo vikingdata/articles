@@ -22,10 +22,10 @@ title: Rundeck : Install
 
 General
 * [Rundeck Install Ubuntu](https://docs.rundeck.com/docs/administration/install/linux-deb.html#installing-rundeck)
-* (Node Sources and How to Use Them)[https://docs.rundeck.com/docs/learning/getting-started/jobs/node-sources.html#adding-a-static-source]
-* (RESOURCE-YAML)[https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition]
-* (SSH Node Execution) [https://docs.rundeck.com/docs/manual/projects/node-execution/ssh.html#configuring-remote-machine-for-ssh]
-* (Use SSH on Linux/Unix Nodes)[https://docs.rundeck.com/docs/learning/howto/ssh-on-linux-nodes.html]
+* [Node Sources and How to Use Them](https://docs.rundeck.com/docs/learning/getting-started/jobs/node-sources.html#adding-a-static-source)
+* [RESOURCE-YAML](https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition)
+* [SSH Node Execution](https://docs.rundeck.com/docs/manual/projects/node-execution/ssh.html#configuring-remote-machine-for-ssh)
+* [se SSH on Linux/Unix Nodes](https://docs.rundeck.com/docs/learning/howto/ssh-on-linux-nodes.html)
 
 ---
 * * *
@@ -213,4 +213,9 @@ server1:
      * Select add or upload key
 	 * Name : server1
 	 * If you see Enter Text, switch to Upload File
-	     * Choose /var/lib/rundeck/ssh_keys/nopass1_rsa 
+	     * Choose /var/lib/rundeck/ssh_keys/nopass1_rsa
+* Click on Jobs
+    * Select server1
+        * 
+
+

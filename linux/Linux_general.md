@@ -17,6 +17,7 @@ title: Linux general tips
 4. [Add user with password](#a)
 5. [Find and remove packages](#pa)
 6. [CheetSheets](#c)
+7. [ssh keys](#s)
 * * *
 
 <a name=links></a>Links
@@ -134,4 +135,27 @@ cat /tmp/remove_packages.txt| apt-get purge --auto-remove -y
     * https://cheatography.com/ovi-mihai/cheat-sheets/mongodb/
     * https://www.mongodb.com/developer/products/mongodb/cheat-sheet/
     * https://gist.github.com/bradtraversy/f407d642bdc3b31681bc7e56d95485b6
-    * https://www.interviewbit.com/mongodb-cheat-sheet/ 
+    * https://www.interviewbit.com/mongodb-cheat-sheet/
+
+
+* * *
+<a name=s></a>ssh keys 
+-----
+
+* -N '' means etmpy password
+* -f is the full path to create private key file. Another public will be named the same and appended with ".pub". 
+
+```
+   # In this example, we don't use the default diretory of "~/.ssh".
+mkdir ~/ssh_keys
+
+   # We will use an empty password
+ssh-keygen -f ~/ssh_keys/test1_rsa -N ''
+
+
+  # Generate random passwords. Suggestion, have script store them.
+mypassphrase=`openssl rand -base64 20`
+ssh-keygen -f ~/ssh_keys/pass1_rsa -N "$mypassphrase"
+echo "My passphrase is $mypassphrase"
+
+```

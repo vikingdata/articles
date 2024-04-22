@@ -22,7 +22,10 @@ title: Rundeck : Install
 
 General
 * [Rundeck Install Ubuntu](https://docs.rundeck.com/docs/administration/install/linux-deb.html#installing-rundeck)
-
+* (Node Sources and How to Use Them)[https://docs.rundeck.com/docs/learning/getting-started/jobs/node-sources.html#adding-a-static-source]
+* (RESOURCE-YAML)[https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition]
+* (SSH Node Execution) [https://docs.rundeck.com/docs/manual/projects/node-execution/ssh.html#configuring-remote-machine-for-ssh]
+* (Use SSH on Linux/Unix Nodes)[https://docs.rundeck.com/docs/learning/howto/ssh-on-linux-nodes.html]
 
 ---
 * * *
@@ -93,10 +96,8 @@ service rundeckd start
 * * *
 <a name=pl></a>First few projects
 -----
-Links
-* (Node Sources and How to Use Them)[https://docs.rundeck.com/docs/learning/getting-started/jobs/node-sources.html#adding-a-static-source]
-* (RESOURCE-YAML)[https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition]
 
+## First Project
 
 
 Steps
@@ -117,8 +118,6 @@ localhost:
   nodename: localhost
 ```
 
-## First project
-
 * Add a node source, this this is a file which contains a list of nodes in yaml format.
     * Click on "Add new node source "
     * Choose file
@@ -137,3 +136,59 @@ localhost:
 	    
 
 ## Second Project
+
+* Create ssh keys with user "rundeck"
+```
+  # default home is /var/lib/rundeck
+sudo -u rundeck bash
+
+  # Create a directory for ssh keys
+mkdir -p ~/ssh_keys
+  # Make passwordless ssh key
+ssh-keygen -f ~/ssh_keys/nopass1_rsa -N ""
+
+```
+* Add ssh to target server if you have to sudo to root. 
+```
+sudo -u rundeck bash
+
+   # Change this to your user and host.
+   # It is assumed you have to sudo to root. 
+host="192.168.1.21"
+user="mark"
+
+  # Change username and host for yyour server.
+  # You may have to enter a password to get it copied. 
+ssh-copy-id -i ~/ssh_keys/nopass1_rsa.pub $user@$host
+
+# Test if we can connect via ssh passwordless
+ssh -i ssh_keys/nopass1_rsa @user@host"ls /etc | wc -l"
+
+  # Now install the key to root
+scp -i ssh_keys/nopass1_rsa ssh_keys/nopass1_rsa.pub $user@$host:/tmp/
+ssh  $user@$host "sudo mkdir -p /root/.ssh"
+
+# Should come back as "root"
+ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo whoami"
+ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo cat /tmp/nopass1_rsa.pub >> /root/.ssh/authorized_keys"
+
+   # test if we appended the ssk key to root
+ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo bash -c 'cat  /root/.ssh/authorized_keys  | grep -i rundeck'"
+
+   # final test, see it we can log in as root
+   ssh -i ssh_keys/nopass1_rsa  root@$host "ls /etc | wc -l "
+
+```
+
+    * If not, you know the root password
+```
+   # change your hostname
+host="192.168.1.21"
+
+  # You may have to answer yes and also put in root's password
+ssh-copy-id -i ~/ssh_keys/nopass1_rsa.pub root@$host
+
+# final test, see it we can log in as root
+ssh -i ssh_keys/nopass1_rsa  root@$host "ls /etc | wc -l "
+
+```

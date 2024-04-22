@@ -97,7 +97,7 @@ service rundeckd start
 <a name=pl></a>First few projects
 -----
 
-## First Project
+### First Project
 
 
 Steps
@@ -118,7 +118,7 @@ localhost:
   nodename: localhost
 ```
 
-* Add a node source, this this is a file which contains a list of nodes in yaml format.
+* Add a node source, add this is a file which contains a list of nodes in yaml format.
     * Click on "Add new node source "
     * Choose file
         * Format : resourceyaml (choose from dropdown box)
@@ -135,7 +135,7 @@ localhost:
             * Click on Localhost and then Command to see the output.
 	    
 
-## Second Project
+### Second Project
 
 * Create ssh keys with user "rundeck"
 ```
@@ -192,3 +192,25 @@ ssh-copy-id -i ~/ssh_keys/nopass1_rsa.pub root@$host
 ssh -i ssh_keys/nopass1_rsa  root@$host "ls /etc | wc -l "
 
 ```
+
+* Under the dropdown, select "Create Projects"
+    * Name it server1
+* Create a file with the yaml properties, and call it "/etc/rundeck/nodelists/server.yml":
+    * Change your hostname to match your server
+```
+server1:
+  description: Rundeck server node
+  hostname: 192.168.1.21
+  nodename: server1
+```
+
+* Add a node source, add this is a file which contains a list of nodes in yaml format.
+    * Click on "Add new node source "
+    * Choose file
+        * Format : resourceyaml (choose from dropdown box)
+        * File Path : /etc/rundeck/nodelists/server.yml
+* Click on Project Settings and then Key Storage
+     * Select add or upload key
+	 * Name : server1
+	 * If you see Enter Text, switch to Upload File
+	     * Choose /var/lib/rundeck/ssh_keys/nopass1_rsa 

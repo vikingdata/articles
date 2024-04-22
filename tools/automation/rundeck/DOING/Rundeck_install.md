@@ -116,6 +116,9 @@ localhost:
   hostname: localhost
   nodename: localhost
 ```
+
+## First project
+
 * Add a node source, this this is a file which contains a list of nodes in yaml format.
     * Click on "Add new node source "
     * Choose file
@@ -133,3 +136,4 @@ localhost:
             * Click on Localhost and then Command to see the output.
 	    
 
+## Second Project

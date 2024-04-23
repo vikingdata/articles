@@ -233,7 +233,7 @@ server1:
     * Name it server1
     * On workflow, click on Add A Step
         * choose command
-        * command: echo "I am running on `hostname`, as `whoami` in `pwd`."
+        * command:```echo "I am running on `hostname`, as `whoami` in `pwd`." ```
 	    * Click Save
 	* Click Nodes
 	    * Click Dispatch to Nodes

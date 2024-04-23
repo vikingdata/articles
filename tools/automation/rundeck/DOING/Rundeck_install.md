@@ -322,3 +322,15 @@ server4:
         * File Path or URL enter "/tmp/script4.sh"
     * Click on Save and then Create
 * Run the job and look at output. 
+
+
+### Project 5 -- execute script from url
+* Choose Project "scripts4"
+* Click on Jobs and then New Job.
+    * name it "url"
+    * Click on Workflow and then Add Step
+        * Click Script or Url
+	    * File Path or URL :
+	    * Arguments : Argument1
+	    * Invocation String : bash ${scriptfile}
+	    

@@ -162,15 +162,15 @@ user="mark"
 ssh-copy-id -i ~/ssh_keys/nopass1_rsa.pub $user@$host
 
 # Test if we can connect via ssh passwordless
-ssh -i ssh_keys/nopass1_rsa @user@host"ls /etc | wc -l"
+ssh -i ssh_keys/nopass1_rsa $user@$host "ls /etc | wc -l"
 
   # Now install the key to root
 scp -i ssh_keys/nopass1_rsa ssh_keys/nopass1_rsa.pub $user@$host:/tmp/
-ssh  $user@$host "sudo mkdir -p /root/.ssh"
+ssh -i ssh_keys/nopass1_rsa $user@$host "sudo mkdir -p /root/.ssh"
 
 # Should come back as "root"
 ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo whoami"
-ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo cat /tmp/nopass1_rsa.pub >> /root/.ssh/authorized_keys"
+ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo cat /tmp/nopass1_rsa.pub "
 
    # test if we appended the ssk key to root
 ssh -i ssh_keys/nopass1_rsa  $user@$host "sudo bash -c 'cat  /root/.ssh/authorized_keys  | grep -i rundeck'"
@@ -202,6 +202,8 @@ server1:
   description: Rundeck server node
   hostname: 192.168.1.21
   nodename: server1
+  usernme: root
+  ssh-key-storage-path: keys/project/server1/nopass1_rsa
 ```
 
 * Add a node source, add this is a file which contains a list of nodes in yaml format.

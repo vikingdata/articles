@@ -19,7 +19,7 @@ title: Rundeck : Install
    * [Project 3 -- running a script from rundeck onto remote server.](#p3)
    * [Project 4 -- execute an existing  script on remote server.](#p4)
    * [Project 5 -- execute script from url](#p5)
-
+   * [Project 6 -- execute local command on rundeck server](#p6)
 
 * * *
 
@@ -105,11 +105,12 @@ service rundeckd start
 -----
 Some things to remember:
   * Sometimes things are cached. This may be keys, scripts, etc. To make sure they are reloaded, edit them, delete and add again, and save them again. 
-
+  * If you have to redo  a job, script, or command completely delete it and start over.
 
 <a name="p1"></a>
 ### Project 1 -- execute command locally on rundeck
 
+This commands could be run remotely. But we defined the host to be localhost
 
 Steps
 
@@ -146,7 +147,7 @@ localhost:
             * Click on Localhost and then Command to see the output.
 	    
 <a name="p2"></a>
-### Project 3 -- setup ssh and run command remotely. 
+### Project 23 -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
 ```
@@ -228,9 +229,20 @@ server1:
 	 * If you see Enter Text, switch to Upload File
 	     * Choose /var/lib/rundeck/ssh_keys/nopass1_rsa
 * Click on Jobs
-    * Select server1
-        * Click on Run Jon Now
-	* Look at its output by clicking on server1 and then Command. You should also see an "OK" comment.
+    * Click new job
+    * Name it server1
+    * On Wordklow, click on Add A Step
+        * choose command
+        * command: echo "I am running on `hostname`, as `whoami` in `pwd`."
+	    * Click Save
+	* Click Nodes
+	    * Click Dispath to Nodes
+	    * Click on Node filter : s.*
+            * Click Search
+            * "server1" should appear under Matched Nodes
+	    * Click Create
+* Click on Run Job now and look at output.
+
 
 
 <a name="p3"></a>
@@ -273,10 +285,16 @@ server3:
 ```
 #!/usr/bin/bash
 
-echo "This is an inline script executed on `hostname -a` on `date`."
+cat /etc/hostname
+echo "This is an inline script executed on `hostname` on `date` by `whoami` at $0."
 ```
         * Under Invocation String : bash ${scriptfile}
         * Click Save
+    * Click Nodes
+        * Click Dispath to Nodes
+        * Click on Node filter : s.*
+	* Click Search
+        * "server3" should appear under Matched Nodes
         * Click Create
 * Click on "Run job now"
 
@@ -289,7 +307,7 @@ echo "This is an inline script executed on `hostname -a` on `date`."
 ssh mark@192.168.1.21
 
 echo '#!/bin/bash
-echo "Excuting script on `hostname` at /tmp/script4.sh" 
+echo "Executing script on `hostname` as `whoami` on `date` at /tmp/script4.sh   $0" 
 ' >  /tmp/script4.sh
 
 chmod 755 /tmp/script4.sh
@@ -332,7 +350,12 @@ server4:
         * Click Add Step
         * Select Script or Url 
         * File Path or URL enter "/tmp/script4.sh"
-    * Click on Save and then Create
+    * Click Nodes
+        * Click Dispath to Nodes
+        * Click on Node filter : s.*
+        * Click Search
+        * "server4" should appear under Matched Nodes
+        * Click on Save and then Create
 * Run the job and look at output. 
 
 <a name="p5"></a>
@@ -345,11 +368,18 @@ server4:
 	    * File Path or URL : https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/printme.sh
 	    * Arguments : Argument1
 	    * Invocation String : bash ${scriptfile}
+       * Click Nodes
+            * Click Dispath to Nodes
+            * Click on Node filter : s.*
+            * Click Search
+            * "server4" should appear under Matched Nodes
+            * Click Create
     * Click on Save and then Create
 * Run the job and look at output.
 
 <a name="p6"></a>
-### Project 5 -- execute local command on server
+### Project 6 -- execute local command on rundeck server
+* This will always be urn locally and rundeck server as user 'rundeck'.
 * Choose Project "scripts4"
 * Click on Jobs and then New Job.
     * name it "local command"
@@ -358,3 +388,5 @@ server4:
             * Command : bash -c 'echo "This is a local command on remote server `hostname`, user `whoami` at `date`"'
     * Click on Save and then Create
 * Run the job and look at output.
+
+

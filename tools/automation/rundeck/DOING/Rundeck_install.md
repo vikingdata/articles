@@ -379,14 +379,81 @@ server4:
 
 <a name="p6"></a>
 ### Project 6 -- execute local command on rundeck server
-* This will always be urn locally and rundeck server as user 'rundeck'.
+* This will always be run locally and rundeck server as user 'rundeck'.
 * Choose Project "scripts4"
 * Click on Jobs and then New Job.
     * name it "local command"
     * Click on Workflow and then Add Step
         * Click Local Command
-            * Command : bash -c 'echo "This is a local command on remote server `hostname`, user `whoami` at `date`"'
+            * Command : ```bash -c 'echo "This is a local command  `hostname`, user `whoami` at `date`"' ```
     * Click on Save and then Create
+* Run the job and look at output.
+
+
+<a name="p7"></a>
+### Project 7 -- Use tags
+
+* Update the public ssh keys on the following server under the name 'mark'.
+    * 192.168.1.28 ssh 192.168.1.24 192.168.1.25 
+    * Use your own hosts. 
+```
+for h in 192.168.1.28 ssh 192.168.1.24 192.168.1.25; do
+   ssh-copy-id -i ~/ssh_keys/nopass1_rsa.pub mark@$h
+done
+
+```
+
+* Change /etc/rundeck/nodelists/server4.yml
+```
+  # For /etc/rundeck/nodelists/server4.yml
+  # Change the hostname to your hostname.
+  # Change 'mark' to your username.
+server4:
+  nodename: server4
+  description: Rundeck server node
+  hostname: 192.168.1.21
+  ssh-key-storage-path: keys/project/scripts4/nopass1_rsa
+  username : mark
+  osFamily : unix
+  tags : tag1
+
+server5:
+  nodename: server5
+  description: server5
+  hostname: 192.168.1.28
+  ssh-key-storage-path: keys/project/scripts4/nopass1_rsa
+  username : mark
+  osFamily : unix
+  tags : tag2
+server6:
+  nodename: server6
+  description: server6
+  hostname: 192.168.1.24
+  ssh-key-storage-path: keys/project/scripts4/nopass1_rsa
+  username : mark
+  osFamily : unix
+  tags : tag3
+
+server7:
+  nodename: server7
+  description: server 7
+  hostname: 192.168.1.25
+  ssh-key-storage-path: keys/project/scripts4/nopass1_rsa
+  username : mark
+  osFamily : unix
+  tags : tag1
+
+```
+* Choose Project "scripts4"
+* Click on Jobs and then New Job.
+    * name it " testing tags"
+    * Click on Workflow and then Add Step
+        * Click Command
+            * Command : ```echo "This is a command on remote server `hostname`, user `whoami` at `date`" ```
+    * Click on Save and then Create
+    * Click on Nodes and select Dispatch to Nodes
+        * Under node filter: tags: tag1
+	
 * Run the job and look at output.
 
 

@@ -20,6 +20,8 @@ title: Rundeck : Install
    * [Project 4 -- execute an existing  script on remote server.](#p4)
    * [Project 5 -- execute script from url](#p5)
    * [Project 6 -- execute local command on rundeck server](#p6)
+   * [Project 7 -- Use tags](#p7)
+   * [Project 8 -- Chaining commands. One makes output for the other command.](#p8)
 
 * * *
 
@@ -457,3 +459,20 @@ server7:
 * Run the job and look at output.
 
 
+<a name="p8"></a>
+### Project 8 -- Chaining commands. One makes output for the other command.
+* This will always be run locally and rundeck server as user 'rundeck'.
+* Choose Project "scripts4"
+* Click on Jobs and then New Job.
+    * name it "chain"
+    * Click on Workflow 
+        * Click on Add Step and then Click Command
+            * Command : ```ls /etc > /tmp/file.list ```
+        * Click on Add Step and then Click Command
+            * Command : ```for f in `cat /tmp/file.list`; do echo "file is $f"; done ```
+    * Click on Nodes
+        * Click on Dispatch to Nodes
+        * In filter, enter servers, press search, and then save. 
+
+* Click on Save and then Create
+* Run the job and look at output.

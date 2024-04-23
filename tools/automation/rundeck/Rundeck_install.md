@@ -12,10 +12,17 @@ title: Rundeck : Install
 
 1. [Links](#links)
 2. [Install Rundeck](#install)
-3. [Make first few projects](#pl)
+3. [Reset Admin password](#a)
+4. [Make first few projects](#pl)
+   * [Project 1-- execute command locally on rundeck](#p1)
+   * [Project 2 -- setup ssh and run command remotely.](#p2)
+   * [Project 3 -- running a script from rundeck onto remote server.](#p3)
+   * [Project 4 -- execute an existing  script on remote server.](#p4)
+   * [Project 5 -- execute script from url](#p5)
 
 
 * * *
+
 
 <a name=links></a>Links
 -----
@@ -96,13 +103,13 @@ service rundeckd start
 * * *
 <a name=pl></a>First few projects
 -----
-
-### First Project
+<a name="p1">
+### Project 1 -- execute command locally on rundeck
 
 
 Steps
 
-* Exceute:
+* Execute:
 ```
 mkdir -p /etc/rundeck/nodelists
 chown -R rundeck /etc/rundeck/nodelists
@@ -134,8 +141,8 @@ localhost:
         * Click on "Run Job Now"
             * Click on Localhost and then Command to see the output.
 	    
-
-### Second Project
+<a name="p2">
+### Project 3 -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
 ```
@@ -219,6 +226,119 @@ server1:
 * Click on Jobs
     * Select server1
         * Click on Run Jon Now
-	* Look at its output by clicking on server1 and then Command. You should also see an "OK" comment. 
+	* Look at its output by clicking on server1 and then Command. You should also see an "OK" comment.
 
 
+<a name="p3">
+### Projects 3 -- running a script from rundeck onto remote server.
+
+* Create New Project
+    * Call it scripts
+* Click on Projects Settings
+    * Key Storage
+        * Upload previous key: nopass1_rsa
+    * Copy server file
+        * cp /etc/rundeck/nodelists/server.yml /etc/rundeck/nodelists/server3.yml
+        * Change "server1" to "server3" and change key path from server1 to scripts.
+    * Click on Edit Nodes
+        * Click on "Add new node source "
+           * Choose file
+               * Format : resourceyaml (choose from dropdown box)
+               * File Path : /etc/rundeck/nodelists/server3.yml
+* Add osFamily=unix to file
+```
+  # For /etc/rundeck/nodelists/server3.yml
+  # Change the hostname to your hostname. 
+server3:
+  nodename: server3
+  description: Rundeck server node
+  hostname: 192.168.1.21
+  ssh-key-storage-path: keys/project/scripts/nopass1_rsa
+  username : root
+  osFamily : unix  
+
+```
+* You should have another projects almost setup like the previous one with some changes.
+* create Job
+    * Click on jobs
+    * Call it inline script 1
+    * On Workflow
+        * Click Add Step
+        * Select Inline script
+	* Under Script
+```
+#!/usr/bin/bash
+
+echo "This is an inline script executed on `hostname -a` on `date`."
+```
+        * Under Invocation String : bash ${scriptfile}
+        * Click Save
+        * Click Create
+* Click on "Run job now"
+
+<a name="p4">
+### Project 4 -- execute an existing  script on remote server.
+
+* On remote server, make script
+```
+   # Change 'mark' to your username. 
+ssh mark@192.168.1.21
+
+echo '#!/bin/bash
+echo "Excuting script on `hostname` at /tmp/script4.sh" 
+' >  /tmp/script4.sh
+
+chmod 755 /tmp/script4.sh
+
+
+```
+* Create a new project
+    * Call it scripts4
+* Click on Projects Settings
+    * Key Storage
+        * Upload previous key: nopass1_rsa
+    * Copy server file
+        * cp /etc/rundeck/nodelists/server.yml /etc/rundeck/nodelists/server4.yml
+        * Change "server1" to "server4" and change key path from server1 to scripts4.
+    * Click on Edit Nodes
+        * Click on "Add new node source "
+           * Choose file
+               * Format : resourceyaml (choose from dropdown box)
+               * File Path : /etc/rundeck/nodelists/server4.yml
+* Add osFamily=unix to file
+```
+  # For /etc/rundeck/nodelists/server4.yml
+  # Change the hostname to your hostname.
+  # Change 'mark' to your username. 
+server4:
+  nodename: server4
+  description: Rundeck server node
+  hostname: 192.168.1.21
+  ssh-key-storage-path: keys/project/scripts4/nopass1_rsa
+  username : mark
+  osFamily : unix
+
+```
+
+* You should have another projects almost setup like the previous one with some changes.
+* create Job
+    * Click on jobs
+    * Call it remote  script 1
+    * On Workflow
+        * Click Add Step
+        * Select Script or Url 
+        * File Path or URL enter "/tmp/script4.sh"
+    * Click on Save and then Create
+* Run the job and look at output. 
+
+<a name="p5">
+### Project 5 -- execute script from url
+* Choose Project "scripts4"
+* Click on Jobs and then New Job.
+    * name it "url"
+    * Click on Workflow and then Add Step
+        * Click Script or Url
+	    * File Path or URL : https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/printme.sh
+	    * Arguments : Argument1
+	    * Invocation String : bash ${scriptfile}
+	    

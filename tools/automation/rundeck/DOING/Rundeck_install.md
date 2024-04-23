@@ -330,7 +330,7 @@ server4:
     * name it "url"
     * Click on Workflow and then Add Step
         * Click Script or Url
-	    * File Path or URL :
+	    * File Path or URL : https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/printme.sh
 	    * Arguments : Argument1
 	    * Invocation String : bash ${scriptfile}
 	    

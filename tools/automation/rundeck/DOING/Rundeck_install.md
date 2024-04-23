@@ -147,7 +147,7 @@ localhost:
             * Click on Localhost and then Command to see the output.
 	    
 <a name="p2"></a>
-### Project 23 -- setup ssh and run command remotely. 
+### Project 2 -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
 ```

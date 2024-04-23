@@ -103,6 +103,10 @@ service rundeckd start
 * * *
 <a name=pl></a>First few projects
 -----
+Some things to remember:
+  * Sometimes things are cached. This may be keys, scripts, etc. To make sure they are reloaded, edit them, delete and add again, and save them again. 
+
+
 <a name="p1"></a>
 ### Project 1 -- execute command locally on rundeck
 
@@ -341,4 +345,16 @@ server4:
 	    * File Path or URL : https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/printme.sh
 	    * Arguments : Argument1
 	    * Invocation String : bash ${scriptfile}
-	    
+    * Click on Save and then Create
+* Run the job and look at output.
+
+<a name="p6"></a>
+### Project 5 -- execute local command on server
+* Choose Project "scripts4"
+* Click on Jobs and then New Job.
+    * name it "local command"
+    * Click on Workflow and then Add Step
+        * Click Local Command
+            * Command : bash -c 'echo "This is a local command on remote server `hostname`, user `whoami` at `date`"'
+    * Click on Save and then Create
+* Run the job and look at output.

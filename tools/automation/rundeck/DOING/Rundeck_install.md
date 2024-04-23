@@ -12,8 +12,8 @@ title: Rundeck : Install
 
 1. [Links](#links)
 2. [Install Rundeck](#install)
-3. [Make first few projects](#pl)
-
+3. [Reset Admin password](#a)
+4. [Make first few projects](#pl)
 
 * * *
 
@@ -97,7 +97,7 @@ service rundeckd start
 <a name=pl></a>First few projects
 -----
 
-### First Project
+### First Project -- execute command locally on rundeck
 
 
 Steps
@@ -135,7 +135,7 @@ localhost:
             * Click on Localhost and then Command to see the output.
 	    
 
-### Second Project
+### Second Project -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
 ```
@@ -269,7 +269,7 @@ echo "This is an inline script executed on `hostname -a` on `date`."
         * Click Create
 * Click on "Run job now"
 
-### Project 4 -- execute a script on remote server.
+### Project 4 -- execute an existing  script on remote server.
 
 * On remote server, make script
 ```

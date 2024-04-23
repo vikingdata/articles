@@ -103,13 +103,13 @@ service rundeckd start
 * * *
 <a name=pl></a>First few projects
 -----
-<a name="p1">
+<a name="p1"></a>
 ### Project 1 -- execute command locally on rundeck
 
 
 Steps
 
-* Exceute:
+* Execute:
 ```
 mkdir -p /etc/rundeck/nodelists
 chown -R rundeck /etc/rundeck/nodelists
@@ -141,7 +141,7 @@ localhost:
         * Click on "Run Job Now"
             * Click on Localhost and then Command to see the output.
 	    
-<a name="p2">
+<a name="p2"></a>
 ### Project 3 -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
@@ -229,7 +229,7 @@ server1:
 	* Look at its output by clicking on server1 and then Command. You should also see an "OK" comment.
 
 
-<a name="p3">
+<a name="p3"></a>
 ### Projects 3 -- running a script from rundeck onto remote server.
 
 * Create New Project
@@ -240,7 +240,7 @@ server1:
     * Copy server file
         * cp /etc/rundeck/nodelists/server.yml /etc/rundeck/nodelists/server3.yml
         * Change "server1" to "server3" and change key path from server1 to scripts.
-    * CLick on Edit Nodes
+    * Click on Edit Nodes
         * Click on "Add new node source "
            * Choose file
                * Format : resourceyaml (choose from dropdown box)
@@ -265,7 +265,7 @@ server3:
     * On Workflow
         * Click Add Step
         * Select Inline script
-	* Under SCript
+	* Under Script
 ```
 #!/usr/bin/bash
 
@@ -276,7 +276,7 @@ echo "This is an inline script executed on `hostname -a` on `date`."
         * Click Create
 * Click on "Run job now"
 
-<a name="p4">
+<a name="p4"></a>
 ### Project 4 -- execute an existing  script on remote server.
 
 * On remote server, make script
@@ -300,7 +300,7 @@ chmod 755 /tmp/script4.sh
     * Copy server file
         * cp /etc/rundeck/nodelists/server.yml /etc/rundeck/nodelists/server4.yml
         * Change "server1" to "server4" and change key path from server1 to scripts4.
-    * CLick on Edit Nodes
+    * Click on Edit Nodes
         * Click on "Add new node source "
            * Choose file
                * Format : resourceyaml (choose from dropdown box)
@@ -331,7 +331,7 @@ server4:
     * Click on Save and then Create
 * Run the job and look at output. 
 
-<a name="p5">
+<a name="p5"></a>
 ### Project 5 -- execute script from url
 * Choose Project "scripts4"
 * Click on Jobs and then New Job.

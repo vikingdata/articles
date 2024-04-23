@@ -14,8 +14,15 @@ title: Rundeck : Install
 2. [Install Rundeck](#install)
 3. [Reset Admin password](#a)
 4. [Make first few projects](#pl)
+   * [Project 1-- execute command locally on rundeck](#p1)
+   * [Project 2 -- setup ssh and run command remotely.](#p2)
+   * [Project 3 -- running a script from rundeck onto remote server.](#p3)
+   * [Project 4 -- execute an existing  script on remote server.](#p4)
+   * [Project 5 -- execute script from url](#p5)
+
 
 * * *
+
 
 <a name=links></a>Links
 -----
@@ -96,8 +103,8 @@ service rundeckd start
 * * *
 <a name=pl></a>First few projects
 -----
-
-### First Project -- execute command locally on rundeck
+<a name="p1">
+### Project 1 -- execute command locally on rundeck
 
 
 Steps
@@ -134,8 +141,8 @@ localhost:
         * Click on "Run Job Now"
             * Click on Localhost and then Command to see the output.
 	    
-
-### Second Project -- setup ssh and run command remotely. 
+<a name="p2">
+### Project 3 -- setup ssh and run command remotely. 
 
 * Create ssh keys with user "rundeck"
 ```
@@ -222,7 +229,7 @@ server1:
 	* Look at its output by clicking on server1 and then Command. You should also see an "OK" comment.
 
 
-
+<a name="p3">
 ### Projects 3 -- running a script from rundeck onto remote server.
 
 * Create New Project
@@ -269,6 +276,7 @@ echo "This is an inline script executed on `hostname -a` on `date`."
         * Click Create
 * Click on "Run job now"
 
+<a name="p4">
 ### Project 4 -- execute an existing  script on remote server.
 
 * On remote server, make script
@@ -323,7 +331,7 @@ server4:
     * Click on Save and then Create
 * Run the job and look at output. 
 
-
+<a name="p5">
 ### Project 5 -- execute script from url
 * Choose Project "scripts4"
 * Click on Jobs and then New Job.

@@ -137,7 +137,7 @@ localhost:
 	* File Path : /etc/rundeck/nodelists/local.yml
 * Click  on "Jobs"
 * Create a new job named "ls /etc" Under details.
-    * Under Workflow add click on "add a step"
+    * Under Workflow add click on "Add a Step"
     * Choose command
     * Enter "ls /etc"
 * For Nodes, leave it local.
@@ -231,12 +231,12 @@ server1:
 * Click on Jobs
     * Click new job
     * Name it server1
-    * On Wordklow, click on Add A Step
+    * On workflow, click on Add A Step
         * choose command
         * command: echo "I am running on `hostname`, as `whoami` in `pwd`."
 	    * Click Save
 	* Click Nodes
-	    * Click Dispath to Nodes
+	    * Click Dispatch to Nodes
 	    * Click on Node filter : s.*
             * Click Search
             * "server1" should appear under Matched Nodes
@@ -351,7 +351,7 @@ server4:
         * Select Script or Url 
         * File Path or URL enter "/tmp/script4.sh"
     * Click Nodes
-        * Click Dispath to Nodes
+        * Click Dispatch to Nodes
         * Click on Node filter : s.*
         * Click Search
         * "server4" should appear under Matched Nodes
@@ -369,7 +369,7 @@ server4:
 	    * Arguments : Argument1
 	    * Invocation String : bash ${scriptfile}
        * Click Nodes
-            * Click Dispath to Nodes
+            * Click Dispatch to Nodes
             * Click on Node filter : s.*
             * Click Search
             * "server4" should appear under Matched Nodes

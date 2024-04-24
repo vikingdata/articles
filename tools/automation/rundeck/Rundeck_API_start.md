@@ -145,7 +145,7 @@ curl -X POST http://localhost:4440/api/47/job/ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c7
 
 ----
 * * *
-<a name=s></aRun a job script
+<a name=s></a>Run a job script
 -----
 
 Here's  python script to run a job. You must know the job id, and authorization token and optionally the base url.

@@ -35,6 +35,10 @@ General
 * [RESOURCE-YAML](https://docs.rundeck.com/docs/manual/document-format-reference/resource-yaml-v13.html#node-definition)
 * [SSH Node Execution](https://docs.rundeck.com/docs/manual/projects/node-execution/ssh.html#configuring-remote-machine-for-ssh)
 * [se SSH on Linux/Unix Nodes](https://docs.rundeck.com/docs/learning/howto/ssh-on-linux-nodes.html)
+* API
+    * [Getting Started with the API](https://docs.rundeck.com/docs/api/api_basics.html#running-the-welcome-project-and-new-user-token-creation)
+    * [API Reference](https://docs.rundeck.com/docs/api/)
+
 
 ---
 * * *

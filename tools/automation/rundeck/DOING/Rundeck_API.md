@@ -93,11 +93,13 @@ curl -X POST http://localhost:4440/api/47/job/ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c7
     "description": "Plugin[exec-command, nodeStep: true] [... 2 steps]",
     "argstring": null,
     "serverUUID": "c13b2855-5b12-4fd2-be62-a12e1efb8e0a"
-}```
+}
+```
 
      * Get status : GET /api/47/execution/72
          * ``` curl -X GET http://localhost:4440/api/47/execution/72?authtoken=qw8QovPQzh6LPBBu5aXFTVyouNGlIOyr| python3 -m json.tool```
 	 * Output
+
 ```
 {
     "id": 72,

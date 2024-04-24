@@ -13,6 +13,7 @@ title: Rundeck : Install
 1. [Links](#links)
 2. [APi explain](#e)
 3. [Examples](#ex)
+4. [Script](#s)
 
 * * *
 <a name=links></a>Links
@@ -27,9 +28,11 @@ General
 
 ----
 * * *
-<a name=e></a>API explained
+<a name=e></a>API explained a little 
 -----
 From https://stackoverflow.com/questions/47671193/running-a-rundeck-job-from-a-rest-api
+
+To run a job....
 ```
 curl -X POST http://rundeck_server:port/api/19/job/87bdc26ce-9893-49bd-ad7a-97f4c4a39196/run?authtoken=AVy8jZdcpTYOyPcOVbfcfOQmB6b92zRu --header "Content-Type:text/json"
 ```
@@ -40,7 +43,7 @@ curl -X POST http://rundeck_server:port/api/19/job/87bdc26ce-9893-49bd-ad7a-97f4
     * You can look this by selecting a Project, then select the job, and the uuid be be printed at the top. 
 * AVy8jZdcpTYOyPcOVbfcfOQmB6b92zRu
 
-Thus the first thing is to get a token. Do the first part of this webpage :[The Rundeck API](https://docs.rundeck.com/docs/api/api_basics.html#running-the-welcome-project-and-new-user-token-creation). Ignore Postman.
+Thus the first thing is to get a token. Do the first part of this webpage :[The Rundeck API](https://docs.rundeck.com/docs/api/api_basics.html#running-the-welcome-project-and-new-user-token-creation). Ignore Postman. Then select a Project and then a Job. Get the UUID for the job (at the top of the screen).
 
 
 ----
@@ -138,4 +141,13 @@ curl -X POST http://localhost:4440/api/47/job/ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c7
 }
 
 ```
-     
+
+
+----
+* * *
+<a name=s></aRun a job script
+-----
+
+Here's  python script to run a job. You must know the job id, and authorization token and optionally the base url.
+
+[https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/Rundeck_submit_job.py](https://raw.githubusercontent.com/vikingdata/articles/main/tools/automation/rundeck/rundeck_files/Rundeck_submit_job.py)

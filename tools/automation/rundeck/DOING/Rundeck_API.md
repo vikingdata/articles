@@ -61,7 +61,8 @@ curl -X GET http://localhost:4440/api/47/plugin/list?authtoken=qw8QovPQzh6LPBBu5
 
 ```
 
-* Execute job : ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c709 ```
+* Execute job : ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c709
+```
 curl -X POST http://localhost:4440/api/47/job/ca79bcf7-c5e3-4ea0-b4f6-6ddc7555c709/run?authtoken=qw8QovPQzh6LPBBu5aXFTVyouNGlIOyr | python3 -m json.tool
 
 ```

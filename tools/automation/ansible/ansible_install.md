@@ -82,7 +82,7 @@ ssh -o "StrictHostKeyChecking no" 127.0.0.1 echo "done"
 
 * You might need to do this. 
 
-Also, I had to edit /etc/ansible/ansible.cng and under the "[ssh_connection]" I had to put
+Also, I had to edit /etc/ansible/ansible.cnf and under the "[ssh_connection]" I had to put
 ```shell
 [ssh_connection]
 ssh_args = -C -o ControlPath=none
@@ -336,7 +336,7 @@ Also....
 -----
 * File Locations
     * Global files
-         * ansibl.cfg
+         * ansible.cfg
     * 
 
 * Global files that apply everywhere at /etc/ansible

@@ -1,0 +1,10 @@
+ssh to 6 or centos 7, disable keys, and other options
+AWS reboots mysql with certificates
+Ansible --- python definition, other settings
+Mongo -- do recommendations from doc
+
+mysql -- query cache threshold, low usage
+
+acceess vcc_rpt_logs through Kevanna
+
+‪4154890314‬

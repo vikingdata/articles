@@ -16,7 +16,6 @@ Original Copyright April 2024**_
 NOTE: This article is always in progress.
 
 1. [Links](#links)
-2. Checking replica status
 
 * * *
 <a name=Links></a>Links
@@ -24,16 +23,6 @@ NOTE: This article is always in progress.
 * [Replication status](https://www.mongodb.com/docs/v6.0/reference/method/rs.status/)
     * [How to check MongoDB replication status](https://www.dragonflydb.io/faq/how-to-check-mongodb-replication-status)
 * https://docs.percona.com/percona-server-for-mongodb/4.4/rate-limit.html#enabling-the-rate-limit
-
-* * *
-<a name=l>Checking Replica Status</a>
------
-* start mongosh or mongo
-    # enter: rs.status()
-* Check replica
-   * ``` mongo --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:" ```
-* Check replica configuration for all servers in replica set
-    * ``` mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"```
 
 * * *
 <a name=os>Operating system config</a>
@@ -102,3 +91,21 @@ Checks
 * Unused Indexes
 * Mutiple Indexes covering the same fields
 * Is Query Profiler turned on
+
+
+* * *
+<a name=u>Usefull Queries and Commands</a>
+-----
+* Replica Status
+    * start mongosh or mongo
+        * enter: rs.status()
+    * Check replica
+        * ``` mongo --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:" ```
+    * Check replica configuration for all servers in replica set
+        * ``` mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"```
+* Shard
+* Slow queries
+* Sharding
+* Database stats
+* Document stats
+

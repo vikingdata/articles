@@ -42,8 +42,8 @@ NOTE: This article is always in progress.
 * Swap
     * Set Swapiness to 0
         * Ubuntu : In /etc/sysctl.conf
-	    * vm.swappiness = 0
-    * Make sure you have swapspace. If it for emergencies.
+            * vm.swappiness = 0
+    * Make sure you have swapspace. It is for emergencies.
     * Monitor swap, if it gets over 25%, send alarm.
 * Change Disk I/O Scheduler  to deadline
 * set numa=off

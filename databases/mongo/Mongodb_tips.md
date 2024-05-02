@@ -16,7 +16,7 @@ Original Copyright April 2024**_
 NOTE: This article is always in progress.
 
 1. [Links](#links)
-2, Checking replica status
+2. Checking replica status
 
 * * *
 <a name=Links></a>Links
@@ -57,7 +57,8 @@ NOTE: This article is always in progress.
         * Set the cache size if needed: cacheSizeGB
 	* Have directory for indexes : directoryForIndexes
 	* Have one directory per database : directoryPerDB
-    * ```
+    *
+```
 storage:
    wiredTiger:
        engineConfig:
@@ -70,7 +71,6 @@ operationProfiling:
 replication
    oplogSizeMB : 1000
    replSetName
-
 ```
 * AWS
 * readahead

@@ -23,6 +23,9 @@ NOTE: This article is always in progress.
 * [Replication status](https://www.mongodb.com/docs/v6.0/reference/method/rs.status/)
     * [How to check MongoDB replication status](https://www.dragonflydb.io/faq/how-to-check-mongodb-replication-status)
 * https://docs.percona.com/percona-server-for-mongodb/4.4/rate-limit.html#enabling-the-rate-limit
+* https://amperecomputing.com/tuning-guides/mongoDB-tuning-guide
+* https://kevcodez.medium.com/mongodb-performance-guide-9121dff56cd1
+* https://severalnines.com/blog/performance-cheat-sheet-mongodb/
 
 * * *
 <a name=os>Operating system config</a>
@@ -35,11 +38,23 @@ NOTE: This article is always in progress.
     * Make sure you have swapspace. It is for emergencies.
     * Monitor swap, if it gets over 25%, send alarm.
 * Change Disk I/O Scheduler  to deadline
-* set numa=off
+* set numactl --interleave
+* /etc/sysclt.conf
+```
+vm.max_map_count = 98000
+kernel.pid_max = 64000
+vm.swappiness = 0
+kernel.threads-max = 64000
+vm.max_map_count=128000
+net.core.somaxconn=65535
+```
+* tuned-adm profile throughput-performance
 
 * * *
 <a name=m>Mongo Config</a>
 -----
+* Use XFS over EXT4
+* Disable access times
 * Always setup replica set and shard your single replica set right away. 
 * Wired Tiger strange options
     * Turn on various options
@@ -53,6 +68,9 @@ storage:
        engineConfig:
            cacheSizeGB: 0.25
            directoryForIndexes: true
+           compressors=snappy
+       collectionConfig:
+         blockCompressor: 
    directoryPerDB: true
 operationProfiling:
    mode: slowOp
@@ -60,12 +78,39 @@ operationProfiling:
 replication
    oplogSizeMB : 1000
    replSetName
+net:
+   compressors : snappy
+
+TODO eviction threads set to 8
+  concurrent write and read transactions
+  
+
 ```
-* AWS
+* AWS -- advantage on large systems
 * readahead
    * On /sbin/blockdev --setra 8192 /dev/sda
        * Change sda to partition mongo is mounted on. 
 * Percona Mongo features, which are free compared to Enterprise Mongo
+* Replica sets
+   * Use hidden servers for backups or apps. These servers will not become primary. 
+* sharding
+    * Always use replica sets
+    * Always have shard to put documents onto older than X time.
+* Connection pooling
+
+* * *
+<a name=u>Using Mongo </a>
+-----
+* Set max execution time
+* Run explain on queries
+* Avoid sorts
+* Use filter on Pipeline to reduce no of documents.
+* Use indexes : 
+   * [The ESR Equality, Sort, Range Rule](https://www.mongodb.com/docs/manual/tutorial/equality-sort-range-rule/)
+* Drop unuse Indexes
+* Drop indexes that cover same fields.
+* Insertmany or Blkwrite when possible.
+
 
 * * *
 <a name=t>Tools</a>
@@ -76,6 +121,8 @@ Tools
 * New Relic or Solar Winds
 * PMM
 * slow query analysis
+* Mongo Compass
+    * explain plan
 * Percona tools
    * pt-diskstats
    * pt-mongodb-query-digest
@@ -108,4 +155,7 @@ Checks
 * Sharding
 * Database stats
 * Document stats
-
+* Locks
+    * db.serverStatus().globalLock
+    * db.serverStatus().locks
+* Query explain 

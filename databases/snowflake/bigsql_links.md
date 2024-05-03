@@ -6,7 +6,7 @@ title: Snowflake, SQL, DBT, and other links
 * [https://docs.getdbt.com/docs/introduction](https://docs.getdbt.com/docs/introduction) 
 * [https://docs.getdbt.com/docs/core/installation](https://docs.getdbt.com/docs/core/installation )
 * [https://docs.getdbt.com/docs/supported-data-platforms](https://docs.getdbt.com/docs/supported-data-platforms)
-* [https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT](https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT])
+* [Intro to Data Build Tool (dbt)  // Create your first project!](https://www.youtube.com/watch?v=5rNquRnNb4E&list=PLy4OcwImJzBLJzLYxpxaPUmCWp8j1esvT])
 * [https://docs.getdbt.com/docs/core/connect-data-platform/mysql-setup](https://docs.getdbt.com/docs/core/connect-data-platform/mysql-setup)
 * [https://docs.getdbt.com/docs/core/connect-data-platform/postgres-setup](https://docs.getdbt.com/docs/core/connect-data-platform/postgres-setup)
 * [https://github.com/dbt-labs/dbt-starter-project](https://github.com/dbt-labs/dbt-starter-project)

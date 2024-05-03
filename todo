@@ -79,3 +79,16 @@ database festures (mysql, postgresql, snowflake)
 mongo -- multie replica set on on server
       Python scripts to display health from status, rs.status, and others
       	     make library which can be used by Dad or standalone
+
+Window functions, snowflake, postgresql, mysql in one article
+
+
+
+ssh to 6 or centos 7, disable keys, and other options
+AWS reboots mysql with certificates
+Ansible --- python definition, other settings
+Mongo -- do recommendations from doc
+
+mysql -- query cache threshold, low usage
+
+acceess vcc_rpt_logs through Kevanna

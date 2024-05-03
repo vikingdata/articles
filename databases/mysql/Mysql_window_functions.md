@@ -127,3 +127,16 @@ WINDOW w AS (ORDER BY amount)
 * * *
 <a name=o>Other Queries</a>
 -----
+
+```
+SELECT person, state, amount,
+    lag(amount)          OVER  w AS 'LAG',
+    FIRST_VALUE(amount)  OVER w AS 'FIRST_VALUE',
+    LAST_VALUE(amount)   OVER w AS 'LAST_VALUE',
+    LEAD(amount)         OVER w AS 'LEAD',
+    NTH_VALUE(amount, 5) over w as 'NTH_VALUE',
+    NTILE(4)             over W as "NTILE"
+from income
+  WINDOW w AS (order BY amount);
+
+```

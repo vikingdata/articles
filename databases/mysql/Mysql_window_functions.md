@@ -12,17 +12,17 @@ MySQL Window Functions
 _**by Mark Nielsen
 Original Copyright March 2022**_
 
-    The purpose of this document is to show how to do window functions. It is also to stop people
-    from asking this in interviews as it is very lame and really just
-    a set of functions in MySQL.
-    Are we expected to remember all functions?
-    Yes according to lame people who make lame tests. And yes because some interviews
-    will always have those people.
-    There is so much with MySQL this is only small part. The reason why it is lame is non-DBAs
-    love to ask about these functions because they don't understand its lame
-    and they want to make themselves feel superior. People look at things to ask about MySQL
-    on the internet because they know nothing usually and want to feel superior. So I hope
-    someone can get use of this.
+The purpose of this document is to show how to do window functions. It is also to stop people
+from asking this in interviews as it is very lame and really just
+a set of functions in MySQL.
+Are we expected to remember all functions?
+Yes according to lame people who make lame tests. And yes because some interviews
+will always have those people.
+There is so much with MySQL this is only small part. The reason why it is lame is non-DBAs
+love to ask about these functions because they don't understand its lame
+and they want to make themselves feel superior. People look at things to ask about MySQL
+on the internet because they know nothing usually and want to feel superior. So I hope
+someone can get use of this.
 
 
 

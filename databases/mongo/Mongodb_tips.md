@@ -124,10 +124,15 @@ Tools
 * Mongo Compass
     * explain plan
 * Percona tools
-   * pt-diskstats
-   * pt-mongodb-query-digest
-   * pt-mongodb-summary
-   * pt-summary
+    * pt-diskstats
+    * pt-mongodb-query-digest
+    * pt-mongodb-summary
+    * pt-summary
+* Free monioring
+    * db.enableFreeMonitoring()
+    * You will be given a url to monitor mongo
+* Free monitoring with [New Relic.](https://newrelic.com/pricing/free-tier)
+    https://docs.newrelic.com/docs/infrastructure/host-integrations/host-integrations-list/mongodb/mongodb-monitoring-integration-new/
 
 * * *
 <a name=c>Check for</a>

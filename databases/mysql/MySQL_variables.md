@@ -44,7 +44,7 @@ select count(1), table_schema
   where table_schema not in ('mysql','information_schema','performance_schema','sys')
   group by table_schema;
 ```
-    * or total
+       * or total
 ```
 select count(1)
   from INFORMATION_SCHEMA.TABLES

@@ -41,7 +41,6 @@ NOTE: This article is always in progress.
 Optimization Important Variables
 * innodb_buffer_pool_size : Typically set to 80% of memory, but I like 70%. Other things may use memory, connections, temporary tables, and as such I like to monitor memory. This variable
 caches data for the innodb storage in ram, which greatly increases speed for read queries. 
-*  table_cache
 * innodb_buffer_pool_instances: Locks in the innodb buffer pool can be a problem with large data. In general innodb_buffer_pool_instances should be set to amount of ram divided by 1 gig.
 * innodb_log_file_size -- pre 8.0 -- transactions use this file. If the log is full, its slows down the system. For older versions of MySQL, making this large is good.
 * innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is not ACID compliant and on crash recovery takes longer. 
@@ -90,12 +89,11 @@ select count(1)
 *  query_cache_size  : Nobody uses this. Cache in redis or other caching before MySQL is hit. 
 *  tmp_table_size, max_heap_table_size, and temptable_max_mmap   : For tables that are created in memory, if you analyze the slow log and you see a lot of temporary tables made and hitting disk, you may want to increase this. You can use Analyze Explain on slow queries to see if they mention "using filesort ; using temporary tables". Filesort just means a table
 was made for sorting, but it might not have hit disk. Using temporary tables also means a temporary table was created but it might not have hit disk/. 
-* Buffers
+* Buffers -- if you have big sorts, joins, reads, or can take advantage of read ahead.
    * sort_buffer
    * read_buffer_size
    * read_rnd_buffer_size
    * join_buffer_size
-* max_allowed_packet
 * long_query_time : Time query needs to execute before saved to slow logs. If your server experiences bad performance and it doesn't show any slow queries, you may want to lower this variable to capture queries that are the slowest. 
 * innodb_purge_threads - Number of background threads dedicated to InnoDB purge operations. The default is normally enough. 
 * innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. It is responsible for cleaning out data in the innodb buffer. 
@@ -127,9 +125,32 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * * *
 <a name=s>Clusterset</a>
 -----
-* server-id : Needed for Clusterset.
+[ Grpup Replication Requirements](https://dev.mysql.com/doc/refman/8.0/en/group-replication-requirements.html)
+    * Innodb Storag Engine
+    * server_id
+    * binlog
+    * log_replica_updates=ON
+    * binlog_format=row.
+    * binlog_checksum=NONE
+    * gtid_mode=ON and enforce_gtid_consistency=ON. 
+    * transaction_write_set_extraction=XXHASH64 
+    * Set lower_case_table_names the same, normally 1.
+    * replica_parallel_type=LOGICAL_CLOCK
+    * replica_preserve_commit_order=ON
+
+[Rquirements for Cluster](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-innodb-cluster-requirements.html)
+
+[Requirements](https://dev.mysql.com/doc/mysql-shell/8.0/en/innodb-clusterset-requirements.html):
+    * Every table has a primary key
+    * Single Primary Mode : default. If Multi, ClusterSet is not supported,
+    * No inbound replication. 
+
 * server_uuid : Made by MySQL server. Used by GTID. 
 
+Option. Because Cluster is being used, if you can assume an entire datacenter won't go down you might want to relax
+    * sync_binlog
+    * innodb_flush_log_at_trx_commit
+    * innodb_flush_method    
 
 * * *
 <a name=o>Other</a>

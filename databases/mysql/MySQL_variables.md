@@ -126,7 +126,7 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 <a name=s>Clusterset</a>
 -----
 * [Group Replication Requirements](https://dev.mysql.com/doc/refman/8.0/en/group-replication-requirements.html)
-    * Innodb Storag Engine
+    * Innodb Storage Engine
     * server_id
     * binlog
     * log_replica_updates=ON

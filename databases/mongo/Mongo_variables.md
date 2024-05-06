@@ -42,9 +42,12 @@ NOTE: This article is always in progress.
     * Comments, if the oplog is too small. Backups may not work as the latest command has to be before the time of backup.
        * Set the oplog size.
        * Also set the no of hours to hold onto queries. oplogMinRetentionHours
-       * To calculate what size it should be, and how much memory to reduce for cacheSizeGB. cacheSizeGB = 80% of memory - connections - oplog - other. 
+       * To caluclate the size of oplog
            * Set hours
-	   * Run oplog.rs.collection.stats().storageSize
+	   * Wait 24 hours and monitor oplog size. 
+	   * Run ``` use local; local.oplog.rs.stats().totalSize ```
+	   * In megabytes ``` use local; db.oplog.rs.stats({scale: 1024*1024} ).totalSize ```
+           * With hours set, you don't need to set the size, but you can.  
 
 Per Connection
 * Set max execution time

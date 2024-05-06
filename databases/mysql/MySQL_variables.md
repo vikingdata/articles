@@ -62,7 +62,6 @@ select count(1)
   where table_schema not in ('mysql','information_schema','performance_schema','sys');
 ```
 * Threads
-    * innodb_thread_concurrency
     * innodb_write_io_threads and  innodb_write_io_threads
          * Look at the ratio of read threads and write threads and determine if you should increase either. Also, you may want to increase them slightly and see if it has an effect by
 	 monitoring.
@@ -98,7 +97,7 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * innodb_purge_threads - Number of background threads dedicated to InnoDB purge operations. The default is normally enough. 
 * innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. It is responsible for cleaning out data in the innodb buffer. 
 * max_allowed_packet : increase if you are uploading large data, images, files are large varchar, text, or binary. 
-
+* innodb_thread_concurrency : The default is no limit on threads, which most systems are okay with. By testing, you may want to limit innodb_thread_concurrency;
 
 * * *
 <a name=c>Client settings</a>

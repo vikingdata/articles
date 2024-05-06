@@ -37,15 +37,13 @@ Optimization Important Variables
     * SHOW OPEN TABLES : shows currently opened tables.
     * SHOW OPENED TABLES : If this value is large, your table cache may be too small.
     * Also count how may tables you have. 
-        * group by database
+        * group by database or total
 ```
 select count(1), table_schema
   from INFORMATION_SCHEMA.TABLES
   where table_schema not in ('mysql','information_schema','performance_schema','sys')
   group by table_schema;
-```
-       * or total
-```
+
 select count(1)
   from INFORMATION_SCHEMA.TABLES
   where table_schema not in ('mysql','information_schema','performance_schema','sys');

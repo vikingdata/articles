@@ -33,9 +33,10 @@ NOTE: This article is always in progress.
 * * *
 <a name=s>Server Configuration</a>
 -----
+
+### Very Important Variables
 * server-id : Used to identify a server in replication or cluster. You should always have it.
 * report-host : Name of the server. Again, you should always have this.
-* datadir : You generally don't want to use /var/lib/mysql. You want to put the database on its own partition like /database and have the data directory at /database/mysql/data. The directory "/database/mysql" can have other directories for bin-logs, errors logs, and other things. 
 
 Optimization Important Variables
 * innodb_buffer_pool_size : Typically set to 80% of memory, but I like 70%. Other things may use memory, connections, temporary tables, and as such I like to monitor memory. This variable
@@ -79,6 +80,8 @@ select count(1)
 * replica_parallel_workers : Default is 4. 
 
 ### Less important variables
+* datadir : You generally don't want to use /var/lib/mysql. You want to put the database on its own partition like /database and have the data directory at /database/mysql/data. The directory "/database/mysql" can have other directories for bin-logs, errors logs, and other things.
+
 
 *  max_connections   : Monitor max connections. If you need more, it is can be set dynamically. 
 *  wait_timeout      : Unless you have long running queries, rarely you need to adjust his. This can be specified per session if needed. 

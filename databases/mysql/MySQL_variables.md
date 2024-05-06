@@ -103,8 +103,22 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * * *
 <a name=c>Client settings</a>
 -----
+* defaults-file : For different authetications have different files. Default, .my.cnf in home directory. 
+* Also, for authentication, use mysql_config_editor  with uses .mylogin.cnf to encrypt login credentials.
+* -vvv
+    * Turn on verbose mode. Useful with "tee" to record your commands.
+```
+mysql -vvv -u USER -p
 
-
+  # And after you log in
+tee TICKET_NO-sql.log
+select now(), @@hostname, @@server_id;
+```
+    * You can also do "mysql --tee FILE -vvv -u USER -p"
+* -e : Let's you execute a command and then exit mysql
+* --batch : prints output in tabular format.
+* To have commands NOT quit on first error "mysql -vvv -tee FILE.log -u USER -e 'source commands.sql'"
+* To have commands quit on first error: ``` cat commands.sql | mysql -vvv -tee FILE.log -u USER ```
 
 * * *
 <a name=s>Replication</a>
@@ -123,7 +137,7 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
    * NOTE: auto_increment_increment should be equal or more than the highest auto_increment_offset.
 
 * * *
-<a name=s>Clusterset</a>
+<a name=cluster>Clusterset</a>
 -----
 * [Group Replication Requirements](https://dev.mysql.com/doc/refman/8.0/en/group-replication-requirements.html)
     * Innodb Storage Engine

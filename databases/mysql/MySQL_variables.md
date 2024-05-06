@@ -25,15 +25,26 @@ NOTE: This article is always in progress.
 * * *
 <a name=Links></a>Links
 -----
+* (MySQL Performance Cheat Sheet)[https://severalnines.com/blog/mysql-performance-cheat-sheet/)
+* (Tuning MySQL System Variables for High Performance)[https://geekflare.com/mysql-performance-tuning/]
 
 * * *
 <a name=s>Server Configuration</a>
 -----
 * server-id : Used to identify a server in replication or cluster. You should always have it.
 * report-host : Name of the server. Again, you should always have this.
+* datadir : You generally don't want to use /var/lib/mysql. You want to put the database on its own partition like /database and have the data directory at /database/mysql/data. The directory "/database/mysql" can have other directories for bin-logs, errors logs, and other things. 
 
 Optimization Important Variables
+* innodb_buffer_pool_size : Typically set to 80% of memory, but I like 70%. Other things may use memory, connections, temporary tables, and as such I like to monitor memory. This variable
+caches data for the innodb storage in ram, which greatly increases speed for read queries. 
 *  table_cache
+* innodb_buffer_pool_instances: Locks in the innodb buffer pool can be a problem with large data. In general innodb_buffer_pool_instances should be set to amount of ram divided by 1 gig.
+* innodb_log_file_size -- pre 8.0 -- transactions use this file. If the log is full, its slows down the system. For older versions of MySQL, making this large is good.
+* innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is ACID compliant but on crash recovery takes longer. 
+
+
+* table_cache : The amount of tables cached. Is this is too small, it may cause problems. 
     * SHOW OPEN TABLES : shows currently opened tables.
     * SHOW OPENED TABLES : If this value is large, your table cache may be too small.
     * Also count how may tables you have. 
@@ -48,6 +59,15 @@ select count(1)
   from INFORMATION_SCHEMA.TABLES
   where table_schema not in ('mysql','information_schema','performance_schema','sys');
 ```
+* Threads
+    * innodb_thread_concurrency
+    * innodb_write_io_threads
+    
+* innodb_flush_method : Changes based on the hardware used. How data is flushe to disk. 
+* innodb_file_per_table : Always use this. The main reason is if you drop a table diskspace is returned to the OS.
+* slow_query_log
+* sync_binlog. Under Cluster, it may be okay to set to 0. 1 means flush to disk transactions for the binlog, which is the safest. If 0, you rely on the operating system which is about every second. In a crash, 0 means you may lose some data.
+* thread_pool_size . The number of threads you are allow to have. With lots of cpu and disks, this can be higher. Generally set to the no of cores on your system.
 
 Less important variables
 
@@ -58,6 +78,13 @@ Less important variables
 *  query_cache_size  : Nobody uses this. Cache in redis or other caching before MySQL is hit. 
 *  tmp_table_size, max_heap_table_size, and temptable_max_mmap   : For tables that are created im memory, if you analyze the slow log and you see a lot of temporary tables made and hitting disk, you may want to increase this. You can use Analyze Explain on slow queries to see if they mention "using filesort ; using temporary tables". Filesort just means a table
 was made for sorting, but it might not have hit disk. Using temporary tables also means a temporary table was created but it might not have hit disk/. 
+* Buffers
+   * sort_bffer
+   * ead_bufeer_size
+   * read_rnd_buffer_size
+   * join_buffer_size
+* max_allowed_packet
+* long_query_time : Time query needs to execute before saved to slow logs. If your server experiences bad performance and it doesn't show any slow queries, you may want to lower this variable to capture queries that are the slowest. 
 
 * * *
 <a name=c>Client settings</a>

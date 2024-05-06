@@ -121,7 +121,7 @@ select now(), @@hostname, @@server_id;
 * To have commands quit on first error: ``` cat commands.sql | mysql -vvv -tee FILE.log -u USER ```
 
 * * *
-<a name=s>Replication</a>
+<a name=r>Replication</a>
 -----
 * server-id : Needed for replication.
 * server_uuid : Made by MySQL server. Used by GTID. 

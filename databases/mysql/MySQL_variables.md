@@ -69,8 +69,7 @@ select count(1)
  # Sum the writes and compare to the reads
   SHOW GLOBAL STATUS WHERE Variable_name RLIKE '^(Com_select|Com_insert|Com_delete|Com_update)$';
 ```
-    * innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. 
-
+* innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. 
 
 * innodb_flush_method : Changes based on the hardware used. How data is flush to disk. 
 * innodb_file_per_table : Always use this. The main reason is if you drop a table diskspace is returned to the OS.
@@ -117,7 +116,7 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * replica_parallel_workers :  default 4 in later versions of MySQL. 
 *  replica_preserve_commit_order=ON. This prevents gaps from occurring.
 * report_host : This should always be setup. Match it with DNS.
-* Stop stop collisions from multiple masters
+* Stop collisions from multiple masters
    * auto_increment_offset : Adds X to the starting point defined for this server for new rows. 
    * auto_increment_increment : determines the starting point. 
    * NOTE: auto_increment_increment should be equal or more than the highest auto_increment_offset.

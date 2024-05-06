@@ -125,7 +125,7 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * * *
 <a name=s>Clusterset</a>
 -----
-[ Grpup Replication Requirements](https://dev.mysql.com/doc/refman/8.0/en/group-replication-requirements.html)
+* [Group Replication Requirements](https://dev.mysql.com/doc/refman/8.0/en/group-replication-requirements.html)
     * Innodb Storag Engine
     * server_id
     * binlog
@@ -138,16 +138,16 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
     * replica_parallel_type=LOGICAL_CLOCK
     * replica_preserve_commit_order=ON
 
-[Rquirements for Cluster](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-innodb-cluster-requirements.html)
+* [Requirements for Cluster](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-innodb-cluster-requirements.html)
 
-[Requirements](https://dev.mysql.com/doc/mysql-shell/8.0/en/innodb-clusterset-requirements.html):
+* [Requirements](https://dev.mysql.com/doc/mysql-shell/8.0/en/innodb-clusterset-requirements.html):
     * Every table has a primary key
     * Single Primary Mode : default. If Multi, ClusterSet is not supported,
     * No inbound replication. 
 
 * server_uuid : Made by MySQL server. Used by GTID. 
 
-Option. Because Cluster is being used, if you can assume an entire datacenter won't go down you might want to relax
+* Option. Because Cluster is being used, if you can assume an entire datacenter won't go down you might want to relax
     * sync_binlog
     * innodb_flush_log_at_trx_commit
     * innodb_flush_method    

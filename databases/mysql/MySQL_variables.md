@@ -29,6 +29,7 @@ NOTE: This article is always in progress.
 * [Tuning MySQL System Variables for High Performance](https://geekflare.com/mysql-performance-tuning/)
 * [MySQL Configuration](https://releem.com/docs/mysql-performance-tuning/mysql-configuration)
 * [Enhancing MySQL 8 on Modern Hardware: A Guide to Tuning InnoDB I/O Threads for Optimal Performance](https://minervadb.xyz/tuning-mysql-innodb-io-threads-for-optimal-performance/#:~:text=1.,innodb_read_io_threads%20and%20innodb_write_io_threads%20to%204.)
+
 * * *
 <a name=s>Server Configuration</a>
 -----

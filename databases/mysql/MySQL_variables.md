@@ -43,7 +43,7 @@ caches data for the innodb storage in ram, which greatly increases speed for rea
 *  table_cache
 * innodb_buffer_pool_instances: Locks in the innodb buffer pool can be a problem with large data. In general innodb_buffer_pool_instances should be set to amount of ram divided by 1 gig.
 * innodb_log_file_size -- pre 8.0 -- transactions use this file. If the log is full, its slows down the system. For older versions of MySQL, making this large is good.
-* innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is ACID compliant but on crash recovery takes longer. 
+* innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is not ACID compliant and on crash recovery takes longer. 
 
 
 * table_cache : The amount of tables cached. Is this is too small, it may cause problems. 
@@ -75,8 +75,9 @@ select count(1)
 * innodb_flush_method : Changes based on the hardware used. How data is flush to disk. 
 * innodb_file_per_table : Always use this. The main reason is if you drop a table diskspace is returned to the OS.
 * slow_query_log
-* sync_binlog. Under Cluster, it may be okay to set to 0. 1 means flush to disk transactions for the binlog, which is the safest. If 0, you rely on the operating system which is about every second. In a crash, 0 means you may lose some data.
+* sync_binlog. Under Cluster, it may be okay to set to 0. 1 means flush to disk transactions for the binlog, which is the safest. If 0, you rely on the operating system which is about every second. In a crash, 0 means you may lose some data. Value 9 i not durable. 
 * thread_pool_size . The number of threads you are allow to have. With lots of cpu and disks, this can be higher. Generally set to the no of cores on your system.
+* replica_parallel_workers : Default is 4. 
 
 ### Less important variables
 
@@ -108,11 +109,24 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * * *
 <a name=s>Replication</a>
 -----
-
+* server-id : Needed for replication.
+* server_uuid : Made by MySQL server. Used by GTID. 
+* skip-replica-start : Important if you don't  want replication to start when the system starts. 
+* log_slow_replica_statements : If you want to log slow queries from replication.
+* replica_compressed_protocol : May save network speed over cpu usage.
+* replica_parallel_workers] default 4 in later versions of MySQL. If threads update the same row, one thread is rolled back and will continue when the other thread is done.
+*  replica_preserve_commit_order=ON. This prevents gaps from occuring.
+* report_host : This should always be setup. Match it with DNS.
+* Stop stop collisions from multiple masters
+   * auto_increment_offset : Adds X to the starting point defined for this server for new rows. 
+   * auto_increment_increment : determines the starting point. 
+   * NOTE: auto_increment_increment should be euqal or more than the highest auto_increment_offset.
 
 * * *
 <a name=s>Clusterset</a>
 -----
+* server-id : Needed for Clusterset.
+* server_uuid : Made by MySQL server. Used by GTID. 
 
 
 * * *

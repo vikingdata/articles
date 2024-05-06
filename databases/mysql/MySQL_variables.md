@@ -114,13 +114,13 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * skip-replica-start : Important if you don't  want replication to start when the system starts. 
 * log_slow_replica_statements : If you want to log slow queries from replication.
 * replica_compressed_protocol : May save network speed over cpu usage.
-* replica_parallel_workers] default 4 in later versions of MySQL. If threads update the same row, one thread is rolled back and will continue when the other thread is done.
-*  replica_preserve_commit_order=ON. This prevents gaps from occuring.
+* replica_parallel_workers :  default 4 in later versions of MySQL. 
+*  replica_preserve_commit_order=ON. This prevents gaps from occurring.
 * report_host : This should always be setup. Match it with DNS.
 * Stop stop collisions from multiple masters
    * auto_increment_offset : Adds X to the starting point defined for this server for new rows. 
    * auto_increment_increment : determines the starting point. 
-   * NOTE: auto_increment_increment should be euqal or more than the highest auto_increment_offset.
+   * NOTE: auto_increment_increment should be equal or more than the highest auto_increment_offset.
 
 * * *
 <a name=s>Clusterset</a>

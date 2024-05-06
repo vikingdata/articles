@@ -25,8 +25,10 @@ NOTE: This article is always in progress.
 * * *
 <a name=Links></a>Links
 -----
-* (MySQL Performance Cheat Sheet)[https://severalnines.com/blog/mysql-performance-cheat-sheet/)
-* (Tuning MySQL System Variables for High Performance)[https://geekflare.com/mysql-performance-tuning/]
+* [MySQL Performance Cheat Sheet](https://severalnines.com/blog/mysql-performance-cheat-sheet/)
+* [Tuning MySQL System Variables for High Performance](https://geekflare.com/mysql-performance-tuning/)
+* [MySQL Configuration](https://releem.com/docs/mysql-performance-tuning/mysql-configuration)
+* [Enhancing MySQL 8 on Modern Hardware: A Guide to Tuning InnoDB I/O Threads for Optimal Performance](https://minervadb.xyz/tuning-mysql-innodb-io-threads-for-optimal-performance/#:~:text=1.,innodb_read_io_threads%20and%20innodb_write_io_threads%20to%204.)
 
 * * *
 <a name=s>Server Configuration</a>
@@ -41,7 +43,7 @@ caches data for the innodb storage in ram, which greatly increases speed for rea
 *  table_cache
 * innodb_buffer_pool_instances: Locks in the innodb buffer pool can be a problem with large data. In general innodb_buffer_pool_instances should be set to amount of ram divided by 1 gig.
 * innodb_log_file_size -- pre 8.0 -- transactions use this file. If the log is full, its slows down the system. For older versions of MySQL, making this large is good.
-* innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is ACID compliant but on crash recovery takes longer. 
+* innodb_flush_log_at_trx_commit - pre 8.0. 0 means not ACID. 1 means data is flushed to disk. 2 means it is flushed to logs, which is not ACID compliant and on crash recovery takes longer. 
 
 
 * table_cache : The amount of tables cached. Is this is too small, it may cause problems. 
@@ -60,31 +62,43 @@ select count(1)
   where table_schema not in ('mysql','information_schema','performance_schema','sys');
 ```
 * Threads
-    * innodb_thread_concurrency
-    * innodb_write_io_threads
-    
-* innodb_flush_method : Changes based on the hardware used. How data is flushe to disk. 
+    * innodb_write_io_threads and  innodb_write_io_threads
+         * Look at the ratio of read threads and write threads and determine if you should increase either. Also, you may want to increase them slightly and see if it has an effect by
+	 monitoring.
+```
+ # Sum the writes and compare to the reads
+  SHOW GLOBAL STATUS WHERE Variable_name RLIKE '^(Com_select|Com_insert|Com_delete|Com_update)$';
+```
+    * innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. 
+
+
+* innodb_flush_method : Changes based on the hardware used. How data is flush to disk. 
 * innodb_file_per_table : Always use this. The main reason is if you drop a table diskspace is returned to the OS.
 * slow_query_log
-* sync_binlog. Under Cluster, it may be okay to set to 0. 1 means flush to disk transactions for the binlog, which is the safest. If 0, you rely on the operating system which is about every second. In a crash, 0 means you may lose some data.
+* sync_binlog. Under Cluster, it may be okay to set to 0. 1 means flush to disk transactions for the binlog, which is the safest. If 0, you rely on the operating system which is about every second. In a crash, 0 means you may lose some data. Value 9 i not durable. 
 * thread_pool_size . The number of threads you are allow to have. With lots of cpu and disks, this can be higher. Generally set to the no of cores on your system.
+* replica_parallel_workers : Default is 4. 
 
-Less important variables
+### Less important variables
 
 *  max_connections   : Monitor max connections. If you need more, it is can be set dynamically. 
-*  wait_timeout      : Unless you have long running queries, rarely you need to afjust his. This can be specified per session if needed. 
+*  wait_timeout      : Unless you have long running queries, rarely you need to adjust his. This can be specified per session if needed. 
 *  thread_cache_size : Monitor. It is reaches to a low amount, increase it. It can be set dynamically. 
 *  key_buffer_size   : Only for MyISAM. Nobody uses it. 
 *  query_cache_size  : Nobody uses this. Cache in redis or other caching before MySQL is hit. 
-*  tmp_table_size, max_heap_table_size, and temptable_max_mmap   : For tables that are created im memory, if you analyze the slow log and you see a lot of temporary tables made and hitting disk, you may want to increase this. You can use Analyze Explain on slow queries to see if they mention "using filesort ; using temporary tables". Filesort just means a table
+*  tmp_table_size, max_heap_table_size, and temptable_max_mmap   : For tables that are created in memory, if you analyze the slow log and you see a lot of temporary tables made and hitting disk, you may want to increase this. You can use Analyze Explain on slow queries to see if they mention "using filesort ; using temporary tables". Filesort just means a table
 was made for sorting, but it might not have hit disk. Using temporary tables also means a temporary table was created but it might not have hit disk/. 
 * Buffers
-   * sort_bffer
+   * sort_buffer
    * read_buffer_size
    * read_rnd_buffer_size
    * join_buffer_size
 * max_allowed_packet
 * long_query_time : Time query needs to execute before saved to slow logs. If your server experiences bad performance and it doesn't show any slow queries, you may want to lower this variable to capture queries that are the slowest. 
+* innodb_purge_threads - Number of background threads dedicated to InnoDB purge operations. The default is normally enough. 
+* innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. It is responsible for cleaning out data in the innodb buffer. 
+* max_allowed_packet : increase if you are uploading large data, images, files are large varchar, text, or binary. 
+* innodb_thread_concurrency : The default is no limit on threads, which most systems are okay with. By testing, you may want to limit innodb_thread_concurrency;
 
 * * *
 <a name=c>Client settings</a>
@@ -95,11 +109,24 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * * *
 <a name=s>Replication</a>
 -----
-
+* server-id : Needed for replication.
+* server_uuid : Made by MySQL server. Used by GTID. 
+* skip-replica-start : Important if you don't  want replication to start when the system starts. 
+* log_slow_replica_statements : If you want to log slow queries from replication.
+* replica_compressed_protocol : May save network speed over cpu usage.
+* replica_parallel_workers :  default 4 in later versions of MySQL. 
+*  replica_preserve_commit_order=ON. This prevents gaps from occuring.
+* report_host : This should always be setup. Match it with DNS.
+* Stop stop collisions from multiple masters
+   * auto_increment_offset : Adds X to the starting point defined for this server for new rows. 
+   * auto_increment_increment : determines the starting point. 
+   * NOTE: auto_increment_increment should be euqal or more than the highest auto_increment_offset.
 
 * * *
 <a name=s>Clusterset</a>
 -----
+* server-id : Needed for Clusterset.
+* server_uuid : Made by MySQL server. Used by GTID. 
 
 
 * * *

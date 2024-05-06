@@ -139,7 +139,11 @@ Tools
 -----
 Checks
 
-* Do you have backups? Mongodump or hot backups? Do you need incremental backups. 
+* Do you have backups? Mongodump or hot backups? Do you need incremental backups.
+    * [MongoDB Database Backup: Best Practices & Expert Tips](https://www.percona.com/blog/mongodb-backup-best-practices/)
+    * Mongodump includes oplog. Slowest option.
+    * Snapshot can record oplog poistion. Largest data, includes parition. 
+    * Percona Hot Backup has oplog. Included shard cluster. Fast recovery, and easiest if sharded. 
 * Unused Indexes
 * Mutiple Indexes covering the same fields
 * Is Query Profiler turned on

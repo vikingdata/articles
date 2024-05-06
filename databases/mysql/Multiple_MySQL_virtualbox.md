@@ -31,6 +31,7 @@ Purpose is to install Multiple installations of MySQL in Linux under VirtualBox 
 * [Move VirtualBox VM to other hosts](https://4sysops.com/archives/move-virtualbox-vm-to-other-hosts/#:~:text=If%20you're%20running%20VirtualBox,it%20on%20the%20target%20PC.)
 * [Install Cygwin](https://www.cygwin.com/install.html)
 * [MySQL under wsl2](MySQL_under_wsl2.md)
+* [Fix ip address ](https://www.youtube.com/watch?v=Bnyv6FR_irM)
 
 * * *
 <a name=l>Install Linux</a>
@@ -53,6 +54,8 @@ Purpose is to install Multiple installations of MySQL in Linux under VirtualBox 
         * Name : mysql1
         * Mac Address Policy : "Generate new"
         * click Finish
+* OPTIONAL: Fix the ip address. When the virtual box os reboots, the ip address may change.
+    * Watch https://www.youtube.com/watch?v=Bnyv6FR_irM
 * Start mysql1 and get ip address
   *    # Record this ip address
       * ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
@@ -184,6 +187,8 @@ Now import the images three times
 * start "mysql2"
 * Login as user and sudo to root
     * sudo bash
+* OPTIONAL: Fix the ip address. When the virtual box os reboots, the ip address may change.
+    * Watch https://www.youtube.com/watch?v=Bnyv6FR_irM
 * Set the hostname to mysql1
     * hostnamectl set-hostname mysql2.myguest.virtualbox.org
 * Setup exportes in Linux bash so you can ssh to this box

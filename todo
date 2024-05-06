@@ -92,3 +92,9 @@ Mongo -- do recommendations from doc
 mysql -- query cache threshold, low usage
 
 acceess vcc_rpt_logs through Kevanna
+
+
+Install DNS, install LDAP, then LDAP for MySQL and Mongo or other
+https://www.cherryservers.com/blog/how-to-install-and-configure-a-private-bind-dns-server-on-ubuntu-22-04
+But need to change linux and windows clients to use your server.
+https://mittaltarun9715.medium.com/how-to-setup-openldap-server-and-client-installation-in-ubuntu-18-04-with-password-caching-d508a9e80642

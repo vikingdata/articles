@@ -6,7 +6,7 @@ copyright : May 2024
 ---
 
 
-MongoDB Variables
+MySQL Variables
 ==============================
 
 _**by Mark Nielsen

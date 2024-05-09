@@ -32,7 +32,7 @@ NOTE: This article is always in progress.
 * directoryPerDB : Have one directory per database. 
 *  blockCompressor : Compress data on disk. Saves diskspace, uses more cpu, less I/O
 * operationProfiling:    mode: slowOp,    slowOpThresholdMs: 100
-    * Turn on profiling. Detect slow queries. Bad queries can affect performance and other queries. 
+    * Turn on profling. Detect slow queries. Bad queries can affect performance and other queirs. 
 * net:   compressors : snappy : Make communication compressed. 
 * Set threads
     * setParameter:  wiredTigerEngineRuntimeConfig: eviction=(threads_min=6,threads_max=12)
@@ -42,7 +42,7 @@ NOTE: This article is always in progress.
     * Comments, if the oplog is too small. Backups may not work as the latest command has to be before the time of backup.
        * Set the oplog size.
        * Also set the no of hours to hold onto queries. oplogMinRetentionHours
-       * To calculate the size of oplog
+       * To caluclate the size of oplog
            * Set hours
 	   * Wait 24 hours and monitor oplog size. 
 	   * Run ``` use local; local.oplog.rs.stats().totalSize ```
@@ -57,9 +57,9 @@ Per Connection
 <a name=s>Replica</a>
 -----
 * arbiterOnly : A member with no data. Primarily used in keeping a cluster up. Counts as a single server being up. 
-* hidden :  member in a replica must have priority 0. They can still participate in votes for other members when there is  failover.
-   * Hidden to applications.
-       * Unless you directly connect to it.
+* hidden :  member in a replica must have priority 0. They can still participate in votes for other memebers when there is  failover.
+   * Hidden to applciations.
+       * Unless you diretly connect to it.
    * Won't respond to read concerns.
    * Will respond to write concerns if ts defined as a number of servers. It will not respond when write concern it majority ( no voting). 
 * Priority : If 0, cannot become primary and cannot trigger elections. Higher priority will give the member a more likely chance to become primary in a failover. 
@@ -70,12 +70,12 @@ Per Connection
 
 Connection settings affected by replica set or shards. 
 
-* read concern : Secondaries respond to read queries. When a certain numbers of servers have committed data for the to occur. Basically a majority of servers have committed data being read.  
+* read concern : Secondaries respond to read queries. When a certain numbers of servers have commited data for the to occur. Basically a majority of servers have committed data being read.  
     * local -- from any node, no promise data has been written to a majority of nodes. With sharded, it communicates with primary or config servers to filter out data that has been orphaned. 
     * available -- same as local with unsharded collections. With sharded collections it doesn't wait for consistency checks from servers it asks data for. Thus my return orphaned data.
-    The purpose is to allow a return even with possible errors -- faster response. 
+    The purpose is to allow a return even with possinle errors -- faster response. 
     * majority -- a majority of servers written the most recent data.
-    * linearizable -- all majority acknowledged writes have finished. It forces a check on the primary to as for write concern of majority to the secondaries. In the event of a failover,
+    * linearizable -- all majority achknowleged writes have finished. It forces a check on the primary to as for write concern of majority to the seondaries. In the event of a failover,
     it forces the Primary to request a write concern majority of the secondaries. If it can't, it isn't the "true" primary. 
     * snapshot - for shards. 
     * Comments
@@ -91,19 +91,19 @@ Connection settings affected by replica set or shards.
     * primaryPreferred -- will try the primary, but it may come from a secondary if primary is not available.
     * secondary -- secondaries only
     * secondaryPreferred  -- secondary -- but will use primary if there are no secondaries.
-    * nearest -- calculates based on latency threshold of servers and uses tags.
-    * Comments: For mongos (shards), with Hedged reads, multiple queries are sent to secondaries and use the first one that responds. Can only be used with non-primary read priority. 
+    * nearest -- caluclates based on latamtcy threshold of servers and uses tags.
+    * Comments: For mongos (shards), with Headged reads, mutiple queries are sent to secodnaries and use the first one that responds. Can only be used with non-primary read priority. 
     
 * write concern : How many secondaries have committed the data before the primary returns a response to the application. 
     * Unacknowledged -- same as ignore errors.
-    * Acknowledged -- written to primary. Could be just in memory. Not journal or disk.
+    * Acknowledged -- written to primary. Could be just in memory. Not jouranl or disk.
     * Journaled -- confirmed to disk. In event of crash, data is recoverable. 
     * Replica Acknowledged -- Replica set confirms data has been written.
         * 1 is the primary only
-	* > 1 includes primary. Waits till X servers have committed data.
+	* > 1 includes primary. Waits till X servers have comitted data.
 	* Majority -- a majority of servers have committed data.
 	* Comments
-	    * getLastError has an "fsync" option, that data must be synced to Primary (not just Journaled)
+	    * getLastError has an "fsync" option, tht data must be synced to Primary (not just journaled)
 
 
 * * *

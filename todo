@@ -80,7 +80,7 @@ mongo -- multie replica set on on server
       Python scripts to display health from status, rs.status, and others
       	     make library which can be used by Dad or standalone
 
-Window functions, snowflake, postgresql, mysql in one article
+Window functions, snowflake, postgresql, mysql, mongodb  in one article
 
 
 
@@ -98,3 +98,32 @@ Install DNS, install LDAP, then LDAP for MySQL and Mongo or other
 https://www.cherryservers.com/blog/how-to-install-and-configure-a-private-bind-dns-server-on-ubuntu-22-04
 But need to change linux and windows clients to use your server.
 https://mittaltarun9715.medium.com/how-to-setup-openldap-server-and-client-installation-in-ubuntu-18-04-with-password-caching-d508a9e80642
+
+RDS - failover, upgrades without downtime, using route
+   https://stratusgrid.com/blog/how-to-perform-amazon-rds-upgrades-with-near-zero-downtime
+   Multi AZ and mutil region   
+   can't do uncrypted and encrypted in an RDS mysql clsuter
+      https://aws.amazon.com/blogs/database/encrypt-an-unencrypted-amazon-aurora-mysql-cluster-with-minimal-downtime-using-aws-dms-homogeneous-data-migrations/
+      https://medium.com/swlh/how-to-encrypt-aws-rds-mysql-replica-set-with-zero-downtime-and-zero-data-loss-b145cbf1ecf0
+mongo -- bulkwrite,
+
+
+RDS amd Aurora
+    system upgrade
+    	   How does increase in size affect i/o
+	   Increase IOPS
+    major upgrades
+    minor upgrades
+    config changes
+    update column changes with zero downtime
+    	   DDL online, percona online schema change
+    How to go from unencrypted to encrypted
+    	unencryped cannot replicate to encrypted RDS and Aurora.
+
+mongodb time series
+    stream
+
+atlas
+ops manager
+
+mysql -- setup clusterset in mysql on one server.

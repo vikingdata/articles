@@ -51,6 +51,9 @@ mkdir -p /data/mongo4/logs
 mkdir -p /data/mongo4/db
 mkdir -p /data/mongo_old/db
 mkdir -p /data/mongo_old/logs
+mkdir -p /data/mongo5/logs
+mkdir -p /data/mongo5/db
+
 
 useradd mongodb --shell /bin/bash --create-home
 chown -R mongodb.mongodb /data /var/lib/mongo
@@ -116,11 +119,14 @@ cd /data/mongo2
 rm -f mongod2.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod2.conf
 cd /data/mongo3
-rm -f mongod2.conf
+rm -f mongod3.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod3.conf
 cd /data/mongo4
-rm -f mongod2.conf
+rm -f mongod4.conf
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod4.conf
+cd /data/mongo5
+rm -f mongod5.conf
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod5.conf
 
 cd /lib/systemd/system/
 rm -f mongod1.service mongod2.service mongod3.service mongod4.service
@@ -128,7 +134,8 @@ wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod2.service
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod3.service
 wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod4.service
-```
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mongo/Multiple_Mongo_one_server_files/mongod5.service
+````
 
 
 
@@ -241,7 +248,8 @@ cat /tmp/reconfig.js | mongo --port 30001
 
 # Let's print out some info
 mongo --port 30001 --eval "rs.status()"
-mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:"
+mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:|sync"
+mongo --port 30001 --eval "rs.status()" | egrep "name:|sync"
 mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"
 
 ```

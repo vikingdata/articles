@@ -150,7 +150,7 @@ Checks
 
 
 * * *
-<a name=u>Usefull Queries and Commands</a>
+<a name=u>Useful Queries and Commands</a>
 -----
 * Replica Status
     * start mongosh or mongo
@@ -163,8 +163,76 @@ Checks
 * Slow queries
 * Sharding
 * Database stats
-* Document stats
 * Locks
     * db.serverStatus().globalLock
     * db.serverStatus().locks
-* Query explain 
+* Query explain
+* Specify secondary syncs and applications to use tags
+    * Specify secondary to sync to other secondary.
+        * https://www.mongodb.com/docs/manual/tutorial/configure-replica-set-secondary-sync-target/
+	* https://www.mongodb.com/docs/manual/reference/command/replSetSyncFrom/#mongodb-dbcommand-dbcmd.replSetSyncFrom
+        * NOTE: even though you change this, it is only temporary. Mongo may change it again at any time.
+        * command : db.adminCommand({ replSetSyncFrom: "<HOST>:<PORT"   } )
+        * Steps:
+```
+mongosh --port 30001 --eval "rs.status()" | egrep "name:|sync"
+
+ # output
+syncSourceHost: '',
+  syncSourceId: -1,
+      name: 'localhost:30001',
+      syncSourceHost: '',
+      syncSourceId: -1,
+      name: 'localhost:30002',
+      syncSourceHost: 'localhost:30001',
+      syncSourceId: 0,
+      name: 'localhost:30003',
+      syncSourceHost: 'localhost:30002',
+      syncSourceId: 1,
+      name: 'localhost:30004',
+      syncSourceHost: 'localhost:30003',
+      syncSourceId: 2,
+
+  # Change localhost:30004 to sync from 'localhost:30002' instead of 'localhost:30003'
+
+mongosh --port 30004 -eval 'db.adminCommand({ replSetSyncFrom: "localhost:30002"   } )'
+{
+  syncFromRequested: 'localhost:30002',
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1715275817, i: 1 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1715275817, i: 1 })
+}
+
+mark@mark-Inspiron-3501:~$ mongosh --port 30001 --eval "rs.status()" | egrep "name:|sync"
+  syncSourceHost: '',
+  syncSourceId: -1,
+      name: 'localhost:30001',
+      syncSourceHost: '',
+      syncSourceId: -1,
+      name: 'localhost:30002',
+      syncSourceHost: 'localhost:30001',
+      syncSourceId: 0,
+      name: 'localhost:30003',
+      syncSourceHost: 'localhost:30002',
+      syncSourceId: 1,
+      name: 'localhost:30004',
+      syncSourceHost: 'localhost:30002',
+      syncSourceId: 1,
+```
+* Using tags for applications to specify which mongo server for read queries.
+        * https://www.mongodb.com/docs/manual/tutorial/configure-replica-set-tag-sets/
+        * Command:
+```
+conf = rs.conf();
+conf.members[0].tags = { "dc": "east",  "usage": "replica", env='prod' };
+conf.members[1].tags = { "dc": "south", "usage": "replica", env='prod' };
+conf.members[2].tags = { "dc": "west",  "usage": "replica", env="prod" };
+conf.members[4].tags = { "dc": "north", "usage": "backup",    nv="prod" };
+rs.reconfig(conf);
+```

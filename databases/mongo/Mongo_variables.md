@@ -100,9 +100,9 @@ Connection settings affected by replica set or shards.
     * Journaled -- confirmed to disk. In event of crash, data is recoverable. 
     * Replica Acknowledged -- Replica set confirms data has been written.
         * 1 is the primary only
-	* greater than  1 includes primary. Waits till X servers have committed data.
-	* Majority -- a majority of servers have committed data.
-	* Comments
+        * greater than  1 includes primary. Waits till X servers have committed data.
+        * Majority -- a majority of servers have committed data.
+        * Comments
 	    * getLastError has an "fsync" option, that data must be synced to Primary (not just Journaled)
 
 

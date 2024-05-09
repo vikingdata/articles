@@ -65,7 +65,7 @@ Per Connection
 * Priority : If 0, cannot become primary and cannot trigger elections. Higher priority will give the member a more likely chance to become primary in a failover. 
 * Votes -- no of votes a server will cast in an election. Members have 0 or 1. Arbiters have 1. If you have priority > 0 it must be one. This is confusing.
 * secondaryDelaySecs : How many seconds this member is behind the primary.
-# tags : Used for read and write preferences.
+* tags : Used for read and write preferences.
 
 
 Connection settings affected by replica set or shards. 

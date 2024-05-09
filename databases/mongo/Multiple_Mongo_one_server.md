@@ -151,6 +151,8 @@ sudo -u mongodb mongod --config=/data/mongo1/mongod1.conf &
 sudo -u mongodb mongod --config=/data/mongo2/mongod2.conf &
 sudo -u mongodb mongod --config=/data/mongo3/mongod3.conf &
 sudo -u mongodb mongod --config=/data/mongo4/mongod4.conf &
+sudo -u mongodb mongod --config=/data/mongo5/mongod5.conf &
+
 sleep 2
 
    # See if they are still running
@@ -161,6 +163,8 @@ mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
 mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
+mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30005
+
 
    # If so, kill and restart
 killall mongod
@@ -172,6 +176,8 @@ systemctl restart mongod1
 systemctl restart mongod2
 systemctl restart mongod3
 systemctl restart mongod4
+systemctl restart mongod5
+
 
   # See if they started
 ps auxw | grep mongod
@@ -227,29 +233,48 @@ mongo --port 30001 --eval "rs.initiate( { _id: 'rs1', version: 1, members: [ {_i
 mongo --port 30001 --eval "rs.add('localhost:30002')"
 mongo --port 30001 --eval "rs.add('localhost:30003')"
 mongo --port 30001 --eval "rs.add('localhost:30004')"
+mongo --port 30001 --eval "rs.add('localhost:30005')"
 
    # First 3 are the main server, the 4th is hidden and cannot become primary.
    # Usually, the 4th is for backups or other. 
 
-echo "
+echo '
 cfg = rs.conf();
 cfg.members[0].priority = 3;
+cfg.members[0].tags = { "dc": "east",   "usage": "replica", "env":"prod" };
+
 cfg.members[1].priority = 2;
+cfg.members[1].tags = { "dc": "west",   "usage": "replica", "env":"prod" };
+
 cfg.members[2].priority = 1;
+cfg.members[2].tags = { "dc": "south",  "usage": "replica", "env":"prod" };
+
 cfg.members[3].priority = 0;
 cfg.members[3].hidden = 1;
 cfg.members[3].votes = 0;
+cfg.members[3].tags = { "dc": "north",  "usage": "backup",  "env":"prod" };
+
+cfg.members[4].priority = 0;
+cfg.members[4].hidden = 1;
+cfg.members[4].votes = 0;
+cfg.members[4].tags = { "dc": "backup", "usage": "query",   "env":"prod" };
 
 rs.reconfig(cfg);
-" >> /tmp/reconfig.js
+' > /tmp/reconfig.js
 
 cat /tmp/reconfig.js | mongo --port 30001
-
 
 # Let's print out some info
 mongo --port 30001 --eval "rs.status()"
 mongo --port 30001 --eval "rs.status()" | egrep "name:|state:|uptime:|health:|stateStr:|sync"
-mongo --port 30001 --eval "rs.status()" | egrep "name:|sync"
 mongo --port 30001 --eval "rs.conf()" | egrep "_id:|arbiterOnly:|hidden:|priority:|votes:"
+mongo --port 30001 --eval "rs.conf()" | egrep "_id:|tags:"
+
+mongo --port 30001 --eval "rs.status()" | egrep "name:|sync"
+  # This change may be undone by mongo
+mongosh --port 30004 -eval 'db.adminCommand({ replSetSyncFrom: "localhost:30002"   } )'
+sleep 4
+mongo --port 30001 --eval "rs.status()" | egrep "name:|sync"
+
 
 ```

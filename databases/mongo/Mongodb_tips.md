@@ -233,6 +233,8 @@ conf = rs.conf();
 conf.members[0].tags = { "dc": "east",  "usage": "replica", env='prod' };
 conf.members[1].tags = { "dc": "south", "usage": "replica", env='prod' };
 conf.members[2].tags = { "dc": "west",  "usage": "replica", env="prod" };
-conf.members[4].tags = { "dc": "north", "usage": "backup",    nv="prod" };
+conf.members[3].tags = { "dc": "north", "usage": "backup",  env="prod" };
+conf.members[4].tags = { "dc": "north", "usage": "read",   env="prod" };
+
 rs.reconfig(conf);
 ```

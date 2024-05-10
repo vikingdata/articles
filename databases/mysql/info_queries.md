@@ -97,7 +97,17 @@ SELECT table_schema
 	, MIN(create_time) AS min_reation_time_table
 FROM information_schema.tables 
 GROUP BY table_schema
-order by db_size_in_meg desc
+order by db_size_in_gig desc
+limit 10;
+
+
+SELECT table_schema
+        , ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
+        , MIN(create_time) AS min_reation_time_table
+FROM information_schema.tables
+where table_schema in ('<DB>')
+GROUP BY table_schema
+order by db_size_in_gig desc
 limit 10;
 
 

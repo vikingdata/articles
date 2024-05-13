@@ -20,7 +20,7 @@ NOT DONE YET
 3. [Setup MongoDB config files](#c)
 4. [Start all instances](#s)
 5. [Setup replica set](#r)
-
+6. Reset
 
 * * *
 <a name=Links></a>Links
@@ -54,8 +54,7 @@ mkdir -p /data/mysql1/logs/relay
 mkdir -p /data/mysql1/logs/redo
 mkdir -p /data/mysql1/logs/undo
 
-
-
+echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
 
 
 ```
@@ -80,6 +79,14 @@ cd /data/mysq6
 
 cd /lib/systemd/system/
 
+
+cd /lib/systemd/system/
+rm -f mysqld1.service mysqld2.service mysqld3.service mysqld4.service
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysq1.service
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld2.service
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld3.service
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld4.service
+wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld5.service
 
 ```
 
@@ -132,11 +139,6 @@ systemctl restart mysql6
 ps auxw | grep mysqld
 
 
-mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30001
-mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30002
-mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30003
-mongosh -eval "db.runCommand({ serverStatus: 1}).host" --port 30004
-
   # These next steps may be uncesssary.
 
   # If good, enable at restart, and then restart them
@@ -167,3 +169,7 @@ service mysql6 restart
 
 
 ```
+
+* * *
+<a name=r>Reset</a>
+-----

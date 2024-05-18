@@ -288,6 +288,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
 echo "export DBT_PROJECT_DIR=~/dbt/dbt_sf" >> ~/.bashrc
 echo "alias dbt_pg='cd ~/dbt/dbt_sf; export DBT_PROJECT_DIR=~/dbt/dbt_sf'" >> ~/.bashrc
  ```
+* test
     *   also : export DBT_PROJECT_DIR=~/dbt/dbt_sf to your current session.
 ```export DBT_PROJECT_DIR=~/dbt/dbt_sf```
 

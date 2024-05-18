@@ -16,8 +16,8 @@ Original Copyright May 2024
 NOT DONE YET
 
 1. [Links](#links)
-2. [Install Mongo](#i)
-3. [Setup MongoDB config files](#c)
+2. [Install MySQL Cluster](#i)
+3. [Setup MySQL config files](#c)
 4. [Start all instances](#s)
 5. [Setup replica set](#r)
 6. Reset
@@ -30,10 +30,51 @@ NOT DONE YET
 <a name=i>Install ClusterSet on Ubuntu</a>
 -----
 
+fg
 ```
 
 sudo bash
 
+apt install curl -y
+curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb -y
+sudo apt update
+sudo percona-release setup ps80
+
+#------------------------------------------
+### If percona-release doesn't work, for example I run LinutMint which is Ubuntu comptabile
+
+echo "
+deb http://repo.percona.com/prel/apt jammy main
+deb-src http://repo.percona.com/prel/apt jammy main
+"> /etc/apt/sources.list.d/percona-prel-release.list
+
+echo "
+deb http://repo.percona.com/ps-80/apt jammy main
+deb-src http://repo.percona.com/ps-80/apt jammy main
+" > /etc/apt/sources.list.d/percona-ps-80-release.list
+
+echo "
+deb http://repo.percona.com/tools/apt jammy main
+deb-src http://repo.percona.com/tools/apt jammy main
+" > /etc/apt/sources.list.d/percona-tools-release.list
+
+apt-get update
+
+#-----------------------------------------
+
+  # It will may ask for password for percona mysql
+  # If it does, leave passwored blank and it will allow
+  # root authetication by sudo to root only.
+sudo apt install percona-server-server -y
+  # If it asks for a password, just press enter.
+
+  # Optional install a specific version
+  # We must have 8.0.36 or earlier, because we download oracle's shell and router at 8.0.36
+# apt list -a percona-server-server
+# apt install  percona-server-server=8.0.35-27-1.jammy
+
+sudo apt install percona-server-server -y
 
 mkdir -p /data/mysql1/logs
 mkdir -p /data/mysql1/db
@@ -57,6 +98,15 @@ mkdir -p /data/mysql1/logs/undo
 echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
 
 
+
+  # Create a script to make local and remote account with admin privs. 
+echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > create_user.sql
+echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
+
+echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';" >> create_user.sql
+echo "grant all privileges on *.* to '$SUDO_USER'@'%';" >> create_user.sql
+echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >> create_user.sql
+
 ```
 
 * * *
@@ -78,15 +128,13 @@ cd /data/mysq5
 cd /data/mysq6
 
 cd /lib/systemd/system/
-
-
-cd /lib/systemd/system/
 rm -f mysqld1.service mysqld2.service mysqld3.service mysqld4.service
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysq1.service
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld2.service
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld3.service
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld4.service
-wget https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Multiple_Mysql_one_server_files/mysqld5.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql1.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql2.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql3.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql4.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql5.service
+https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql6.service
 
 ```
 

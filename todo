@@ -1,4 +1,4 @@
-snowflake
+
 
   DONE cli and dpt setup - done, post it
   DONE vscode setup
@@ -11,29 +11,7 @@ object versus dict
 streamlit
 events versus cpt and cronjobs
 
-snowflake
-  different stages examples, user, table, named
-  flatten and queryng json files - -nested json queries
-  sci anaconda -- use external app, in virtual env
-  different stages
-  defining and enforcement of contraints -- examples
-   unie, primary, foriegn, not null and not null is only one enforced.
-  File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger.
-  pipe example, internal and external   
-  uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
-
-mysql or postgresql
-1. window fuctions rank, important for data enginners -- include mysql and postgresql if there are any differences.
-  Answer complicated questions with window functions
-    1. by month, rank, etc, in mysql, postgresql, and snowflake, mayeb mongodb
-
-
-
 DONE different guis, vscode, and other
-1st dpt project in postgresql
-  copy data to snowflake
-  execute in snowflake
-  compare reports
 
 whats this --- t and l and i between mysql and snowflake. 
 
@@ -80,9 +58,6 @@ mongo -- multie replica set on on server
       Python scripts to display health from status, rs.status, and others
       	     make library which can be used by Dad or standalone
 
-Window functions, snowflake, postgresql, mysql, mongodb  in one article
-
-
 
 ssh to 6 or centos 7, disable keys, and other options
 AWS reboots mysql with certificates
@@ -105,8 +80,16 @@ RDS - failover, upgrades without downtime, using route
    can't do uncrypted and encrypted in an RDS mysql clsuter
       https://aws.amazon.com/blogs/database/encrypt-an-unencrypted-amazon-aurora-mysql-cluster-with-minimal-downtime-using-aws-dms-homogeneous-data-migrations/
       https://medium.com/swlh/how-to-encrypt-aws-rds-mysql-replica-set-with-zero-downtime-and-zero-data-loss-b145cbf1ecf0
-mongo -- bulkwrite,
 
+mongo --
+   bulkwrite, 1st command will roll back, multiple commands won't (each command suceeded comitted), unless inside a transaction
+      ways data can be reuined
+      	   Incomplete replica failovers, use write concrn to avoid this
+	   Sharding, orphaned rows -- use read concern to avoid this. 
+   time series
+   stream
+   atlas
+   ops manager
 
 RDS amd Aurora
     system upgrade
@@ -120,10 +103,31 @@ RDS amd Aurora
     How to go from unencrypted to encrypted
     	unencryped cannot replicate to encrypted RDS and Aurora.
 
-mongodb time series
-    stream
-
-atlas
-ops manager
-
 mysql -- setup clusterset in mysql on one server.
+
+Snowflake 
+  https://www.kaggle.com/c/titanic, titanic file, and ml
+  pytorch , sklearn, data science
+  Window functions, snowflake, postgresql, mysql, mongodb  in one article
+  extract data from mysql and load into snowflake, take care of datatypes.
+
+  different stages examples, user, table, named
+  flatten and queryng json files - -nested json queries
+  sci anaconda -- use external app, in virtual env
+  different stages
+  defining and enforcement of contraints -- examples
+   unie, primary, foriegn, not null and not null is only one enforced.
+  File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger.
+  pipe example, internal and external
+  uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
+
+1st dpt project in postgresql
+  copy data to snowflake
+  execute in snowflake
+  compare reports
+
+
+monitoring -- with mysql, postghesql, snowflake
+	new relic
+	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
+	telegraph -- used with promethesus

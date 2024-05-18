@@ -227,19 +227,19 @@ We will practice a little bit with the gui. We will set up a DBT database.
         Select "AccountAdmin" role
 *   Linux
      Enter python environment: env_dbt
-   * Execute:     
+    * Execute:     
      pip install dbt-snowflake
         		
-   *   Setup in config file for postgresql. Run dbt init and edit file.
+    *   Setup in config file for postgresql. Run dbt init and edit file.
 
-       * Execute : cd ~/dbt
-       *   Run dbt init and edit file.
+        * Execute : cd ~/dbt
+        *   Run dbt init and edit file.
            Execute: dbt init
-           *   name : dbt_sf
-           *   database : snowflake, should be "2".
-	   * It will ask you a bunch of other questions, other than account_id, username, and password use the values below when you edit .dbt/profiles.yml
+            *   name : dbt_sf
+            *    database : snowflake, should be "2".
+	    * It will ask you a bunch of other questions, other than account_id, username, and password use the values below when you edit .dbt/profiles.yml
 
-       * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
+        * You may have to edit ~/.dbt/profiles.yml but you should not have to. 
            ```bash           
            dbt_sf:
              outputs:
@@ -263,34 +263,33 @@ We will practice a little bit with the gui. We will set up a DBT database.
             target: dev
 
            ```
-       * The account name in the config file is really the account identifier. There are at least two values you can put in there.
-       * The account name you can get from the url sent to you in the email.
-           * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
-           * The accountname is everything up to snowflakecomputing.
-           * The account name would thus be fntrtms-lobABCD
-       * Also, you can find out what to put in "account name" by
-           * Login into the web gui
-           * Select Admin
-           * Select Accounts
-           * You should see the message "1 Account in <ORG NAME>"
-           * Under that, is a list of accounts.
-           * The name of the first entry is the one you want.
-           * So let's say The org ame is "name" and the account is "xyz". The account name would be abc-xzy
-       * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
-       * Use the same username and password you use to log into the web gui.
-       * Or you create a user and password.
+        * The account name in the config file is really the account identifier. There are at least two values you can put in there.
+        * The account name you can get from the url sent to you in the email.
+            * My url, was close to https://fntrtms-lobABCD.snowflakecomputing.com
+            * The accountname is everything up to snowflakecomputing.
+            * The account name would thus be fntrtms-lobABCD
+        * Also, you can find out what to put in "account name" by
+            * Login into the web gui
+            * Select Admin
+            * Select Accounts
+            * You should see the message "1 Account in <ORG NAME>"
+            * Under that, is a list of accounts.
+            * The name of the first entry is the one you want.
+            * So let's say The org ame is "name" and the account is "xyz". The account name would be abc-xzy
+        * The other way, look at https://docs.snowflake.com/en/user-guide/admin-account-identifier
+        * Use the same username and password you use to log into the web gui.
+        * Or you create a user and password.
     *   Change to working directory, it will search for dbt_project.yml
         ```cd ~/dbt/dbt_sf```
     *   Execute, and there should be no errors: dbt debug
     *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.
 
-        ```bash
-        echo "export DBT_PROJECT_DIR=~/dbt/dbt_pg" >> ~/.bashrc
-        echo "alias dbt_pg='cd ~/dbt/dbt_pg; export DBT_PROJECT_DIR=~/dbt/dbt_pg'" >> ~/.bashrc
-        ```
-    *   also : export DBT_PROJECT_DIR=~/dbt/dbt_pg to your current session.
-        ```export DBT_PROJECT_DIR=~/dbt/dbt_pg```
-
+```bash
+echo "export DBT_PROJECT_DIR=~/dbt/dbt_sf" >> ~/.bashrc
+echo "alias dbt_pg='cd ~/dbt/dbt_sf; export DBT_PROJECT_DIR=~/dbt/dbt_sf'" >> ~/.bashrc
+ ```
+    *   also : export DBT_PROJECT_DIR=~/dbt/dbt_sf to your current session.
+```export DBT_PROJECT_DIR=~/dbt/dbt_sf```
 
 
 * * *

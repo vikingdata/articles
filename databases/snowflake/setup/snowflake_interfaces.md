@@ -282,7 +282,7 @@ We will practice a little bit with the gui. We will set up a DBT database.
     *   Change to working directory, it will search for dbt_project.yml
         ```cd ~/dbt/dbt_sf```
     *   Execute, and there should be no errors: dbt debug
-    *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_test1``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.
+    *   Lastly, add ```DBT_PROJECT_DIR=~/dbt/dbt_sf ``` to your .bashrc file. No matter what directory you are in it will find the file after you log in.
 
 ```bash
 echo "export DBT_PROJECT_DIR=~/dbt/dbt_sf" >> ~/.bashrc

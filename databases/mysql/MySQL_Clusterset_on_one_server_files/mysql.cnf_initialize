@@ -5,8 +5,8 @@ plugin-load=auth_socket.so
 #group_replication_ip_allowlist="192.168.1.0/24"
 
 server-id=__ID__
-port=3306
-report_host=__HOST__
+port=__port__
+report_host=localhost
 character-set-server=latin1
 collation-server=latin1_bin
 

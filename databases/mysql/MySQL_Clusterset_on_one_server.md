@@ -122,22 +122,18 @@ echo "select user,host,plugin,authentication_string from mysql.user where user='
 ```
 sudo bash
 
-cd /data/mysq1
-
-cd /data/mysq2
-cd /data/mysq3
-cd /data/mysq4
-cd /data/mysq5
-cd /data/mysq6
+for i in 1 2 3 4 5 6; do
+  cd /data/mysql$i
+  wget -O mysql$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
+  wget -O mysql$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
+done
 
 cd /lib/systemd/system/
-rm -f mysqld1.service mysqld2.service mysqld3.service mysqld4.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql1.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql2.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql3.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql4.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql5.service
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/service/mysql6.service
+
+for i in 1 2 3 4 5 6; do
+  rm -f mysqld$i.service
+
+
 
 ```
 

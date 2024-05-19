@@ -11,10 +11,10 @@ WantedBy=multi-user.target
 Type=notify
 User=mysql
 Group=mysql
-PIDFile=/data/mysql1/mysqld.pid
+PIDFile=/data/mysql__NO__/mysqld.pid
 PermissionsStartOnly=true
 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
-ExecStart=/usr/sbin/mysqld --defaults-file=/data/mysql1/mysql1.cnf
+ExecStart=/usr/sbin/mysqld --defaults-file=/data/mysql__NO__/mysql__NO__.cnf
 TimeoutSec=infinity
 Restart=on-failure
 RuntimeDirectory=mysqld

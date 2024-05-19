@@ -290,6 +290,7 @@ echo "alias dbt_pg='cd ~/dbt/dbt_sf; export DBT_PROJECT_DIR=~/dbt/dbt_sf'" >> ~/
  ```
 * .
     *   also : export DBT_PROJECT_DIR=~/dbt/dbt_sf to your current session.
+
 ```export DBT_PROJECT_DIR=~/dbt/dbt_sf```
 
 

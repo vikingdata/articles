@@ -88,6 +88,8 @@ mkdir -p /data/mysql5/logs
 mkdir -p /data/mysql5/db
 mkdir -p /data/mysql6/logs
 mkdir -p /data/mysql6/db
+mkdir -p /data/mysql_init
+
 
 mkdir -p /data/mysql1/logs/innodb
 mkdir -p /data/mysql1/logs/binlog
@@ -95,17 +97,21 @@ mkdir -p /data/mysql1/logs/relay
 mkdir -p /data/mysql1/logs/redo
 mkdir -p /data/mysql1/logs/undo
 
+chown -R mysql.mysql /data/mysql*
+
 echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
 
 
 
-  # Create a script to make local and remote account with admin privs. 
-echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > create_user.sql
-echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';" >> create_user.sql
+  # Create a script to make local and remote account with admin privs.
 
-echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';" >> create_user.sql
-echo "grant all privileges on *.* to '$SUDO_USER'@'%';" >> create_user.sql
-echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >> create_user.sql
+export root_file=/data/mysql_init/root_account.sql
+echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root_file
+echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';"          >>  $root_file
+
+echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $root_file
+echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $root_file
+echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >>  $root_file
 
 ```
 
@@ -116,11 +122,8 @@ echo "select user,host,plugin,authentication_string from mysql.user where user='
 ```
 sudo bash
 
-mkdir -p /data/mysql1/logs
-mkdir -p /data/mysql1/data
-
-
 cd /data/mysq1
+
 cd /data/mysq2
 cd /data/mysq3
 cd /data/mysq4

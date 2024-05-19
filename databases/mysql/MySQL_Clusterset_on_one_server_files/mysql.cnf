@@ -1,18 +1,16 @@
 
 [mysqld]
-#plugin-load=auth_socket.so
-#plugin_load_add='group_replication.so'
-#group_replication_ip_allowlist="127.0.0.0/24"
-#group_replication_group_name = "a1eba67d-747f-436a-929b-56857de72ecc"
+plugin-load=auth_socket.so
+plugin_load_add='group_replication.so'
+group_replication_ip_allowlist="127.0.0.0/24"
+group_replication_group_name = "a1eba67d-747f-436a-929b-56857de72ecc"
 
-#mkdir -p /data/mysql1/logs/innodb
-#mkdir -p /data/mysql1/logs/binlog
-#mkdir -p /data/mysql1/logs/relay
 
 
 ### General settings
-server-id=1
+server-id=__NO__
 port=__PORT__
+
 report_host=localhost
 character-set-server=latin1
 collation-server=latin1_bin

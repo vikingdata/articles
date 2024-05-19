@@ -76,32 +76,20 @@ sudo apt install percona-server-server -y
 
 sudo apt install percona-server-server -y
 
-mkdir -p /data/mysql1/logs
-mkdir -p /data/mysql1/db
-mkdir -p /data/mysql2/logs
-mkdir -p /data/mysql2/db
-mkdir -p /data/mysql3/logs
-mkdir -p /data/mysql3/db
-mkdir -p /data/mysql4/logs
-mkdir -p /data/mysql4/db
-mkdir -p /data/mysql5/logs
-mkdir -p /data/mysql5/db
-mkdir -p /data/mysql6/logs
-mkdir -p /data/mysql6/db
-mkdir -p /data/mysql_init
+for i in 1 2 3 4 5 6; do
+  mkdir -p /data/mysql$i/db
+  mkdir -p /data/mysql$i/innodb
 
+  mkdir -p /data/mysql$i/binlog
+  mkdir -p /data/mysql$i/relay
 
-mkdir -p /data/mysql1/logs/innodb
-mkdir -p /data/mysql1/logs/binlog
-mkdir -p /data/mysql1/logs/relay
-mkdir -p /data/mysql1/logs/redo
-mkdir -p /data/mysql1/logs/undo
+  mkdir -p /data/mysql$i/undo
+  mkdir -p /data/mysql$i/logs
+done
 
 chown -R mysql.mysql /data/mysql*
 
 echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
-
-
 
   # Create a script to make local and remote account with admin privs.
 
@@ -122,17 +110,28 @@ echo "select user,host,plugin,authentication_string from mysql.user where user='
 ```
 sudo bash
 
+port=4000
 for i in 1 2 3 4 5 6; do
+  let port=$port+1
   cd /data/mysql$i
   wget -O mysql$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
   wget -O mysql$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
+
+  sed -i "s/__NO__/$i/g"       mysql$i.cnf_initialize
+  sed -i "s/__PORT__/$port/g"  mysql$i.cnf_initialize
+
+  sed -i "s/__NO__/$i/g"       mysql$i.cnf
+  sed -i "s/__PORT__/$port/g"  mysql$i.cnf
+
 done
 
 cd /lib/systemd/system/
 
 for i in 1 2 3 4 5 6; do
   rm -f mysqld$i.service
-
+  wget -O mysql$i.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.service
+  sed -i "s/__NO__/$i/g"  mysqld$i.service
+done
 
 
 ```

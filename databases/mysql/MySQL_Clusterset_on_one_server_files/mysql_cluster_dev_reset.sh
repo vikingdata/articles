@@ -38,10 +38,20 @@ for i in 1 2 3 4 5 6; do
 
 done
 
-for i in 1 2 4 5 6; do
    echo "init mysql$i node, this may take a while"
-   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql$i/mysqld$i.cnf_initialize --defaults-group-suffix= --initialize-insecure
-done
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize --defaults-group-suffix= --initialize-insecure
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize --defaults-group-suffix= --initialize-insecure
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize --defaults-group-suffix= --initialize-insecure
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize --defaults-group-suffix= --initialize-insecure
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure
+
+
 
 cd /lib/systemd/system/
 

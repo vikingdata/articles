@@ -150,10 +150,7 @@ for i in 1 2 3 4 5 6; do
 
 done
 
-for i in 1 2 4 5 6; do
-   echo "init mysql$i node, this may take a while"
-   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql$i/mysqld$i.cnf_initialize --defaults-group-suffix= --initialize-insecure
-done
+
 
 cd /lib/systemd/system/
 

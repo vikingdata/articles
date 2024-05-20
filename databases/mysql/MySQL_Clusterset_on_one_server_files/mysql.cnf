@@ -41,7 +41,7 @@ log_slow_extra=on
 
 
 # Replication settings
-log-replicas-updates=on
+log-replica-updates=on
 master_info_repository=table
 #relay_log_info_file=table
 

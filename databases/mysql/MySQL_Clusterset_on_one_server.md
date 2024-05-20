@@ -84,7 +84,6 @@ for i in 1 2 3 4 5 6; do
   mkdir -p /data/mysql$i/log/relay
 
   mkdir -p /data/mysql$i/log/undo
-  mkdir -p /data/mysql$i/log
 done
 
 chown -R mysql.mysql /data/mysql*

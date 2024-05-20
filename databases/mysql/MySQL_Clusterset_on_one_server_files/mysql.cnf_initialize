@@ -30,9 +30,10 @@ log_slow_extra=on
 
 
 # Replication settings
-log-slave-updates=on
+log-replicas-updates=on
 master_info_repository=table
-relay_log_info_repository=table
+#relay_log_info_file=table
+
 
 #MyISAM
 key_buffer_size=1M

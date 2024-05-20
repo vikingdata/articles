@@ -22,19 +22,20 @@ default_authentication_plugin=mysql_native_password
 
 
 ## Directory and filenamesettings
-datadir=/data/mysql1/db
-socket=/data/mysql1/mysqld1.sock
-pid_file=/data/mysql1/mysql1.pid
+datadir=/data/mysql__NO__/db
+socket=/data/mysql__NO__/mysqld__NO__.sock
+pid_file=/data/mysql__NO__/mysql__NO__.pid
+log-error=/data/mysql__NO__/log/mysql__NO__.log
+log-bin=/data/mysql__NO__/log/binlog/mysql-bin
+relay-log=/data/mysql__NO__/log/relay/relay-bin
+slow_query_log_file='/data/mysql__NO__/log/mysql__NO__-slow.log'
+innodb-log-group-home-dir=/data/mysql__NO__/logs/redo
+innodb_undo_directory=/data/mysql__NO__/logs/undo
 
-log-error=/data/mysql1/log/mysql1.log
-
-log-bin=/data/mysql1/log/binlog/mysql-bin
-relay-log=/data/mysql1/log/relay/relay-bin
-
-slow_query_log_file='/data/mysql1/log/mysql1-slow.log'
 slow_query_log=on
 log_slow_admin_statements=on
 log_slow_extra=on
+
 
 
 # Replication settings
@@ -59,15 +60,13 @@ innodb_buffer_pool_instances=1
 innodb_buffer_pool_size=5242880
 innodb_doublewrite=off
 innodb_log_file_size=4194304
-innodb-log-group-home-dir=/data/mysql1/logs/redo
-innodb_undo_directory=/data/mysql1/logs/undo
 
 # ClusterSet 
 sql_require_primary_key=on
 binlog_checksum=none
 enforce_gtid_consistency=on
 gtid_mode=on
-lower_case_table_names=1
+lower_case_table_names=__NO__
 transaction_write_set_extraction=XXHASH64
 binlog_transaction_dependency_tracking=writeset
 replica_parallel_type=logical_clock
@@ -77,7 +76,7 @@ replica_preserve_commit_order=on
 
 [client]
 port=40000
-socket=/data/mysql1/mysqld1.sock
+socket=/data/mysql__NO__/mysqld__NO__.sock
 
 
 [mysql]

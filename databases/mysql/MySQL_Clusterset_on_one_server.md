@@ -114,14 +114,14 @@ port=4000
 for i in 1 2 3 4 5 6; do
   let port=$port+1
   cd /data/mysql$i
-  wget -O mysql$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
-  wget -O mysql$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
+  wget -O mysqld$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
+  wget -O mysqld$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
 
-  sed -i "s/__NO__/$i/g"       mysql$i.cnf_initialize
-  sed -i "s/__PORT__/$port/g"  mysql$i.cnf_initialize
+  sed -i "s/__NO__/$i/g"       mysqld$i.cnf_initialize
+  sed -i "s/__PORT__/$port/g"  mysqld$i.cnf_initialize
 
-  sed -i "s/__NO__/$i/g"       mysql$i.cnf
-  sed -i "s/__PORT__/$port/g"  mysql$i.cnf
+  sed -i "s/__NO__/$i/g"       mysqld$i.cnf
+  sed -i "s/__PORT__/$port/g"  mysqld$i.cnf
 
 done
 
@@ -129,7 +129,7 @@ cd /lib/systemd/system/
 
 for i in 1 2 3 4 5 6; do
   rm -f mysqld$i.service
-  wget -O mysql$i.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.service
+  wget -O mysqld$i.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.service
   sed -i "s/__NO__/$i/g"  mysqld$i.service
 done
 
@@ -145,11 +145,12 @@ done
 killall mysqld
 sleep 2
 
-sudo -u mysqld mysqld --config=/data/mysql1/mysqld1.conf & 
-sudo -u mysqld mysqld --config=/data/mysql2/mysqld2.conf &
-sudo -u mysqld mysqld --config=/data/mysql3/mysqld3.conf &
-sudo -u mysqld mysqld --config=/data/mysql4/mysqld4.conf &
-sudo -u mysqld mysqld --config=/data/mysql5/mysqld5.conf &
+sudo -u mysql mysqld --config=/data/mysql1/mysqld1.cnf_initialize & 
+sudo -u mysql mysqld --config=/data/mysql2/mysqld2.cnf_initialize &
+sudo -u mysql mysqld --config=/data/mysql3/mysqld3.cnf_initialize &
+sudo -u mysql mysqld --config=/data/mysql4/mysqld4.cnf_initialize &
+sudo -u mysql mysqld --config=/data/mysql5/mysqld5.cnf_initialize &
+sudo -u mysql mysqld --config=/data/mysql5/mysqld6.cnf_initialize &
 
 sleep 2
 

@@ -137,6 +137,7 @@ rm -rf /data/mysql*
 port=4000
 for i in 1 2 3 4 5 6; do
   let port=$port+1
+  mkdir -p /data/mysql$i
   cd /data/mysql$i
   wget -O mysqld$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
   wget -O mysqld$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
@@ -149,6 +150,11 @@ for i in 1 2 3 4 5 6; do
 
 done
 
+for i in 1 2 4 5 6; do
+   echo "init mysql$i node, this may take a while"
+   sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql$i/mysqld$i.cnf_initialize --defaults-group-suffix= --initialize-insecure
+done
+
 cd /lib/systemd/system/
 
 for i in 1 2 3 4 5 6; do
@@ -158,6 +164,7 @@ for i in 1 2 3 4 5 6; do
 done
 
 systemctl daemon-reload
+
 
 
 ```

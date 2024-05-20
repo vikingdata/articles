@@ -32,6 +32,8 @@ slow_query_log_file='/data/mysql__NO__/log/mysql__NO__-slow.log'
 innodb-log-group-home-dir=/data/mysql__NO__/log/redo
 innodb_undo_directory=/data/mysql__NO__/log/undo
 
+innodb_log_group_home_dir=/data/mysql__NO__/log/redo
+
 slow_query_log=on
 log_slow_admin_statements=on
 log_slow_extra=on
@@ -39,9 +41,11 @@ log_slow_extra=on
 
 
 # Replication settings
-log-slave-updates=on
+log-replicas-updates=on
 master_info_repository=table
-relay_log_info_repository=table
+#relay_log_info_file=table
+
+
 
 #MyISAM
 key_buffer_size=1M
@@ -49,7 +53,7 @@ key_buffer_size=1M
 
 # Innodb settings
 transaction_isolation=READ-COMMITTED
-innodb_dedicated_server=on
+#innodb_dedicated_server=on
 innodb_undo_log_truncate=on
 innodb_max_undo_log_size=1g
 innodb_file_per_table=on

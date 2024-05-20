@@ -37,7 +37,7 @@ sudo bash
 
 apt install curl -y
 curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
-apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb -y
+sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
 sudo apt update
 sudo percona-release setup ps80
 
@@ -59,13 +59,29 @@ deb http://repo.percona.com/tools/apt jammy main
 deb-src http://repo.percona.com/tools/apt jammy main
 " > /etc/apt/sources.list.d/percona-tools-release.list
 
+echo "
+deb http://repo.percona.com/ps-57/apt jammy main
+deb-src http://repo.percona.com/ps-57/apt jammy main
+" >> /etc/apt/sources.list.d/percona-ps-57-release.list
+
 apt-get update
 
 #-----------------------------------------
 
+# Disable app armor
+# https://www.cyberciti.biz/faq/ubuntu-linux-howto-disable-apparmor-commands/
+
+sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
+# check with
+ sudo aa-status | grep -i mysql
+
   # It will may ask for password for percona mysql
   # If it does, leave passwored blank and it will allow
   # root authetication by sudo to root only.
+#sudo apt-get install percona-server-server-5.7
+
 sudo apt install percona-server-server -y
   # If it asks for a password, just press enter.
 
@@ -84,9 +100,12 @@ for i in 1 2 3 4 5 6; do
   mkdir -p /data/mysql$i/log/relay
 
   mkdir -p /data/mysql$i/log/undo
+  mkdir -p /data/mysql$i/log/redo
+  mkdir -p /data/mysql$i/log/doublewrite
 done
 
 chown -R mysql.mysql /data/mysql*
+chmod +w -R /data/mysql*/log /data/mysql*/db
 
 echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
 
@@ -100,6 +119,11 @@ echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $ro
 echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $root_file
 echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >>  $root_file
 
+mysql    2877782  0.0  0.0   9968  3624 ?        Ss   11:08   0:00 -bash -c /usr/sbin/mysqld --defaults-group-suffix= --initialize-insecure > /dev/null
+mysql    2877788  1.2  1.5 994072 118108 ?       Sl   11:08   0:00 /usr/sbin/mysqld --defaults-group-suffix= --initialize-insecure
+mysql    2877802  0.0  0.0   8296  4188 ?        Ss   11:08   0:00 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+
+
 ```
 
 * * *
@@ -109,6 +133,7 @@ echo "select user,host,plugin,authentication_string from mysql.user where user='
 ```
 sudo bash
 
+rm -rf /data/mysql*
 port=4000
 for i in 1 2 3 4 5 6; do
   let port=$port+1
@@ -132,6 +157,8 @@ for i in 1 2 3 4 5 6; do
   sed -i "s/__NO__/$i/g"  mysqld$i.service
 done
 
+systemctl daemon-reload
+
 
 ```
 
@@ -144,12 +171,14 @@ done
 killall mysqld
 sleep 2
 
-mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize & 
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure
+
+sudo -u mysql mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize & 
 mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize &
 mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize &
 mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize &
 mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize &
-mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize &
+sudo -u mysql mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize &
 
 sleep 2
 

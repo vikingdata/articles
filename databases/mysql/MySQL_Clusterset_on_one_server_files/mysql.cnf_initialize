@@ -21,8 +21,8 @@ log-error=/data/mysql__NO__/log/mysql__NO__.log
 log-bin=/data/mysql__NO__/log/binlog/mysql-bin
 relay-log=/data/mysql__NO__/log/relay/relay-bin
 slow_query_log_file='/data/mysql__NO__/log/mysql__NO__-slow.log'
-innodb-log-group-home-dir=/data/mysql__NO__/logs/redo
-innodb_undo_directory=/data/mysql__NO__/logs/undo
+innodb-log-group-home-dir=/data/mysql__NO__/log/redo
+innodb_undo_directory=/data/mysql__NO__/log/undo
 
 slow_query_log=on
 log_slow_admin_statements=on

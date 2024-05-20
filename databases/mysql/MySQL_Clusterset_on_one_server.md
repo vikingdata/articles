@@ -78,13 +78,13 @@ sudo apt install percona-server-server -y
 
 for i in 1 2 3 4 5 6; do
   mkdir -p /data/mysql$i/db
-  mkdir -p /data/mysql$i/innodb
+  mkdir -p /data/mysql$i/log/innodb
 
-  mkdir -p /data/mysql$i/binlog
-  mkdir -p /data/mysql$i/relay
+  mkdir -p /data/mysql$i/log/binlog
+  mkdir -p /data/mysql$i/log/relay
 
-  mkdir -p /data/mysql$i/undo
-  mkdir -p /data/mysql$i/logs
+  mkdir -p /data/mysql$i/log/undo
+  mkdir -p /data/mysql$i/log
 done
 
 chown -R mysql.mysql /data/mysql*
@@ -145,12 +145,12 @@ done
 killall mysqld
 sleep 2
 
-sudo -u mysql mysqld --config=/data/mysql1/mysqld1.cnf_initialize & 
-sudo -u mysql mysqld --config=/data/mysql2/mysqld2.cnf_initialize &
-sudo -u mysql mysqld --config=/data/mysql3/mysqld3.cnf_initialize &
-sudo -u mysql mysqld --config=/data/mysql4/mysqld4.cnf_initialize &
-sudo -u mysql mysqld --config=/data/mysql5/mysqld5.cnf_initialize &
-sudo -u mysql mysqld --config=/data/mysql5/mysqld6.cnf_initialize &
+mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize & 
+mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize &
+mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize &
+mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize &
+mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize &
+mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize &
 
 sleep 2
 

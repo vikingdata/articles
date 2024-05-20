@@ -41,6 +41,17 @@ master_info_repository=table
 #MyISAM
 key_buffer_size=1M
 
+# ClusterSet
+sql_require_primary_key=on
+binlog_checksum=none
+enforce_gtid_consistency=on
+gtid_mode=on
+lower_case_table_names=__NO__
+transaction_write_set_extraction=XXHASH64
+binlog_transaction_dependency_tracking=writeset
+replica_parallel_type=logical_clock
+replica_preserve_commit_order=on
+
 
 # Innodb settings
 transaction_isolation=READ-COMMITTED

@@ -37,6 +37,9 @@ for i in 1 2 3 4 5 6; do
   sed -i "s/__PORT__/$port/g"  mysqld$i.cnf
 
 done
+cd /data
+
+# watch -n 1 "cd /data; clear;ps auxw | grep mysql; ls -al mysql1/db; tail -n 5 mysql1/log/mysql1.log"
 
    echo "init mysql$i node, this may take a while"
    sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure
@@ -51,6 +54,7 @@ done
    echo "init mysql$i node, this may take a while"
    sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure
 
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf   
 
 
 cd /lib/systemd/system/

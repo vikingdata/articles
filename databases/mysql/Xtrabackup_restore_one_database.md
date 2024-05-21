@@ -37,25 +37,13 @@ I am using LinutMint, jammy Ubuntu comptaible.
 * Select version and platform
    * Choose 8.1.0-1 and Ubuntu Jammy
 * select file(s)
-    * percona-xtrabackup-81_8.1.0-1-1.jammy_amd64.deb
+    * percona-xtrabackup-83_8.3.0-1-1.jammy_amd64.deb
+        * I am using 8.0.36 MySQL
 * Clicked on donwload link or
-    *[This](https://downloads.percona.com/downloads/Percona-XtraBackup-innovative-release/Percona-XtraBackup-8.1.0-1/binary/debian/jammy/x86_64/percona-xtrabackup-test-81_8.1.0-1-1.jammy_amd64.deb?_gl=1*o2958s*_gcl_au*MTg3NjMzMTYxOS4xNzEzMzE2NDAx)
+    * [This](https://downloads.percona.com/downloads/Percona-XtraBackup-innovative-release/Percona-XtraBackup-8.3.0-1/binary/debian/jammy/x86_64/percona-xtrabackup-83_8.3.0-1-1.jammy_amd64.deb?_gl=1*2ekmol*_gcl_au*MTg3NjMzMTYxOS4xNzEzMzE2NDAx)
 
 ```
-sudo
-mkdir xtrabackup_install
-cd xtrabackup_install
-
-wget https://downloads.percona.com/downloads/Percona-XtraBackup-LATEST/Percona-XtraBackup-8.0.26-18/binary/debian/focal/x86_64/percona-xtrabackup-80_8.0.26-18-1.focal_amd64.de
-sudo dpkg -i percona-xtrabackup-80_8.0.26-18-1.focal_amd64.deb
-
-
-
-```
-
-or because I am using linux Mint
-
-```
+dpkg -i  percona-xtrabackup-83_8.3.0-1-1.jammy_amd64.deb
 
 
 ```

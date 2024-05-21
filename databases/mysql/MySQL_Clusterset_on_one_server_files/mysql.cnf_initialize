@@ -17,8 +17,8 @@ max_connect_errors=100000
 
 datadir=/data/mysql__NO__/db
 socket=/data/mysql__NO__/mysqld__NO__.sock
-pid_file=/data/mysql__NO__/mysql__NO__.pid
-log-error=/data/mysql__NO__/log/mysql__NO__.log
+pid_file=/data/mysql__NO__/mysqld__NO__.pid
+log-error=/data/mysql__NO__/log/mysqld__NO__.log
 log-bin=/data/mysql__NO__/log/binlog/mysql-bin
 relay-log=/data/mysql__NO__/log/relay/relay-bin
 slow_query_log_file='/data/mysql__NO__/log/mysql__NO__-slow.log'

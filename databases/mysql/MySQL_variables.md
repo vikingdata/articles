@@ -99,6 +99,9 @@ was made for sorting, but it might not have hit disk. Using temporary tables als
 * innodb_page_cleaners - Set as high as innodb_buffer_pool_instances. It is responsible for cleaning out data in the innodb buffer. 
 * max_allowed_packet : increase if you are uploading large data, images, files are large varchar, text, or binary. 
 * innodb_thread_concurrency : The default is no limit on threads, which most systems are okay with. By testing, you may want to limit innodb_thread_concurrency;
+* Huge transparent page
+    * If you don't have huge transparent pages on it may use swap, which is okay. just have a big swap. 
+        * https://www.percona.com/blog/settling-the-myth-of-transparent-hugepages-for-databases/
 
 * * *
 <a name=c>Client settings</a>

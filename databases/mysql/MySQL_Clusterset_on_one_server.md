@@ -1,4 +1,4 @@
- 
+7 
 ---
 title : MySQL Clusterset on one server
 author : Mark Nielsen  

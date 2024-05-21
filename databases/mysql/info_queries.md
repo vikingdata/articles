@@ -243,3 +243,9 @@ WHERE index_name IS NOT NULL
     and  object_schema  not in('mysql', 'information_schema', 'performance_schema', 'sys')
 ORDER BY object_schema, object_name, index_name;
 ```
+
+
+* * *
+
+<a name=tc></a>Table cache.
+-----

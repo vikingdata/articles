@@ -1,4 +1,19 @@
 
+# https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.37-linux-glibc2.28-x86_64.tar.xz
+# https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.37-linux-glibc2.28-x86-64bit.tar.gz
+# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.4.0-1ubuntu24.04_amd64.deb
+# https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-dbgsym_8.4.0-1ubuntu24.04_amd64.deb
+
+
+# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-dbgsym_8.0.37-1ubuntu22.04_amd64.deb
+
+# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb
+# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router_8.0.37-1ubuntu24.04_amd64.deb
+# dpkg -i mysql-router_8.0.37-1ubuntu22.04_amd64.deb  mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb
+
+# wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.37-1ubuntu22.04_amd64.deb
+dpkg -i mysql-shell_8.0.37-1ubuntu22.04_amd64.deb
+
 killall mysqld
 sleep 10
 killall mysqld
@@ -12,8 +27,8 @@ for i in 1 2 4 5 6; do
       mkdir -vp /data/mysql$i/log
     
       cd /data/mysql$i/log
-      rm -rvf redo undo db binlog
-      mkdir -vp redo undo db binlog
+      rm -rvf redo undo db binlog relay
+      mkdir -vp redo undo db binlog relay
       cd ..
       rm -rvf db
       mkdir -vp db

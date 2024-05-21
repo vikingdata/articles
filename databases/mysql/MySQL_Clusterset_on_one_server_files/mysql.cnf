@@ -1,11 +1,14 @@
 
 [mysqld]
-#REMOVE_AFTER_INIT plugin-load=auth_socket.so
-#REMOVE_AFTER_INIT plugin_load_add='group_replication.so'
-#REMOVE_AFTER_INIT group_replication_ip_allowlist="127.0.0.0/24"
-#REMOVE_AFTER_INIT group_replication_group_name = "a1eba67d-747f-436a-929b-56857de72ecc"
+plugin-load=auth_socket.so
+plugin_load_add='group_replication.so'
+group_replication_ip_allowlist="127.0.0.0/24"
+group_replication_group_name = "a1eba67d-747f-436a-929b-56857de72ecc"
 
-
+group_replication_local_address=127.0.0.1:403__NO__
+port=400__NO__
+mysqlx_port=401__NO__
+admin_port=402__NO__
 
 ### General settings
 server-id=__NO__
@@ -21,13 +24,15 @@ log_timestamps=system
 default_authentication_plugin=mysql_native_password
 
 
+
 ## Directory and filenamesettings
-datadir    =/data/mysql__NO__/db
-socket     =/data/mysql__NO__/mysqld__NO__.sock
-pid_file   =/data/mysql__NO__/mysqld__NO__.pid
-log-error  =/data/mysql__NO__/log/mysqld__NO__.log
-log-bin    = data/mysql__NO__/log/binlog/mysql-bin
-relay-log  =/data/mysql__NO__/log/relay/relay-bin
+datadir       =/data/mysql__NO__/db
+socket        =/data/mysql__NO__/mysqld__NO__.sock
+mysqlx_socket =/data/mysql__NO__/mysqld__NO__.sock
+pid_file      =/data/mysql__NO__/mysqld__NO__.pid
+log-error     =/data/mysql__NO__/log/mysqld__NO__.log
+log-bin       =/data/mysql__NO__/log/binlog/mysql-bin
+relay-log     =/data/mysql__NO__/log/relay/relay-bin
 slow_query_log_file       ='/data/mysql__NO__/log/mysqld__NO__-slow.log'
 innodb-log-group-home-dir =/data/mysql__NO__/log/redo
 innodb_undo_directory     =/data/mysql__NO__/log/undo
@@ -37,8 +42,6 @@ innodb_log_group_home_dir=/data/mysql__NO__/log/redo
 slow_query_log=on
 log_slow_admin_statements=on
 log_slow_extra=on
-
-
 
 # Replication settings
 log-replica-updates=on

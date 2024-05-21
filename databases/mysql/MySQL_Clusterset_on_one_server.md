@@ -111,12 +111,24 @@ echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
 
   # Create a script to make local and remote account with admin privs.
 
+mkdir -p /data/mysql_init/
 export root_file=/data/mysql_init/root_account.sql
 echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';"          >>  $root_file
 
+echo "CREATE USER 'root'@'%' IDENTIFIED by 'root';" > $root_file
+echo "grant all privileges on *.* to 'root'@'%';"          >>  $root_file
+
+echo "GRANT CLONE_ADMIN, CONNECTION_ADMIN, CREATE USER, EXECUTE, FILE, GROUP_REPLICATION_ADMIN, PERSIST_RO_VARIABLES_ADMIN, PROCESS, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, REPLICATION_APPLIER, REPLICATION_SLAVE_ADMIN, ROLE_ADMIN, SELECT, SHUTDOWN, SYSTEM_VARIABLES_ADMIN ON *.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT DELETE, INSERT, UPDATE ON mysql.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SHOW VIEW, TRIGGER, UPDATE ON mysql_innodb_cluster_metadata.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SHOW VIEW, TRIGGER, UPDATE ON mysql_innodb_cluster_metadata_bkp.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SHOW VIEW, TRIGGER, UPDATE ON mysql_innodb_cluster_metadata_previous.* TO 'root'@'%' WITH GRANT OPTION;
+" >> $root_file
+
 echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $root_file
+
 echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >>  $root_file
 
 mysql    2877782  0.0  0.0   9968  3624 ?        Ss   11:08   0:00 -bash -c /usr/sbin/mysqld --defaults-group-suffix= --initialize-insecure > /dev/null
@@ -158,7 +170,7 @@ for i in 1 2 3 4 5 6; do
   rm -f mysqld$i.service
   wget -O mysqld$i.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.service
   sed -i "s/__NO__/$i/g"  mysqld$i.service
-done
+0done
 
 systemctl daemon-reload
 

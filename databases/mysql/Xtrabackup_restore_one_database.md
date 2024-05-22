@@ -134,5 +134,17 @@ xtrabackup --prepare --target-dir=$TARGET_DIR
 <a name=r></a>Restore one database
 -----
 
+* NOTE
+    * You probably don't need the socket file.
+    * You might want to add -u and -p is needed for username and password.
+        * Login like this : mysql -u <NAME> -p
+	* and then enter the commands for mysql
+
 * First change the table on disk.
-    * ``` mysql -e " insert into p1 values (10);" ptest  -S  /data/mysql1/mysqld1.sock  ```
+    * ``` mysql -e " insert into p1 values (10);" ptest1  -S  /data/mysql1/mysqld1.sock  ```
+    * ``` mysql -e " select * from p1 ;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
+* Discard table, copy file, and import
+    * ``` mysql -e "alter table p1 DISCARD TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
+    * cp /data/mysql_test_restore/ptest1/p1.ibd /data/mysql1/ptest1
+    * ``` mysql -e "alter table p1 IMPORT TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
+* select rows to make sure it was from the backup

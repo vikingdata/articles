@@ -32,6 +32,9 @@ Original Copyright May 2024**_
 
 I am using LinutMint, jammy Ubuntu compatible.
 
+* NOTE
+    * Your version of Xtrabackup will depend on your version of MySQL.
+    * There are different versions of Xtrabackup for 8.0, 8.1, etc. 
 * Go to : https://www.percona.com/downloads
 * Go to Percona XtraDB Cluster on the page
 * I switched to Percona XtraBackup 8.0
@@ -49,8 +52,6 @@ wget -O https://downloads.percona.com/downloads/Percona-XtraBackup-8.0/Percona-X
  ls -al p.deb
 #  -rw-r--r-- 1 root root 44310224 Mar 12 02:17 p.deb
 
-  # Ignore if says th
-dpkg -i  p.deb
 
 apt list --installed | egrep percona-xtra
 # percona-xtrabackup-80/unknown,now 8.0.35-30-1.jammy amd64 [installed]

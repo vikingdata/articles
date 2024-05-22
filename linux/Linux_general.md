@@ -159,3 +159,49 @@ ssh-keygen -f ~/ssh_keys/pass1_rsa -N "$mypassphrase"
 echo "My passphrase is $mypassphrase"
 
 ```
+
+* * *
+<a name=d></a>Disk  commands
+-----
+
+
+* * *
+<a name=m></a>Monitor commands
+-----
+* Top and other top like commands
+* Load
+* IO
+* CPU
+* diskspace
+* Memory
+    * What is using swap
+        * article
+    * Start top
+        * press f
+        * Go down to Swap
+            * Click right arrow to select it
+            * Move with up arrow to the first field and press enter.
+        * Now we need to sort
+        * press s
+            * highlight the swap field
+            * press Esc
+       * Now it should be sorted by swap
+* Network
+* Disk
+   * lsblk -- show you the partitions available
+```
+ sudo lsblk
+[sudo] password for mark:
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0 931.5G  0 disk
+├─sda1   8:1    0   512M  0 part /boot/efi
+└─sda2   8:2    0   931G  0 part /
+```
+    * blkid -- shows you the uuid to can put in /etc/fstab replacing the device.
+```
+sudo blkid
+
+/dev/sda2: UUID="0a70c609-712e-4849-8c15-ca5972114471" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="4acad244-ebdb-47d7-bfa9-b71493398ee7"
+/dev/sda1: UUID="1093-3218" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI System Partition" PARTUUID="ec3cbda4-bde2-411e-9c9d-a44450148230"
+
+```

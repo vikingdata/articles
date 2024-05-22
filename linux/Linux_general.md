@@ -189,6 +189,7 @@ echo "My passphrase is $mypassphrase"
 * Network
 * Disk
    * lsblk -- show you the partitions available
+   * * blkid -- shows you the uuid to can put in /etc/fstab replacing the device
 ```
  sudo lsblk
 [sudo] password for mark:
@@ -196,10 +197,7 @@ NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 931.5G  0 disk
 ├─sda1   8:1    0   512M  0 part /boot/efi
 └─sda2   8:2    0   931G  0 part /
-```
-    * blkid -- shows you the uuid to can put in /etc/fstab replacing the device
-    
-```
+
 sudo blkid
 
 /dev/sda2: UUID="0a70c609-712e-4849-8c15-ca5972114471" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="4acad244-ebdb-47d7-bfa9-b71493398ee7"

@@ -18,6 +18,8 @@ title: Linux general tips
 5. [Find and remove packages](#pa)
 6. [CheetSheets](#c)
 7. [ssh keys](#s)
+8. [Disk Commands](#d)
+0. [Monitor Commands](#m)
 * * *
 
 <a name=links></a>Links
@@ -163,33 +165,11 @@ echo "My passphrase is $mypassphrase"
 * * *
 <a name=d></a>Disk  commands
 -----
-
-
-* * *
-<a name=m></a>Monitor commands
------
-* Top and other top like commands
-* Load
-* IO
-* CPU
-* diskspace
-* Memory
-    * What is using swap
-        * article: https://my.f5.com/manage/s/article/K40027012
-    * Start top
-        * press f
-        * Go down to Swap
-            * Click right arrow to select it
-            * Move with up arrow to the first field and press enter.
-        * Now we need to sort
-        * press s
-            * highlight the swap field
-            * press Esc
-       * Now it should be sorted by swap
-* Network
-* Disk
-   * lsblk -- show you the partitions available
-   * * blkid -- shows you the uuid to can put in /etc/fstab replacing the device
+* TODO
+    * fstab
+    * lvm, adding a partition. and other commands -- show in virtualbox
+* lsblk -- show you the partitions available
+* blkid -- shows you the uuid to can put in /etc/fstab replacing the device
 ```
  sudo lsblk
 [sudo] password for mark:
@@ -198,9 +178,52 @@ sda      8:0    0 931.5G  0 disk
 ├─sda1   8:1    0   512M  0 part /boot/efi
 └─sda2   8:2    0   931G  0 part /
 
+```
+* blkid -- shows you the uuid to can put in /etc/fstab replacing the device
+```
 sudo blkid
 
 /dev/sda2: UUID="0a70c609-712e-4849-8c15-ca5972114471" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="4acad244-ebdb-47d7-bfa9-b71493398ee7"
 /dev/sda1: UUID="1093-3218" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI System Partition" PARTUUID="ec3cbda4-bde2-411e-9c9d-a44450148230"
 
 ```
+
+
+* * *
+<a name=m></a>Monitor commands
+-----
+* Top and other top like commands
+* Load
+    * TODO: explain load and cpu: load/divided by cpu
+* IO
+    * TODO
+        * Try 2 seconds and extra fields
+        * Max IO
+* CPU
+    * TODO cpu count, core count
+* diskspace
+    * TODO
+        * diskspace rowth
+	* disk activity
+	* Find files of certain size or name
+* Memory
+    * TODO: activity, activity per process
+    * What is using swap
+        * article: https://my.f5.com/manage/s/article/K40027012
+        * Start top
+            * press f
+            * Go down to Swap
+                * Click right arrow to select it
+                * Move with up arrow to the first field and press enter.
+            * Now we need to sort
+            * press s
+                * highlight the swap field
+            * press Esc
+            * Now it should be sorted by swap
+* Network
+    * TODO:
+        * Port process is attached to
+	* Max speed
+	* current activity
+* Disk
+   * TODO: Files process is attached to

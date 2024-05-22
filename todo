@@ -131,3 +131,5 @@ monitoring -- with mysql, postghesql, snowflake
 	new relic
 	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
 	telegraph -- used with promethesus
+
+grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 10 minutes to reduce traffic -- unless server is in the same domain AWS)

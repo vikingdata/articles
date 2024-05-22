@@ -175,7 +175,7 @@ echo "My passphrase is $mypassphrase"
 * diskspace
 * Memory
     * What is using swap
-        * article
+        * article: https://my.f5.com/manage/s/article/K40027012
     * Start top
         * press f
         * Go down to Swap
@@ -197,7 +197,8 @@ sda      8:0    0 931.5G  0 disk
 ├─sda1   8:1    0   512M  0 part /boot/efi
 └─sda2   8:2    0   931G  0 part /
 ```
-    * blkid -- shows you the uuid to can put in /etc/fstab replacing the device.
+    * blkid -- shows you the uuid to can put in /etc/fstab replacing the device
+    
 ```
 sudo blkid
 

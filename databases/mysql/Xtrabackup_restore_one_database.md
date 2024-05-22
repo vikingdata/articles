@@ -140,11 +140,23 @@ xtrabackup --prepare --target-dir=$TARGET_DIR
         * Login like this : mysql -u <NAME> -p
 	* and then enter the commands for mysql
 
-* First change the table on disk.
-    * ``` mysql -e " insert into p1 values (10);" ptest1  -S  /data/mysql1/mysqld1.sock  ```
-    * ``` mysql -e " select * from p1 ;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
-* Discard table, copy file, and import
-    * ``` mysql -e "alter table p1 DISCARD TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
-    * cp /data/mysql_test_restore/ptest1/p1.ibd /data/mysql1/ptest1
-    * ``` mysql -e "alter table p1 IMPORT TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock  ```
-* select rows to make sure it was from the backup
+* Check files are different
+```
+ls -al /data/mysql_test_restore/ptest1/p1.ibd /data/mysql1/db/ptest1/p1.ib
+
+# Change data and verify
+mysql -e " insert into p1 values (10);" ptest1  -S  /data/mysql1/mysqld1.sock
+mysql -e " select * from p1 ;" ptest1  -S  /data/mysql1/mysqld1.sock  
+
+   # Discard table, cop old table reimport old table
+mysql -e "alter table p1 DISCARD TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock
+rsync -av /data/mysql_test_restore/ptest1/p1.ibd /data/mysql1/db/ptest1
+chown mysql /data/mysql1/db/ptest1/p1.ibd
+mysql -e "alter table p1 IMPORT TABLESPACE;" ptest1  -S  /data/mysql1/mysqld1.sock  
+
+   # Verify data is old table, Verify old table is now the same as live table. 
+ls -al /data/mysql_test_restore/ptest1/p1.ibd /data/mysql1/db/ptest1/p1.ib
+mysql -e " select * from p1 ;" ptest1  -S  /data/mysql1/mysqld1.sock 
+
+```
+

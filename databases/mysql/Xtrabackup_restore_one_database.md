@@ -12,8 +12,6 @@ MySQL 8: Xtrabackup restore one database
 _**by Mark Nielsen
 Original Copyright May 2024**_
 
-NOT DONE
-
 1. [Links](#links)
 2. [Installing Xtrabackup](#i)
 3. [Setting up data](#s)
@@ -26,7 +24,6 @@ NOT DONE
 * https://docs.percona.com/percona-xtrabackup/8.0/installation.html
 * [full backups](https://docs.percona.com/percona-xtrabackup/8.0/create-full-backup.html#:~:text=To%20create%20a%20backup%2C%20run,the%20location%20of%20those%2C%20too.)
 * [Percona XtraBackup: Backup and Restore of a Single Table or Database](https://www.percona.com/blog/percona-xtrabackup-backup-and-restore-of-a-single-table-or-database/)
-* [Recover MySQL Database from FRM and IBD Files](https://community.spiceworks.com/t/recover-mysql-database-from-frm-and-ibd-files/10143940)
 
 * * *
 <a name=i></a> Installing Xtrabackup

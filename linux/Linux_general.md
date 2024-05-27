@@ -138,7 +138,12 @@ cat /tmp/remove_packages.txt| apt-get purge --auto-remove -y
     * https://www.mongodb.com/developer/products/mongodb/cheat-sheet/
     * https://gist.github.com/bradtraversy/f407d642bdc3b31681bc7e56d95485b6
     * https://www.interviewbit.com/mongodb-cheat-sheet/
-
+* TODO
+    * Linux
+    * MySQL
+    * GIT
+    * snowflake
+    * Python
 
 * * *
 <a name=s></a>ssh keys 

@@ -27,11 +27,18 @@ NOT DONE YET
 -----
 
 * * *
+<a name=n></a>Notes
+-----
+
+* Login
+    * The socket file matches root@loacalhost 
+
+
+* * *
 <a name=i>Install ClusterSet on Ubuntu</a>
 -----
 
-fg
-```
+
 
 sudo bash
 
@@ -112,10 +119,13 @@ echo "this is a dev server" > /data/THIS_IS_A_DEV_SERVER
   # Create a script to make local and remote account with admin privs.
 
 mkdir -p /data/mysql_init/
+
+   # create user account with most priviledges with no password, localhost. 
 export root_file=/data/mysql_init/root_account.sql
 echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';"          >>  $root_file
 
+   # create root @ % with all privs. 
 echo "CREATE USER 'root'@'%' IDENTIFIED by 'root';" > $root_file
 echo "grant all privileges on *.* to 'root'@'%';"          >>  $root_file
 
@@ -126,15 +136,15 @@ GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CRE
 GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SHOW VIEW, TRIGGER, UPDATE ON mysql_innodb_cluster_metadata_previous.* TO 'root'@'%' WITH GRANT OPTION;
 " >> $root_file
 
+  # Update the root local password to %
+echo "set password for root@localhost = 'root';" >> $root_file
+echo "FLUSH PRIVILEGES;" >> $root_file
+
+  # create local user with most privs for all other hosts. 
 echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $root_file
 
-echo "select user,host,plugin,authentication_string from mysql.user where user='$SUDO_USER';" >>  $root_file
-
-mysql    2877782  0.0  0.0   9968  3624 ?        Ss   11:08   0:00 -bash -c /usr/sbin/mysqld --defaults-group-suffix= --initialize-insecure > /dev/null
-mysql    2877788  1.2  1.5 994072 118108 ?       Sl   11:08   0:00 /usr/sbin/mysqld --defaults-group-suffix= --initialize-insecure
-mysql    2877802  0.0  0.0   8296  4188 ?        Ss   11:08   0:00 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
-
+echo "select user,host,plugin,authentication_string from mysql.user ;" >>  $root_file
 
 ```
 
@@ -187,29 +197,27 @@ systemctl daemon-reload
 killall mysqld
 sleep 2
 
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize --defaults-group-suffix= --initialize-insecure
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize --defaults-group-suffix= --initialize-insecure
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize --defaults-group-suffix= --initialize-insecure
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize --defaults-group-suffix= --initialize-insecure
 sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure
-
-sudo -u mysql mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize & 
-mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize &
-mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize &
-mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize &
-mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize &
-sudo -u mysql mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize &
 
 sleep 2
 
    # See if they are still running
 jobs
 
-mysql -u root -p root -P 40001 "select @@hostname, now()"
+mysql -u root -p root -P 4001 "select @@hostname, now()"
 
    # test if you can connect
-mysql -u root -p root -P 40001 "select @@hostname, now()"
-mysql -u root -p root -P 40002 "select @@hostname, now()"
-mysql -u root -p root -P 40003 "select @@hostname, now()"
-mysql -u root -p root -P 40004 "select @@hostname, now()"
-mysql -u root -p root -P 40005 "select @@hostname, now()"
-mysql -u root -p root -P 40006 "select @@hostname, now()"
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql1/mysqld1.sock
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql2/mysqld2.sock
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql3/mysqld3.sock
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql4/mysqld4.sock
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql5/mysqld5.sock
+mysql -u root  -e "select @@hostname, now()" -S /data/mysql6/mysqld6.sock
 
 
    # If so, kill and restart
@@ -256,11 +264,28 @@ service mysql6 restart
 -----
 
 ```
+ #
 
+mysqlsh -u root -proot -h 192.168.1.7 -P 4011
 
+dba.createCluster('test')
+
+watch -n 1 "clear;ps auxw | grep mysqld$| grep -v grep ; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
 
 ```
 
 * * *
 <a name=r>Reset</a>
 -----
+
+
+```
+killall mysqld
+sleep 3
+killall -9 mysqld
+sleep 3
+
+rm -rf /data/mysql1 /data/mysql2 /data/mysql3 /data/mysql4 /data/mysql5 /data/mysql6
+
+
+```

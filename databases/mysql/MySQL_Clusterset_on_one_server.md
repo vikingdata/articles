@@ -31,7 +31,7 @@ NOT DONE YET
 -----
 
 | Login | notes| matching account for root |
-|---- | --- |
+|---- | --- | --- |
 | -p 4001 -h localhost | need to specify socket file or it fails | localhost |
 | -p 4001 -h 127.0.0.1 | Connects to  127.0.01 but uses localhost password | localhost |
 | -S socket | specfy -S /data/mysql1/mysqls.socket" or other | localhost |

@@ -14,7 +14,8 @@ Group=mysql
 PIDFile=/data/mysql__NO__/mysqld.pid
 PermissionsStartOnly=true
 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
-ExecStart=/usr/sbin/mysqld --defaults-file=/data/mysqld__NO__/mysql__NO__.cnf
+
+ExecStart=/usr/sbin/mysqld --defaults-file=/data/mysql__NO__/mysqld__NO__.cnf
 TimeoutSec=infinity
 Restart=on-failure
 RuntimeDirectory=mysqld

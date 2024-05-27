@@ -38,7 +38,7 @@ NOT DONE YET
 <a name=i>Install ClusterSet on Ubuntu</a>
 -----
 
-
+```
 
 sudo bash
 
@@ -268,7 +268,7 @@ service mysql6 restart
 
 mysqlsh -u root -proot -h 192.168.1.7 -P 4011
 
-dba.createCluster('test')
+dba.creatcluster('test')
 
 watch -n 1 "clear;ps auxw | grep mysqld$| grep -v grep ; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
 

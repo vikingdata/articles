@@ -188,15 +188,46 @@ systemctl daemon-reload
 -----
 
 ```
+
+cd /data
+
 killall mysqld
 sleep 2
 
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize --defaults-group-suffix= --initialize-insecure
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize --defaults-group-suffix= --initialize-insecure
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize --defaults-group-suffix= --initialize-insecure
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize --defaults-group-suffix= --initialize-insecure
-sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure
+sleeptime=15
+echo "init mysql1"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+sleep $sleeptime
+
+echo "init mysql2"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql2/mysqld2.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+sleep $sleeptime
+
+echo "init mysql3"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql3/mysqld3.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+sleep $sleeptime
+
+echo "init mysql4"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql4/mysqld4.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+sleep $sleeptime
+
+echo "init mysql5"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql5/mysqld5.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+sleep $sleeptime
+
+echo "init mysql6"
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initialize --defaults-group-suffix= --initialize-insecure &
+
+count_mysql=1
+while [ $count_mysql -gt 0 ]; do
+  echo "mysql processes"
+  ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' | wc -l
+  count_mysql=`ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' | wc -l`  
+  ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' 
+  sleep 1
+  clear
+done
+
 
 sleep 2
 
@@ -214,18 +245,14 @@ mysql -u root  -e "select @@hostname, now()" -S /data/mysql5/mysqld5.sock
 mysql -u root  -e "select @@hostname, now()" -S /data/mysql6/mysqld6.sock
 
 
-   # If so, kill and restart
-killall mysqld
-rm /data/mysql*/*.lock
-
-systemctl daemon-reload
-
-systemctl restart mysql1
-systemctl restart mysql2
-systemctl restart mysql3
-systemctl restart mysql4
-systemctl restart mysql5
-systemctl restart mysql6
+   # restart mysql after init
+   
+systemctl restart mysqld1
+systemctl restart mysqld2
+systemctl restart mysqld3
+systemctl restart mysqld4
+systemctl restart mysqld5
+systemctl restart mysqld6
 
 
   # See if they started
@@ -263,6 +290,8 @@ service mysql6 restart
 mysqlsh -u root -proot -h 192.168.1.7 -P 4011
 
 dba.creatcluster('test')
+
+watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
 
 watch -n 1 "clear;ps auxw | grep mysqld$| grep -v grep ; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
 

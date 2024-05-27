@@ -1,4 +1,4 @@
-7 
+ 
 ---
 title : MySQL Clusterset on one server
 author : Mark Nielsen  
@@ -16,8 +16,8 @@ Original Copyright May 2024
 NOT DONE YET
 
 1. [Links](#links)
-2. [Install MySQL Cluster](#i)
-3. [Setup MySQL config files](#c)
+2. [Install Percona and mysqlsh](#i)
+3. [Setup directories and files for MySQL ClusterSet](#s)
 4. [Start all instances](#s)
 5. [Setup replica set](#r)
 6. Reset
@@ -35,7 +35,7 @@ NOT DONE YET
 
 
 * * *
-<a name=i>Install ClusterSet on Ubuntu</a>
+<a name=i>Install Percona MySQL, mysqlsh, mysql router on Ubuntu</a>
 -----
 
 ```
@@ -99,6 +99,14 @@ sudo apt install percona-server-server -y
 
 sudo apt install percona-server-server -y
 
+```
+
+* * *
+<a name=s>Setup directories and files for MySQL ClusterSet</a>
+-----
+
+```
+
 for i in 1 2 3 4 5 6; do
   mkdir -p /data/mysql$i/db
   mkdir -p /data/mysql$i/log/innodb
@@ -146,20 +154,10 @@ echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $ro
 
 echo "select user,host,plugin,authentication_string from mysql.user ;" >>  $root_file
 
-```
-
-* * *
-<a name=c>Setup MySQL config file</a>
------
-
-```
-sudo bash
-
-rm -rf /data/mysql*
 port=4000
 for i in 1 2 3 4 5 6; do
   let port=$port+1
-  mkdir -p /data/mysql$i
+
   cd /data/mysql$i
   wget -O mysqld$i.cnf_initialize https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf_initialize
   wget -O mysqld$i.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.cnf
@@ -172,19 +170,15 @@ for i in 1 2 3 4 5 6; do
 
 done
 
-
-
 cd /lib/systemd/system/
 
 for i in 1 2 3 4 5 6; do
   rm -f mysqld$i.service
   wget -O mysqld$i.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/MySQL_Clusterset_on_one_server_files/mysql.service
   sed -i "s/__NO__/$i/g"  mysqld$i.service
-0done
+done
 
 systemctl daemon-reload
-
-
 
 ```
 

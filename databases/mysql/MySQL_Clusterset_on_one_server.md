@@ -30,8 +30,12 @@ NOT DONE YET
 <a name=n></a>Notes
 -----
 
-* Login
-    * The socket file matches root@loacalhost 
+| Login | notes| matching account for root |
+|---- | --- |
+| -p 4001 -h localhost | need to specify socket file or it fails | localhost |
+| -p 4001 -h 127.0.0.1 | Connects to  127.0.01 but uses localhost password | localhost |
+| -S socket | specfy -S /data/mysql1/mysqls.socket" or other | localhost |
+| -p 4001 -h <your external ip> | | % |
 
 
 * * *
@@ -134,7 +138,7 @@ echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root
 echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';"          >>  $root_file
 
    # create root @ % with all privs. 
-echo "CREATE USER 'root'@'%' IDENTIFIED by 'root';" > $root_file
+echo "CREATE USER 'root'@'%' IDENTIFIED by 'root';" >> $root_file
 echo "grant all privileges on *.* to 'root'@'%';"          >>  $root_file
 
 echo "GRANT CLONE_ADMIN, CONNECTION_ADMIN, CREATE USER, EXECUTE, FILE, GROUP_REPLICATION_ADMIN, PERSIST_RO_VARIABLES_ADMIN, PROCESS, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, REPLICATION_APPLIER, REPLICATION_SLAVE_ADMIN, ROLE_ADMIN, SELECT, SHUTDOWN, SYSTEM_VARIABLES_ADMIN ON *.* TO 'root'@'%' WITH GRANT OPTION;
@@ -228,25 +232,11 @@ while [ $count_mysql -gt 0 ]; do
   clear
 done
 
-
-sleep 2
-
-   # See if they are still running
-jobs
-
-mysql -u root -p root -P 4001 "select @@hostname, now()"
-
-   # test if you can connect
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql1/mysqld1.sock
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql2/mysqld2.sock
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql3/mysqld3.sock
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql4/mysqld4.sock
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql5/mysqld5.sock
-mysql -u root  -e "select @@hostname, now()" -S /data/mysql6/mysqld6.sock
+  # In other windows you can watch the processes
+# watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db"
 
 
-   # restart mysql after init
-   
+  ### restart services
 systemctl restart mysqld1
 systemctl restart mysqld2
 systemctl restart mysqld3
@@ -254,28 +244,50 @@ systemctl restart mysqld4
 systemctl restart mysqld5
 systemctl restart mysqld6
 
+  # In other windows you can watch the processes
+# watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db"
 
-  # See if they started
-ps auxw | grep mysqld
 
+   # test if you can connect
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql1/mysqld1.sock
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql2/mysqld2.sock
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql3/mysqld3.sock
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql4/mysqld4.sock
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql5/mysqld5.sock
+mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql6/mysqld6.sock
 
-  # These next steps may be uncesssary.
+  # Load The account information
+echo "loading accounts"
+for i in 1 2 3 4 5 6; do
+   mysql -u root  -e "source $root_file" -S /data/mysql$i/mysqld$i.sock
 
-  # If good, enable at restart, and then restart them
-systemctl enable mysql1
-systemctl enable mysql2
-systemctl enable mysql3
-systemctl enable mysql4
-systemctl enable mysql5
-systemctl enable mysql6
+done
 
-   # restart them using service 
-service mysql1 restart
-service mysql2 restart
-service mysql3 restart
-service mysql4 restart
-service mysql5 restart
-service mysql6 restart
+echo "testing root localhost"
+my_ip=`ifconfig  | grep "inet "| grep -v 127 | sed -e "s/  */ /g" | cut -d ' ' -f3`
+echo  "my external ip is $my_ip"
+# If this is the wrong, change it.
+# my_ip="<MY_IP>"  
+
+echo "checking mysql root on socket"
+for i in 1 2 3 4 5 6; do
+mysql -sN -u root -proot  -S /data/mysql$i/mysqld$i.sock -e "select user(),current_user(), @@hostname, @@port" 2> /dev/null
+done
+
+sleep 2
+echo ""
+echo "checking mysql root on 127.0.0.1"
+for i in 1 2 3 4 5 6; do
+mysql -sN -u root -proot  -P 400$i -h 127.0.0.1 -e "select user(),current_user(),@@hostname, @@port" 2> /dev/null
+done
+
+sleep 2
+echo ""
+echo "checking mysql root on $my_ip"
+for i in 1 2 3 4 5 6; do
+mysql -sN -u root -proot  -P 400$i -h $my_ip -e "select user(),current_user(),@@hostname, @@port" 2> /dev/null
+done
+
 
 
 ```

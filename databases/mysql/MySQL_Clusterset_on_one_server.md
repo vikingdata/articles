@@ -20,9 +20,9 @@ NOTE: Has been tested, but need to add router and ReplicaSet, and test again
 3. [Install Percona and mysqlsh](#i)
 4. [Setup directories and files for MySQL ClusterSet](#s)
 5. [Start all instances](#start)
-6. {Setup Clusterset](#c)
-6. [Reset][#r]
-7. [TODO][#todo]
+6. [Setup Clusterset](#c)
+6. [Reset](#r)
+7. [TODO](#todo)
 
 * * *
 <a name=Links></a>Links

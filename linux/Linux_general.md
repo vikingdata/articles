@@ -197,38 +197,90 @@ sudo blkid
 * * *
 <a name=m></a>Monitor commands
 -----
-* Top and other top like commands
-* Load
-    * TODO: explain load and cpu: load/divided by cpu
-* IO
-    * TODO
-        * Try 2 seconds and extra fields
-        * Max IO
-* CPU
-    * TODO cpu count, core count
-* diskspace
-    * TODO
-        * diskspace rowth
-	* disk activity
-	* Find files of certain size or name
-* Memory
-    * TODO: activity, activity per process
-    * What is using swap
-        * article: https://my.f5.com/manage/s/article/K40027012
-        * Start top
-            * press f
-            * Go down to Swap
-                * Click right arrow to select it
-                * Move with up arrow to the first field and press enter.
-            * Now we need to sort
-            * press s
-                * highlight the swap field
-            * press Esc
-            * Now it should be sorted by swap
-* Network
-    * TODO:
-        * Port process is attached to
-	* Max speed
-	* current activity
-* Disk
-   * TODO: Files process is attached to
+
+### First run Top
+* press 1
+   * this tells you the activity per cpu
+   * The average is sum of the precentage divided by the number of cpus
+* Look at load
+    * To estimate load, divide load by the no of cpus. That number you want below 1.
+	* This doesn't always work out to be true.
+    * Organize top by memory, cpu, and swap
+* Run free -h
+    * Total - Used is the amount of memory that is free or used by file cache.
+    * Total - Used is the true amount of memory free.
+    * High swap can be bad. It may be because something is reading a lot of files.
+    * Check on processes using swap in top.
+        * NOTE: The last used things get put into swap. What is causing high usage of swap may not
+	be causing high swap.
+* Run iostat
+    * https://www.geeksforgeeks.org/iostat-command-in-linux-with-examples/
+    * iostat - 5
+    * Look at the amount of writes and reads.
+*You can do other options as well.
+* On another exact system, write a 10 gig file, divide by 10 to get the Gig/sec written.
+Use this as a maximum write/sec and compare to iostat.
+        * rm -rf 1gig.bin; time dd if=/dev/random of=1gig.bin bs=100M count=10;ls -al 1gig.bin
+
+###
+Count all cpus.
+```
+cat /proc/cpuinfo  | egrep -i "processor|cpu cores"
+
+echo "cpus", `cat /proc/cpuinfo  | egrep -i "processor" | cut -d ':' -f2 | wc -l`
+
+echo "cores", `cat /proc/cpuinfo  | egrep -i "cpu core" | cut -d ':' -f2 | paste -sd +  | bc`
+
+
+```
+
+### diskspace
+* Find files larger than 100 megs on system
+```#!/usr/bash
+
+find_files='find / -size +1G -type f -printf %s_%p\n'
+#find_files='find . -size +1M'
+
+for l in `$find_files 2>/dev/null  |sort -nr `; do
+    size=`echo $l | cut -d '_' -f 1`
+    f=`echo $l | cut -d '_' -f 2`
+    sizeG=`echo "scale=2; $size/1000000000" | bc`
+    echo $"$sizeG""G $size $f"
+done
+
+find_files='find / -size +100M -size -1000M -type f -printf %s_%p\n'
+for l in `$find_files 2>/dev/null  |sort -nr `; do
+    size=`echo $l | cut -d '_' -f 1`
+    f=`echo $l | cut -d '_' -f 2`
+    sizeM=`echo "scale=2; $size/1000000" | bc `
+    echo $"$sizeM""M $size $f"
+done
+````
+
+###
+Oragnize TOP example with SWAP
+* TODO: activity, activity per process
+* What is using swap
+   * article: https://my.f5.com/manage/s/article/K40027012
+   * Start top
+       * press f
+       * Go down to Swap
+           * Click right arrow to select it
+           * Move with up arrow to the first field and press enter.
+       * Now we need to sort
+       * press s
+           * highlight the swap field
+       * press Esc
+       * Now it should be sorted by swap
+
+### Network
+* TODO:
+   * Port process is attached to
+   * Max speed
+   * current activity
+
+### lsof
+TODO:
+* processes attached to port
+* which ports are active
+* open files

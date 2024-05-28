@@ -206,6 +206,8 @@ sudo blkid
     * To estimate load, divide load by the no of cpus. That number you want below 1.
 	* This doesn't always work out to be true.
     * Organize top by memory, cpu, and swap
+
+### Free
 * Run free -h
     * Total - Used is the amount of memory that is free or used by file cache.
     * Total - Used is the true amount of memory free.
@@ -213,17 +215,18 @@ sudo blkid
     * Check on processes using swap in top.
         * NOTE: The last used things get put into swap. What is causing high usage of swap may not
 	be causing high swap.
+
+### Iostat
 * Run iostat
     * https://www.geeksforgeeks.org/iostat-command-in-linux-with-examples/
     * iostat - 5
     * Look at the amount of writes and reads.
-*You can do other options as well.
+* You can do other options as well.
 * On another exact system, write a 10 gig file, divide by 10 to get the Gig/sec written.
 Use this as a maximum write/sec and compare to iostat.
         * rm -rf 1gig.bin; time dd if=/dev/random of=1gig.bin bs=100M count=10;ls -al 1gig.bin
 
-###
-Count all cpus.
+### Count all cpus.
 ```
 cat /proc/cpuinfo  | egrep -i "processor|cpu cores"
 
@@ -257,8 +260,7 @@ for l in `$find_files 2>/dev/null  |sort -nr `; do
 done
 ````
 
-###
-Oragnize TOP example with SWAP
+### Oragnize TOP example with SWAP
 * TODO: activity, activity per process
 * What is using swap
    * article: https://my.f5.com/manage/s/article/K40027012

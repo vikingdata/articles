@@ -16,11 +16,13 @@ Original Copyright May 2024
 NOTE: Has been tested, but need to add router and ReplicaSet, and test again
 
 1. [Links](#links)
-2. [Install Percona and mysqlsh](#i)
-3. [Setup directories and files for MySQL ClusterSet](#s)
-4. [Start all instances](#s)
-5. [Setup replica set](#r)
-6. Reset
+2. {Notes](#n)
+3. [Install Percona and mysqlsh](#i)
+4. [Setup directories and files for MySQL ClusterSet](#s)
+5. [Start all instances](#start)
+6. {Setup Clusterset](#c)
+6. [Reset][#r]
+7. [TODO][#todo]
 
 * * *
 <a name=Links></a>Links
@@ -201,7 +203,7 @@ systemctl daemon-reload
 
 
 * * *
-<a name=s>Start all instances</a>
+<a name=start>Start all instances</a>
 -----
 
 ```
@@ -322,10 +324,8 @@ chmod 755 /data/mysql_init/Start_mysql_servers.sh
 ```
 
 * * *
-<a name=r>Setup CluserSet</a>
+<a name=c>Setup CluserSet</a>
 -----
-
-Unfortunately I have to figure out how to add hosts on localhost. For now it is manual between two login sessions. 
 
 Do this in order. Open two login sessions and root. Call them Window1 and Window2. HINT: You could use screen or tmux. 
 * On Window1:
@@ -353,43 +353,7 @@ Do this in order. Open two login sessions and root. Call them Window1 and Window
 " > /data/mysql_init/create_clusterset.js
 
 mysqlsh -u root -proot -h 127.0.0.1 -P 4011 < /data/mysql_init/create_clusterset.js
-
-* * *
-<a name=replica>Setup Replica CluserSet</a>
------
-NOTE: This does not work. I might have to use a 2nd host for the Replica Cluster in the CLusterSet. I get a weird error when doing this.  
-
-
-* On window1, we we create the first enter into the ReplicaSet
-    * execute: r4 = cs1.createReplicaCluster('localhost:4004', 'failover_cs', {recoveryMethod:'clone'})
-    * When you see the message "Waiting for server restart"
-        * Switch to Window2 and execute
-            * service mysqld4 restart
-            * switch back to Window1
-    * On Window1 you should see three hosts from
-        * execute: cs1.status()
-
-* On Window1:
-    * Execute : c1.addInstance('localhost:4003', {recoveryMethod:'clone'});
-    * When you see the message "Waiting for server restart"
-        * Switch to Window2 and execute
-            * service mysqld3 restart
-            * switch back to Window1
-    * On Window1 you should see three hosts from
-        * execute: c1.status()
-
-* On Window1:
-    * Execute : c1.addInstance('localhost:4003', {recoveryMethod:'clone'});
-    * When you see the message "Waiting for server restart"
-        * Switch to Window2 and execute
-            * service mysqld3 restart
-            * switch back to Window1
-    * On Window1 you should see three hosts from
-        * execute: c1.status()
-
-
-``` /data/mysql_init/create_replica.js
-
+```
 
 * * *
 <a name=r>Reset</a>
@@ -407,8 +371,8 @@ rm -rf /data/mysql1 /data/mysql2 /data/mysql3 /data/mysql4 /data/mysql5 /data/my
 ```
 
 * * *
-<a name=todo></a>
+<a name=todo></a>To Do
 -----
-* Get ReplicaSet to work. may need to use another host.
+* Add a Replica Cluster to take full advantage of ClusterSet
 * Show router example.
 * Test everything from scratch one more time. 

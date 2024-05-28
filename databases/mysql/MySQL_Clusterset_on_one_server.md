@@ -13,7 +13,7 @@ _**by Mark Nielsen
 Original Copyright May 2024
 **_
 
-NOT DONE YET
+NOTE: Has been tested, but need to add router and ReplicaSet, and test again
 
 1. [Links](#links)
 2. [Install Percona and mysqlsh](#i)
@@ -81,8 +81,15 @@ deb-src http://repo.percona.com/ps-57/apt jammy main
 
 apt-get update
 
-TODO Install mysqlsh and mysqlrouter from oracle download
+   # install router and shell
 
+wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router_8.0.37-1ubuntu22.04_amd64.deb
+wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb
+dpkg -i mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb mysql-router_8.0.37-1ubuntu2
+
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.37-1ubuntu22.04_amd64.deb
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.37-linux-glibc2.28-x86-64bit.tar.gz
+dpkg -i mysql-shell_8.0.37-1ubuntu22.04_amd64.deb mysql-shell-8.0.37-linux-glibc2.28-x86-64bit.tar.gz
 #-----------------------------------------
 
 # Disable app armor
@@ -204,7 +211,7 @@ cd /data
 killall mysqld
 sleep 2
 
-sleeptime=15
+sleeptime=2
 echo "init mysql1"
 sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql1/mysqld1.cnf_initialize --defaults-group-suffix= --initialize-insecure &
 sleep $sleeptime
@@ -250,6 +257,7 @@ systemctl restart mysqld3
 systemctl restart mysqld4
 systemctl restart mysqld5
 systemctl restart mysqld6
+sleep 10
 
   # In other windows you can watch the processes
 # watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db"
@@ -292,50 +300,96 @@ for i in 1 2 3 4 5 6; do
 mysql -sN -u root -proot  -P 400$i -h $my_ip -e "select user(),current_user(),@@hostname, @@port" 2> /dev/null
 done
 
+echo "echo 'stopping mysql6 '"       > /data/mysql_init/Start_mysql_servers.sh
+echo "service mysqld6 stop"       >> /data/mysql_init/Start_mysql_servers.sh
+for i in 5 4 3 2 1; do
+  echo "echo 'stopping mysql$i'"     >> /data/mysql_init/Start_mysql_servers.sh
+  echo "service mysqld$i stop"    >> /data/mysql_init/Start_mysql_servers.sh
+done
+echo "echo 'starting mysql6 '"       >> /data/mysql_init/Start_mysql_servers.sh
+echo "service mysqld6 start"       >> /data/mysql_init/Start_mysql_servers.sh
+for i in 1 2 3 4 5; do
+  echo "echo 'starting mysql$i'"     >> /data/mysql_init/Start_mysql_servers.sh
+  echo "service mysqld$i start"    >> /data/mysql_init/Start_mysql_servers.sh
+done
+
+echo "echo 'dba.rebootClusterFromCompleteOutage()' | mysqlsh -u root -proot -h 127.0.0.1 -P 4011 " >> /data/mysql_init/Start_mysql_servers.sh
+
+chmod 755 /data/mysql_init/Start_mysql_servers.sh
+
+
+
 ```
 
 * * *
 <a name=r>Setup CluserSet</a>
 -----
 
-```
- #
+Unfortunately I have to figure out how to add hosts on localhost. For now it is manual between two login sessions. 
 
-mysqlsh -u root -proot -h 127.0.0.1 -P 4014
+Do this in order. Open two login sessions and root. Call them Window1 and Window2. HINT: You could use screen or tmux. 
+* On Window1:
+    * mysqlsh -u root -proot -h $my_ip -P 4011
+    * Execute: c1 = dba.createCluster('primary', {localAddress:'127.0.0.1:4001'});
+    * Execute : c1.addInstance('localhost:4002', {recoveryMethod:'clone'});
+    * When you see the message "Waiting for server restart"
+        * Switch to Window2 and execute
+            * service mysqld2 restart
+            * switch back to Window1
+    * On Window1 you should see two hosts from
+        * execute: c1.status()
+* On Window1:
+    * Execute : c1.addInstance('localhost:4003', {recoveryMethod:'clone'});
+    * When you see the message "Waiting for server restart"
+        * Switch to Window2 and execute
+            * service mysqld3 restart
+            * switch back to Window1
+    * On Window1 you should see three hosts from
+        * execute: c1.status()
+* On Window1, we create the clusterset.
+    * execute: cs1 = c1.createClusterSet('cs1');
 
-
-mysqlsh -u root -proot -h 127.0.0.1 -P 4011
-
-echo "
-c1 = dba.createCluster('primary')
-c1.addInstance('localhost:4002', {recoveryMethod:'clone'})
-c1.addInstance('localhost:4003', {recoveryMethod:'clone'})
-c1.createClusterSet('cs1')
-
-r4 = c1.createReplicaCluster('localhost:4004', 'failver_cs', {recoveryMethod:'clone'})
-r4.addInstance('localhost:4005', {recoveryMethod:'clone'})
-r4.addInstance('localhost:4006', {recoveryMethod:'clone'})
-
-cs1 = dba.getClusterSet()
-cs1.status()
 
 " > /data/mysql_init/create_clusterset.js
 
 mysqlsh -u root -proot -h 127.0.0.1 -P 4011 < /data/mysql_init/create_clusterset.js
 
-# https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-batch-code-execution.html
-# or one of these
-# mysqlsh  -u root -proot -h 127.0.0.1 -P 4011 --file /data/mysql_init/create_clusterset.js
-# cat /data/mysql_init/create_clusterset.js | mysqlsh  -u root -proot -h 127.0.0.1 -P 4011
+* * *
+<a name=replica>Setup Replica CluserSet</a>
+-----
+NOTE: This does not work. I might have to use a 2nd host for the Replica Cluster in the CLusterSet. I get a weird error when doing this.  
 
 
+* On window1, we we create the first enter into the ReplicaSet
+    * execute: r4 = cs1.createReplicaCluster('localhost:4004', 'failover_cs', {recoveryMethod:'clone'})
+    * When you see the message "Waiting for server restart"
+        * Switch to Window2 and execute
+            * service mysqld4 restart
+            * switch back to Window1
+    * On Window1 you should see three hosts from
+        * execute: cs1.status()
+
+* On Window1:
+    * Execute : c1.addInstance('localhost:4003', {recoveryMethod:'clone'});
+    * When you see the message "Waiting for server restart"
+        * Switch to Window2 and execute
+            * service mysqld3 restart
+            * switch back to Window1
+    * On Window1 you should see three hosts from
+        * execute: c1.status()
+
+* On Window1:
+    * Execute : c1.addInstance('localhost:4003', {recoveryMethod:'clone'});
+    * When you see the message "Waiting for server restart"
+        * Switch to Window2 and execute
+            * service mysqld3 restart
+            * switch back to Window1
+    * On Window1 you should see three hosts from
+        * execute: c1.status()
 
 
-watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
+``` /data/mysql_init/create_replica.js
 
-watch -n 1 "clear;ps auxw | grep mysqld$| grep -v grep ; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
-
-```
 
 * * *
 <a name=r>Reset</a>
@@ -350,5 +404,11 @@ sleep 3
 
 rm -rf /data/mysql1 /data/mysql2 /data/mysql3 /data/mysql4 /data/mysql5 /data/mysql6
 
-
 ```
+
+* * *
+<a name=todo></a>
+-----
+* Get ReplicaSet to work. may need to use another host.
+* Show router example.
+* Test everything from scratch one more time. 

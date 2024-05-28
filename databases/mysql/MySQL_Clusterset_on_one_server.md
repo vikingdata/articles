@@ -319,8 +319,6 @@ echo "echo 'dba.rebootClusterFromCompleteOutage()' | mysqlsh -u root -proot -h 1
 
 chmod 755 /data/mysql_init/Start_mysql_servers.sh
 
-
-
 ```
 
 * * *
@@ -349,11 +347,6 @@ Do this in order. Open two login sessions and root. Call them Window1 and Window
 * On Window1, we create the clusterset.
     * execute: cs1 = c1.createClusterSet('cs1');
 
-
-" > /data/mysql_init/create_clusterset.js
-
-mysqlsh -u root -proot -h 127.0.0.1 -P 4011 < /data/mysql_init/create_clusterset.js
-```
 
 * * *
 <a name=r>Reset</a>

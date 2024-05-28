@@ -25,10 +25,14 @@ NOT DONE YET
 * * *
 <a name=Links></a>Links
 -----
+* https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1_dba.html
+* https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1_cluster.html
+* https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1_cluster_set.html
 
 * * *
 <a name=n></a>Notes
 -----
+When cconnecting to MySQL AFTER installation. 
 
 | Login | notes| matching account for root |
 |---- | --- | --- |
@@ -76,6 +80,8 @@ deb-src http://repo.percona.com/ps-57/apt jammy main
 " >> /etc/apt/sources.list.d/percona-ps-57-release.list
 
 apt-get update
+
+TODO Install mysqlsh and mysqlrouter from oracle download
 
 #-----------------------------------------
 
@@ -134,11 +140,11 @@ mkdir -p /data/mysql_init/
 
    # create user account with most priviledges with no password, localhost. 
 export root_file=/data/mysql_init/root_account.sql
-echo "CREATE USER '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root_file
+echo "CREATE USER if not exists '$SUDO_USER'@'localhost' IDENTIFIED WITH auth_socket;" > $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'localhost';"          >>  $root_file
 
    # create root @ % with all privs. 
-echo "CREATE USER 'root'@'%' IDENTIFIED by 'root';" >> $root_file
+echo "CREATE USER if not exists 'root'@'%' IDENTIFIED by 'root';" >> $root_file
 echo "grant all privileges on *.* to 'root'@'%';"          >>  $root_file
 
 echo "GRANT CLONE_ADMIN, CONNECTION_ADMIN, CREATE USER, EXECUTE, FILE, GROUP_REPLICATION_ADMIN, PERSIST_RO_VARIABLES_ADMIN, PROCESS, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, REPLICATION_APPLIER, REPLICATION_SLAVE_ADMIN, ROLE_ADMIN, SELECT, SHUTDOWN, SYSTEM_VARIABLES_ADMIN ON *.* TO 'root'@'%' WITH GRANT OPTION;
@@ -153,7 +159,7 @@ echo "set password for root@localhost = 'root';" >> $root_file
 echo "FLUSH PRIVILEGES;" >> $root_file
 
   # create local user with most privs for all other hosts. 
-echo "CREATE USER '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $root_file
+echo "CREATE USER if not exists '$SUDO_USER'@'%' IDENTIFIED by '$SUDO_USER';"          >>  $root_file
 echo "grant all privileges on *.* to '$SUDO_USER'@'%';"                  >>  $root_file
 
 echo "select user,host,plugin,authentication_string from mysql.user ;" >>  $root_file
@@ -224,10 +230,11 @@ sudo -u mysql /usr/sbin/mysqld --defaults-file=/data/mysql6/mysqld6.cnf_initiali
 
 count_mysql=1
 while [ $count_mysql -gt 0 ]; do
-  echo "mysql processes"
+  echo "mysql processes -- this can take a long time, depending on speed of computer"
   ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' | wc -l
   count_mysql=`ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' | wc -l`  
   ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' 
+  du -sh /data/mysql*/db
   sleep 1
   clear
 done
@@ -249,18 +256,15 @@ systemctl restart mysqld6
 
 
    # test if you can connect
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql1/mysqld1.sock
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql2/mysqld2.sock
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql3/mysqld3.sock
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql4/mysqld4.sock
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql5/mysqld5.sock
-mysql -u root  -e "select @@hostname, now(), @@port" -S /data/mysql6/mysqld6.sock
+
+for i in 1 2 3 4 5 6; do
+  mysql -N -u root  -e "select @@hostname, now(), @@port" -S /data/mysql$i/mysqld$i.sock | cat
+done
 
   # Load The account information
 echo "loading accounts"
 for i in 1 2 3 4 5 6; do
    mysql -u root  -e "source $root_file" -S /data/mysql$i/mysqld$i.sock
-
 done
 
 echo "testing root localhost"
@@ -288,8 +292,6 @@ for i in 1 2 3 4 5 6; do
 mysql -sN -u root -proot  -P 400$i -h $my_ip -e "select user(),current_user(),@@hostname, @@port" 2> /dev/null
 done
 
-
-
 ```
 
 * * *
@@ -299,9 +301,35 @@ done
 ```
  #
 
-mysqlsh -u root -proot -h 192.168.1.7 -P 4011
+mysqlsh -u root -proot -h 127.0.0.1 -P 4014
 
-dba.creatcluster('test')
+
+mysqlsh -u root -proot -h 127.0.0.1 -P 4011
+
+echo "
+c1 = dba.createCluster('primary')
+c1.addInstance('localhost:4002', {recoveryMethod:'clone'})
+c1.addInstance('localhost:4003', {recoveryMethod:'clone'})
+c1.createClusterSet('cs1')
+
+r4 = c1.createReplicaCluster('localhost:4004', 'failver_cs', {recoveryMethod:'clone'})
+r4.addInstance('localhost:4005', {recoveryMethod:'clone'})
+r4.addInstance('localhost:4006', {recoveryMethod:'clone'})
+
+cs1 = dba.getClusterSet()
+cs1.status()
+
+" > /data/mysql_init/create_clusterset.js
+
+mysqlsh -u root -proot -h 127.0.0.1 -P 4011 < /data/mysql_init/create_clusterset.js
+
+# https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-batch-code-execution.html
+# or one of these
+# mysqlsh  -u root -proot -h 127.0.0.1 -P 4011 --file /data/mysql_init/create_clusterset.js
+# cat /data/mysql_init/create_clusterset.js | mysqlsh  -u root -proot -h 127.0.0.1 -P 4011
+
+
+
 
 watch -n 1 "clear;ps auxw | grep /usr/sbin/mysqld | egrep -v   'grep|sudo' ; echo ""; du -sh /data/mysql*/db; tail -n 10 mysql1/log/mysql1.log"
 

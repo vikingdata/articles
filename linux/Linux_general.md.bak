@@ -31,7 +31,7 @@ title: Linux general tips
     * (Top 35 Linux Console Tips and Tricks From Practical Experience)[https://hackernoon.com/top-35-linux-console-tips-and-tricks-from-practical-experience]
     * [6 Linux Terminal Tips and Tricks to Get Things Done Quickl](https://www.makeuseof.com/linux-terminal-tips-and-tricks/)
     * (10 Linux Terminal Tips and Tricks to Enhance Your Workflow)[https://www.learnlinux.tv/10-linux-terminal-tips-and-tricks-to-enhance-your-workflow/]
-        * I use screen instead of tmux
+        * I use screen instead of ttmux
 ---
 * * *
 <a name=install></a>Disk Performance
@@ -149,7 +149,7 @@ cat /tmp/remove_packages.txt| apt-get purge --auto-remove -y
 <a name=s></a>ssh keys 
 -----
 
-* -N '' means empty password
+* -N '' means etmpy password
 * -f is the full path to create private key file. Another public will be named the same and appended with ".pub". 
 
 ```
@@ -202,7 +202,7 @@ sudo blkid
 * https://www.geeksforgeeks.org/top-command-in-linux-with-examples/
 * press 1
    * this tells you the activity per cpu
-   * The average is sum of the percentage divided by the number of cpus
+   * The average is sum of the precentage divided by the number of cpus
 * Look at load
     * To estimate load, divide load by the no of cpus. That number you want below 1.
 	* This doesn't always work out to be true.
@@ -264,7 +264,7 @@ for l in `$find_files 2>/dev/null  |sort -nr `; do
 done
 ````
 
-### Organize TOP example with SWAP
+### Oragnize TOP example with SWAP
 * TODO: activity, activity per process
 * What is using swap
    * article: https://my.f5.com/manage/s/article/K40027012

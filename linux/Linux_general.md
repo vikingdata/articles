@@ -16,7 +16,7 @@ title: Linux general tips
 3. [password management](#p)
 4. [Add user with password](#a)
 5. [Find and remove packages](#pa)
-6. [CheetSheets](#c)
+6. [CheatSheets](#c)
 7. [ssh keys](#s)
 8. [Disk Commands](#d)
 0. [Monitor Commands](#m)
@@ -129,7 +129,7 @@ cat /tmp/remove_packages.txt| apt-get purge --auto-remove -y
 ```
 
 * * *
-<a name=c></a>Cheetsheets
+<a name=c></a>Cheatsheets
 -----
 * MongoDB
     * This is a very good one [A Performance Cheat Sheet for MongoDB](https://severalnines.com/blog/performance-cheat-sheet-mongodb/)
@@ -302,12 +302,12 @@ done
 * https://www.linode.com/docs/guides/how-to-use-sar/
 * https://docs.oracle.com/cd/E19455-01/805-7229/spmonitor-15391/index.html
 
-For all these examples, it will gather stats for 10 seconds 3 times. 
+For all these examples, it will gather stats for 2 seconds 5 times. 
 
 | Topic | command |
 |---  | --- |
-| Network | sar -n DEV  10 3 |
-| swap | sar -S 10 3 |
-| disk | sar -d 10 3 |
-| memory | sar -r 1 3 |
-| cpu | sar -u 10 3 |
+| Network | sar -n DEV  2 5 |
+| swap | sar -S 2 5 |
+| disk | sar -d 2 5 3 |
+| memory | sar -r 2 5 |
+| cpu | sar -u 2 5 |

@@ -199,6 +199,7 @@ sudo blkid
 -----
 
 ### First run Top
+* https://www.geeksforgeeks.org/top-command-in-linux-with-examples/
 * press 1
    * this tells you the activity per cpu
    * The average is sum of the precentage divided by the number of cpus
@@ -208,6 +209,7 @@ sudo blkid
     * Organize top by memory, cpu, and swap
 
 ### Free
+* https://phoenixnap.com/kb/free-linux-command
 * Run free -h
     * Total - Used is the amount of memory that is free or used by file cache.
     * Total - Used is the true amount of memory free.
@@ -239,6 +241,8 @@ echo "cores", `cat /proc/cpuinfo  | egrep -i "cpu core" | cut -d ':' -f2 | paste
 
 ### diskspace
 * Find files larger than 100 megs on system
+* https://www.geeksforgeeks.org/find-command-in-linux-with-examples/
+
 ```#!/usr/bash
 
 find_files='find / -size +1G -type f -printf %s_%p\n'
@@ -276,13 +280,34 @@ done
        * Now it should be sorted by swap
 
 ### Network
-* TODO:
-   * Port process is attached to
-   * Max speed
-   * current activity
+* Speed of ethernet card
+   * First do : ifconfig
+   * foreach interface
+       * sudo ethtool eth0 | grep Speed
+       * cat /sys/class/net/eth0/speed
+* activity
+    * install sar
+     sar -n DEV  1
 
 ### lsof
-TODO:
-* processes attached to port
-* which ports are active
-* open files
+* https://phoenixnap.com/kb/linux-check-open-ports
+* List open ports: sudo lsof -nP -iTCP -sTCP:LISTEN
+* All files opened on root or "/": lsof /
+* Show all open connections : lsof -i
+* Show all open files by mysqld: lsof -c mysqld
+
+
+### SAR
+* https://www.accuwebhosting.com/blog/how-to-install-and-use-sar-on-linux
+* https://www.linode.com/docs/guides/how-to-use-sar/
+* https://docs.oracle.com/cd/E19455-01/805-7229/spmonitor-15391/index.html
+
+For all these examples, it will gather stats for 10 seconds 3 times. 
+
+| Topic | command |
+|---  | --- |
+| Network | sar -n DEV  10 3 |
+| swap | sar -S 10 3 |
+| disk | sar -d 10 3 |
+| memory | sar -r 1 3 |
+| cpu | sar -u 10 3 |

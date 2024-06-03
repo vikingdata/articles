@@ -111,7 +111,7 @@ select ');'
 " > make_create_table.sql
 
 
-mysql -e "source make_create_table.sql" > create_table.sql
+mysql -N -e "source make_create_table.sql" > create_table.sql
 
 # You may need to supply  username and password
 # When it prompts for the password, enter the password. 
@@ -120,6 +120,29 @@ mysql -e "source make_create_table.sql" > create_table.sql
 
 
 #### Export the data as json. 
+
+echo "
+select ' select JSON_ARRAYAGG( JSON_OBJECT ('
+  union 
+select
+  GROUP_CONCAT(
+    concat (\"'\", COLUMN_NAME, \"'\", ',' , COLUMN_NAME )
+    SEPARATOR ',')
+  from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='t1'
+  union
+select ')) from mark1.t1';
+" > make_get_data.sql
+
+mysql -N -e "source make_get_data.sql" > get_data.sql
+
+# You may need to supply  username and password
+# When it prompts for the password, enter the password.
+# mysql -N  -u <USER> -p -e "source make_get_data.sql" mark1 > get_data.sql
+# ex: mysql -N -u root -p -e "source make_get_data_table.sql" mark1 > get_data.sql
+
+# and lastly, get the data
+
+mysql -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
 

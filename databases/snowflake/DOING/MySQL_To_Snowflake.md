@@ -100,7 +100,6 @@ select   GROUP_CONCAT(
      concat(
        COLUMN_NAME, ' ',
        DATA_TYPE,  
-       IF(NUMERIC_PRECISION IS NULL,'', concat('(', convert(NUMERIC_PRECISION, char), ')' ) ),
        IF(CHARACTER_MAXIMUM_LENGTH IS NULL,'',concat('(' , convert(CHARACTER_MAXIMUM_LENGTH, char) , ')') ),
        if (IS_NULLABLE = 'NO', ' NOT NULL', '')
      )
@@ -144,7 +143,19 @@ mysql -N -e "source make_get_data.sql" > get_data.sql
 
 mysql -N -e "source get_data.sql" | python -m json.tool >  data.json
 
+ mysqldump -t --compact $a  --skip-triggers  --no-create-info --xml  --set-gtid-purged=OFF mark1 t1 | grep -v '^SET' | grep -v '^<mysql' | grep -v '</mysql'> test.xml
+
 ```
+
+#### Connect to snowflake via the web
+* Go to Databases
+* create database sample
+* Click on database sample
+* create schema sample
+* Click on create
+    * Choose Table
+        * Choose Standard
+	    * copy and paste the contents in "create_table.sql" 
 
 
 * * *

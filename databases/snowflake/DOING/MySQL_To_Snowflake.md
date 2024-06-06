@@ -11,14 +11,19 @@ MySQL to Snowflake
 _**by Mark Nielsen  
 Original Copyright June 2024**_
 
-To convert MySQL data to Snowflake reliably.   
+To convert MySQL data to Snowflake reliably.
+
+This doc requires
+* A snowflake account
+* snowsql is installed
+* Python and modules installed
   
 1.  [Links](#links)
 2.  [Create data in MySQL](#c)
 3.  [Issues](#i)
-4.  [Export data to file and upload to Snowflake JSON](#d)
-6.  [Convert data on the fly with Python](#o)
-  
+4.  [Export data to file and upload to Snowflake JSON via SnowSQL](#d)
+5.  [Convert data on the fly with Python](#o)
+6.  [Upload to Snowflake JSON via wen interface](#w)  
 
 * * *
 
@@ -89,10 +94,33 @@ Solutions for data types.
 <a name=d></a>Export data to file and upload to Snowflake
 ----------
 
+NOTE: "staging table" is not really a staging table. It is a real table. I call it staging because you may use this table over once day to load data
+into a final table. In effect, it is a staging table for my purposes. 
+
+Summary of steps
+* with Mysql
+    * Create a query which generate a creates table format for snowflake.
+    * Make the crate table sql.
+    * Create a data file in json format.
+* In snowflake
+    * Create database
+    * Create final table
+    * For the json file
+       * Create a internal stage (a location of where the json file will be).
+       * Load the arbitrary json file to the stagng location.
+       * Create a file format which explains how to interpret the json file into a tabular table.
+       * Create a staging table to view the data. The table will only have one column, a variant column.
+       * Load json from stage into the staging table.
+    * Select data from staging table into final table. 
+
 #### Make the create table file. 
 
 ```
 echo "
+
+# Change the authetication for your mysql account
+export auth=" -u root -proot -h 127.0.0.1 -P 3306 "
+
 select
    ' create table t1 ('
    UNION
@@ -110,7 +138,7 @@ select ');'
 " > make_create_table.sql
 
 
-mysql -N -e "source make_create_table.sql" > create_table.sql
+mysql $auth -N -e "source make_create_table.sql" > create_table.sql
 
 # You may need to supply  username and password
 # When it prompts for the password, enter the password. 
@@ -132,7 +160,7 @@ select
 select ')) from mark1.t1';
 " > make_get_data.sql
 
-mysql -N -e "source make_get_data.sql" > get_data.sql
+mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
 # You may need to supply  username and password
 # When it prompts for the password, enter the password.
@@ -141,22 +169,23 @@ mysql -N -e "source make_get_data.sql" > get_data.sql
 
 # and lastly, get the data
 
-mysql -N -e "source get_data.sql" | python -m json.tool >  data.json
-
- mysqldump -t --compact $a  --skip-triggers  --no-create-info --xml  --set-gtid-purged=OFF mark1 t1 | grep -v '^SET' | grep -v '^<mysql' | grep -v '</mysql'> test.xml
+mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
 
 #### Connect to snowflake via the web
+
+### Create Table
 * Go to Databases
-* create database sample
-* Click on database sample
-* create schema sample
+* create database "sample" if it doesn't exist.
+* Click on database "sample".
+* Click on schema "public".
 * Click on create
     * Choose Table
         * Choose Standard
 	    * copy and paste the contents in "create_table.sql" 
 
+#### 
 
 * * *
 <a name=o></a>Convert data on the fly

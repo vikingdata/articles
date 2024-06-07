@@ -21,14 +21,16 @@ This doc requires
 1.  [Links](#links)
 2.  [Create data in MySQL](#c)
 3.  [Issues](#i)
-4.  [Export data to file and upload to Snowflake JSON via SnowSQL](#d)
+4.  [Export data to json file and upload Snowsight (web) or cli SnowSql](#u)
 5.  [Convert data on the fly with Python](#o)
-6.  [Upload to Snowflake JSON via wen interface](#w)  
 
 * * *
 
 <a name=links></a>Links
 -----
+* https://www.chaosgenius.io/blog/snowflake-insert-into/
+* https://thinketl.com/how-to-load-and-query-json-data-in-snowflake/
+* https://www.projectpro.io/recipes/load-json-data-from-local-internal-stage-snowflake
 
 * * *
 
@@ -91,7 +93,7 @@ Solutions for data types.
 
 
 * * *
-<a name=d></a>Export data to file and upload to Snowflake
+<a name=u></a>Export data to json file and upload Snowsight (web) or cli SnowSql
 ----------
 
 NOTE: "staging table" is not really a staging table. It is a real table. I call it staging because you may use this table over once day to load data
@@ -174,23 +176,23 @@ mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
 
-## Connect to snowflake via the web
+## Connect to snowflake via the Snowsight (web)
 * CLick on "data"
     * Create database "sampledb" if it doesn't exist. 
     * Select database "sampledb"
     * Create schema "public" if it doesn't exist
 
 
-## SETUP STAGE, AND, STAGE TABLE
+## SETUP STAGE AND STAGE TABLE
 * In SnowSQL
     * ConNECT "sampledb" database and "public" schema.
-* In the web interface SnowPark"
+* In the Snowsight (web)
     * Select Projects
         * Select worksheets
 	    * Select "+" and then "SQL Workssheet"
             * Make sure you are using "accountadmin" and warehouse "compute_wh". 
 
-* Execute the commands by copy and paste. For the web interface you must run all or press the arrow to run it.
+* Execute the commands by copy and paste. For the Snowsight (web) interface you must run all or press the arrow to run it.
 
 ```
 create or replace database sampledb;
@@ -215,16 +217,16 @@ create or replace table stage_table_t1 (t1_data  variant );
 
 ```
 
-### upload data inot staging
-* For snowcli : "   put file://data.json @stage_t1; "
-* for web gui : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
+### upload data into staging
+* For snowsql : "   put file://data.json @stage_t1; "
+* for Snowsight (web) : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
     * Select data
     * Select load files into a stage
     * Select "Add data"
     * Select "data.json", Select sampledb, Select stage_t1
     * Upload file
 
-## Copy the file from stage into the table stage_table_t1
+### Copy the file from stage into the table stage_table_t1
 ```
 -- Copy data from staging into staging table
 copy into stage_table_t1
@@ -232,14 +234,17 @@ copy into stage_table_t1
     FILE_FORMAT = JSON_FORMAT
     on_error = 'skip_file';
 
-
+-- Verify data in staging table
 select count(1) from stage_table_t1;
-select * from stage_table_t1 limit 5;
 
+-- See how to select raw rows and then separate values into columns per row. 
+select * from stage_table_t1 limit 5;
 SELECT 
     t1_data:a,
     t1_data:d:Category
 FROM stage_table_1 limit 5;
+
+-- Insert the data into final row and then verify
 
 delete from t1;
 insert into t1 (a, ni, i, d, t, v, nc )
@@ -258,9 +263,8 @@ select * from t1 limit;
 
 ```
 
-
 * * *
-<a name=o></a>Convert data on the fly
+<a name=o></a>Convert data on the fly with Python
 ----------
 
 

@@ -413,7 +413,7 @@ connected to mysql
 connecting to snowflake
 connected to snowflake
 Uploading rows
-length of time: 1.13
+length of time: 1.13 seconds
 Counting rows in t1_python
 Rows in t1_python:  313
 ```

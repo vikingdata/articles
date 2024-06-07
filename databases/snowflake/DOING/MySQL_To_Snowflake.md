@@ -12,7 +12,8 @@ _**by Mark Nielsen
 Original Copyright June 2024**_
 
 To convert MySQL data to Snowflake reliably.
-For uploading the data with a file, we will use JSON in order to o convert MySQL data to Snowflake reliably (including nulls).
+For uploading the data with a file, we will use JSON in order to o convert MySQL data to Snowflake reliably (including nulls). Other formats like XML or csv
+are possible. With csv you have to take care of nulls. 
 When using Python, it takes care of the conversion.
 
 This doc requires

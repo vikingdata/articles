@@ -15,9 +15,13 @@ To convert MySQL data to Snowflake reliably.
 
 This doc requires
 * A snowflake account
+    * Be familiar how to create databases, schemas, and to use worksheets.
+    * If you know how to create user accounts, that can be useful.
+    * Know how to get your snowflake account
     * snowsql is installed
-    * Python and modules installed
+    * Python module installed
 * A MySQL server
+    * Python module for MySQL is installed
 
 1.  [Links](#links)
 2.  [Create data in MySQL](#c)
@@ -364,6 +368,7 @@ print ("connected to snowflake")
 # Select all rows from table "t1"
 # If we do this properly, we seelect the max primary key or count the rows and do it in batches of 500 rows.
 # In this case, table is small
+# Also, if data is huge your system may run out of memmory if you don't use a loop to select rows. 
 
 m_cursor.execute("select * from t1")
 m_rows = m_cursor.fetchall()
@@ -383,7 +388,7 @@ sf_insert_many = " insert into t1_python (a, ni, i, d, t, v, nc) values (%s, %s,
 sf_cursor.executemany( sf_insert_many, m_rows)
 
 end_time = time.time()
-print ("length of time:", end_time - start_time)
+print ("length of time:", round(end_time - start_time,2), " seconds")
 
 print ("Counting rows in t1_python")
 # count rows in table

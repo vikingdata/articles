@@ -119,7 +119,8 @@ Summary of steps
        * Load json from stage into the staging table.
     * Select data from staging table into final table. 
 
-## Make the create table file. 
+## Make the create table file and data file
+
 
 ```
 
@@ -128,6 +129,7 @@ export auth=" -u root -proot -h 127.0.0.1 -P 3306 "
 
 echo "
 
+# Make the query to create table in sf
 select
    ' create table t1 ('
    UNION
@@ -144,17 +146,10 @@ from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='t1'
 select ');'
 " > make_create_table.sql
 
-
+# Create the file for create table using query
 mysql $auth -N -e "source make_create_table.sql" > create_table.sql
 
-# You may need to supply  username and password
-# When it prompts for the password, enter the password. 
-# mysql -u <USER> -p -e "source make_create_table.sql" mark1 > create_table.sql
-# ex: mysql -u root -p -e "source make_create_table.sql" mark1 > create_table.sql
-
-
-## Export the data as json. 
-
+# Create the query to get the data
 echo "
 select ' select JSON_ARRAYAGG( JSON_OBJECT ('
   union 
@@ -167,16 +162,10 @@ select
 select ')) from mark1.t1';
 " > make_get_data.sql
 
+
 mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
-# You may need to supply  username and password
-# When it prompts for the password, enter the password.
-# mysql -N  -u <USER> -p -e "source make_get_data.sql" mark1 > get_data.sql
-# ex: mysql -N -u root -p -e "source make_get_data_table.sql" mark1 > get_data.sql
-
-# and lastly, get the data
-
-
+# Export data as json using query. 
 mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```

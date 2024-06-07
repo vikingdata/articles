@@ -91,6 +91,11 @@ The data in MySQL must converted to Snowflake. Issues involve data types.
 * There must be tables in Snowflake with correct datatypes for the data. Snowflake can guess
 what the datatypes should be, but you can create the tables ahead of time.
 * The data in MySQL must correctly be inserted into Snowflake. Problems can arise with Nulls or if there is not a direct data type equivalent. 
+* Also https://docs.snowflake.com/en/sql-reference/data-types-text
+    * """Storage: A column consumes storage for only the amount of actual data stored. For example, a 1-character string in a VARCHAR(16777216) column only consumes a single character.
+
+Performance: There is no performance difference between using the full-length VARCHAR declaration VARCHAR(16777216) and a smaller length.
+"""
 
 Solutions for data types.
 * Export to Json and upload
@@ -141,7 +146,6 @@ select   GROUP_CONCAT(
      concat(
        COLUMN_NAME, ' ',
        DATA_TYPE,  
-       IF(CHARACTER_MAXIMUM_LENGTH IS NULL,'',concat('(' , convert(CHARACTER_MAXIMUM_LENGTH, char) , ')') ),
        if (IS_NULLABLE = 'NO', ' NOT NULL', '')
      )
    SEPARATOR ',')  
@@ -169,7 +173,8 @@ select ')) from mark1.t1';
 # Execute the file to create the query to get data. 
 mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
-# Export data as json using query. 
+# Export data as json using query.
+# json.tool is a pretty print which formats the json file so it is more human readable. 
 mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
@@ -205,7 +210,6 @@ a int NOT NULL, ni int, i int, d datetime, t timestamp, v varchar(255), nc char(
 
 -- create the stage or location we will upload the file
 CREATE OR REPLACE STAGE stage_t1;
-list stage_t1;
 
 -- Create a file format which tells you how to interpret data in the stage table
 create or replace file format json_format type = 'json' strip_outer_array = true;
@@ -240,8 +244,8 @@ select count(1) from stage_table_t1;
 select * from stage_table_t1 limit 5;
 SELECT 
     t1_data:a,
-    t1_data:d:
-FROM stage_table_1 limit 5;
+    t1_data:d
+FROM stage_table_t1 limit 5;
 
 -- Insert the data into final row and then verify
 

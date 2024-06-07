@@ -299,7 +299,7 @@ COMPUTE_WH@SAMPLEDB.PUBLIC>select * from t1 limit 5;
 | 5 | 21983 | 29951 | 2024-06-07 11:23:40.000 | 2024-06-07 11:23:40.000 | qUla5Szc0bx95KIh0OySxCKDBO7syqyJE8rdRg== | 4cXd |
 +---+-------+-------+-------------------------+-------------------------+------------------------------------------+------+
 5 Row(s) produced. Time Elapsed: 0.723s
-GOD#COMPUTE_WH@SAMPLEDB.PUBLIC>
+COMPUTE_WH@SAMPLEDB.PUBLIC>
 
 
 

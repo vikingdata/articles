@@ -78,7 +78,7 @@ done >> insert_data.sql
 
 Log into MySQL and then
 ```
-mysql -e  source insert_data.sql
+mysql -e  "source insert_data.sql"
 
 ```
 
@@ -129,7 +129,7 @@ Summary of steps
 ```
 
 # Change the authetication for your mysql account
-export auth=" -u root -proot -h 127.0.0.1 -P 3306 "
+export auth=" -u <USER> -p<PASSSWORD> -h 127.0.0.1 -P 3306 "
 
 echo "
 
@@ -240,7 +240,7 @@ select count(1) from stage_table_t1;
 select * from stage_table_t1 limit 5;
 SELECT 
     t1_data:a,
-    t1_data:d:Category
+    t1_data:d:
 FROM stage_table_1 limit 5;
 
 -- Insert the data into final row and then verify
@@ -258,7 +258,7 @@ SELECT
 FROM stage_table_t1;
 
 select count(1) from t1;
-select * from t1 limit;
+select * from t1 limit 5;
 
 ```
 
@@ -366,7 +366,7 @@ sf_cursor = sf.cursor()
 print ("connected to snowflake")
 
 # Select all rows from table "t1"
-# If we do this properly, we seelect the max primary key or count the rows and do it in batches of 500 rows.
+# If we do this properly, we select the max primary key or count the rows and do it in batches of 500 rows.
 # In this case, table is small
 # Also, if data is huge your system may run out of memmory if you don't use a loop to select rows. 
 
@@ -413,7 +413,7 @@ connected to mysql
 connecting to snowflake
 connected to snowflake
 Uploading rows
-length of time: 1.1369833946228027
+length of time: 1.13
 Counting rows in t1_python
 Rows in t1_python:  313
 ```

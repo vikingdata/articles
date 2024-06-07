@@ -113,7 +113,7 @@ Summary of steps
        * Load json from stage into the staging table.
     * Select data from staging table into final table. 
 
-#### Make the create table file. 
+## Make the create table file. 
 
 ```
 echo "
@@ -146,7 +146,7 @@ mysql $auth -N -e "source make_create_table.sql" > create_table.sql
 # ex: mysql -u root -p -e "source make_create_table.sql" mark1 > create_table.sql
 
 
-#### Export the data as json. 
+## Export the data as json. 
 
 echo "
 select ' select JSON_ARRAYAGG( JSON_OBJECT ('
@@ -169,23 +169,71 @@ mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
 # and lastly, get the data
 
+
 mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
 
-#### Connect to snowflake via the web
+## Connect to snowflake via the web
+* CLick on "data"
+    * Create database "sampledb" if it doesn't exist. 
+    * Select database "sampledb"
+    * Create schema "public" if it doesn't exist
 
-### Create Table
-* Go to Databases
-* create database "sample" if it doesn't exist.
-* Click on database "sample".
-* Click on schema "public".
-* Click on create
-    * Choose Table
-        * Choose Standard
-	    * copy and paste the contents in "create_table.sql" 
 
-#### 
+## SETUP STAGE, AND, STAGE TABLE
+* In SnowSQL
+    * ConNECT "sampledb" database and "public" schema.
+* In the web interface SnowPark"
+    * Select Projects
+        * Select worksheets
+	    * Select "+" and then "SQL Workssheet"
+            * Make sure you are using "accountadmin" and warehouse "compute_wh". 
+
+* Execute the commands by copy and paste. For the web interface you must run all or press the arrow to run it.
+
+```
+create or replace database sampledb;
+use sampledb.public;
+
+
+-- source the create_table.sql or do this
+
+create table t1 (
+a int(10) NOT NULL,ni int(10),i int(10),d datetime,t timestamp,v varchar(255),nc char(8) NOT NULL
+);
+
+
+
+-- create the stage or location we will upload the file
+CREATE OR REPLACE STAGE stage_t1;
+list stage_t1;
+
+-- Create a file format which tells you how to interpret data in the stage table
+create or replace file format json_format_NO_OUTER type = 'json';
+
+-- Create stage table.
+create or replace table stage_table_t1 (t1_data  variant );
+```
+
+### upload data inot staging
+* For snowcli : "   put file://data.json @stage_t1; "
+* for web gui : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
+    * Select data
+    * Select load files into a stage
+    * Select "Add data"
+    * Select "data.json", Select sampledb, Select stage_t1
+    * Upload file
+
+## Copy the file from stage into the table stage_table_t1
+```
+-- Copy data from staging into staging table
+copy into stage_t1
+    from  @stage_t1/data.json
+    on_error = 'skip_file';
+
+```
+
 
 * * *
 <a name=o></a>Convert data on the fly

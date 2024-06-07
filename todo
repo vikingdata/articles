@@ -109,7 +109,7 @@ Snowflake
   https://www.kaggle.com/c/titanic, titanic file, and ml
   pytorch , sklearn, data science
   Window functions, snowflake, postgresql, mysql, mongodb  in one article
-  extract data from mysql and load into snowflake, take care of datatypes.
+DONE  extract data from mysql and load into snowflake, take care of datatypes.
 
   different stages examples, user, table, named
   flatten and queryng json files - -nested json queries
@@ -119,7 +119,12 @@ Snowflake
    unie, primary, foriegn, not null and not null is only one enforced.
   File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger.
   pipe example, internal and external
-  uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
+IGNORE uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
+
+  file loading
+    loading csvs into snowflake and null mgmt
+    flexible schema mgmt with variant
+    another article: loading into snowflake with (modern) zstandard vs (old schoo) gzip
 
 1st dpt project in postgresql
   copy data to snowflake

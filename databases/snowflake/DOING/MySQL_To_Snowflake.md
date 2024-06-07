@@ -393,14 +393,14 @@ print ("Rows in t1_python: ", sf_cursor.fetchone()[0])
 ```
 
 
-##@ Execute bash script
+### Execute bash script
 ```
 chmod 755 load_data.sh
 ./load_data.sh
 
 ```
 
-##@ Expected output
+### Expected output
 
 ```
 connecting to mysql

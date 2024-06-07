@@ -283,9 +283,9 @@ python load_mysql_to_snowflake.py
 
 ```
 
-#@ Create python script
+## Create python script
 
-##@ Create python script load_mysql_to_snowflake.py
+### Create python script load_mysql_to_snowflake.py
 ``` text 
 #!/usr/bin/python
 

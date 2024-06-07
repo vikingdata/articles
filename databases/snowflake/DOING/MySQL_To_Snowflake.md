@@ -199,21 +199,20 @@ use sampledb.public;
 
 -- source the create_table.sql or do this
 
-create table t1 (
-a int(10) NOT NULL,ni int(10),i int(10),d datetime,t timestamp,v varchar(255),nc char(8) NOT NULL
+create or replace table t1 (
+a int NOT NULL, ni int, i int, d datetime, t timestamp, v varchar(255), nc char(8) NOT NULL
 );
-
-
 
 -- create the stage or location we will upload the file
 CREATE OR REPLACE STAGE stage_t1;
 list stage_t1;
 
 -- Create a file format which tells you how to interpret data in the stage table
-create or replace file format json_format_NO_OUTER type = 'json';
+create or replace file format json_format type = 'json' strip_outer_array = true;
 
 -- Create stage table.
 create or replace table stage_table_t1 (t1_data  variant );
+
 ```
 
 ### upload data inot staging
@@ -228,9 +227,34 @@ create or replace table stage_table_t1 (t1_data  variant );
 ## Copy the file from stage into the table stage_table_t1
 ```
 -- Copy data from staging into staging table
-copy into stage_t1
+copy into stage_table_t1
     from  @stage_t1/data.json
+    FILE_FORMAT = JSON_FORMAT
     on_error = 'skip_file';
+
+
+select count(1) from stage_table_t1;
+select * from stage_table_t1 limit 5;
+
+SELECT 
+    t1_data:a,
+    t1_data:d:Category
+FROM stage_table_1 limit 5;
+
+delete from t1;
+insert into t1 (a, ni, i, d, t, v, nc )
+SELECT
+    t1_data:a,
+    t1_data:ni,
+    t1_data:i,
+    t1_data:d,
+    t1_data:t,
+    t1_data:v,
+    t1_data:nc
+FROM stage_table_t1;
+
+select count(1) from t1;
+select * from t1 limit;
 
 ```
 

@@ -12,12 +12,17 @@ _**by Mark Nielsen
 Original Copyright June 2024**_
 
 To convert MySQL data to Snowflake reliably.
+For uploading the data with a file, we will use JSON in order to o convert MySQL data to Snowflake reliably (including nulls).
 
 This doc requires
 * A snowflake account
+    * Be familiar how to create databases, schemas, and to use worksheets.
+    * If you know how to create user accounts, that can be useful.
+    * Know how to get your snowflake account
     * snowsql is installed
-    * Python and modules installed
+    * Python module installed
 * A MySQL server
+    * Python module for MySQL is installed
 
 1.  [Links](#links)
 2.  [Create data in MySQL](#c)
@@ -70,12 +75,29 @@ for i in {0..1000}; do
 done >> insert_data.sql
 
 
+
+
 ```
 
 Log into MySQL and then
 ```
-mysql -e  source insert_data.sql
+mysql -e  "source insert_data.sql"
 
+```
+
+Data should looke like
+```
+mysql> select * from t1 limit 5;
++---+-------+-------+---------------------+---------------------+------------------------------------------+------+
+| a | ni    | i     | d                   | t                   | v                                        | nc   |
++---+-------+-------+---------------------+---------------------+------------------------------------------+------+
+| 1 | 16336 | 22336 | 2024-06-07 11:23:37 | 2024-06-07 11:23:37 | DiibBvQGUrknkw==                         | Ug== |
+| 2 |  5772 | 31505 | 2024-06-07 11:23:38 | 2024-06-07 11:23:38 | RN3cntZ7kDeYtCFTMeiqJGR2                 | Tw== |
+| 3 | 13587 | 20559 | 2024-06-07 11:23:39 | 2024-06-07 11:23:39 | 3i4G6EAQn6p2fxvjHe7zi2TnZw==             | gg== |
+| 4 | 22644 | 29907 | 2024-06-07 11:23:39 | 2024-06-07 11:23:39 | riWzFW8+lniPng==                         | 0+sU |
+| 5 | 21983 | 29951 | 2024-06-07 11:23:40 | 2024-06-07 11:23:40 | qUla5Szc0bx95KIh0OySxCKDBO7syqyJE8rdRg== | 4cXd |
++---+-------+-------+---------------------+---------------------+------------------------------------------+------+
+5 rows in set (0.00 sec)
 ```
 
 
@@ -87,12 +109,17 @@ The data in MySQL must converted to Snowflake. Issues involve data types.
 * There must be tables in Snowflake with correct datatypes for the data. Snowflake can guess
 what the datatypes should be, but you can create the tables ahead of time.
 * The data in MySQL must correctly be inserted into Snowflake. Problems can arise with Nulls or if there is not a direct data type equivalent. 
+* Also https://docs.snowflake.com/en/sql-reference/data-types-text
+    * """Storage: A column consumes storage for only the amount of actual data stored. For example, a 1-character string in a VARCHAR(16777216) column only consumes a single character.
+
+Performance: There is no performance difference between using the full-length VARCHAR declaration VARCHAR(16777216) and a smaller length.
+"""
 
 Solutions for data types.
 * Export to Json and upload
     * Create the tables on Snowflake first. Look at the data types for the fields in MySQL and
     see if Snowflake has an equivalent.
-    * Be aware of Nulls. Make sure Json has null fields.
+    * Be aware of Nulls. That's why json is used. XML could also be used. 
 * Use Python or other language to automatically take care of data type conversion. Tables on Snowflake should be created ahead of time. 
 
 
@@ -106,14 +133,14 @@ into a final table. In effect, it is a staging table for my purposes.
 Summary of steps
 * with Mysql
     * Create a query which generate a creates table format for snowflake.
-    * Make the crate table sql.
+    * Make the create table sql.
     * Create a data file in json format.
 * In snowflake
     * Create database
     * Create final table
     * For the json file
-       * Create a internal stage (a location of where the json file will be).
-       * Load the arbitrary json file to the stagng location.
+       * Create a internal stage (a location of where the json file will be). An internal stage is like a directory or folder of files. 
+       * Load the arbitrary json file to the staging location.
        * Create a file format which explains how to interpret the json file into a tabular table.
        * Create a staging table to view the data. The table will only have one column, a variant column.
        * Load json from stage into the staging table.
@@ -125,7 +152,7 @@ Summary of steps
 ```
 
 # Change the authetication for your mysql account
-export auth=" -u root -proot -h 127.0.0.1 -P 3306 "
+export auth=" -u <USER> -p<PASSSWORD> -h 127.0.0.1 -P 3306 "
 
 echo "
 
@@ -137,7 +164,6 @@ select   GROUP_CONCAT(
      concat(
        COLUMN_NAME, ' ',
        DATA_TYPE,  
-       IF(CHARACTER_MAXIMUM_LENGTH IS NULL,'',concat('(' , convert(CHARACTER_MAXIMUM_LENGTH, char) , ')') ),
        if (IS_NULLABLE = 'NO', ' NOT NULL', '')
      )
    SEPARATOR ',')  
@@ -165,7 +191,8 @@ select ')) from mark1.t1';
 # Execute the file to create the query to get data. 
 mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
-# Export data as json using query. 
+# Export data as json using query.
+# json.tool is a pretty print which formats the json file so it is more human readable. 
 mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ```
@@ -177,13 +204,13 @@ mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
     * Create schema "public" if it doesn't exist
 
 
-## SETUP STAGE AND STAGE TABLE
+## Setup stage and stage table
 * In SnowSQL
     * Connect to "sampledb" database and "public" schema.
 * In the Snowsight (web)
     * Select Projects
         * Select worksheets
-	    * Select "+" and then "SQL Workssheet"
+	    * Select "+" and then "SQL Worksheet"
             * Make sure you are using "accountadmin" and warehouse "compute_wh". 
 
 * Execute the commands by copy and paste. For the Snowsight (web) interface you must run all or press the arrow to run it.
@@ -201,7 +228,6 @@ a int NOT NULL, ni int, i int, d datetime, t timestamp, v varchar(255), nc char(
 
 -- create the stage or location we will upload the file
 CREATE OR REPLACE STAGE stage_t1;
-list stage_t1;
 
 -- Create a file format which tells you how to interpret data in the stage table
 create or replace file format json_format type = 'json' strip_outer_array = true;
@@ -214,7 +240,7 @@ create or replace table stage_table_t1 (t1_data  variant );
 ### Upload data into staging
 * For snowsql : "   put file://data.json @stage_t1; "
 * for Snowsight (web) : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
-    * You cannot upload a file by command on the web. You must do it mmanually. 
+    * You cannot upload a file by command on the web. You must do it manually. 
     * Select data
     * Select load files into a stage
     * Select "Add data"
@@ -236,8 +262,8 @@ select count(1) from stage_table_t1;
 select * from stage_table_t1 limit 5;
 SELECT 
     t1_data:a,
-    t1_data:d:Category
-FROM stage_table_1 limit 5;
+    t1_data:d
+FROM stage_table_t1 limit 5;
 
 -- Insert the data into final row and then verify
 
@@ -254,9 +280,104 @@ SELECT
 FROM stage_table_t1;
 
 select count(1) from t1;
-select * from t1 limit;
+select * from t1 limit 5;
 
 ```
+
+Data should look like this is SnowSql
+```
+COMPUTE_WH@SAMPLEDB.PUBLIC>select * from t1 limit 5;
++---+-------+-------+-------------------------+-------------------------+------------------------------------------+------+
+| A |    NI |     I | D                       | T                       | V                                        | NC   |
+|---+-------+-------+-------------------------+-------------------------+------------------------------------------+------|
+| 1 | 16336 | 22336 | 2024-06-07 11:23:37.000 | 2024-06-07 11:23:37.000 | DiibBvQGUrknkw==                         | Ug== |
+| 2 |  5772 | 31505 | 2024-06-07 11:23:38.000 | 2024-06-07 11:23:38.000 | RN3cntZ7kDeYtCFTMeiqJGR2                 | Tw== |
+| 3 | 13587 | 20559 | 2024-06-07 11:23:39.000 | 2024-06-07 11:23:39.000 | 3i4G6EAQn6p2fxvjHe7zi2TnZw==             | gg== |
+| 4 | 22644 | 29907 | 2024-06-07 11:23:39.000 | 2024-06-07 11:23:39.000 | riWzFW8+lniPng==                         | 0+sU |
+| 5 | 21983 | 29951 | 2024-06-07 11:23:40.000 | 2024-06-07 11:23:40.000 | qUla5Szc0bx95KIh0OySxCKDBO7syqyJE8rdRg== | 4cXd |
++---+-------+-------+-------------------------+-------------------------+------------------------------------------+------+
+5 Row(s) produced. Time Elapsed: 0.723s
+GOD#COMPUTE_WH@SAMPLEDB.PUBLIC>
+
+
+
+COMPUTE_WH@SAMPLEDB.PUBLIC>SELECT
+                                   t1_data:a,
+                                   t1_data:ni,
+                                   t1_data:i,
+                                   t1_data:d,
+                                   t1_data:y,
+                                   t1_data:v,
+                                   t1_data:nc
+                               FROM stage_table_t1 limit 5;
++-----------+------------+-----------+------------------------------+-----------+--------------------------------------------+------------+
+| T1_DATA:A | T1_DATA:NI | T1_DATA:I | T1_DATA:D                    | T1_DATA:Y | T1_DATA:V                                  | T1_DATA:NC |
+|-----------+------------+-----------+------------------------------+-----------+--------------------------------------------+------------|
+| 1         | 16336      | 22336     | "2024-06-07 11:23:37.000000" | NULL      | "DiibBvQGUrknkw=="                         | "Ug=="     |
+| 2         | 5772       | 31505     | "2024-06-07 11:23:38.000000" | NULL      | "RN3cntZ7kDeYtCFTMeiqJGR2"                 | "Tw=="     |
+| 3         | 13587      | 20559     | "2024-06-07 11:23:39.000000" | NULL      | "3i4G6EAQn6p2fxvjHe7zi2TnZw=="             | "gg=="     |
+| 4         | 22644      | 29907     | "2024-06-07 11:23:39.000000" | NULL      | "riWzFW8+lniPng=="                         | "0+sU"     |
+| 5         | 21983      | 29951     | "2024-06-07 11:23:40.000000" | NULL      | "qUla5Szc0bx95KIh0OySxCKDBO7syqyJE8rdRg==" | "4cXd"     |
++-----------+------------+-----------+------------------------------+-----------+--------------------------------------------+------------+
+5 Row(s) produced. Time Elapsed: 0.150s
+
+
+COMPUTE_WH@SAMPLEDB.PUBLIC>SELECT * FROM stage_table_t1 limit 5;
++---------------------------------------------------+
+| T1_DATA                                           |
+|---------------------------------------------------|
+| {                                                 |
+|   "a": 1,                                         |
+|   "d": "2024-06-07 11:23:37.000000",              |
+|   "i": 22336,                                     |
+|   "nc": "Ug==",                                   |
+|   "ni": 16336,                                    |
+|   "t": "2024-06-07 11:23:37.000000",              |
+|   "v": "DiibBvQGUrknkw=="                         |
+| }                                                 |
+| {                                                 |
+|   "a": 2,                                         |
+|   "d": "2024-06-07 11:23:38.000000",              |
+|   "i": 31505,                                     |
+|   "nc": "Tw==",                                   |
+|   "ni": 5772,                                     |
+|   "t": "2024-06-07 11:23:38.000000",              |
+|   "v": "RN3cntZ7kDeYtCFTMeiqJGR2"                 |
+| }                                                 |
+| {                                                 |
+|   "a": 3,                                         |
+|   "d": "2024-06-07 11:23:39.000000",              |
+|   "i": 20559,                                     |
+|   "nc": "gg==",                                   |
+|   "ni": 13587,                                    |
+|   "t": "2024-06-07 11:23:39.000000",              |
+|   "v": "3i4G6EAQn6p2fxvjHe7zi2TnZw=="             |
+| }                                                 |
+| {                                                 |
+|   "a": 4,                                         |
+|   "d": "2024-06-07 11:23:39.000000",              |
+|   "i": 29907,                                     |
+|   "nc": "0+sU",                                   |
+|   "ni": 22644,                                    |
+|   "t": "2024-06-07 11:23:39.000000",              |
+|   "v": "riWzFW8+lniPng=="                         |
+| }                                                 |
+| {                                                 |
+|   "a": 5,                                         |
+|   "d": "2024-06-07 11:23:40.000000",              |
+|   "i": 29951,                                     |
+|   "nc": "4cXd",                                   |
+|   "ni": 21983,                                    |
+|   "t": "2024-06-07 11:23:40.000000",              |
+|   "v": "qUla5Szc0bx95KIh0OySxCKDBO7syqyJE8rdRg==" |
+| }                                                 |
++---------------------------------------------------+
+5 Row(s) produced. Time Elapsed: 0.516s
+
+
+
+```
+
 
 * * *
 <a name=o></a>Convert data on the fly with Python
@@ -285,7 +406,7 @@ python load_mysql_to_snowflake.py
 
 ## Create python script
 
-# Create python script load_mysql_to_snowflake.py
+### Create python script load_mysql_to_snowflake.py
 ``` text 
 #!/usr/bin/python
 
@@ -362,8 +483,9 @@ sf_cursor = sf.cursor()
 print ("connected to snowflake")
 
 # Select all rows from table "t1"
-# If we do this properly, we seelect the max primary key or count the rows and do it in batches of 500 rows.
+# If we do this properly, we select the max primary key or count the rows and do it in batches of 500 rows.
 # In this case, table is small
+# Also, if data is huge your system may run out of memmory if you don't use a loop to select rows. 
 
 m_cursor.execute("select * from t1")
 m_rows = m_cursor.fetchall()
@@ -383,7 +505,7 @@ sf_insert_many = " insert into t1_python (a, ni, i, d, t, v, nc) values (%s, %s,
 sf_cursor.executemany( sf_insert_many, m_rows)
 
 end_time = time.time()
-print ("length of time:", end_time - start_time)
+print ("length of time:", round(end_time - start_time,2), " seconds")
 
 print ("Counting rows in t1_python")
 # count rows in table
@@ -393,14 +515,14 @@ print ("Rows in t1_python: ", sf_cursor.fetchone()[0])
 ```
 
 
-## Execute bash script
+### Execute bash script
 ```
 chmod 755 load_data.sh
 ./load_data.sh
 
 ```
 
-## Expected output
+### Expected output
 
 ```
 connecting to mysql
@@ -408,7 +530,7 @@ connected to mysql
 connecting to snowflake
 connected to snowflake
 Uploading rows
-length of time: 1.1369833946228027
+length of time: 1.13 seconds
 Counting rows in t1_python
 Rows in t1_python:  313
 ```

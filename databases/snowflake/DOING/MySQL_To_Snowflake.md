@@ -12,6 +12,8 @@ _**by Mark Nielsen
 Original Copyright June 2024**_
 
 To convert MySQL data to Snowflake reliably.
+For uploading the data with a file, we will use JSON in order to o convert MySQL data to Snowflake reliably (including nulls).
+When using Python, it takes care of the conversion.
 
 This doc requires
 * A snowflake account
@@ -84,7 +86,7 @@ mysql -e  "source insert_data.sql"
 
 ```
 
-Data should looke like
+Data should look like
 ```
 mysql> select * from t1 limit 5;
 +---+-------+-------+---------------------+---------------------+------------------------------------------+------+
@@ -118,7 +120,7 @@ Solutions for data types.
 * Export to Json and upload
     * Create the tables on Snowflake first. Look at the data types for the fields in MySQL and
     see if Snowflake has an equivalent.
-    * Be aware of Nulls. Make sure Json has null fields.
+    * Be aware of Nulls. That's why json is used. XML could also be used. 
 * Use Python or other language to automatically take care of data type conversion. Tables on Snowflake should be created ahead of time. 
 
 

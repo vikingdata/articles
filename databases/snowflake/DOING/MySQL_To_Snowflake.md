@@ -162,7 +162,7 @@ select
 select ')) from mark1.t1';
 " > make_get_data.sql
 
-
+# Execute the file to create the query to get data. 
 mysql $auth -N -e "source make_get_data.sql" > get_data.sql
 
 # Export data as json using query. 

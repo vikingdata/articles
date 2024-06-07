@@ -15,9 +15,10 @@ To convert MySQL data to Snowflake reliably.
 
 This doc requires
 * A snowflake account
-* snowsql is installed
-* Python and modules installed
-  
+    * snowsql is installed
+    * Python and modules installed
+* A MySQL server
+
 1.  [Links](#links)
 2.  [Create data in MySQL](#c)
 3.  [Issues](#i)
@@ -31,6 +32,9 @@ This doc requires
 * https://www.chaosgenius.io/blog/snowflake-insert-into/
 * https://thinketl.com/how-to-load-and-query-json-data-in-snowflake/
 * https://www.projectpro.io/recipes/load-json-data-from-local-internal-stage-snowflake
+* Python
+    * https://docs.snowflake.com/developer-guide/python-connector/python-connector-example
+    * https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-api
 
 * * *
 
@@ -70,7 +74,7 @@ done >> insert_data.sql
 
 Log into MySQL and then
 ```
-mysql > source insert_data.sql
+mysql -e  source insert_data.sql
 
 ```
 
@@ -118,10 +122,11 @@ Summary of steps
 ## Make the create table file. 
 
 ```
-echo "
 
 # Change the authetication for your mysql account
 export auth=" -u root -proot -h 127.0.0.1 -P 3306 "
+
+echo "
 
 select
    ' create table t1 ('
@@ -177,7 +182,7 @@ mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 ```
 
 ## Connect to snowflake via the Snowsight (web)
-* CLick on "data"
+* Click on "data"
     * Create database "sampledb" if it doesn't exist. 
     * Select database "sampledb"
     * Create schema "public" if it doesn't exist
@@ -185,7 +190,7 @@ mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
 
 ## SETUP STAGE AND STAGE TABLE
 * In SnowSQL
-    * ConNECT "sampledb" database and "public" schema.
+    * Connect to "sampledb" database and "public" schema.
 * In the Snowsight (web)
     * Select Projects
         * Select worksheets
@@ -217,9 +222,10 @@ create or replace table stage_table_t1 (t1_data  variant );
 
 ```
 
-### upload data into staging
+### Upload data into staging
 * For snowsql : "   put file://data.json @stage_t1; "
 * for Snowsight (web) : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
+    * You cannot upload a file by command on the web. You must do it mmanually. 
     * Select data
     * Select load files into a stage
     * Select "Add data"

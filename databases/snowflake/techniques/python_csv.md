@@ -51,7 +51,13 @@ customer_id,name,email,phone,age,balance,premium,join_date
 
 ## Step by Step with Snowsight
 
-## Load into Stage
+TODO : use worksheet
+
+In this section, we will use a worksheet. 
+
+### Load into Stage
+
+TODO: start workspace
 
 ```sql
 create database if not exists TUTORIAL;
@@ -103,6 +109,10 @@ CREATE or REPLACE TABLE mytable USING TEMPLATE (
   )
 );
 ```
+
+#### Select data for verification
+TODO
+
 * * *
 
 # <a name=installpython></a>Install Python connector
@@ -123,8 +133,7 @@ In addition, I had to
 
 
 ## Python Program to match manual load
-
-## This program program roughly follow the steps that was manually run earlier.
+This program roughly follow the steps that was manually run earlier.
 
 
 ```python

@@ -106,14 +106,14 @@ into a final table. In effect, it is a staging table for my purposes.
 Summary of steps
 * with Mysql
     * Create a query which generate a creates table format for snowflake.
-    * Make the create table sql.
+    * Make the crate table sql.
     * Create a data file in json format.
 * In snowflake
     * Create database
     * Create final table
     * For the json file
-       * Create a internal stage (a location of where the json file will be). An internal stage is like a directory or folder of files. 
-       * Load the arbitrary json file to the staging location.
+       * Create a internal stage (a location of where the json file will be).
+       * Load the arbitrary json file to the stagng location.
        * Create a file format which explains how to interpret the json file into a tabular table.
        * Create a staging table to view the data. The table will only have one column, a variant column.
        * Load json from stage into the staging table.
@@ -177,13 +177,13 @@ mysql $auth -N -e "source get_data.sql" | python -m json.tool >  data.json
     * Create schema "public" if it doesn't exist
 
 
-## Setup stage and stage table
+## SETUP STAGE AND STAGE TABLE
 * In SnowSQL
     * Connect to "sampledb" database and "public" schema.
 * In the Snowsight (web)
     * Select Projects
         * Select worksheets
-	    * Select "+" and then "SQL Worksheet"
+	    * Select "+" and then "SQL Workssheet"
             * Make sure you are using "accountadmin" and warehouse "compute_wh". 
 
 * Execute the commands by copy and paste. For the Snowsight (web) interface you must run all or press the arrow to run it.
@@ -214,7 +214,7 @@ create or replace table stage_table_t1 (t1_data  variant );
 ### Upload data into staging
 * For snowsql : "   put file://data.json @stage_t1; "
 * for Snowsight (web) : https://docs.snowflake.com/en/user-guide/data-load-local-file-system-stage-ui#uploading-files-onto-a-stage
-    * You cannot upload a file by command on the web. You must do it manually. 
+    * You cannot upload a file by command on the web. You must do it mmanually. 
     * Select data
     * Select load files into a stage
     * Select "Add data"

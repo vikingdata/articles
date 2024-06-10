@@ -95,6 +95,21 @@ mysql> select * from t1 limit 5;
 <a name=w></a>Web interface
 ----------
 
+* Log into You redhat service
+* Click on create database
+    * Enter sampledb
+* Click on schema
+
+* Create the table. Copy and paste the table from
+```
+create or replace table t1 (
+a int NOT NULL, ni int, i int, d datetime, t timestamp, v varchar(255), nc char(8) NOT NULL
+);
+
+
+```
+
+
 * * *
 <a name=api></a>API interface
 ----------

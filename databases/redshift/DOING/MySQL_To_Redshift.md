@@ -19,18 +19,18 @@ First we will should how to upload a document. Then we will upload data with Pyt
 
 <a name=links></a>Links
 -----
-
+ 
 Connect
-    * https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html#install-odbc-driver-linux	
-        * https://pypi.org/project/pyodbc/
-	* UnixODBC
-	    * See what version Ubuntu installs: sudo apt-get install unixodbc unixodbc-dev
-	        * Mine was the newset version 2.3.10
-	    * If if its older than https://www.unixodbc.org/unixODBC.html then you might want to install manually. 
-    * https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html
-        * https://docs.aws.amazon.com/redshift/latest/mgmt/data-api-access.html
-    * https://docs.aws.amazon.com/cli/latest/reference/redshift/
-        * https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+* https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html#install-odbc-driver-linux	
+    * https://pypi.org/project/pyodbc/
+    * UnixODBC
+        * See what version Ubuntu installs: sudo apt-get install unixodbc unixodbc-dev
+        * Mine was the newset version 2.3.10
+        * If if its older than https://www.unixodbc.org/unixODBC.html then you might want to install manually. 
+* https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html
+    * https://docs.aws.amazon.com/redshift/latest/mgmt/data-api-access.html
+* https://docs.aws.amazon.com/cli/latest/reference/redshift/
+    * https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 
 

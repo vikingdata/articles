@@ -31,8 +31,9 @@ Connect
     * https://docs.aws.amazon.com/redshift/latest/mgmt/data-api-access.html
 * https://docs.aws.amazon.com/cli/latest/reference/redshift/
     * https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-
-
+* Web interface : https://aws.amazon.com/redshift/query-editor-v2/
+    * https://docs.aws.amazon.com/redshift/latest/dg/t_loading-tables-from-s3.html
+    * https://docs.informatica.com/integration-cloud/data-integration-connectors/h2l/0972-configuring-aws-iam-authentication-for-amazon-redshift-and-/configuring-aws-iam-authentication-for-amazon-redshift-and-amazo/create-the-amazon-redshift-role.html
 
 
 * * *
@@ -95,17 +96,74 @@ mysql> select * from t1 limit 5;
 <a name=w></a>Web interface
 ----------
 
-* Log into You redhat service
-* Click on create database
-    * Enter sampledb
-* Click on schema
+The few steps listed here will be needed for other sections.
 
-* Create the table. Copy and paste the table from
+## Setup database
+* Started Amazon Redshift Query Editor
+    * Select "default-workgroup"
+    * Select "create database"
+    * Click "Create Schema"
+        * Select "samepldb" for database and enter "public"
+    * Click on create Table
+        * Select sampldb, public, call the table t1_web
+	* Enter the columns as
 ```
-create or replace table t1 (
-a int NOT NULL, ni int, i int, d datetime, t timestamp, v varchar(255), nc char(8) NOT NULL
-);
+a int NOT NULL
+ni int not null
+i int
+d date
+t timestamp
+v varchar
+nc varchar NOT NULL
 
+```
+
+###The table definition should be
+```
+CREATE TABLE public.t1_web (
+    a integer NOT NULL ENCODE az64,
+    ni integer NOT NULL ENCODE az64,
+    i integer ENCODE az64,
+    d date ENCODE az64,
+    t timestamp without time zone ENCODE az64,
+    v character varying(256) ENCODE lzo,
+    nc character varying(256) NOT NULL ENCODE lzo
+) DISTSTYLE AUTO;
+```
+You can also enter the above in a worksheet on database sampledb and schema public and then click "run".
+
+## Create a cluster and role
+   * When creating th cluster, select also to create the role for S3. 
+   * Copy its arn
+
+## Create a staging area to upload the json file.
+* Sign up for free S3. There are limits if you exceed that you will have to pay for, but for testing purposes, this will be unlikely. 
+* Once in S3, create a bucket.
+* select thje bucket
+* Click "upload"
+    * Click add files
+        * select data.json
+    * click Upload
+* Select the file
+   * copy the S3 URI.
+   * copy the arn, Amazon Resource Name (ARN
+
+
+## In the worksheet
+    * Create a staging table
+    * Load data.json from the A3 bucket into the staging table
+    * Create a link between the file an the staging table
+    * Load the staging table into the final table
+```
+create temp table t1_web_temp (like t1_web);
+
+-- change S3 URI and ARN
+copy t1_web_temp
+from 's3://mybucket/data.json' 
+iam_role 'arn:aws:iam::994334653999:role/s3                                  ';
+
+-- now select table
+Select * from t1_web_temp;
 
 ```
 

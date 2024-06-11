@@ -138,3 +138,7 @@ monitoring -- with mysql, postghesql, snowflake
 	telegraph -- used with promethesus
 
 grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 10 minutes to reduce traffic -- unless server is in the same domain AWS)
+
+
+perconba tools
+	 pmm, disable table stats. limit connctions. disable settings, 

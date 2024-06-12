@@ -46,7 +46,8 @@ select trigger_schema, trigger_name
 ```
   # pre 8.0
   # needs testing
-mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases --master-data=1 --dump-slave=2 --master-data=2 \
+mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
+--master-data=1 --dump-slave=2 --master-data=2 \
    | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
 
 

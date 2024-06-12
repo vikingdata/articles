@@ -141,4 +141,25 @@ grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 1
 
 
 perconba tools
-	 pmm, disable table stats. limit connctions. disable settings, 
+	 pmm, disable table stats. limit connctions. disable settings,
+	 1. too many connections : ALTER USER pmm@'%' WITH MAX_USER_CONNECTIONS 10;
+	 2. can it pull? https://docs.percona.com/percona-monitoring-and-management/details/personal_data_handling.html
+
+
+
+explain these questions
+  max instance size you have used.
+  explain your migration stratergy on merging two databses.
+  did you use AWS DMS and why explain
+  what is use of Amazon redhshift .did you use in project ?explain .what is key difference between amazon redshift and other databases (mysql aurora) 
+  how to update data bases column in aurora db when you have huge data 1 TB .
+  what is your disaster recovery stratergy explain.
+  can you explain how you created instance of aws aurora .explain step by step process .
+  what are the major challenges you faced in your project .
+  what is the max size of data you migrated.
+  SQL concepts - how did you fix performace issue in query
+
+mysql
+	mysqldump, nob-blcokingm rtgigger and stored proedure, and gzip
+linux
+	list services

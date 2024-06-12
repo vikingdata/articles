@@ -19,7 +19,9 @@ title: Linux general tips
 6. [CheatSheets](#c)
 7. [ssh keys](#s)
 8. [Disk Commands](#d)
-0. [Monitor Commands](#m)
+10. [Monitor Commands](#m)
+11. [List Services](#services)
+
 * * *
 
 <a name=links></a>Links
@@ -261,6 +263,7 @@ for l in `$find_files 2>/dev/null  |sort -nr `; do
     f=`echo $l | cut -d '_' -f 2`
     sizeM=`echo "scale=2; $size/1000000" | bc `
     echo $"$sizeM""M $size $f"
+
 done
 ````
 
@@ -311,3 +314,13 @@ For all these examples, it will gather stats for 2 seconds 5 times.
 | disk | sar -d 2 5 3 |
 | memory | sar -r 2 5 |
 | cpu | sar -u 2 5 |
+
+
+* * *
+<a name=services></a>List services
+---------------
+* https://bitlaunch.io/blog/how-to-list-services-in-linux-using-the-command-line/
+* ls /lib/systemd/system/ | grep ssh
+
+
+

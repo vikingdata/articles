@@ -50,6 +50,18 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
 --master-data=1 --dump-slave=2 --master-data=2 \
    | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
 
+```
 
+* to make a list of databases to ignore, select databases you want and add --databases to the option. Or use mysqlpump which has an exclude option.
+```
+
+SELECT group_concat( schema_name SEPARATOR ',')
+  FROM information_schema.schemata
+  where
+     schema_name not in ('sys', 'performance_schema', 'information_schema', 'mysql_innodb_cluster_metadata')
+     and  schema_name not like 'Ignore_pattern1%'
+     and schema_name not like '%Ignore_pattern2%';
 
 ```
+
+

@@ -22,6 +22,8 @@ TODO: simple performance_shema queries, information_schema queries
 4. [No index](#noindex)
 5. [Busiest tables](#busy)
 6. [Unused indexes](#unused)
+7. [List stored procedures, functions, triggers](#list1)
+
 * * *
 
 <a name=files></a>files
@@ -249,3 +251,29 @@ ORDER BY object_schema, object_name, index_name;
 
 <a name=tc></a>Table cache.
 -----
+
+
+* * *
+
+<a name=list1></a>List stored procedures, functions, triggers
+-----
+
+* stored procedures and functions. amd triggers
+```
+SELECT  routine_schema,  
+        routine_name,  
+        routine_type 
+FROM information_schema.routines 
+WHERE routine_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema') 
+ORDER BY routine_name;
+
+  # just trigger name
+select trigger_schema, trigger_name
+  from information_schema.triggers
+  WHERE trigger_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
+
+  # triggers with code
+select trigger_schema, trigger_name, action_statement
+  from information_schema.triggers
+  WHERE trigger_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
+```

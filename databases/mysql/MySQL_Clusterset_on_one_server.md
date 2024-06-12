@@ -16,7 +16,7 @@ Original Copyright May 2024
 NOTE: Has been tested, but need to add router and ReplicaSet, and test again
 
 1. [Links](#links)
-2. {Notes](#n)
+2. [Notes](#n) x
 3. [Install Percona and mysqlsh](#i)
 4. [Setup directories and files for MySQL ClusterSet](#s)
 5. [Start all instances](#start)

@@ -29,3 +29,10 @@ Original Copyright March 2024**_
 -----
 NOTE: if you are using Percona MySQL, turn off extended Percona slow query.
     * log_slow_verbosity=off
+
+
+
+NOTE:
+* Install oracle community version
+* edit script to work with percona
+* Make Python script

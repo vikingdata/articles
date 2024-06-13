@@ -159,7 +159,7 @@ explain these questions
   what is the max size of data you migrated.
   SQL concepts - how did you fix performace issue in query
 
-mysql
+DONE mysql
 	mysqldump, nob-blcokingm rtgigger and stored proedure, and gzip
 DONE linux
 	list services

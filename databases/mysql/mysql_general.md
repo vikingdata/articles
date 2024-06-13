@@ -65,3 +65,48 @@ SELECT group_concat( schema_name SEPARATOR ',')
 ```
 
 
+* * *
+
+<a name=replication></a>Replication non-gtid
+-----
+
+## Switch Slave from Master to replicate off another slave.
+
+Basically, a Master has two slaves, slave 1 and 2. We want to make Slave 2 replicate from Slave 1. Turn Slave 1 into a slave relay.
+
+
+We make some assumptions
+* Each server has a unique server-id
+* Each server has bin-log turned on.
+* Replication is setup between the Master and two Slaves.
+* We can stop replication temporarily without applications being affected.
+* We assume the accounts for replication are the same on all servers.
+
+Steps.
+* Stop slave on Slave 2: stop slave
+* Stop slave on slave 1: stop slave
+* Get Replication position on Slave 1
+    * Show slave status : and record two fields
+       * Exec_Master_Log_Pos
+       * Master_Log_File
+* Replicate on Slave 2 to the position on Slave 1
+```
+START SLAVE UNTIL MASTER_LOG_FILE='><Master_Log_File of slave 1>', MASTER_LOG_POS=<Exec_Master_Log_Pos of slave 1>;
+### Keep doing show slave status until it stops. 
+
+```
+* Check Show slave status on slave1 and slave2 are the same for Master_Log_File and Exec_Master_Log_Pos.
+* Change replication on Slave 2 to Slave 1
+    * You will need to execute "show master logs" on slave 1. Note the last line. 
+        * Name of the file in first column
+	* Position in 2nd column. 
+    * Execute on Slave 2
+```
+change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of slave 1>', MASTER_LOG_POS=<bilog position of slave 1>;
+```
+* Start slave on slave 2 : start slave
+* Check slave 2 with "show slave status\G"
+* start slave on slave 1 : start slave
+* Check replication on slave 1 amd slave 2 : show slave status
+    
+

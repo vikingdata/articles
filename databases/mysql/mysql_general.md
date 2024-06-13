@@ -42,15 +42,26 @@ select trigger_schema, trigger_name
   WHERE trigger_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
 ```
 
-* mysqldump command,, with triggers, stored procedure, and replication position, everything
+* mysqldump pre-8.0 command, with triggers, stored procedure, and replication position, everything
 ```
   # pre 8.0
-  # needs testing
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
 --dump-slave=2 --master-data=2 \
    | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
 
 ```
+
+* mysqldump 8.0 command, with triggers, stored procedure, and replication position, everything
+```
+  # 8.0.26
+  # needs testing
+mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
+--dump-replica=2 --source_data=2 \
+   | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
+
+```
+
+
 
 * to make a list of databases to ignore, select databases you want and add --databases to the option. Or use mysqlpump which has an exclude option.
 ```

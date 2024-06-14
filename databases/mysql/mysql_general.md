@@ -20,6 +20,7 @@ Not including
 
 1. [mysqldump](#mysqldump)
 2. [Replication non-gtid ](#replication)
+    * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail q gzip file](#tailgzip)
 
 
@@ -83,7 +84,8 @@ SELECT group_concat( schema_name SEPARATOR ',')
 <a name=replication></a>Replication non-gtid
 -----
 
-### Switch Slave from Master to replicate off another slave.
+<a name=switchSlave></a>
+### Non-gtid. Switch Slave from Master to replicate off another slave.
 
 Basically, a Master has two slaves, slave 1 and 2. We want to make Slave 2 replicate from Slave 1. Turn Slave 1 into a slave relay.
 

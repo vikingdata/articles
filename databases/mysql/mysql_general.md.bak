@@ -120,7 +120,7 @@ change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of sl
 * Start slave on slave 2 : start slave
 * Check slave 2 with "show slave status\G"
 * start slave on slave 1 : start slave
-* Check replication on slave 1 and slave 2 : show slave status
+* Check replication on slave 1 amd slave 2 : show slave status
     
 
 * * *

@@ -15,11 +15,13 @@ Original Copyright June 2924**_
 This article will grow over time. 
 
 Not including
-* Info queries
-* MySQL variables
+* [Info queries](info_queries.md)
+* [MySQL variables](info_queries.md)
 
 1. [mysqldump](#mysqldump)
 2. [Replication non-gtid ](#replication)
+3. [tail q gzip file](#tailgzip)
+
 
 * * *
 
@@ -121,3 +123,33 @@ change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of sl
 * Check replication on slave 1 amd slave 2 : show slave status
     
 
+* * *
+<a name=tailgzip></a>Tail a gzipped file
+-----
+
+Assume a file is called File.gz
+
+### Long way
+This takes a long time since it has to unzip the entire file before doing tail.
+
+```
+zcat FILE.gz | tail -n 5
+
+  ## or
+gunzip -c FILE.gz | tail -n 5
+
+```
+
+### Faster way
+A faster way is to NOT decompress the entire file.
+For more information: https://github.com/circulosmeos/gztool
+
+```
+gztool -t FILE.gz | tail -n 5
+
+```
+
+### Or leave file uncompressed
+```
+tail -n 5 FILE.sql
+```

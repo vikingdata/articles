@@ -22,7 +22,7 @@ Not including
 2. [Replication non-gtid ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail q gzip file](#tailgzip)
-
+4. (Percona Xtrabackup](#p]
 
 * * *
 
@@ -154,4 +154,39 @@ gztool -t FILE.gz | tail -n 5
 ### Or leave file uncompressed
 ```
 tail -n 5 FILE.sql
+```
+
+* * *
+
+<a name=p></a>Percona xtrabackup
+-----
+
+
+* https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html#prepare-the-backup
+
+
+```
+
+  # make backups
+BACKUP_DIR=/data/backups
+
+innobackupex $BACKUP_DIR
+  # prepare backup
+
+innobackupex --use-memory=4G --apply-log $BAKPU_DIR
+
+
+  # Trasnfer to other computer
+
+
+  # Make direcories
+
+  # Copy your my.cnf
+
+  # Restore backup
+
+
+  # Compare and copy back the original my.cnf
+
+
 ```

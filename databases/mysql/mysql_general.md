@@ -162,31 +162,54 @@ tail -n 5 FILE.sql
 -----
 
 
-* https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html#prepare-the-backup
-
+* https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html
 
 ```
 
   # make backups
 BACKUP_DIR=/data/backups
+PASSWORD="bad_passsword"
 
-innobackupex $BACKUP_DIR
+sudo innobackupex $BACKUP_DIR -u root -p$PASSWORD
   # prepare backup
 
-innobackupex --use-memory=4G --apply-log $BAKPU_DIR
+sudo innobackupex --use-memory=4G --apply-log $BACKUP_DIR
 
 
-  # Trasnfer to other computer
+  # Transfer to other computer
+  # On the remote side, make sure the username has right to write to /data/backups
+  # If not on REMOTE server: sudo  chown -R username /data/backups
+
+sudo rsync -av $BACKUP_DIR username@otherserver:/data/backups
+
+  # Log into REMOTE server
+ssh username@remote_server
+
+```
+### The rest of the commands are on the REMOTE server, not the source server. 
+
+````
+  # Stop mysql and empty out directories
+sudo  service mysqld stop
+ # Rememeber to empty out the mysql directories
 
 
-  # Make direcories
+  # Copy back the data
+  # Change the name of the dated directory to your date. 
+sudo innobackupex --copy-back /data/backups/2010-03-13_02-42-44/
 
-  # Copy your my.cnf
+  # Change onwership, let's assume the data is under /data/mysql
+sudo chown -R mysql.mysql /data/mysql
 
-  # Restore backup
 
+  # Start mysql, look at logfile, see if you can log in
+sudo service mysqld start
 
-  # Compare and copy back the original my.cnf
+  # I assume the logfile is /var/log/mysql/error.log
+sudo tail -n 10 /var/log/mysql/error.log
+
+  # enter the password when asked, and change USER to the loginname you log into mysql as
+mysql -u USER -p -e "show databases"
 
 
 ```

@@ -165,7 +165,7 @@ tail -n 5 FILE.sql
 * https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html
 
 
-### On both source and remote servers, checl mysqld version and innobackupex version.
+### On both source and remote servers, check mysqld version and innobackupex version.
 
 The versions should be the same or close. You may have to check documentation if they are compatible. The remote server should have versions that are NOT older.
 

@@ -15,8 +15,11 @@ Original Copyright June 2924**_
 This article will grow over time. 
 
 Not including
+
 * [Info queries](info_queries.md)
 * [MySQL variables](MySQL_variables.md)
+
+Index
 
 1. [mysqldump](#mysqldump)
 2. [Replication non-gtid ](#replication)

@@ -21,8 +21,8 @@ Not including
 1. [mysqldump](#mysqldump)
 2. [Replication non-gtid ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
-3. [tail q gzip file](#tailgzip)
-4. [Percona Xtrabackup](#p) ....
+3. [tail a gzip file](#tailgzip)
+4. [Percona Xtrabackup](#p) 
 
 * * *
 

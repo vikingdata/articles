@@ -243,7 +243,7 @@ TODO: make key, copy, login
 
 ssh-copy-id -i ~/.ssh/mykey user@host
 
-```
+
 
 * * *
 <a name=rrm></a>Restore and replication mistmatch

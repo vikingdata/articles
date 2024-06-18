@@ -248,9 +248,19 @@ ssh-copy-id -i ~/.ssh/mykey user@host
 * * *
 <a name=rr></a>Restore and replication mistmatch
 -----
-`
+* https://www.percona.com/blog/using-mysql-8-persisted-system-variables/
+
+When there is a mismatch in replication, check these things. `
 
 These checks should be the same for replicating servers
+* Check my.cnf on both servers
+* Check persistent variables on both servers.
+    * query:
+```select v.VARIABLE_NAME,g.VARIABLE_VALUE current_value,p.VARIABLE_VALUE as persist_value,VARIABLE_SOURCE,VARIABLE_PATH
+   from performance_schema.variables_info v
+     JOIN performance_schema.persisted_variables p USING(VARIABLE_NAME)
+     JOIN performance_schema.global_variables g USING(VARIABLE_NAME)\G
+```
 * Global variables
     * default_collation_for_utff8m4
 

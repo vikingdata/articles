@@ -27,7 +27,7 @@ Index
 3. [tail a gzip file](#tailgzip)
 4. [Percona Xtrabackup](#p) 
 5. [Copy ssh keys](#ssh)
-6. [Restore and replication mistmatch](#rr)
+6. [Restore and replication mistmatch](#rrm)
 
 * * *
 
@@ -246,7 +246,7 @@ ssh-copy-id -i ~/.ssh/mykey user@host
 ```
 
 * * *
-<a name=rr></a>Restore and replication mistmatch
+<a name=rrm></a>Restore and replication mistmatch
 -----
 * https://www.percona.com/blog/using-mysql-8-persisted-system-variables/
 

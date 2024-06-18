@@ -206,7 +206,7 @@ ssh username@remote_server
 ```
 ### The rest of the commands are on the REMOTE server, not the source server. 
 
-````
+```
   # Stop mysql and empty out directories
 sudo  service mysqld stop
  # Rememeber to empty out the mysql directories

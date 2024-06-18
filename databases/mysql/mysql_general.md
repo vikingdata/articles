@@ -26,6 +26,8 @@ Index
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail a gzip file](#tailgzip)
 4. [Percona Xtrabackup](#p) 
+5. [Copy ssh keys](#ssh)
+6. [Restore and replication mistmatch](#rr)
 
 * * *
 
@@ -229,3 +231,70 @@ mysql -u USER -p -e "show databases"
 
 
 ```
+
+* * *
+<a name=ssh></a>Copy ssh keys 
+-----
+
+
+* https://www.ssh.com/academy/ssh/copy-id
+
+TODO: make key, copy, login
+
+ssh-copy-id -i ~/.ssh/mykey user@host
+
+```
+
+* * *
+<a name=rr></a>Restore and replication mistmatch
+-----
+`
+
+These checks should be the same for replicating servers
+* Global variables
+    * default_collation_for_utff8m4
+
+* character
+
+```
+mysql>  show global variables like '%character%';
++-------------------------------+--------------------+
+| Variable_name                 | Value              |
++-------------------------------+--------------------+
+| character_set_client     | utf8mb4                             |
+| character_set_connection | utf8mb4                             |
+| character_set_database   | utf8mb4                             |
+| character_set_filesystem | binary                              |
+| character_set_results    | utf8mb4                             |
+| character_set_server     | utf8mb4                             |
+| character_set_system     | utf8mb3                             |
+| character_sets_dir       | /usr/share/percona-server/charsets/
+
+```
+
+* collation
+```
+mysql>  show global variables like '%coll%';
++-------------------------------+--------------------+
+| Variable_name                 | Value              |
++-------------------------------+--------------------+
+| collation_connection          | utf8mb4_0900_ai_ci |
+| collation_database            | utf8mb4_0900_ai_ci |
+| collation_server              | utf8mb4_0900_ai_ci |
+| default_collation_for_utf8mb4 | utf8mb4_0900_ai_ci |
++-------------------------------+--------------------+
+```
+ 
+
+ 
+* strict
+```
+mysql>  show global variables like '%stric%';
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| innodb_strict_mode | ON    |
++--------------------+-------+
+1 row in set (0.00 sec)
+```
+* Check create database and create table and diff them from the master to the slave.

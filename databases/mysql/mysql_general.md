@@ -77,12 +77,12 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
 ```
 
 ### Dump all but mysql database or accounts <a name=data></a>
-* You could use mysqlpump pr pt-grants
+* You could use mysqlpump or pt-grants to get just the accounts
     * mysqlpump : ```mysqlpump -uUSER -p --exclude-databases=% --add-drop-user --users > accounts.sql" ```
     * Pt-grants : ``` pt-show-grants -uUSER --ask-pass --drop > accounts.sql```
 
 * Get databases except mysql
-    * Mysqlpump : ``` mysqlpump --user=user --password --exclude-databases=mysql --result-file=data.sql ```
+    * Mysqlpump : ``` mysqlpump --user=user --password --exclude-databases=mysql --events --routines --result-file=data.sql ```
     * With mysqldump : 
 
 

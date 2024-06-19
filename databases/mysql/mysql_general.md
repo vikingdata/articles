@@ -22,6 +22,7 @@ Not including
 Index
 
 1. [mysqldump](#mysqldump)
+    * [List events, triggers, stored procedures](#stuff)
     * [all databases](#all)
     * [ all but accounts ](#data)
 2. [Replication non-gtid ](#replication)
@@ -36,11 +37,7 @@ Index
 <a name=mysqldump></a>MySQL Dump
 -----
 
-### Dump all databases <a name=all></a>
-* NOTE: You could also add
-    * Pre.80 : --dump-slave=2
-    * 8.0 : --dump-replica=2
-
+### List events, triggers, stored procedures <a name=stuff></a>
 * See if you have triggers or stored procedures
    * Unless you dump mysql and all-databases, you can ignore dumping triggers and stored procedures if you find none
 ```
@@ -48,14 +45,19 @@ SELECT  routine_schema,
         routine_name,  
         routine_type 
 FROM information_schema.routines 
-WHERE routine_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema') 
+WHERE routine_schema not in ('sys', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema') 
 ORDER BY routine_name;
 
   # just trigger name
 select trigger_schema, trigger_name
   from information_schema.triggers
-  WHERE trigger_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
+  WHERE trigger_schema not in ('sys', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
 ```
+
+### Dump all databases <a name=all></a>
+* NOTE: You could also add
+    * Pre.80 : --dump-slave=2
+    * 8.0 : --dump-replica=2
 
 * mysqldump pre-8.0 command, with triggers, stored procedure, and replication position, everything
 ```

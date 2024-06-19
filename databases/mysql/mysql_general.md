@@ -22,6 +22,8 @@ Not including
 Index
 
 1. [mysqldump](#mysqldump)
+    * [all databases]](#all)
+    * [ all but accounts ](#data)
 2. [Replication non-gtid ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail a gzip file](#tailgzip)
@@ -33,6 +35,8 @@ Index
 
 <a name=mysqldump></a>MySQL Dump
 -----
+
+### Dump all databases
 
 * See if you have triggers or stored procedures
    * Unless you dump mysql and all-databases, you can ignore dumping triggers and stored procedures if you find none
@@ -69,17 +73,36 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
 
 ```
 
+### Dump all but mysql database or accounts
+* You could use mysqlpump pr pt-grants
+    * mysqlpump : ```mysqlpump -uUSER -p --exclude-databases=% --add-drop-user --users > accounts.sql" ```
+    * Pt-grants : ``` pt-show-grants -uUSER --ask-pass --drop > accounts.sql```
+
+* Get databases except mysql
+    * Mysqlpump : ``` mysqlpump --user=user --password --exclude-databases=mysql --result-file=data.sql ```
+    * With mysqldump : 
 
 
 * to make a list of databases to ignore, select databases you want and add --databases to the option. Or use mysqlpump which has an exclude option.
 ```
 
+echo "
 SELECT group_concat( schema_name SEPARATOR ',')
   FROM information_schema.schemata
   where
      schema_name not in ('sys', 'performance_schema', 'information_schema', 'mysql_innodb_cluster_metadata')
      and  schema_name not like 'Ignore_pattern1%'
      and schema_name not like '%Ignore_pattern2%';
+" > select_database.sql
+
+echo "DATABASE_LIST='"                            >  dump_variables.sh
+mysql -u root -p -e "source select_database.sql" >>  dump_variables.sh 
+echo "'"                                         >>  dump_variables.sh
+
+source dump_variables.sh
+mysqldump -u root -p --single-transaction --events --triggers --routines --opt --dump-replica=2 --source_data=2 \
+ --databases $DATABASE_LIST | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
+
 
 ```
 
@@ -308,3 +331,5 @@ mysql>  show global variables like '%stric%';
 1 row in set (0.00 sec)
 ```
 * Check create database and create table and diff them from the master to the slave.
+
+* If all else fails, take a percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same. 

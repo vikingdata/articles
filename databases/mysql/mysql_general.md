@@ -61,7 +61,7 @@ select trigger_schema, trigger_name
 ```
   # pre 8.0
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
---master-data=2 | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
+--master-data=2 | gzip > mysqlbackup.sql.gz 
 
 ```
 
@@ -70,7 +70,7 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
   # 8.0.26
   # needs testing
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
---source_data=2    | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
+--source_data=2    | gzip > mysqlbackup.sql.gz
 
 ```
 
@@ -95,14 +95,24 @@ SELECT group_concat( schema_name SEPARATOR ' ')
      and schema_name not in ('mysql')
      and schema_name not like '%Ignore_pattern2%';
 " > select_database.sql
-  # select database.sql should looke like : DATABASE_LIST='mark1,temp1,temp2'
+  # select database.sql should looke like : DATABASE_LIST='mark1 temp1 temp2'
 
 echo "DATABASE_LIST='"` mysql -N -u root -p -e "source select_database.sql" `"'"   >>  dump_variables.sh
 
 source dump_variables.sh
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --source_data=2 \
- --databases $DATABASE_LIST  > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql
+ --databases $DATABASE_LIST  > mysqlbackup.sql
 
+
+```
+
+   * Verify databases
+```
+  # Uncompressed
+grep '^CREATE DATABASE' mysqlbackup.sql
+
+  # compressed
+gunzip -c mysqlbackup.sql | grep '^CREATE DATABASE"
 
 ```
 

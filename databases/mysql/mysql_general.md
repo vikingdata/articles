@@ -36,7 +36,7 @@ Index
 <a name=mysqldump></a>MySQL Dump
 -----
 
-### Dump all databases
+### Dump all databases <a name=all></a>
 
 * See if you have triggers or stored procedures
    * Unless you dump mysql and all-databases, you can ignore dumping triggers and stored procedures if you find none
@@ -73,7 +73,7 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
 
 ```
 
-### Dump all but mysql database or accounts
+### Dump all but mysql database or accounts <a name=data></a>
 * You could use mysqlpump pr pt-grants
     * mysqlpump : ```mysqlpump -uUSER -p --exclude-databases=% --add-drop-user --users > accounts.sql" ```
     * Pt-grants : ``` pt-show-grants -uUSER --ask-pass --drop > accounts.sql```

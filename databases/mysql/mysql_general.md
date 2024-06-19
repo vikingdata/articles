@@ -37,6 +37,9 @@ Index
 -----
 
 ### Dump all databases <a name=all></a>
+* NOTE: You could also add
+    * Pre.80 : --dump-slave=2
+    * 8.0 : --dump-replica=2
 
 * See if you have triggers or stored procedures
    * Unless you dump mysql and all-databases, you can ignore dumping triggers and stored procedures if you find none
@@ -58,8 +61,7 @@ select trigger_schema, trigger_name
 ```
   # pre 8.0
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
---dump-slave=2 --master-data=2 \
-   | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
+--master-data=2 | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz 
 
 ```
 
@@ -68,8 +70,7 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
   # 8.0.26
   # needs testing
 mysqldump -u root -p --single-transaction --events --triggers --routines --opt --all-databases \
---dump-replica=2 --source_data=2 \
-   | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
+--source_data=2    | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
 
 ```
 
@@ -87,21 +88,20 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
 ```
 
 echo "
-SELECT group_concat( schema_name SEPARATOR ',')
+SELECT group_concat( schema_name SEPARATOR ' ')
   FROM information_schema.schemata
   where
      schema_name     not in ('sys', 'performance_schema', 'information_schema', 'mysql_innodb_cluster_metadata')
      and schema_name not in ('mysql')
      and schema_name not like '%Ignore_pattern2%';
 " > select_database.sql
+  # select database.sql should looke like : DATABASE_LIST='mark1,temp1,temp2'
 
-echo "DATABASE_LIST='"                            >  dump_variables.sh
-mysql -u root -p -e "source select_database.sql" >>  dump_variables.sh 
-echo "'"                                         >>  dump_variables.sh
+echo "DATABASE_LIST='"` mysql -N -u root -p -e "source select_database.sql" `"'"   >>  dump_variables.sh
 
 source dump_variables.sh
-mysqldump -u root -p --single-transaction --events --triggers --routines --opt --dump-replica=2 --source_data=2 \
- --databases $DATABASE_LIST | gzip > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql.gz
+mysqldump -u root -p --single-transaction --events --triggers --routines --opt --source_data=2 \
+ --databases $DATABASE_LIST  > mysqlbackup_`hostname`_`date +%Y%m%d_%H%M%S`.sql
 
 
 ```

@@ -10,7 +10,7 @@ MySQL General
 ==============================
 
 _**by Mark Nielsen
-Original Copyright June 2924**_
+Original Copyright June 2024**_
 
 This article will grow over time. 
 
@@ -117,6 +117,8 @@ grep '^CREATE DATABASE' mysqlbackup.sql
 gunzip -c mysqlbackup.sql | grep '^CREATE DATABASE"
 
 ```
+
+TODO: other checks : count events, triggers, stored procedures, no of DATABAES, no of tables
 
 
 * * *

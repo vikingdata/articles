@@ -22,7 +22,7 @@ Not including
 Index
 
 1. [mysqldump](#mysqldump)
-    * [all databases]](#all)
+    * [all databases](#all)
     * [ all but accounts ](#data)
 2. [Replication non-gtid ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
@@ -90,8 +90,8 @@ echo "
 SELECT group_concat( schema_name SEPARATOR ',')
   FROM information_schema.schemata
   where
-     schema_name not in ('sys', 'performance_schema', 'information_schema', 'mysql_innodb_cluster_metadata')
-     and  schema_name not like 'Ignore_pattern1%'
+     schema_name     not in ('sys', 'performance_schema', 'information_schema', 'mysql_innodb_cluster_metadata')
+     and schema_name not in ('mysql)
      and schema_name not like '%Ignore_pattern2%';
 " > select_database.sql
 

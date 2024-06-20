@@ -25,6 +25,7 @@ Index
     * [List events, triggers, stored procedures](#stuff)
     * [all databases](#all)
     * [ all but accounts ](#data)
+    * [Problems woth mysqlpump](#pumpproblems)
 2. [Replication non-gtid ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail a gzip file](#tailgzip)
@@ -82,7 +83,7 @@ mysqldump -u root -p --single-transaction --events --triggers --routines --opt -
     * Pt-grants : ``` pt-show-grants -uUSER --ask-pass --drop > accounts.sql```
 
 * Get databases except mysql
-    * Mysqlpump : ``` mysqlpump --user=user --password --exclude-databases=mysql --events --routines --result-file=data.sql ```
+    * Mysqlpump : ``` mysqlpump --user=user --password --exclude-databases=mysql --events --routines --result-file=data.sql --add-drop-ddatabase --add-drop-table ```
     * With mysqldump : 
 
 
@@ -102,7 +103,8 @@ SELECT group_concat( schema_name SEPARATOR ' ')
 echo "DATABASE_LIST='"` mysql -N -u root -p -e "source select_database.sql" `"'"   >>  dump_variables.sh
 
 source dump_variables.sh
-mysqldump -u root -p --single-transaction --events --triggers --routines --opt --source_data=2 \
+  # For 8.0.25 and later, replace --master-data with --source-data
+mysqldump -u root -p --single-transaction --events --triggers --routines --opt --master_data=2 \
  --databases $DATABASE_LIST  > mysqlbackup.sql
 
 
@@ -117,6 +119,10 @@ grep '^CREATE DATABASE' mysqlbackup.sql
 gunzip -c mysqlbackup.sql | grep '^CREATE DATABASE"
 
 ```
+
+### Problems woth mysqlpump <a name=pumpproblems></a>
+* If mysqlpump gives a weird message like it aborted, use mysqldump. MysqlPump is still good for getting accounts. 
+
 
 TODO: other checks : count events, triggers, stored procedures, no of DATABAES, no of tables
 

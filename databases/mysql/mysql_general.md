@@ -223,8 +223,9 @@ innobackup --version
 
 ```
 
+### Method 1
 
-### Make initial backup
+#### Make initial backup
 ```
 
   # make backups
@@ -247,23 +248,57 @@ sudo rsync -av $BACKUP_DIR username@otherserver:/data/backups
 ssh username@remote_server
 
 ```
-### The rest of the commands are on the REMOTE server, not the source server. 
+#### The rest of the commands are on the REMOTE server, not the source server. 
 
 ```
   # Stop mysql and empty out directories
 sudo  service mysqld stop
- # Rememeber to empty out the mysql directories
-
+  # Rememeber to empty out the mysql directories
+  # Remove ALL Mysql data files: idbdata, binlogs, relay logs, logfiles, and all data files (all databases)
 
   # Copy back the data
   # Change the name of the dated directory to your date. 
 sudo innobackupex --copy-back /data/backups/2010-03-13_02-42-44/
 
+```
+
+### Method 2 -- similar to method one
+
+#### On source server
+
+```
+   # You may need the BACKUP priviledge on root, i had too
+   # If xtrbackup fails and you get backup priv message, in mysql
+# mysql > grant backup_admin on *.* to root@localhost;
+
+
+BACKUP_DIR=/data/backup
+
+   # Enter password if necessayr
+sudo xtrabackup --target-dir $BACKUP_DIR -u root -p --backup 2>&1 | tee backup.log
+sudo xtrabackup --target-dir $BACKUP_DIR --prepare 2>&1 | tail prepare.log
+```
+
+### On target server
+* Transfer files to target server.
+    * Use directory /data/restore for example
+* Stop Mysqld : service mysql stop
+* Remove ALL Mysql data files: idbdata, binlogs, relay logs, logfiles, and all data files (all databases)
+* Copy files back and restore
+```
+sudo xtrabackup --target-dir=/data/restore --copy-back 2>&1 | tee copy-back.log
+
+```
+
+### For method 1 or 2
+
+```
+
   # Change onwership, let's assume the data is under /data/mysql
 sudo chown -R mysql.mysql /data/mysql
 
 
-  # Start mysql, look at logfile, see if you can log in
+# Start mysql, look at logfile, see if you can log in
 sudo service mysqld start
 
   # I assume the logfile is /var/log/mysql/error.log
@@ -352,4 +387,7 @@ mysql>  show global variables like '%stric%';
 ```
 * Check create database and create table and diff them from the master to the slave.
 
-* If all else fails, take a percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same. 
+* If all else fails, take a percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same.
+
+
+

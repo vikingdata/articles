@@ -211,7 +211,9 @@ tail -n 5 FILE.sql
 
 
 * https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html
-
+    * innobackupex command
+* https://docs.percona.com/percona-xtrabackup/8.0/backup-overview.html#backup-types
+    * xtrabackup command
 
 ### On both source and remote servers, check mysqld version and innobackupex version.
 

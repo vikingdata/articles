@@ -169,6 +169,19 @@ echo "My passphrase is $mypassphrase"
 
 ```
 
+To copy the ssh key to other host
+
+* https://www.ssh.com/academy/ssh/copy-id
+
+```
+ssh-copy-id -i ~/.ssh/mykey user@host
+
+  # test with login
+
+ssh  user@host "echo 'ssh works'"
+
+```
+
 * * *
 <a name=d></a>Disk  commands
 -----

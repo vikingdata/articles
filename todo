@@ -163,3 +163,7 @@ DONE mysql
 	mysqldump, nob-blcokingm rtgigger and stored proedure, and gzip
 DONE linux
 	list services
+
+piplne ansible got rundeck, git runner, etc
+       git brach and merge, with request and approval for code
+       kubernetes, orchestrator

@@ -26,11 +26,10 @@ Index
     * [all databases](#all)
     * [ all but accounts ](#data)
     * [Problems woth mysqlpump](#pumpproblems)
-2. [Replication non-gtid ](#replication)
+2. [Replication  ](#replication)
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
 3. [tail a gzip file](#tailgzip)
 4. [Percona Xtrabackup](#p) 
-5. [Copy ssh keys](#ssh)
 6. [Restore and replication mistmatch](#rrm)
 
 * * *
@@ -129,8 +128,30 @@ TODO: other checks : count events, triggers, stored procedures, no of DATABAES, 
 
 * * *
 
-<a name=replication></a>Replication non-gtid
+<a name=replication></a>Replication 
 -----
+
+### GTID, setting up replication from using Percona Xtrabackup
+* RPM LOCATION: https://ftpmirror.your.org/pub/percona/percona/yum/release/7/os/x86_64/
+* https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
+* https://docs.percona.com/percona-xtrabackup/8.0/create-gtid-replica.html
+* We asume "GIT_MODE" is ON when the backup was performed. Also, GTID_CONSIStENCY should be ON.  
+
+* Both systems : show global variables like 'gtid%';
+    * gtid_executed and gtid_purged should be on both.
+        * gtid_executed on slave should be later than gtid_purged on source (master)
+    * Note gtid_mode. It should be set to ON on both.
+* Change master on SLAVE just to the host;
+``` change master to master_host='<HOST>', master_user='<repl_user>', master_password='<repl_passsword>';
+* on SLAVE
+    * enter mysql command : start slave io_thread;
+    * enter mysql command : show slave status\G
+        * Make sure it is connecting and downloading data
+    * If good, start slave: start slave;
+        * Look at slave status : show slave status\G
+    *  Also, you can check if the gtid is moving : show global variables like 'gtid%';
+
+TODO: GTID mutltiple replication, error inserting slave and it messes up replication, xtrabackup without GTID as first. Converting exsiting setup to GTID, master and slave. 
 
 <a name=switchSlave></a>
 ### Non-gtid. Switch Slave from Master to replicate off another slave.
@@ -341,6 +362,8 @@ These checks should be the same for replicating servers
      JOIN performance_schema.persisted_variables p USING(VARIABLE_NAME)
      JOIN performance_schema.global_variables g USING(VARIABLE_NAME)\G
 ```
+* Execute: status;
+   * see if both servers match critical settings. 
 * Global variables
     * default_collation_for_utff8m4
 

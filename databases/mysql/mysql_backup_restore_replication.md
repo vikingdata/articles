@@ -24,7 +24,7 @@ Index
 2. [Percona Xtrabackup](#p)
     * [Backup](#pbackp)
     * [Restore](#prestore)
-3. [Replication ](#replication)
+3. [Replication](#replication)
     * [Replication AFTER restore](#repr) 
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
     * [Restore and replication mismatch](#rrm) 
@@ -138,8 +138,6 @@ cat mysqlbackup.sql | mysql -u root -p 2>&1 | tee restore.log
 TODO: other checks : count events, triggers, stored procedures, no of DATABASES, no of tables
 
 
-
-```
 
 * * *
 

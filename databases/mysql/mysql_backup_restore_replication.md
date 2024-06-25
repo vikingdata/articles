@@ -254,12 +254,29 @@ mysql -u USER -p -e "show databases"
 -----
 ### Replication AFTER restore.
 * For GTID
+    * Links
+        * RPM LOCATION: https://ftpmirror.your.org/pub/percona/percona/yum/release/7/os/x86_64/
+        * https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
+        * https://docs.percona.com/percona-xtrabackup/8.0/create-gtid-replica.html
+        * We assume "GIT_MODE" is ON when the backup was performed. Also, GTID_Consistency should be ON.
     * Make sure both master and slave ON
-        * gitd_mode
-        * gtid_consistency
-* For GTID or non-GTID
+        gtid_consistency
+        * gtid_mode
+	    * If GTID_MODE on slave is OFF
+```
+   -- on slave
+SET GLOBAL gtid_mode = "OFF_PERMISSIVE";
+SET GLOBAL gtid_mode = "ON_PERMSSIVE";
+SET GLOBAL gtid_consistency= "ON";
+SET GLOBAL gtid_mode = "ON";
+
+```
+
+     
+### For GTID or non-GTID
 * Make sure there is an account on the Master with has Replication Client as a grant. 
 * From mysqldump or from xtrabackup you should get a log file and log position. It doesn't matter if its GTID or not, set replication on the SLAVE
+    * Why must you do this on a GTID_MODE=ON? Because there is no guarantee all the binlogs on the master have GTID stamps. If there are, you will get "anonymous" errors in replication. 
 ```
    # These commands may at some point be deprecated. 
 change master to master_host="<host>", master_user='<user>', master_password='<password>';
@@ -277,21 +294,9 @@ change master to master_log_file='<log file>', master_log_pos=<log postition>;
 * https://docs.percona.com/percona-xtrabackup/8.0/create-gtid-replica.html
 * We assume "GIT_MODE" is ON when the backup was performed. Also, GTID_Consistency should be ON.
 
-* Both systems : show global variables like 'gtid%';
-    * gtid_executed and gtid_purged should exist and noth be ON
-        * gtid_executed on slave should be later than gtid_purged on source (master)
-    * Note gtid_mode. It should be set to ON on both.
-* Change master on SLAVE just to the host;
-``` change master to master_host='<HOST>', master_user='<repl_user>', master_password='<repl_passsword>';```
-* on SLAVE
-    * enter mysql command : start slave io_thread;
-    * enter mysql command : show slave status\G
-        * Make sure it is connecting and downloading data
-    * If good, start slave: start slave;
-        * Look at slave status : show slave status\G
-    *  Also, you can check if the gtid is moving : show global variables like 'gtid%';
 
-TODO: GTID mutltiple replication, error inserting slave and it messes up replication, xtrabackup without GTID as first. Converting exsiting setup to GTID, master and slave.
+
+TODO: GTID multiple replication, error inserting slave and it messes up replication, xtrabackup without GTID as first. Converting existing setup to GTID, master and slave.
 
 <a name=switchSlave></a>
 ### Non-gtid. Switch Slave from Master to replicate off another slave.
@@ -334,7 +339,7 @@ change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of sl
 * Check replication on slave 1 and slave 2 : show slave status
 
 		  
-### <a name=rrm></a>Restore and replication mistmatch
+### <a name=rrm></a>Restore and replication mismatch
 
 * https://www.percona.com/blog/using-mysql-8-persisted-system-variables/
 

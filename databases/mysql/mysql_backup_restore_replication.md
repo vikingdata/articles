@@ -22,8 +22,8 @@ Index
     * [Problems with mysqlpump](#pumpproblems)
     * [Restore](#mr)
 2. [Percona Xtrabackup](#p)
-    * Backup
-    * Restore
+    * [Backup](#pbackp)
+    * [Restore](#prestore)
 3. [Replication ](#replication)
     * [Replication AFTER restore](#repr) 
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
@@ -146,6 +146,7 @@ TODO: other checks : count events, triggers, stored procedures, no of DATABASES,
 <a name=p></a>Percona xtrabackup
 -----
 
+### Percona Backup <a name=pbackup></a>
 
 * https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html
     * innobackupex command
@@ -218,7 +219,8 @@ sudo xtrabackup --target-dir $BACKUP_DIR -u root -p --backup 2>&1 | tee backup.l
 sudo xtrabackup --target-dir $BACKUP_DIR --prepare 2>&1 | tail prepare.log
 ```
 
-### On target server
+### Restore on target server <a name=prestore></a>
+
 * Transfer files to target server.
     * Use directory /data/restore for example
 * Stop Mysqld : service mysql stop

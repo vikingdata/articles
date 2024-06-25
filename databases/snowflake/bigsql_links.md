@@ -28,6 +28,10 @@ title: Snowflake, SQL, DBT, and other links
 * [https://www.intricity.com/learningcenter](https://www.intricity.com/learningcenter)
 * [https://learn.snowflake.com/en/courses/](https://learn.snowflake.com/en/courses/)
 * [https://docs.snowflake.com/en/release-notes/new-features](https://docs.snowflake.com/en/release-notes/new-features)
+* https://www.youtube.com/live/-fU7qet9CFc?si=ZWHspPmhk3C9teNS
+* https://www.coursera.org/learn/snowflake-intro-app-developers-data-scientists-data-engineers
+* https://docs.snowflake.com/en/sql-reference/constructs/asof-join
+    * duckdb has this : https://db-engines.com/en/ranking_trend/system/DuckDB
 
 ## Smowflake Community & Resources
 * [https://community.snowflake.com/s/](https://community.snowflake.com/s/)

@@ -1,11 +1,11 @@
 
 ---
-title : MySQL Backup Rstore Replication
+title : MySQL Backup Restore Replication
 author : Mark Nielsen
 copyright : June 2024 
 ---
 
-MySQL Backup Rstore Replication
+MySQL Backup Restore Replication
 ==============================
 _**by Mark Nielsen
 Original Copyright June 2024**_
@@ -19,15 +19,15 @@ Index
     * [List events, triggers, stored procedures](#stuff)
     * [all databases](#all)
     * [all but accounts ](#data)
-    * [Problems woth mysqlpump](#pumpproblems)
+    * [Problems with mysqlpump](#pumpproblems)
     * [Restore](#mr)
 2. [Percona Xtrabackup](#p)
     * Backup
-    * REstore
+    * Restore
 3. [Replication ](#replication)
     * [Replication AFTER restore](#repr) 
     * [Non-gtid. Switch Slave from Master to replicate off another slave](#switchSlave)
-    * [Restore and replication mistmatch](#rrm) 
+    * [Restore and replication mismatch](#rrm) 
 
 * * *
 
@@ -117,14 +117,14 @@ gunzip -c mysqlbackup.sql | grep '^CREATE DATABASE"
 
 ```
 
-### Problems woth mysqlpump <a name=pumpproblems></a>
+### Problems with mysqlpump <a name=pumpproblems></a>
 * If mysqlpump gives a weird message like it aborted, use mysqldump. MysqlPump is still good for getting accounts. 
 
 
 ### Restore <a name=rm><a/>
 
-* Check if you have the exact same version of mysql and setttings.
-* If not, you may want to exclude mysql from the backup. You hmay want to use mysqlpump to get the accounts. 
+* Check if you have the exact same version of mysql and settings.
+* If not, you may want to exclude mysql from the backup. You may want to use mysqlpump to get the accounts. 
 
 ```
 
@@ -135,7 +135,7 @@ cat mysqlbackup.sql | mysql -u root -p 2>&1 | tee restore.log
    * Grep for errors. 
 
 
-TODO: other checks : count events, triggers, stored procedures, no of DATABAES, no of tables
+TODO: other checks : count events, triggers, stored procedures, no of DATABASES, no of tables
 
 
 
@@ -169,7 +169,7 @@ innobackup --version
 
   # make backups
 BACKUP_DIR=/data/backups
-PASSWORD="bad_passsword"
+PASSWORD="bad_password"
 
 sudo innobackupex $BACKUP_DIR -u root -p$PASSWORD
   # prepare backup
@@ -192,7 +192,7 @@ ssh username@remote_server
 ```
   # Stop mysql and empty out directories
 sudo  service mysqld stop
-  # Rememeber to empty out the mysql directories
+  # Remember to empty out the mysql directories
   # Remove ALL Mysql data files: idbdata, binlogs, relay logs, logfiles, and all data files (all databases)
 
   # Copy back the data
@@ -206,14 +206,14 @@ sudo innobackupex --copy-back /data/backups/2010-03-13_02-42-44/
 #### On source server
 
 ```
-   # You may need the BACKUP priviledge on root, i had too
-   # If xtrbackup fails and you get backup priv message, in mysql
+   # You may need the BACKUP privilege on root, i had too
+   # If Xtrabackup fails and you get backup priv message, in mysql
 # mysql > grant backup_admin on *.* to root@localhost;
 
 
 BACKUP_DIR=/data/backup
 
-   # Enter password if necessayr
+   # Enter password if necessary
 sudo xtrabackup --target-dir $BACKUP_DIR -u root -p --backup 2>&1 | tee backup.log
 sudo xtrabackup --target-dir $BACKUP_DIR --prepare 2>&1 | tail prepare.log
 ```
@@ -233,7 +233,7 @@ sudo xtrabackup --target-dir=/data/restore --copy-back 2>&1 | tee copy-back.log
 
 ```
 
-  # Change onwership, let's assume the data is under /data/mysql
+  # Change ownership, let's assume the data is under /data/mysql
 sudo chown -R mysql.mysql /data/mysql
 
 
@@ -274,7 +274,7 @@ change master to master_log_file='<log file?', master_log_pos=<log postition>;
 * RPM LOCATION: https://ftpmirror.your.org/pub/percona/percona/yum/release/7/os/x86_64/
 * https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
 * https://docs.percona.com/percona-xtrabackup/8.0/create-gtid-replica.html
-* We asume "GIT_MODE" is ON when the backup was performed. Also, GTID_CONSIStENCY should be ON.
+* We assume "GIT_MODE" is ON when the backup was performed. Also, GTID_Consistency should be ON.
 
 * Both systems : show global variables like 'gtid%';
     * gtid_executed and gtid_purged should be on both.
@@ -325,7 +325,7 @@ START SLAVE UNTIL MASTER_LOG_FILE='><Master_Log_File of slave 1>', MASTER_LOG_PO
         * Position in 2nd column.
     * Execute on Slave 2
 ```
-change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of slave 1>', MASTER_LOG_POS=<bilog position of slave 1>;
+change master t0 master_host='server1', MASTER_LOG_FILE='><bin_log file of of slave 1>', MASTER_LOG_POS=<binlog position of slave 1>;
 ```
 * Start slave on slave 2 : start slave
 * Check slave 2 with "show slave status\G"
@@ -398,7 +398,7 @@ mysql>  show global variables like '%stric%';
 ```
 * Check create database and create table and diff them from the master to the slave.
 
-* If all else fails, take a percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same.
+* If all else fails, take a Percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same.
 
 
 

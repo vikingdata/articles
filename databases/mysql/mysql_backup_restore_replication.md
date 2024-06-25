@@ -22,7 +22,7 @@ Index
     * [Problems with mysqlpump](#pumpproblems)
     * [Restore](#mr)
 2. [Percona Xtrabackup](#p)
-    * [Backup](#pbackp)
+    * [Backup](#pbackup)
     * [Restore](#prestore)
 3. [Replication](#replication)
     * [Replication AFTER restore](#repr) 
@@ -286,14 +286,6 @@ change master to master_log_file='<log file>', master_log_pos=<log postition>;
 * Start slave
 * Check replication: show slave status
     * or : while sleep 5; do clear; mysql -u root -p<PASSWORD> -e "show slave status\G" | egrep -i "running|seconds|gtid"; done
-
-
-###  GTID, setting up replication from using Percona Xtrabackup
-* RPM LOCATION: https://ftpmirror.your.org/pub/percona/percona/yum/release/7/os/x86_64/
-* https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
-* https://docs.percona.com/percona-xtrabackup/8.0/create-gtid-replica.html
-* We assume "GIT_MODE" is ON when the backup was performed. Also, GTID_Consistency should be ON.
-
 
 
 TODO: GTID multiple replication, error inserting slave and it messes up replication, xtrabackup without GTID as first. Converting existing setup to GTID, master and slave.

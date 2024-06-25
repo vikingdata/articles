@@ -150,7 +150,9 @@ TODO: other checks : count events, triggers, stored procedures, no of DATABASES,
     * innobackupex command
 * https://docs.percona.com/percona-xtrabackup/8.0/backup-overview.html#backup-types
     * xtrabackup command
-
+* If GTID
+    * make sure "gtid_mode" and "GTID_Consistency" are both set to ON.
+    
 ### On both source and remote servers, check mysqld version and innobackupex version.
 
 The versions should be the same or close. You may have to check documentation if they are compatible. The remote server should have versions that are NOT older.
@@ -276,7 +278,8 @@ SET GLOBAL gtid_mode = "ON";
 ### For GTID or non-GTID
 * Make sure there is an account on the Master with has Replication Client as a grant. 
 * From mysqldump or from xtrabackup you should get a log file and log position. It doesn't matter if its GTID or not, set replication on the SLAVE
-    * Why must you do this on a GTID_MODE=ON? Because there is no guarantee all the binlogs on the master have GTID stamps. If there are, you will get "anonymous" errors in replication. 
+    * Why must you do this on a GTID_MODE=ON? Because there is no guarantee all the binlogs on the master have GTID stamps. If there are, you will get "anonymous" errors in replication. If GTID, we make sure gtid_mode and GTID_Consistency are set to ON before the backup occurred. Any binlogs AFTER the backup will have gtid stamps 
+    
 ```
    # These commands may at some point be deprecated. 
 change master to master_host="<host>", master_user='<user>', master_password='<password>';
@@ -302,6 +305,7 @@ We make some assumptions
 * Replication is setup between the Master and two Slaves.
 * We can stop replication temporarily without applications being affected.
 * We assume the accounts for replication are the same on all servers.
+* If GTID, we assume the backup was made AFTER gtid_mode and GTID_Consistency are both set to ON. 
 
 Steps.
 * Stop slave on Slave 2: stop slave
@@ -396,7 +400,7 @@ mysql>  show global variables like '%stric%';
 ```
 * Check create database and create table and diff them from the master to the slave.
 
-* If all else fails, take a Percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they ma not be the same.
+* If all else fails, take a Percona xtrabackup, or binary backup, restore, and make sure all database, tables, and variables are the same. The reason? If you do an ALTER TABLE or create new schema, they may not be the same.
 
 
 

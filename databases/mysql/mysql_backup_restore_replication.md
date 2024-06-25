@@ -246,6 +246,7 @@ sudo tail -n 10 /var/log/mysql/error.log
   # enter the password when asked, and change USER to the loginname you log into mysql as
 mysql -u USER -p -e "show databases"
 
+```
 
 * * *
 

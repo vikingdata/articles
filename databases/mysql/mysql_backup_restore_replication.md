@@ -264,7 +264,7 @@ mysql -u USER -p -e "show databases"
    # These commands may at some point be deprecated. 
 change master to master_host="<host>", master_user='<user>', master_password='<password>';
 
-change master to master_log_file='<log file?', master_log_pos=<log postition>;
+change master to master_log_file='<log file>', master_log_pos=<log postition>;
 ```
 * Start slave
 * Check replication: show slave status
@@ -278,11 +278,11 @@ change master to master_log_file='<log file?', master_log_pos=<log postition>;
 * We assume "GIT_MODE" is ON when the backup was performed. Also, GTID_Consistency should be ON.
 
 * Both systems : show global variables like 'gtid%';
-    * gtid_executed and gtid_purged should be on both.
+    * gtid_executed and gtid_purged should exist and noth be ON
         * gtid_executed on slave should be later than gtid_purged on source (master)
     * Note gtid_mode. It should be set to ON on both.
 * Change master on SLAVE just to the host;
-``` change master to master_host='<HOST>', master_user='<repl_user>', master_password='<repl_passsword>';
+``` change master to master_host='<HOST>', master_user='<repl_user>', master_password='<repl_passsword>';```
 * on SLAVE
     * enter mysql command : start slave io_thread;
     * enter mysql command : show slave status\G

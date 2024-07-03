@@ -18,8 +18,8 @@ class Dad:
       self.args = None
 
       
-      loadConfig()
-      parseArgs()
+      self.loadConfig()
+      selfparseArgs()
 
   def loadCconfig(self):
       if not os.path.exists(self.config_file) :

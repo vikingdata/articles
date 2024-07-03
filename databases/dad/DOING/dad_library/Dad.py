@@ -55,16 +55,22 @@ class Dad:
       if args.comand_list and args.comand_list is True:
           Message = """
   -c options. Given servers given by -s
-          sp
-          compare_rows
-          explain_processlist
-          rep_info
-          cluster_info
+          For All databases
+          dashboard                 Prints out the dashboard. 
+
+          For MySQL 
+          mysql_sp                  Does a show processlist for each server. Orders by longest queries first.
+                                    --full do do a full processlist.
+          mysql_compare_rows        Compare the top 10 non-mysql system tables for all servers.
+                                    -n to change number of tables. 
+          mysql_explain_processlist For each process in processlist that has a query running with "select" in
+                                    it, run an explain in a read only transacton. Removes duplicates. 
+          mysql_rep_info            Gets replication informtaion for servers. 
+          mysql_cluster_info        Gets cluster information for servers. 
+          mysql_global_cmpare       Compares gloval status variables of servers.
+
+          Other databases with have other options.           
           
-
-
-
-
           """
           parser.print_help()
           print (Messsage)

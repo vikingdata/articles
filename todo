@@ -164,6 +164,12 @@ DONE mysql
 DONE linux
 	list services
 
-piplne ansible got rundeck, git runner, etc
+pipeline ansible git rundeck, git runner, etc
        git brach and merge, with request and approval for code
        kubernetes, orchestrator
+
+cockroach -- install
+
+processlist, slow logs, current status, replication group info
+    mysql, mongo, other databases
+    part of DAD -- start DAD

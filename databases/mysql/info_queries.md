@@ -315,4 +315,24 @@ SELECT schema_name, '', ''
  ;
 
 
+SELECT table_schema, table_NAME, COLUMN_NAME
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE COLUMN_NAME like concat ('%', @field, '%')
+     AND TABLE_SCHEMa not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema')
+     and table_schema in ('db1', 'db2')
+union
+
+SELECT  table_schema, table_NAME, ''
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE  table_NAME like concat ('%', @field, '%')
+    and table_schema in ('db1', 'db2')
+union
+
+SELECT schema_name, '', ''
+    FROM INFORMATION_SCHEMA.schemata
+    WHERE schema_NAME like concat ('%', @field, '%')
+;
+
+
+
 ```

@@ -18,6 +18,7 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 
 1. [Download and Cluster on one server](#d)
 2. [Serverless (almost free)(#s)
+3. [Connect to CockroachDB}(#connect)
 
 * * *
 <a name=Links></a>Links
@@ -45,3 +46,39 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 <a name=s>[Serverless (almost free)</a>
 -----
 
+* Signup : https://www.cockroachlabs.com/serverless/
+    * Answer a bunch of questions.
+    * Specify the free version.
+    * Specify GCP and all in one region. GCP seems free. AWS seems to charge if you keep everything in a region
+    * Add a new user
+        After Adding user, click on "Connect"
+        * It will ask for "Select option/language"
+	    * Choose Paraemeters only and record stuff. 
+	    * Choose CockroachDB Client
+
+
+* * *
+<a name=connect>Connect to CockroachDB serverless and your own</a>
+-----
+To Figure out how to connect to CockroachDB easily,
+* Login into CockroachDB serverless
+    * or signup https://www.cockroachlabs.com/lp/serverless/
+* Click on "SQL Users
+* Click on "Connect""
+    * Choose the user
+    * Choose how you want to connect, which OS, database, etc.
+    * It will show you how to connect or what to put in your script.
+* To install the necessary software, use the link provided [ see the connection reference ](https://www.cockroachlabs.com/docs/stable/connect-to-the-database.html)
+* Connecting to the serverless with be VERY similar to connecting to CockroachDB if you download it.
+* For the client
+    * FOr the cloud
+        * Download https://www.cockroachlabs.com/docs/cockroachcloud/ccloud-get-started
+        * Connect : ccloud cluster sql <CLUSTERNAME> -u <USERNAME> -p <ENTER-SQL-USER-PASSWORD>
+    * For cloud or download
+        * Install the client : https://www.cockroachlabs.com/docs/releases/
+            * Choose the OS
+            * It will download a zip file you will have to unzip onto your computer
+                * FOr Linux/Unix/Mac: Soemething easy like /usr/local/cockrochdb
+            	* For Windows:
+            	    * Suggestion: Add path to environment variables.
+            	    * c:\local\cockroachdb

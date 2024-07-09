@@ -70,13 +70,15 @@ tail -n 5 FILE.sql
    * ubuntu
        * apt update
        * apt install libjemalloc2
-   * Install in mysql my.cnf ```
+   * Install in mysql my.cnf
+```
 [mysqld_safe]
    # Make sure you load the right library
    # depending on how jemaloc was installed
 malloc-lib=/usr/lib64/libjemalloc.so.1
 ```
-   * restart MySQL
+* .
+    * restart MySQL
 
  
 * other reasons

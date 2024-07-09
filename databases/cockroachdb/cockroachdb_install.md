@@ -68,7 +68,8 @@ To Figure out how to connect to CockroachDB easily,
     * Choose the user
     * Choose how you want to connect, which OS, database, etc.
     * It will show you how to connect or what to put in your script.
-* To install the necessary software, use the link provided [ see the connection reference ](https://www.cockroachlabs.com/docs/stable/connect-to-the-database.html)
+* To install the necessary software, use the link provided
+    * https://www.cockroachlabs.com/docs/stable/connect-to-the-database.html
 * Connecting to the serverless with be VERY similar to connecting to CockroachDB if you download it.
 * For the client
     * FOr the cloud

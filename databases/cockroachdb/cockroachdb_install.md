@@ -17,8 +17,8 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 
 
 1. [Download and Cluster on one server](#d)
-2. [Serverless (almost free)(#s)
-3. [Connect to CockroachDB}(#connect)
+2. [Serverless - almost free](#s)
+3. [Connect to CockroachDB](#connect)
 
 * * *
 <a name=Links></a>Links

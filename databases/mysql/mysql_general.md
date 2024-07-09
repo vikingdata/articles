@@ -54,3 +54,31 @@ gztool -t FILE.gz | tail -n 5
 tail -n 5 FILE.sql
 ```
 
+* * *
+<a name=tailgzip></a>What causes swap
+-----
+ transparent huge pages set to active
+   * cat /sys/kernel/mm/transparent_hugepage/enabled
+       * Should be :  always [madvise] never
+   * To turn off
+       * echo never > /sys/kernel/mm/transparent_hugepage/enabled
+       * echo never > /sys/kernel/mm/transparent_hugepage/defrag
+* jemalloc  https://support.sentieon.com/appnotes/jemalloc/
+   * centos
+       * yum install epel-release
+       * yum install jemalloc
+   * ubuntu
+       * apt update
+       * apt install libjemalloc2
+   * Install in mysql my.cnf ```
+[mysqld_safe]
+   # Make sure you load the right library
+   # depending on how jemaloc was installed
+malloc-lib=/usr/lib64/libjemalloc.so.1
+```` 
+   * restart MySQL
+
+ 
+* other reasons
+   * swapinesss to 1
+   * high tmp_table_size=1768M max_heap_table_size=1768M

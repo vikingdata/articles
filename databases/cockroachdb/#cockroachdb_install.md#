@@ -73,6 +73,8 @@ mv cockroach-sql-v24.1.2.linux-amd64/cockroach-sql /usr/local/bin
 mv cockroach-v24.1.2.linux-amd64/cockroach  /usr/local/sbin
 mv cockroach-v24.1.2.linux-amd64/lib/*  /usr/local/lib
 
+
+
 ```
 
 ### Make configureation files

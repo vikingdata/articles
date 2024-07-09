@@ -70,17 +70,29 @@ tail -n 5 FILE.sql
    * ubuntu
        * apt update
        * apt install libjemalloc2
-   * Install in mysql my.cnf
+   * Install in mysql my.cnf and then restart mysql
 ```
 [mysqld_safe]
    # Make sure you load the right library
    # depending on how jemaloc was installed
+   # check which library file got installed on your system
 malloc-lib=/usr/lib64/libjemalloc.so.1
 ```
-* .
-    * restart MySQL
-
- 
 * other reasons
    * swapinesss to 1
-   * high tmp_table_size=1768M max_heap_table_size=1768M
+       * cat /proc/sys/vm/swappiness
+       * Should be set to "0"
+       * Change it : https://linuxize.com/post/how-to-change-the-swappiness-value-in-linux/
+           * sudo sysctl vm.swappiness=0
+	   * edit sudo sysctl vm.swappiness=0
+                * vm.swappiness=0
+   * high temp tables memory settings in mysql with an engine Engine
+       * MEMORY
+           * tmp_table_size
+           * max_heap_table_size
+       * TempTable	   
+           * tmp_table_size
+	   * temptable_max_ram
+* Note enough ram
+    * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
+    * [Analyze ram and swap use](/vikingdata/articles/blob/main/linux/Linux_general.md#m)

@@ -6,7 +6,7 @@ copyright : Feb 2021 to Sept 2023
 ---
 
 
-MySL Info queries
+MySQL Info queries
 ==============================
 
 _**by Mark Nielsen
@@ -14,15 +14,16 @@ Original Copyright Feb 2021**_
 
 This article will grow over time. 
 
-TODO: simple performance_shema queries, information_schema queries
+TODO: simple performance_schema queries, information_schema queries
 
 1. [table files](#files)
-2. [InnooDB buffer pool ratio](#ibpr)
+2. [InnoDB buffer pool ratio](#ibpr)
 3. [Size of database/tables](#size)
 4. [No index](#noindex)
 5. [Busiest tables](#busy)
 6. [Unused indexes](#unused)
 7. [List stored procedures, functions, triggers](#list1)
+8. [find keyword in field, table, database](#find1)
 
 * * *
 
@@ -41,7 +42,7 @@ mysql> select FILE_ID, FILE_NAME, FILE_TYPE, TABLESPACE_NAME
 
 * * *
 
-<a name=ibpr></a>InnooDB buffer pool ratio
+<a name=ibpr></a>InnoDB buffer pool ratio
 -----
 
 This tell how efficient read queries are getting data from memory and not disk.
@@ -258,7 +259,7 @@ ORDER BY object_schema, object_name, index_name;
 <a name=list1></a>List stored procedures, functions, triggers
 -----
 
-* stored procedures and functions. amd triggers
+* stored procedures and functions. and triggers
 ```
 SELECT  routine_schema,  
         routine_name,  
@@ -276,4 +277,42 @@ select trigger_schema, trigger_name
 select trigger_schema, trigger_name, action_statement
   from information_schema.triggers
   WHERE trigger_schema not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema');
+```
+
+* * *
+
+<a name=list1></a>find keyword in field, table, database
+-----
+
+
+```
+create database if not exists test1;
+create database if not exists temp2;
+use temp2;
+create table if not exists test2 (i int, primary key(i));
+create database if not exists temp3;
+use temp3;
+create table if not exists table2 (test3 int, primary key(test3));
+
+
+select @field := 'test';
+
+SELECT table_schema, table_NAME, COLUMN_NAME 
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE COLUMN_NAME like concat ('%', @field, '%')
+     AND TABLE_SCHEMa not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema')
+union
+
+SELECT  table_schema, table_NAME, '' 
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE  table_NAME like concat ('%', @field, '%')
+
+union
+
+SELECT schema_name, '', ''
+    FROM INFORMATION_SCHEMA.schemata
+    WHERE schema_NAME like concat ('%', @field, '%')
+ ;
+
+
 ```

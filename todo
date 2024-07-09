@@ -169,7 +169,11 @@ pipeline ansible git rundeck, git runner, etc
        kubernetes, orchestrator
 
 cockroach -- install
+    feaures
+    qquery data with flashback
 
 processlist, slow logs, current status, replication group info
     mysql, mongo, other databases
     part of DAD -- start DAD
+
+inline views

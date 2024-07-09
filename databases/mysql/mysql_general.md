@@ -80,21 +80,20 @@ tail -n 5 FILE.sql
    # check which library file got installed on your system
 malloc-lib=/usr/lib64/libjemalloc.so.1
 ```
-* other reasons
-   * swapinesss to 1
-       * cat /proc/sys/vm/swappiness
-       * Should be set to "0"
-       * Change it : https://linuxize.com/post/how-to-change-the-swappiness-value-in-linux/
-           * sudo sysctl vm.swappiness=0
-	   * edit sudo sysctl vm.swappiness=0
-                * vm.swappiness=0
-   * high temp tables memory settings in mysql with an engine Engine
-       * MEMORY
-           * tmp_table_size
-           * max_heap_table_size
-       * TempTable	   
-           * tmp_table_size
-	   * temptable_max_ram
+* swapinesss to 1
+    * cat /proc/sys/vm/swappiness
+    * Should be set to "0"
+    * Change it : https://linuxize.com/post/how-to-change-the-swappiness-value-in-linux/
+        * sudo sysctl vm.swappiness=0
+        * edit sudo sysctl vm.swappiness=0
+            * vm.swappiness=0
+* high temp tables memory settings in mysql with an engine Engine
+    * MEMORY
+      * tmp_table_size
+      * max_heap_table_size
+    * TempTable	   
+      * tmp_table_size
+      * temptable_max_ram
 * Note enough ram
     * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
     * [Analyze ram and swap use](https://github.com/vikingdata/articles/blob/main/linux/Linux_general.md#m) -- Monitor commands

@@ -95,4 +95,4 @@ malloc-lib=/usr/lib64/libjemalloc.so.1
 	   * temptable_max_ram
 * Note enough ram
     * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
-    * [Analyze ram and swap use](/vikingdata/articles/blob/main/linux/Linux_general.md#m)
+    * [Analyze ram and swap use](https://github.com/vikingdata/articles/blob/main/linux/Linux_general.md#m) -- Monitor commands

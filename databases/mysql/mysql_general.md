@@ -75,7 +75,7 @@ tail -n 5 FILE.sql
    # Make sure you load the right library
    # depending on how jemaloc was installed
 malloc-lib=/usr/lib64/libjemalloc.so.1
-```` 
+```
    * restart MySQL
 
  

@@ -19,6 +19,7 @@ Not including
 * [Info queries](info_queries.md)
 * [MySQL variables](MySQL_variables.md)
 * [Backup Restore Replication](mysql_backup_restore_replication.md)
+* [What causes swap](#swap)
 
 Index
 1. [tail a gzip file](#tailgzip)
@@ -55,7 +56,7 @@ tail -n 5 FILE.sql
 ```
 
 * * *
-<a name=tailgzip></a>What causes swap
+<a name=swap></a>What causes swap
 -----
  transparent huge pages set to active
    * cat /sys/kernel/mm/transparent_hugepage/enabled

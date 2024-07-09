@@ -58,7 +58,8 @@ tail -n 5 FILE.sql
 * * *
 <a name=swap></a>What causes swap
 -----
- transparent huge pages set to active
+
+* transparent huge pages set to active
    * cat /sys/kernel/mm/transparent_hugepage/enabled
        * Should be :  always [madvise] never
    * To turn off

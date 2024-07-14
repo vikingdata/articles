@@ -97,3 +97,4 @@ malloc-lib=/usr/lib64/libjemalloc.so.1
 * Note enough ram
     * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
     * [Analyze ram and swap use](https://github.com/vikingdata/articles/blob/main/linux/Linux_general.md#m) -- Monitor commands
+* MySQL memory cosiderations : https://mariadb.com/kb/en/mariadb-memory-allocation/

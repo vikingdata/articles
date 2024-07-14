@@ -37,6 +37,8 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 	things might be overlooked.
     * [DBengines](https://db-engines.com/en/system/CockroachDB%3BMySQL%3BPostgreSQL)
 * [Client connection parameters](https://www.cockroachlabs.com/docs/stable/connection-parameters)    
+* Install
+    * https://www.atlantic.net/vps-hosting/how-to-install-a-cockroachdb-cluster-on-ubuntu-22-04/
 
 
 * * *
@@ -75,12 +77,236 @@ mv cockroach-v24.1.2.linux-amd64/lib/*  /usr/local/lib
 
 ```
 
-### Make configureation files
+### Make Initialize cockroach
+* Look at https://www.cockroachlabs.com/docs/stable/cockroach-start
+* https://uptimedba.github.io/cockroach-vb-single/cockroach-vb-single/cockroach-vb-single_db_startup_and_logging.html
+    * This explains how to setup a cluster witout certs. 
+* https://www.cockroachlabs.com/docs/stable/deploy-cockroachdb-on-premises
+* https://www.cockroachlabs.com/docs/stable/cockroach-init
 
-### Install services
+#### Init Method One
+* Make stand alone node
+    * It it initialize itself
+* Add other 2 nodes
+* Perform check
 
-### Make cluster
+```
+cd /
+sudo bash
 
+useradd cockroach --shell /bin/bash --create-home
+
+echo "
+
+mkdir -p /data
+cd /data
+
+   # reset cockroachdb
+killall -u cockroach
+sleep 5
+killall -9 -u cockroach
+sleep 5
+rm -rf /data/cockroach
+
+mkdir -p cockroach/data1
+mkdir -p cockroach/data2
+mkdir -p cockroach/data3
+mkdir -p /usr/local/lib/cockroach
+
+chown -R cockroach.cockroach /data/cockroach /usr/local/lib/cockroach
+
+echo 'starting node1'
+sudo -i -u cockroach cockroach start-single-node --port=26257 --http-port=8080 \
+  --background --store=/data/cockroach/data1 --insecure\
+  > /data/cockroach/c1.log 2>&1 &
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'starting node2'
+sudo -i -u cockroach cockroach start --port=26258 --http-port=8081 \
+  --background --store=/data/cockroach/data2 --insecure --join=localhost:26257 \
+  > /data/cockroach/c2.log 2>&1 &
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'starting node3'
+sudo -i -u cockroach cockroach start --port=26259 --http-port=8082 \
+  --background --store=/data/cockroach/data3 --insecure --join=localhost:26257 \
+  > /data/cockroach/c3.log 2>&1 & 
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'sleeping 10 seconds to let servers sync'
+sleep 10
+echo 'checking status'
+sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure
+
+echo 'If the status is okay, the cluster was intilaized and cluster is setup'
+
+"  > cockroach/cockroch_cluster_init1.sh
+
+chmod 755 /data/cockroach/cockroch_cluster_init1.sh
+
+ # As root
+/data/cockroach/cockroch_cluster_init1.sh
+
+```
+
+#### init method 2
+* Create cluster
+    * Start all nodes
+* Init node
+* perform check
+
+```
+
+
+mkdir -p /data
+cd /data
+
+   # reset cockroachdb
+killall -u cockroach
+sleep 5
+killall -9 -u cockroach
+sleep 5
+rm -rf /data/cockroach
+
+mkdir -p cockroach/data1
+mkdir -p cockroach/data2
+mkdir -p cockroach/data3
+mkdir -p /usr/local/lib/cockroach
+
+chown -R cockroach.cockroach /data/cockroach /usr/local/lib/cockroach
+
+echo 'starting node1'
+sudo -i -u cockroach cockroach start --port=26257 --http-port=8080 \
+     --background --store=/data/cockroach/data1 --insecure  \
+     --join=localhost:26257,localhost:26258,localhost:26259 > /data/cockroach/c1.log 2>&1 &
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'Intializing node1 node cluster'
+cockroach init --insecure --host=localhost:26257
+echo 'checking connection to node1'
+sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure
+
+echo 'starting node2'
+sudo -i -u cockroach cockroach start --port=26258 --http-port=8081 \
+     --background --store=/data/cockroach/data2 --insecure \
+     --join=localhost:26257,localhost:26258,localhost:26259 > /data/cockroach/c2.log 2>&1 &
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'starting node3'
+sudo -i -u cockroach cockroach start --port=26259 --http-port=8082  \
+     --background --store=/data/cockroach/data3 --insecure \
+     --join=localhost:26257,localhost:26258,localhost:26259 > /data/cockroach/c3.log 2>&1 &
+echo 'sleeping 5 seconds'
+sleep 5
+reset
+
+echo 'sleeping 10 seconds to let servers sync'
+sleep 10
+echo 'checking status'
+sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure
+
+echo 'If the status is okay, the cluster was intilaized and cluster is setup'
+echo 'You should see 3 hosts where the last 2 columns 'is_available | is_live' are all true. '
+echo 'if issues run as root  : sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure'
+echo "or as user cockroach   : cockroach node status --host=localhost --port=26257 --insecure'
+
+```
+
+chmod 755 /data/cockroach/cockroch_cluster_init2.sh
+
+ # As root
+/data/cockroach/cockroch_cluster_init2.sh
+
+
+```
+
+### Connect and make database, make sure each node sees it
+```
+cockroach sql --port=26257 -e " CREATE database if not exists mark;" --insecure
+cockroach sql --port=26257 -e " show databases" --insecure
+cockroach sql --port=26258 -e " show databases" --insecure
+cockroach sql --port=26259 -e " show databases" --insecure
+
+```
+
+### Add certs to cockroach and restart
+
+```
+rm -rf /data/cockroach/certs
+mkdir -p /data/cockroach/certs
+export COCKROACH_CERTS_DIR=/data/cockroach/certs
+
+HOST_IP="192.168.1.7"
+
+   ## All 3 nodes with use ca.crt and ca.key
+cockroach cert create-ca \
+ --certs-dir=$COCKROACH_CERTS_DIR \
+ --ca-key=$COCKROACH_CERTS_DIR/ca.key
+
+  ## All 3 nodes will use client.root.key and client.root.crt 
+cockroach cert create-client \
+ root \
+ --certs-dir=$COCKROACH_CERTS_DIR \
+ --ca-key=$COCKROACH_CERTS_DIR/ca.key
+
+cockroach cert create-node \
+ localhost \
+ 127.0.0.1 \
+ $HOST_IP \
+--certs-dir=$COCKROACH_CERTS_DIR \
+ --ca-key=$COCKROACH_CERTS_DIR/ca.key
+
+```
+
+### Restart Cluster
+```
+
+echo shutting down node1
+cockroach quit --http-port 8080 
+sleep 5
+
+echo shutting down node2
+cockroach quit --http-port 8081
+sleep 5
+
+echo shutting down node3
+cockroach quit --http-port 8082
+sleep 5
+
+count=`ps auxw | grep "cockroach start" | grep -v grep | wc -l`
+while [ $count -gt 0 ] ; do
+   echo ""
+   echo "$count cockroach processses remaining"
+   ps auxw | grep "cockroach start" | grep -v grep 
+   sleep 2
+   count=`ps auxw | grep "cockroach start" | grep -v grep |wc -l`
+done   
+
+
+```
+
+### Make account
+```
+sudo -i -u cockroach cockroach sql --port=26257 -e " CREATE USER mark WITH PASSWORD 'mark_bad_password';"
+```
+
+### Connect and make database, make sure each node sees it
+```
+cockroach sql --port=26257 -e " CREATE database if not exists mark2;" --insecure
+cockroach sql --port=26257 -e " show databases" --insecure
+cockroach sql --port=26258 -e " show databases" --insecure
+cockroach sql --port=26259 -e " show databases" --insecure
+```
 
 * * *
 <a name=s>Serverless (almost free)</a>

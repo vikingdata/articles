@@ -12,9 +12,6 @@ echo 'sleeping 5 seconds'
 sleep 5
 reset
 
-echo 'checking connection to node1'
-sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure
-
 echo 'starting node2'
 sudo -i -u cockroach cockroach start --port=26258 --http-port=8081 \
      --pid-file=/data/cockroach/node2.pid \
@@ -29,7 +26,6 @@ sudo -i -u cockroach cockroach start --port=26259 --http-port=8082  \
      --pid-file=/data/cockroach/node3.pid \
      --background --store=/data/cockroach/data3 --insecure \
      --join=localhost:26257,localhost:26258,localhost:26259 > /data/cockroach/c3.log 2>&1 &
-echo 'sleeping 5 seconds'
 sleep 5
 reset
 

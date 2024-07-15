@@ -184,6 +184,7 @@ chmod 755 /data/cockroach/cockroch_cluster_stop*
 
 wget -O cockroach_cluster_start_insecure.sh $GET_DIR_URL/cockroach_cluster_start_insecure.sh
 wget -O cockroach_cluster_start_secure.sh $GET_DIR_URL/cockroach_cluster_start_secure.sh
+wget -O cockroach_cluster_check_insecure.sh $GET_DIR_URL/cockroach_cluster_check_insecure.sh
 chmod 755 /data/cockroach/cockroch_cluster_start*
 
 ./cockroch_cluster_start_secure.sh

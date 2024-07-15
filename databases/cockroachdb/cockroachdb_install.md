@@ -16,11 +16,12 @@ There are two ways to install CockroachDB reasonably. First is to download Cockr
 if you don't go over the storage, use, and stay within the same area on GCP, it should be free forever (don't quote me on it). 
 
 
-1. [Download and make Cluster on one server](#d)
+1. [Links](#Links)
+2. [Notes](#notes)
+3. [Download and make Cluster on one server](#d)
     * [Install bianries](#bin)
-
-2. [Serverless - almost free](#s)
-3. [Connect to CockroachDB](#connect)
+4. [Serverless - almost free](#s)
+5. [Connect to CockroachDB](#connect)
 
 * * *
 <a name=Links></a>Links
@@ -39,7 +40,16 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 * [Client connection parameters](https://www.cockroachlabs.com/docs/stable/connection-parameters)    
 * Install
     * https://www.atlantic.net/vps-hosting/how-to-install-a-cockroachdb-cluster-on-ubuntu-22-04/
+* Errors
+    * https://www.cockroachlabs.com/docs/stable/common-errors
 
+* * *
+<a name=notes></a>Notes
+-----
+
+* Many articles explain how to install CockroachDB
+* None of the articles explain how to restart a cluster.
+    * You can stop individual nodes, but stopping the last node with a normal "kill" command leaves it hanging. This appears to a bug from 2016.
 
 * * *
 <a name=d>Download and Cluster on one server</a>
@@ -158,6 +168,7 @@ GET_DIR_URL=https://raw.githubusercontent.com/vikingdata/articles/main/databases
 wget -O cockroch_cluster_stop_insecure.sh $GET_DIR_URL/cockroch_cluster_stop_insecure.sh
 wget -O cockroch_cluster_stop_secure.sh $GET_DIR_URL/cockroch_cluster_stop_secure.sh
 
+chmod 755 /data/cockroach/cockroch_cluster_stop*
 ./cockroch_cluster_stop_insecure.sh
 
 wget -O cockroch_cluster_start_insecure.sh $GET_DIR_URL/cockroch_cluster_start_insecure.sh

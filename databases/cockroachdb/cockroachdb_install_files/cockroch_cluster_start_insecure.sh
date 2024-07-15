@@ -5,7 +5,7 @@ cd /data/cockroach
 
 echo 'starting node1'
 sudo -i -u cockroach cockroach start --port=26257 --http-port=8080 \
-     --background --store=/data/cockroach/data1  --certs-dir=certs  \
+     --background --store=/data/cockroach/data1  --insecure  \
      --join=localhost:26257,localhost:26258,localhost:26259 > /data/cockroach/c1.log 2>&1 &
 echo 'sleeping 5 seconds'
 sleep 5
@@ -32,6 +32,13 @@ reset
 
 echo 'sleeping 10 seconds to let servers sync'
 sleep 10
-echo 'checking status'
+echo 'checking status on node1'
 sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --insecure
+
+echo 'checking status on node2'
+sudo -i -u cockroach cockroach node status --host=localhost --port=26258 --insecure
+
+echo 'checking status on node3'
+sudo -i -u cockroach cockroach node status --host=localhost --port=26259 --insecure
+
 

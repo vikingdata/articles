@@ -18,19 +18,19 @@ mkdir -p /usr/local/lib/cockroach
 chown -R cockroach.cockroach /data/cockroach /usr/local/lib/cockroach
 
 echo 'starting node1'
-sudo -i -u cockroach cockroach start-single-node --port=26257 --http-port=8080   --background --store=/data/cockroach/data1 --insecure  > /data/cockroach/c1.log 2>&1 &
+sudo -i -u cockroach cockroach start-single-node --port=26257 --http-port=8080   --background --store=/data/cockroach/data1 --insecure  --pid-file=/data/cockroach/node1.pid  > /data/cockroach/c1.log 2>&1 &
 echo 'sleeping 5 seconds'
 sleep 5
 reset
 
 echo 'starting node2'
-sudo -i -u cockroach cockroach start --port=26258 --http-port=8081   --background --store=/data/cockroach/data2 --insecure --join=localhost:26257   > /data/cockroach/c2.log 2>&1 &
+sudo -i -u cockroach cockroach start --port=26258 --http-port=8081   --background --store=/data/cockroach/data2 --insecure --join=localhost:26257  --pid-file=/data/cockroach/node2.pid  > /data/cockroach/c2.log 2>&1 &
 echo 'sleeping 5 seconds'
 sleep 5
 reset
 
 echo 'starting node3'
-sudo -i -u cockroach cockroach start --port=26259 --http-port=8082   --background --store=/data/cockroach/data3 --insecure --join=localhost:26257   > /data/cockroach/c3.log 2>&1 &
+sudo -i -u cockroach cockroach start --port=26259 --http-port=8082   --background --store=/data/cockroach/data3 --insecure --join=localhost:26257 --pid-file=/data/cockroach/node1.pid3  > /data/cockroach/c3.log 2>&1 &
 echo 'sleeping 5 seconds'
 sleep 5
 reset

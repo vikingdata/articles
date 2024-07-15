@@ -50,6 +50,15 @@ if you don't go over the storage, use, and stay within the same area on GCP, it 
 * Many articles explain how to install CockroachDB
 * None of the articles explain how to restart a cluster.
     * You can stop individual nodes, but stopping the last node with a normal "kill" command leaves it hanging. This appears to a bug from 2016.
+* Somtimes you get an error " ERROR: could not cleanup temporary directories" and cockroachdb won't start. The official solution is to specify another
+storage directory because another process is running. The problem is, no processes is running. 
+        * My error was: ERROR: could not cleanup temporary directories from record file: could not lock temporary directory /data/cockroach/data1/cockroach-temp3460925515
+	* To solve this, it might not be the best solution
+	```
+rm -rf /data/cockroach/data1/cockroach-temp3460925515
+echo "" > /data/cockroach/data1/temp-dirs-record.txt
+
+```
 
 * * *
 <a name=d>Download and Cluster on one server</a>
@@ -108,8 +117,8 @@ useradd cockroach --shell /bin/bash --create-home
 
 cd /data/cockroach
 GET_DIR_URL=https://raw.githubusercontent.com/vikingdata/articles/main/databases/cockroachdb/cockroachdb_install_files
-wget -O cockroch_cluster_init1.sh $GET_DIR_URL/cockroch_cluster_init1.sh
-wget -O cockroch_cluster_init2.sh $GET_DIR_URL/cockroch_cluster_init2.sh
+wget -O cockroach_cluster_init1.sh $GET_DIR_URL/cockroach_cluster_init1.sh
+wget -O cockroach_cluster_init2.sh $GET_DIR_URL/cockroach_cluster_init2.sh
 chmod 755 /data/cockroach/cockroch_cluster_init*
 
  # As root
@@ -156,6 +165,8 @@ cockroach cert create-node \
 --certs-dir=$COCKROACH_CERTS_DIR \
  --ca-key=$COCKROACH_CERTS_DIR/ca.key
 
+chown -R cockroach /data/cockroach/certs
+
 ```
 
 ### Restart Cluster
@@ -165,14 +176,14 @@ sudo bash
 cd /data/cockroach
 GET_DIR_URL=https://raw.githubusercontent.com/vikingdata/articles/main/databases/cockroachdb/cockroachdb_install_files
 
-wget -O cockroch_cluster_stop_insecure.sh $GET_DIR_URL/cockroch_cluster_stop_insecure.sh
-wget -O cockroch_cluster_stop_secure.sh $GET_DIR_URL/cockroch_cluster_stop_secure.sh
+wget -O cockroach_cluster_stop_insecure.sh $GET_DIR_URL/cockroach_cluster_stop_insecure.sh
+wget -O cockroach_cluster_stop_secure.sh $GET_DIR_URL/cockroach_cluster_stop_secure.sh
 
 chmod 755 /data/cockroach/cockroch_cluster_stop*
 ./cockroch_cluster_stop_insecure.sh
 
-wget -O cockroch_cluster_start_insecure.sh $GET_DIR_URL/cockroch_cluster_start_insecure.sh
-wget -O cockroch_cluster_start_secure.sh $GET_DIR_URL/cockroch_cluster_start_secure.sh
+wget -O cockroach_cluster_start_insecure.sh $GET_DIR_URL/cockroach_cluster_start_insecure.sh
+wget -O cockroach_cluster_start_secure.sh $GET_DIR_URL/cockroach_cluster_start_secure.sh
 chmod 755 /data/cockroach/cockroch_cluster_start*
 
 ./cockroch_cluster_start_secure.sh

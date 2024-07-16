@@ -177,3 +177,20 @@ processlist, slow logs, current status, replication group info
     part of DAD -- start DAD
 
 inline views
+
+
+roles -- mysql, cockroachdb, postgresql, snoflake
+
+mysql -- if log flush happens more than 1 seconds, log flush buffer is too small
+
+inline views
+
+mysql -- sys.statement_analysis -- analyze queries : how to turn on and what to do
+  1. Look for exec_count, and avg and lock latency
+  2. performance_schema, threads threads,processlist_id and other thread tables
+  . performance_schema, metadata_locks, threads, join by owner_thread_id and thread_id, with processlist_id on threads.
+
+
+msqyl rep -- parrallel master to serial slave,
+  large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,
+  backups blocks DDL queries and hence slave in blocked,  

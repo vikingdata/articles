@@ -10,6 +10,8 @@
 <a name=et></a>et
 -----
 
+* Spatial index for spaital column. https://dev.mysql.com/doc/refman/8.4/en/create-index.html
+
 
 * characterstics of role : can be dropped, is locked, granted to users
 
@@ -19,11 +21,13 @@
    3. SET GLOBAL gtid_executed to values execued in the thread.
    4. Make sure the master still has the data.
 
-* With more memeory thena data and no binlog, what improvements an you do? innodb_flush_log_at_trx_commit=2
+* With more memeory then data and no binlog, what improvements an you do? innodb_flush_log_at_trx_commit=2
     * innodb_doublewrite=0
-    * innodb_undo_directory=/dev/shm --- ubdo logs in memory
-    *  sync_binlog=0 - normally yes, but binlog isn't used.
-    * trx commit is already 2, 0 would be faster.
+    * innodb_undo_directory=/dev/shm --- undo logs in memory
+    * NO:  sync_binlog=0 - normally yes, but binlog isn't used.
+    * NO : trx commit is already 2, 0 would be faster.
+    * More memory might help
+    * larger innodb_file_size -- help organize things to commit
 
 * persistent stats : optimizer saved acrosss restarts, when innodb_stats_persistent_sample_pages is increased it improves precision on execution plans of transient index statistics
     * innodb_stats_auto_recalc causes new indexes and if data is changed more then 10% to be updated
@@ -38,11 +42,11 @@ at a time. Master might be too busy, but transferring the binlog is fast. Tables
 
 * kill -9 is bad, kill -15 mysql will tell it to stop and gracefully shutdown
 
-* To stop sql injection, preprared staements, stored procedures, vlidate input, escaped input
+* To stop sql injection, preprared staements, stored procedures, validate input, escaped input
     * https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-    * Connection Control plugin liits connections, nothing to do with sql injection
+    * Connection Control plugin limits connections, nothing to do with sql injection
 
-* 15 roles are active by default. They need to be activated or set as default.
+* No roles are active by default. They need to be activated or set as default.
 
 * mysqlbinlog can use rewrite to rewrite queries for a database
   mysqlbinlog --rewrite-db='db1->db2'
@@ -58,7 +62,7 @@ https://dev.mysql.com/doc/dev/mysqlsh-api-javascript/8.0/classmysqlsh_1_1dba_1_1
 * Multi source replication use relay_log_recovery to resolve crashes, does not resolve conflicts between 2 replication
 streams.
 
-* to install audit, mysql < audit_log_filter_linux_install.sql
+* to install audit, mysql < audit_log_filter_linux_install.sql : https://dev.mysql.com/doc/mysql-secure-deployment-guide/5.7/en/secure-deployment-audit.html
 
 * ADMIN OPTION with role just grants the ability to give and revoke role to other users. 20
 
@@ -88,6 +92,7 @@ https://dev.mysql.com/doc/mysql-enterprise-backup/4.1/en/meb-files-backed-up-inn
 
 
 * Snapshots: No recovery is usually necessary. If copied into anoher system, can be brought up immediately.
+They can greatly reduce time. 
 
 * To run multiple mysql instances: Docker, different systemd settings, use different options for each instance and
 different systemd settings can specify different startup configs. 29
@@ -127,6 +132,7 @@ truly down and have not gotten data relative to the 2 nodes.
 * explain analyze
     * https://www.percona.com/blog/using-explain-analyze-in-mysql-8/
     * https://dev.mysql.com/worklog/task/?id=4168
+    * https://dev.mysql.com/blog-archive/mysql-explain-analyze/
 
 * mysqlpump excludes
       * Does not dump performance_schema, ndbinfo, or sys, schema_information
@@ -178,7 +184,7 @@ truly down and have not gotten data relative to the 2 nodes.
   data is not decryopted in memory, except temporarily when processed.
   Data is encrypted on disk, memory, and over network. 
 
-* AFTER RPM installation, you need to initialize data directory, and password can be found in log file.
+* AFTER RPM installation, you need to initialize data directory, and for PERCONA password can be found in log file.
   rpm is split many rpms, password might not be in log file. 
 
 * for mysqlpump, ro backup databases that it doesn't normally backup
@@ -199,6 +205,11 @@ truly down and have not gotten data relative to the 2 nodes.
 * on Windows three ways to connect  Pipe, memory, tcpip.
 
 skip 65
+
+* mysqldump all databases delete logs, will delete all but last binlog and dump all databases except sys, iformation_schema,
+and performance_schema
+
+* to force error logs. rename and flush
 
 
 * For importing tabls:

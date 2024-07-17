@@ -1,33 +1,27 @@
 
 
 cd /data/cockroach
-echo shutting down node1
-cockroach node drain 1  --port=26257 --insecure
-if [ -f node1.pid ]; then
-  echo "killing node 1 ",`cat node1.pid`
-  kill `cat node1.pid`
-  rm node1.pid
-fi
-sleep 5
 
-echo shutting down node2
-cockroach node drain 2  --port=26258 --insecure
-if [ -f node1.pid ]; then
-  echo "killing node 2 ", `cat node2.pid`
-  kill `cat node2.pid`
-  rm node2.pid
-fi
-sleep 5
+PORT="26256"
+for i in 1 2 3; do
+  let PORT=$Port+1
 
-echo shutting down node3
-# cockroach node drain 3  --port=26259 --insecure
-if [ -f node3.pid ]; then
-  echo "killing node 3 ", `cat node3.pid`
-  kill `cat node3.pid`
-  sleep 20
-  kill -9 `cat node3.pid`
-  rm node3.pid
-fi
+  echo "shutting down node$i"
+  cockroach node drain $i  --port=$PORT --insecure
+
+  if [ -f node$i.pid ]; then
+    PID=`cat node$i.pid`
+    echo "killing node $i $PID"
+    kill $PID
+    sleep 5
+    if ps -p $PID > /dev/null; then
+      sleep 5
+      echo "hard killing $PID -- this is bad, need a better shutdown method"
+      kill -9 $PID
+    fi
+    rm node1.pid
+  fi  
+done
 
 echo '
 echo ""
@@ -52,5 +46,7 @@ count=`ps auxw | grep "cockroach start" | grep -v grep | wc -l`
 
 if [ $count -lt 1 ]; then
     echo "cockroachdb cluster should have stopped"
+else
+    echo "Darn, cockroach still running, try to fnd out why."
 fi
 

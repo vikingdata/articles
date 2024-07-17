@@ -30,8 +30,8 @@ sudo -i -u cockroach cockroach start --port=26259 --http-port=8082  \
 echo 'sleeping 5 seconds'
 reset
 
-echo 'sleeping 10 seconds to let servers sync'
-sleep 10
+echo 'sleeping 30 seconds to let servers sync'
+sleep 30
 echo 'checking status'
 sudo -i -u cockroach cockroach node status --host=localhost --port=26257 -certs-dir=$CERT_DIR
 

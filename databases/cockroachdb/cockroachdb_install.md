@@ -176,16 +176,16 @@ wget -O cockroach_cluster_start_secure.sh $GET_DIR_URL/cockroach_cluster_start_s
 wget -O cockroach_cluster_check_insecure.sh $GET_DIR_URL/cockroach_cluster_check_insecure.sh
 wget -O cockroach_cluster_check_secure.sh $GET_DIR_URL/cockroach_cluster_check_secure.sh
 
-chmod 755 /data/coackroach/cockroch_cluster_st*
+chmod 755 /data/cockroach/cockroach_cluster_*
 
 ./cockroach_cluster_check_insecure.sh
-./cockroch_cluster_stop_insecure.sh
+./cockroach_cluster_stop_insecure.sh
 
-./cockroch_cluster_start_insecure.sh
+./cockroach_cluster_start_insecure.sh
 ./cockroach_cluster_check_insecure.sh
-./cockroch_cluster_stop_insecure.sh
+./cockroach_cluster_stop_insecure.sh
 
-./cockroch_cluster_start_secure.sh
+./cockroach_cluster_start_secure.sh
 cockroach_cluster_check_secure.sh
 
 

@@ -4,16 +4,25 @@ cd /data/cockroach
 
 PORT="26256"
 for i in 1 2 3; do
-  let PORT=$Port+1
+  let PORT=$PORT+1
 
   if [ -f node$i.pid ]; then
-    echo "shutting down node$i"
-    cockroach node drain $i  --port=$PORT --insecure
-     
+    if ! [ "$i" = 3 ]; then
+      echo "shutting down node$i"
+      cockroach node drain $i  --port=$PORT --insecure
+    fi
+    
     PID=`cat node$i.pid`
     echo "killing node $i $PID"
     kill $PID
     sleep 5
+
+
+    if ps -p $PID > /dev/null; then
+      echo "node still runnning, waiting 10 seconds before hard kill"
+      sleep 10
+    fi
+
     if ps -p $PID > /dev/null; then
       sleep 5
       echo "hard killing $PID -- this is bad, need a better shutdown method"

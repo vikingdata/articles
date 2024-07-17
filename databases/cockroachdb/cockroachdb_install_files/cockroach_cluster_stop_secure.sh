@@ -6,10 +6,10 @@ PORT="26256"
 for i in 1 2 3; do
   let PORT=$Port+1
 
-  echo "shutting down node$i"
-  cockroach node drain $i  --port=$PORT --certs-dir=$CERT_DIR
-
   if [ -f node$i.pid ]; then
+    echo "shutting down node$i"
+    cockroach node drain $i  --port=$PORT --certs-dir=$CERT_DIR
+      
     PID=`cat node$i.pid`
     echo "killing node $i $PID"
     kill $PID
@@ -19,7 +19,7 @@ for i in 1 2 3; do
       echo "hard killing $PID -- this is bad, need a better shutdown method"
       kill -9 $PID
     fi
-    rm node1.pid
+    rm node1$i.pid
   fi  
 done
 

@@ -20,6 +20,7 @@
    2. SET GLOBAL gtid_purged to the purged values of slave.
    3. SET GLOBAL gtid_executed to values execued in the thread.
    4. Make sure the master still has the data.
+https://www.percona.com/blog/how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
 
 * With more memeory then data and no binlog, what improvements an you do? innodb_flush_log_at_trx_commit=2
     * innodb_doublewrite=0

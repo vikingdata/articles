@@ -180,13 +180,16 @@ chmod 755 /data/cockroach/cockroach_cluster_*
 
 ./cockroach_cluster_check_insecure.sh
 ./cockroach_cluster_stop_insecure.sh
-
 ./cockroach_cluster_start_insecure.sh
 ./cockroach_cluster_check_insecure.sh
 ./cockroach_cluster_stop_insecure.sh
 
 ./cockroach_cluster_start_secure.sh
 ./cockroach_cluster_check_secure.sh
+./cockroach_cluster_stop_insecure.sh
+./cockroach_cluster_start_secure.sh
+./cockroach_cluster_check_secure.sh
+
 
 
 ```

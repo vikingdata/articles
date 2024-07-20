@@ -1,6 +1,7 @@
 
 cd /data/cockroach
 
+CERT_DIR=/data/cockroach/certs
 
 echo 'checking status on node1'
 sudo -i -u cockroach cockroach node status --host=localhost --port=26257 --certs-dir=$CERT_DIR

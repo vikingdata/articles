@@ -1,7 +1,7 @@
 
 
 cd /data/cockroach
-$CERT_DIR=/data/cockroach/certs
+CERT_DIR=/data/cockroach/certs
 
 echo 'starting node1'
 sudo -i -u cockroach cockroach start --port=26257 --http-port=8080 \

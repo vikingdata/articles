@@ -21,6 +21,7 @@ These are Cloud services I am interested in and how to use them. Its really easy
 5. MongoDB
 6. CockroachDB
 7. New Relic
+8. Snowflake
 
 * * *
 <a name=Links></a>Links
@@ -55,4 +56,24 @@ Date: July 2024
        * Programming -- secret manager
 
 
+
+* * *
+<a name=g></a>GCP
+-----
+
+* * *
+<a name=></a>
+-----
+
+* * *
+<a name=></a>
+-----
+
+* * *
+<a name=></a>
+-----
+
+* * *
+<a name=></a>
+-----
 

@@ -102,8 +102,10 @@ Edit monitors:
 
 NOTE: I could not change the metric settings in the yml file because it would not accept the license key. Then when I removed the yml file, it still would not restart.
 I think the license key is stored temporarily somewhere and when you make your yml file is deletes the previous config and then won't work again. You have to remove
-and install again. 
+and install again. And you cannot get support for free accounts. I think the license key is intentionally less than 40 characters so you can't reduce the monitor rate by making your
+own yml file. Be careful not to go over the 100 GB a month. 
 
+For paid accounts to change the rate of monitoring....
 
 ```
  # Put in your license key first. 

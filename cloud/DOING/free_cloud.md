@@ -93,8 +93,8 @@ Edit monitors:
     * https://docs.newrelic.com/docs/synthetics/synthetic-monitoring/using-monitors/add-edit-monitors/
     * In accounts: go to Synthetic Monitoring
         * edit /etc/newrelic-infra.yml
-	* Use the templte at https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
-	    * wget -O /etc/newrelic-infra.yml https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
+        * Use the templte at https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
+        * wget -O /etc/newrelic-infra.yml https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
     * Commands
         * Start/Stop : https://docs.newrelic.com/docs/infrastructure/install-infrastructure-agent/manage-your-agent/start-stop-restart-infrastructure-agent/
     

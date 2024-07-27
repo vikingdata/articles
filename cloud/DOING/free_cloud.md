@@ -13,7 +13,7 @@ Original Copyright August 2024**_
 
 
 These are Cloud services I am interested in and how to use them. Its really easy, get an account and use their dashboards. I focus on free always accounts.
-Most free accounts have limitations. 
+Most free accounts have limitations. GCP and AWS have many more free always services and some trail services, but I just list the ones I am mainly interested in. 
 
 1. [GCP](#g)
 2. [AWS](#a)
@@ -40,7 +40,7 @@ Most free accounts have limitations.
 -----
 
 * [AWS](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=tier%23always-free&awsf.Free%20Tier%20Categories=*all)
-   * Limits by usage  -- up 100%
+   * Limits by usage  
        * database : redshift, Dynamo, SimpleDB
        * Monitoring -- cloudwatch, GLue, Key management
        * Programming -- lambda

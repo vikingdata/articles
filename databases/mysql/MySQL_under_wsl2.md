@@ -58,7 +58,7 @@ Info Commands is Windows Shell or Powershell
 wsl --set-default Ubuntu-22.04
 wsl
 
-  # ot if you didn't set the default
+  # or if you didn't set the default
 wsl --distribution Ubuntu-22.04
 
   # Once in Linux

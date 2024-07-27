@@ -48,9 +48,12 @@ Most free accounts have limitations. GCP and AWS have many more free always serv
 
    * No longer
       * EC2 -- now if you make a 3 year contract, you pay per month for your ip address. GCP per month at the lowest costs is about $4 per month.
-      I am paying over $10 a month with a 3 year contract. Its better to just stop using AWS and use GCP. You recipe your costs quickly.
+      I am paying over $10 a month with a 3 year contract. Its better to just stop using AWS and use GCP. You recover your costs quickly if you switch from AWS to GCP when you
+      just want to test.
    * There are other free services, but I am not interested in them right now.
-
+   * For GCP with no committment, I got a a vm for about $3.26 a month. $40  year. With AWS I pay now $11 a month for some reason, probably because of ip address and with a 3 year
+   payment. I will update the true cost of the GCP server later --- estimates are not very good usually. AWS seems to have reduced its committed servers, but they have in small print
+   costs doesn't include usage of services. That's were I get charged $11 a month. We will see if GCP does something similar. 
 
 
 * * *

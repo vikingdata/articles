@@ -56,7 +56,7 @@ These services are free until you go beyond a resource limit. I don't list all t
        * database : redshift, Dynamo, SimpleDB
        * Monitoring -- cloudwatch, GLue, Key management
        * Programming -- lambda
-       * Infrastructure -- CLoudFront, Route
+       * Infrasturcture -- CLoudFront, Route
 
    * No longer
       * EC2 -- now if you make a 3 year contract, you pay per month for your ip address. GCP per month at the lowest costs is about $4 per month.

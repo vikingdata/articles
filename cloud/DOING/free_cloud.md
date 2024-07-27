@@ -20,7 +20,7 @@ These are Cloud services I am interested in and how to use them. Its really easy
 4. [AWS](#a)
 5. [MongoDB](#m)
 6. [CockroachDB](#c)
-7. [New Relic](n)
+7. [New Relic](#n)
 8. [Snowflake](#s)
 
 * * *
@@ -100,3 +100,13 @@ Edit monitors:
     
 
 
+* * *
+<a name=s></a>Snowflake
+-----
+You can sign up with the same email every 30 days. It means, you can make it always free, but you have to sign up again. 
+
+https://signup.snowflake.com/
+
+I recommend using the $2 option per month and limiting the amount of data and traffic after the free month. 
+
+https://www.snowflake.com/en/data-cloud/pricing-options/

@@ -13,7 +13,7 @@ Original Copyright August 2024**_
 
 
 These are Cloud services I am interested in and how to use them. Its really easy, get an account and use their dashboards. I focus on free always accounts.
-Most free accounts have limitations. GCP and AWS have many more free always services and some trail services, but I just list the ones I am mainly interested in. 
+Most free accounts have limitations. GCP and AWS have many more free always services and some trial services, but I just list the ones I am mainly interested in. 
 
 1. [GCP](#g)
 2. [AWS](#a)

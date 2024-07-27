@@ -86,18 +86,18 @@ Free : https://www.cockroachlabs.com/pricing/
 -----
 
 Links
-    * https://newrelic.com/pricing/free-tier
+* https://newrelic.com/pricing/free-tier
 
 Free monitoring. Be careful how often you alert and load data. You have 100 GB free a month.Reduce the checking of your servers.
 
 Edit monitors:
-    * https://docs.newrelic.com/docs/synthetics/synthetic-monitoring/using-monitors/add-edit-monitors/
-    * In accounts: go to Synthetic Monitoring
-        * edit /etc/newrelic-infra.yml
-        * Use the templte at https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
-        * wget -O /etc/newrelic-infra.yml https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
-    * Commands
-        * Start/Stop : https://docs.newrelic.com/docs/infrastructure/install-infrastructure-agent/manage-your-agent/start-stop-restart-infrastructure-agent/
+* https://docs.newrelic.com/docs/synthetics/synthetic-monitoring/using-monitors/add-edit-monitors/
+* In accounts: go to Synthetic Monitoring
+    * edit /etc/newrelic-infra.yml
+    * Use the templte at https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
+    * wget -O /etc/newrelic-infra.yml https://github.com/newrelic/infrastructure-agent/blob/master/assets/examples/infrastructure/newrelic-infra-template.yml.example
+* Commands
+    * Start/Stop : https://docs.newrelic.com/docs/infrastructure/install-infrastructure-agent/manage-your-agent/start-stop-restart-infrastructure-agent/
     
 
 

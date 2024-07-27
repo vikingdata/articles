@@ -12,27 +12,15 @@ _**by Mark Nielsen
 Original Copyright August 2024**_
 
 
-These are Cloud services I am interested in and how to use them. Its really easy, get an account and use their dashboards.
+These are Cloud services I am interested in and how to use them. Its really easy, get an account and use their dashboards. I focus on free always accounts.
+Most free accounts have limitations. 
 
-1. [Links](#links)
-2. [Summary](#s)
-3. [GCP](#g)
-4. [AWS](#a)
-5. [MongoDB](#m)
-6. [CockroachDB](#c)
-7. [New Relic](#n)
-8. [Snowflake](#s)
-
-* * *
-<a name=Links></a>Links
------
-
-
-* * *
-<a name=s></a>Summary
------
-
-These services are free until you go beyond a resource limit. I don't list all the services, just the ones I am interested in. 
+1. [GCP](#g)
+2. [AWS](#a)
+3. [MongoDB](#m)
+4. [CockroachDB](#c)
+5. [New Relic](#n)
+6. [Snowflake](#s)
 
 
 * * *
@@ -85,7 +73,6 @@ Free : https://www.cockroachlabs.com/pricing/
 <a name=n></a>New Relic
 -----
 
-Links
 * https://newrelic.com/pricing/free-tier
 
 Free monitoring. Be careful how often you alert and load data. You have 100 GB free a month.Reduce the checking of your servers.

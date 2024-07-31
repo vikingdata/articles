@@ -357,6 +357,9 @@ Not really Linux, but to increase the font size in Windows. cygwin is a Linux em
     * https://gist.github.com/r2k0/1152840
     * https://www.gnu.org/software/sed/manual/sed.html
     * https://www.tecmint.com/linux-sed-command-tips-tricks/
+    * https://www.geeksforgeeks.org/cut-command-linux-examples/
+    * https://gist.github.com/andfaulkner/48f3784a0e1d984cb76f
+    * https://www.tutorialspoint.com/unix_commands/cut.htm
 
 
 * Convert all whitespace to single space

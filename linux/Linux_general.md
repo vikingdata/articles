@@ -352,6 +352,13 @@ Not really Linux, but to increase the font size in Windows. cygwin is a Linux em
 * * *
 <a name=parse></a>Parse text files
 ---------------
+* Links
+    * https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
+    * https://gist.github.com/r2k0/1152840
+    * https://www.gnu.org/software/sed/manual/sed.html
+    * https://www.tecmint.com/linux-sed-command-tips-tricks/
+
+
 * Convert all whitespace to single space
    * sed 's/\s\s*/ /g'
 * Remove beginning whitespace

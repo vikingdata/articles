@@ -372,7 +372,8 @@ echo "		a b c d 1 2" > example.txt
 echo "d   e f   g 3     4" >> example.txt
 
 ```
-* sed 's/\s\s*/ /g' example.txt
+
+sed 's/\s\s*/ /g' example.txt
 
 ```
 # output
@@ -380,14 +381,14 @@ echo "d   e f   g 3     4" >> example.txt
 d e f g 3 4
 ```
 
-* sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g'
+sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g'
 ```
 # output
 a b c d 1 2
 d e f g 3 4
 ``` 
 
-* sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g' | cut -d ' ' -f 3,4
+sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g' | cut -d ' ' -f 3,4
 ```
 #output
 c d

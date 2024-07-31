@@ -367,10 +367,8 @@ Not really Linux, but to increase the font size in Windows. cygwin is a Linux em
    * cut -d ' ' -f 3,4
 * Test
 
-echo "		a b c d 1 2" > example.txt
-
-echo "d   e f   g 3     4" >> example.txt
-
+echo "		a b c d 1 2" > example.txt \
+echo "d   e f   g 3     4" >> example.txt \
 sed 's/\s\s*/ /g' example.txt
 
 ```

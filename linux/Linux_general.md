@@ -21,6 +21,8 @@ title: Linux general tips
 8. [Disk Commands](#d)
 10. [Monitor Commands](#m)
 11. [List Services](#services)
+12. [cygwin font size](#cygwin)
+13. [ Parse text files](#parse)
 
 * * *
 
@@ -336,4 +338,50 @@ For all these examples, it will gather stats for 2 seconds 5 times.
 * ls /lib/systemd/system/ | grep ssh
 
 
+
+
+* * *
+<a name=cygwin></a>Cygwin font size
+---------------
+Not really Linux, but to increase the font size in Windows. cygwin is a Linux emulator for Widnows.
+
+* Make a shortcut desktop
+* Enter : C:\cygwin64\bin\mintty.exe -i /Cygwin-Terminal.ico   -o FontSize=18
+    * Note: Change C:\cygwin64\bin\mintty.exe to whever mintty is installed. 
+
+* * *
+<a name=parse></a>Parse text files
+---------------
+* Convert all whitespace to single space
+   * sed 's/\s\s*/ /g'
+* Remove beginning whitespace
+   * sed 's/^\s*//g'
+* Get 3rd and fourth field
+   * cut -d ' ' -f 3,4
+* Test
+
+```
+echo "		a b c d 1 2" > example.txt
+echo "d   e f   g 3     4" >> example.txt
+
+```
+* sed 's/\s\s*/ /g' example.txt
+
+```
+# output
+ a b c d 1 2
+d e f g 3 4
+```
+
+* sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g'
+```# output
+a b c d 1 2
+d e f g 3 4
+``` 
+
+* sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g' | cut -d ' ' -f 3,4
+```#output
+c d
+f g
+```
 

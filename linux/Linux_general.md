@@ -381,13 +381,15 @@ d e f g 3 4
 ```
 
 * sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g'
-```# output
+```
+# output
 a b c d 1 2
 d e f g 3 4
 ``` 
 
 * sed 's/\s\s*/ /g' example.txt | sed 's/^\s*//g' | cut -d ' ' -f 3,4
-```#output
+```
+#output
 c d
 f g
 ```

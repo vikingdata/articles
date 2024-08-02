@@ -28,6 +28,8 @@ title: Linux general tips
 
 <a name=links></a>Links
 -----
+* [Unix Commands Reference](https://www.tutorialspoint.com/unix_commands/alternatives.htm)
+    * Good for learning most Linux commands
 * [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/x17837.html)
 * [Introducing pass](https://www.passwordstore.org/)
 * [https://wiki.archlinux.org/title/Pass](https://wiki.archlinux.org/title/Pass)

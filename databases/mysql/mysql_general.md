@@ -129,6 +129,7 @@ Links
 * Make sure this is in my.cnf and is in global variables
     * SET GLOBAL innodb_undo_log_truncate=ON;
 * Kill all processes or restart mysql
+    * Before you do this, get permission. 
 * NOTE: innodb_undo_001 and innodb_undo_002 are reserved and CANNOT be manually truncated. You must
 allow them to auto truncate. 
 * Select all undo files

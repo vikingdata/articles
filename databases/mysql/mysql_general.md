@@ -14,7 +14,6 @@ Original Copyright June 2024**_
 
 This article will grow over time. 
 
-Not including [Info Queries](info_queries.md)
 
 * [tail a gzip file](#tailgzip)
 * [Info queries](info_queries.md)
@@ -124,7 +123,7 @@ SELECT * FROM performance_schema.global_variables
 <a name=undo></a>Remove large undo files
 -----
 Links
-    * https://dev.mysql.com/doc/refman/8.4/en/innodb-undo-tablespaces.html#innodb-drop-undo-tablespaces
+* https://dev.mysql.com/doc/refman/8.4/en/innodb-undo-tablespaces.html#innodb-drop-undo-tablespaces
 
 * Make sure this is in my.cnf and is in global variables
     * SET GLOBAL innodb_undo_log_truncate=ON;

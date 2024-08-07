@@ -156,10 +156,22 @@ ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
 ```
 * Select staus of undo file until Free_Extents stops.
 ```
-SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size
-FROM INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+ SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
+ INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+
+*************************** 1. row ***************************
+       FILE_ID: 4294967151
+       FILE_NAME: ./undo_002
+       FILE_TYPE: UNDO LOG
+       FREE_EXTENTS: 2
+       TOTAL_EXTENTS: 16
+       INITIAL_SIZE: 16777216
+
+```
+
 ```
 * Verify its empty
+```
 SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE '%undo2%';
 +-----------------+--------+
 | NAME            | STATE  |

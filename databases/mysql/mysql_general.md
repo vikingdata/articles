@@ -127,8 +127,29 @@ Links
 
 * Make sure this is in my.cnf and is in global variables
     * SET GLOBAL innodb_undo_log_truncate=ON;
+* Increase the purge frequency -- by lowering the number. Check undo logs described below and see if they auto-purge. 
+```
+show global variables like 'innodb_purge_rseg_truncate_frequency';
+
++--------------------------------------+-------+
+| Variable_name                        | Value |
++--------------------------------------+-------+
+| innodb_purge_rseg_truncate_frequency | 128   |
++--------------------------------------+-------+
+
+SET GLOBAL innodb_purge_rseg_truncate_frequency=32;
++
+
+```
+* Increase the amount of threads
+```
+ set GLOBAL innodb_purge_threads=8;
+```
+
 * Kill all processes or restart mysql
-    * Before you do this, get permission. 
+    * Before you do this, get permission.
+    * The goal is to release a query that might be causing the undo log to grow by not releasing a commit.
+        * You can also try to kill long running queries. 
 * NOTE: innodb_undo_001 and innodb_undo_002 are reserved and CANNOT be manually truncated. You must
 allow them to auto truncate. 
 * Select all undo files
@@ -167,23 +188,9 @@ ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
  TOTAL_EXTENTS: 1000
   INITIAL_SIZE: 1677721611
 
-  -- Wait an hour
-
-SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
-INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
-*************************** 1. row ***************************
-      FILE_ID: 4294967151
-    FILE_NAME: ./undo_002
-    FILE_TYPE: UNDO LOG
- FREE_EXTENTS: 2
-TOTAL_EXTENTS: 16
- INITIAL_SIZE: 16777216
-		
-
 ```
 
-
-* Verify its empty
+* Keep executing this query until its say empty.
 ```
 SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE '%undo2%';
 +-----------------+--------+
@@ -191,6 +198,26 @@ SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE 
 +-----------------+--------+
 | innodb_undo_002 | empty  |
 +-----------------+--------+
+```
+
+* Enable previous large undo
+```
+ALTER UNDO TABLESPACE innodb_undo_002 SET ACTIVE;
+```
+
+# Wait a while and check again and it should decrease now. 
+```
+SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
+INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+*************************** 1. row ***************************
+      FILE_ID: 4294967151
+          FILE_NAME: ./undo_002
+	      FILE_TYPE: UNDO LOG
+	       FREE_EXTENTS: 2
+	       TOTAL_EXTENTS: 16
+	        INITIAL_SIZE: 16777216
+
+
 ```
 
 * Check diskspace:

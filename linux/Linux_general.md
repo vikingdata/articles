@@ -288,6 +288,7 @@ done
 * TODO: activity, activity per process
 * What is using swap
    * article: https://my.f5.com/manage/s/article/K40027012
+   * [Swap Memory: What It Is, How It Works, and How to Manage It](https://phoenixnap.com/kb/swap-memory#:~:text=Swap%20memory%2C%20also%20known%20as,preventing%20system%20slowdowns%20or%20crashes.)
    * Start top
        * press f
        * Go down to Swap

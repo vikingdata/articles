@@ -20,7 +20,8 @@ Not including
 * [MySQL variables](MySQL_variables.md)
 * [Backup Restore Replication](mysql_backup_restore_replication.md)
 * [What causes swap](#swap)
-
+* [Show mutiple variables from 'show'](#show)
+* [Removing large undo files][#undo]
 Index
 1. [tail a gzip file](#tailgzip)
 
@@ -98,3 +99,57 @@ malloc-lib=/usr/lib64/libjemalloc.so.1
     * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
     * [Analyze ram and swap use](https://github.com/vikingdata/articles/blob/main/linux/Linux_general.md#m) -- Monitor commands
 * MySQL memory cosiderations : https://mariadb.com/kb/en/mariadb-memory-allocation/
+
+* * *
+<a name=show></a>Show mutiple variables from 'show'
+-----
+* https://dev.mysql.com/doc/refman/8.4/en/regexp.html
+* https://www.geeksforgeeks.org/rlike-operator-in-mysql/
+
+```
+SHOW GLOBAL STATUS WHERE Variable_name RLIKE 'read';
+SHOW GLOBAL STATUS WHERE Variable_name RLIKE '_read';
+SHOW GLOBAL STATUS WHERE Variable_name RLIKE 'read_';
+SHOW GLOBAL variables WHERE Variable_name = 'gtid_executed' or Variable_name = 'gtid_purged';
+
+SELECT * FROM performance_schema.global_status
+ WHERE VARIABLE_NAME like '%read%';
+ 
+SELECT * FROM performance_schema.global_variables
+ WHERE VARIABLE_NAME like 'gtid_executed'
+     OR VARIABLE_NAME like 'gtid_purged';
+
+```
+* * *
+<a name=undo></a>Remove large undo files
+-----
+Links
+    * https://dev.mysql.com/doc/refman/8.4/en/innodb-undo-tablespaces.html#innodb-drop-undo-tablespaces
+
+* Make sure this is in my.cnf and is in global variables
+    * SET GLOBAL innodb_undo_log_truncate=ON;
+* Kill all processes or restart mysql
+* Select all undo files
+```
+SELECT TABLESPACE_NAME, FILE_NAME FROM INFORMATION_SCHEMA.FILES
+  WHERE FILE_TYPE LIKE 'UNDO LOG';
+```
+Output
+```
+
+```
+* Create new undo file
+```
+CREATE UNDO TABLESPACE  temp_undo ADD DATAFILE 'temp_undo.ibu';
+```
+* Disable previous large undo
+```
+ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
+```
+* Select staus of undo file until Free_Extents equal Total_Extents
+```
+SELECT * FROM INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+```
+
+
+

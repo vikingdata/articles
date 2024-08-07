@@ -190,7 +190,8 @@ ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
 
 ```
 
-* Keep executing this query until its say empty.
+* Keep executing this query until its say empty. Auto purging should happen automatically.
+By disabling the file, letting it empty, and activating it will auto purge the file. 
 ```
 SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE '%undo2%';
 +-----------------+--------+
@@ -205,7 +206,7 @@ SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE 
 ALTER UNDO TABLESPACE innodb_undo_002 SET ACTIVE;
 ```
 
-# Wait a while and check again and it should decrease now. 
+* Wait a while and check again and it should decrease now. 
 ```
 SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
 INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
@@ -227,6 +228,15 @@ INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
 -rw-r----- 1 mysql mysql 16M Aug  7 10:57 /var/lib/mysql/undo_001
 -rw-r----- 1 mysql mysql 16M Aug  7 10:55 /var/lib/mysql/undo_002
 -rw-r----- 1 mysql mysql 16M Aug  7 10:57 /var/lib/mysql/undo_003.ibu
+```
+* Deactivate and then drop the 3rd undo log.
+
+```
+MySQL [test1]> ALTER UNDO TABLESPACE temp_undo SET INACTIVE;
+Query OK, 0 rows affected (0.022 sec)
+
+MySQL [test1]> ALTER UNDO TABLESPACE temp_undo SET ACTIVE;
+Query OK, 0 rows affected (0.030 sec)
 ```
 
 * Other Info

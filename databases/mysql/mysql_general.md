@@ -161,11 +161,24 @@ ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
 
 *************************** 1. row ***************************
        FILE_ID: 4294967151
-       FILE_NAME: ./undo_002
-       FILE_TYPE: UNDO LOG
-       FREE_EXTENTS: 2
-       TOTAL_EXTENTS: 16
-       INITIAL_SIZE: 16777216
+     FILE_NAME: ./undo_002
+     FILE_TYPE: UNDO LOG
+  FREE_EXTENTS: 200
+ TOTAL_EXTENTS: 1000
+  INITIAL_SIZE: 1677721611
+
+  -- Wait an hour
+
+SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
+INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+*************************** 1. row ***************************
+      FILE_ID: 4294967151
+    FILE_NAME: ./undo_002
+    FILE_TYPE: UNDO LOG
+ FREE_EXTENTS: 2
+TOTAL_EXTENTS: 16
+ INITIAL_SIZE: 16777216
+		
 
 ```
 

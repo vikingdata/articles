@@ -129,6 +129,8 @@ Links
 * Make sure this is in my.cnf and is in global variables
     * SET GLOBAL innodb_undo_log_truncate=ON;
 * Kill all processes or restart mysql
+* NOTE: innodb_undo_001 and innodb_undo_002 are reserved and CANNOT be manually truncated. You must
+allow them to auto truncate. 
 * Select all undo files
 ```
 SELECT TABLESPACE_NAME, FILE_NAME FROM INFORMATION_SCHEMA.FILES
@@ -136,20 +138,46 @@ SELECT TABLESPACE_NAME, FILE_NAME FROM INFORMATION_SCHEMA.FILES
 ```
 Output
 ```
++-----------------+------------+
+| TABLESPACE_NAME | FILE_NAME  |
++-----------------+------------+
+| innodb_undo_001 | ./undo_001 |
+| innodb_undo_002 | ./undo_002 |
++-----------------+------------+
 
 ```
-* Create new undo file
+* Create new undo file -- not it may ask for full path. 
 ```
-CREATE UNDO TABLESPACE  temp_undo ADD DATAFILE 'temp_undo.ibu';
+CREATE UNDO TABLESPACE  temp_undo ADD DATAFILE 'undo_003.ibu';
 ```
 * Disable previous large undo
 ```
 ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
 ```
-* Select staus of undo file until Free_Extents equal Total_Extents
+* Select staus of undo file until Free_Extents stops.
 ```
-SELECT * FROM INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size
+FROM INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G
+```
+* Verify its empty
+SELECT NAME, STATE FROM INFORMATION_SCHEMA.INNODB_TABLESPACES   WHERE NAME LIKE '%undo2%';
++-----------------+--------+
+| NAME            | STATE  |
++-----------------+--------+
+| innodb_undo_002 | empty  |
++-----------------+--------+
 ```
 
+* Check diskspace:
+    * df -h
+    * ls -alh /var/lib/mysql/undo*
+```
+-rw-r----- 1 mysql mysql 16M Aug  7 10:57 /var/lib/mysql/undo_001
+-rw-r----- 1 mysql mysql 16M Aug  7 10:55 /var/lib/mysql/undo_002
+-rw-r----- 1 mysql mysql 16M Aug  7 10:57 /var/lib/mysql/undo_003.ibu
+```
 
+* Other Info
+   * SELECT NAME, SUBSYSTEM, COMMENT FROM INFORMATION_SCHEMA.INNODB_METRICS WHERE NAME LIKE '%truncate%';
+   
 

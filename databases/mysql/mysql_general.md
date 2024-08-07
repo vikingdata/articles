@@ -14,16 +14,16 @@ Original Copyright June 2024**_
 
 This article will grow over time. 
 
-Not including
+Not including [Info Queries](info_queries.md)
 
+* [tail a gzip file](#tailgzip)
 * [Info queries](info_queries.md)
 * [MySQL variables](MySQL_variables.md)
 * [Backup Restore Replication](mysql_backup_restore_replication.md)
 * [What causes swap](#swap)
 * [Show mutiple variables from 'show'](#show)
-* [Removing large undo files][#undo]
-Index
-1. [tail a gzip file](#tailgzip)
+* [Removing large undo files](#undo)
+
 
 * * *
 <a name=tailgzip></a>Tail a gzipped file

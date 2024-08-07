@@ -20,7 +20,7 @@ This article will grow over time.
 * [MySQL variables](MySQL_variables.md)
 * [Backup Restore Replication](mysql_backup_restore_replication.md)
 * [What causes swap](#swap)
-* [Show multiple variables from 'show'](#show)
+* [Show mutiple variables from 'show'](#show)
 * [Removing large undo files](#undo)
 
 
@@ -97,10 +97,10 @@ malloc-lib=/usr/lib64/libjemalloc.so.1
 * Note enough ram
     * [Look at the innodb buffer pool ratio](info_queries.md#ibpr)
     * [Analyze ram and swap use](https://github.com/vikingdata/articles/blob/main/linux/Linux_general.md#m) -- Monitor commands
-* MySQL memory considerations : https://mariadb.com/kb/en/mariadb-memory-allocation/
+* MySQL memory cosiderations : https://mariadb.com/kb/en/mariadb-memory-allocation/
 
 * * *
-<a name=show></a>Show multiple variables from 'show'
+<a name=show></a>Show mutiple variables from 'show'
 -----
 * https://dev.mysql.com/doc/refman/8.4/en/regexp.html
 * https://www.geeksforgeeks.org/rlike-operator-in-mysql/
@@ -174,7 +174,7 @@ CREATE UNDO TABLESPACE  temp_undo ADD DATAFILE 'undo_003.ibu';
 ```
 ALTER UNDO TABLESPACE innodb_undo_002 SET INACTIVE;
 ```
-* Select status of undo file until Free_Extents stops.
+* Select staus of undo file until Free_Extents stops.
 ```
  SELECT file_id, file_name, file_type, free_extents, total_extents, initial_size FROM
  INFORMATION_SCHEMA.FILES   WHERE FILE_NAME='./undo_002'\G

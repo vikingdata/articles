@@ -247,6 +247,6 @@ Query OK, 0 rows affected (0.030 sec)
 -----
 * Extract queries from binlog with row level replication : [mysqlbinlog Row Event Display](https://dev.mysql.com/doc/refman/8.4/en/mysqlbinlog-row-events.html)
 ```
-mysqlbinlog  --base64-output=DECODE-ROWS and verbose FILE > FILE.sql
+mysqlbinlog  --base64-output=DECODE-ROWS --verbose FILE > FILE.sql
 
 ```

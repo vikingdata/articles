@@ -74,3 +74,7 @@ create database temp1;
 PURGE BINARY LOGS BEFORE now();
 
 
+SELECT * FROM performance_schema.global_variables
+  WHERE VARIABLE_NAME like 'gtid_executed'
+    OR VARIABLE_NAME like 'gtid_purged';
+```

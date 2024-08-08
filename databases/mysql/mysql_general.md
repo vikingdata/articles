@@ -22,7 +22,7 @@ This article will grow over time.
 * [What causes swap](#swap)
 * [Show multiple variables from 'show'](#show)
 * [Removing large undo files](#undo)
-
+* [Binlogs](#binlog)
 
 * * *
 <a name=tailgzip></a>Tail a gzipped file
@@ -242,3 +242,11 @@ Query OK, 0 rows affected (0.030 sec)
    * SELECT NAME, SUBSYSTEM, COMMENT FROM INFORMATION_SCHEMA.INNODB_METRICS WHERE NAME LIKE '%truncate%';
    
 
+* * *
+<a name=binlog></a>Binlog stuff
+-----
+* Extract queries from binlog with row level replication : [mysqlbinlog Row Event Display](https://dev.mysql.com/doc/refman/8.4/en/mysqlbinlog-row-events.html)
+```
+mysqlbinlog  --base64-output=DECODE-ROWS and verbose FILE > FILE.sql
+
+```

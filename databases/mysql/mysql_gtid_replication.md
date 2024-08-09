@@ -66,23 +66,25 @@ Index
 -----
 * On slave in MySQL
 ```
- stop slave;
-mysql> reset master all;
+stop slave;
+reset slave all;
 ```
 * On both servers at Linux prompt
 ```
 service mysql stop
-rm -f /var/lib/mysql
+rm -vf /var/lib/mysql/binlog.*
 service mysql start
 ```
 
 * On both servers in mysql
 ```
- CREATE USER 'repl'@'%' IDENTIFIED BY 'repl';
- GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
- CREATE USER 'remote'@'%' IDENTIFIED BY 'bad_password';
- GRANT all privileges ON *.* TO 'remote'@'%';
-
+drop user if exists 'repl'@'%';
+drop user if exists 'remote'@'%';
+CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+GRANT all privileges ON *.* TO 'repl'@'%';
+CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
+GRANT all privileges ON *.* TO 'remote'@'%';
 ```
 
 * On master in mysql
@@ -94,7 +96,7 @@ service mysql start
 * On master in mysql in Linux
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-echo "master ip - $ip"
+echo "master ip = $ip"
 ```
 Output
 ```
@@ -103,16 +105,18 @@ master ip = 192.168.0.217
 
 ```
 
-
 * On slave in mysql
 ```
+stop slave;
  drop database if exists rep_test;
  CHANGE REPLICATION SOURCE TO
-     SOURCE_HOST = '192.168.0.217',
-     SOURCE_USER = 'repl',
-     SOURCE_PASSWORD = 'repl',
-     SOURCE_AUTO_POSITION = 1;
+ SOURCE_HOST = '192.168.0.217',
+ SOURCE_USER = 'repl',
+ SOURCE_PASSWORD = 'repl',
+ SOURCE_AUTO_POSITION = 1;
  start slave;
+show slave status\G
+show databases like '%rep_test%';
 
 ```
 

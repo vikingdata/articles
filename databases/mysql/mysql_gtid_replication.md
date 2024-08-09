@@ -28,7 +28,7 @@ Index
 * * *
 <a name=links></a>Links
 -----
-* [Repair (replace) a slave gtid](https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html)
+* (Repair - replace -  a slave gtid)[https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html)]
 * Setup GTID
     * (Setting Up Replication Using GTIDs)[https://dev.mysql.com/doc/mysql-replication-excerpt/8.0/en/replication-gtids-howto.html]
     
@@ -66,7 +66,7 @@ Index
 -----
 * On slave in MySQL
 ```
-mysql > stop slave;
+ stop slave;
 mysql> reset master all;
 ```
 * On both servers at Linux prompt
@@ -78,17 +78,17 @@ service mysql start
 
 * On both servers in mysql
 ```
-mysql > CREATE USER 'repl'@'%' IDENTIFIED BY 'repl';
-mysql > GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
-mysql > CREATE USER 'remote'@'%' IDENTIFIED BY 'bad_password';
-mysql > GRANT all privileges ON *.* TO 'remote'@'%';
+ CREATE USER 'repl'@'%' IDENTIFIED BY 'repl';
+ GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+ CREATE USER 'remote'@'%' IDENTIFIED BY 'bad_password';
+ GRANT all privileges ON *.* TO 'remote'@'%';
 
 ```
 
 * On master in mysql
 ```
-mysql > drop database if exists rep_test;
-mysql > create database rep_test;
+ drop database if exists rep_test;
+ create database rep_test;
 ```
 
 * On master in mysql in Linux
@@ -106,13 +106,13 @@ master ip = 192.168.0.217
 
 * On slave in mysql
 ```
-mysql > drop database if exists rep_test;
-mysql > CHANGE REPLICATION SOURCE TO
+ drop database if exists rep_test;
+ CHANGE REPLICATION SOURCE TO
      SOURCE_HOST = '192.168.0.217',
      SOURCE_USER = 'repl',
      SOURCE_PASSWORD = 'repl',
      SOURCE_AUTO_POSITION = 1;
-mysql > start slave;
+ start slave;
 
 ```
 

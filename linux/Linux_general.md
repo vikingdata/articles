@@ -23,6 +23,7 @@ title: Linux general tips
 11. [List Services](#services)
 12. [cygwin font size](#cygwin)
 13. [ Parse text files](#parse)
+14. [remove binary fromn texzt file](#removebin)
 
 * * *
 
@@ -398,3 +399,46 @@ c d
 f g
 ```
 
+* * *
+<a name=removebin></a>Remove binary data from text file
+---------------
+
+* Using cat 
+```
+cat -v FILE1 > FILE2
+```
+* Using strings
+```
+strings FILE1 > FILE2
+
+```
+
+* What are the equiv tr, sed, and python commands? Note with tr, :print: does not include newlines.
+
+
+* * *
+<a name=swap></a>Adding swapspace temporarily. 
+---------------
+
+* Check diskspace with : df -h /
+```
+mark@mysql1:~$ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3        24G   17G  5.8G  75% /
+```
+* 24 gigs of space, adding 8 gig swapfile
+```
+
+export SWAPFILE='/swapfile'
+
+swapoff -a
+dd if=/dev/zero of=$SWAPFILE bs=1024 count=8048576
+mkswap $SWAPFILE
+chmod 600 $SWAPFILE
+echo "$SWAPFILE    none    swap    sw    0    0" >> /etc/fstab
+swapon -a
+swapon -s
+free -h 
+
+
+```

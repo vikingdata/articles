@@ -76,8 +76,9 @@ rm -vf /var/lib/mysql/binlog.*
 service mysql start
 ```
 
-* On both servers in mysql
+* On master in mysql
 ```
+reset master;
 drop user if exists 'repl'@'%';
 drop user if exists 'remote'@'%';
 CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';

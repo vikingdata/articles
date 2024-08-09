@@ -28,7 +28,7 @@ Index
 * * *
 <a name=links></a>Links
 -----
-* (Repair - replace -  a slave gtid)[https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html)]
+* [Repair - replace -  a slave gtid](https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html)
 * Setup GTID
     * (Setting Up Replication Using GTIDs)[https://dev.mysql.com/doc/mysql-replication-excerpt/8.0/en/replication-gtids-howto.html]
     

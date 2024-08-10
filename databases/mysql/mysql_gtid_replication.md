@@ -30,7 +30,7 @@ Index
 -----
 * [Repair - replace -  a slave gtid](https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_gtid.html)
 * Setup GTID
-    * (Setting Up Replication Using GTIDs)[https://dev.mysql.com/doc/mysql-replication-excerpt/8.0/en/replication-gtids-howto.html]
+    * [Setting Up Replication Using GTIDs](https://dev.mysql.com/doc/mysql-replication-excerpt/8.0/en/replication-gtids-howto.html)
     
 * SKip Query GTID
     * [MySQL replication — Skipped GTID and how to fix it](https://medium.com/@brianlie/mysql-replication-skipped-gtid-and-how-to-fix-it-a2d836452724)
@@ -67,10 +67,12 @@ Index
 * On slave in MySQL
 ```
 stop slave;
-reset slave all;
+reset slave all; --- removes slave settings
+reset master;    --- removes slave binlog gtid settings
 ```
 * On both servers at Linux prompt
 ```
+  ## REmoves all binlogs, starts fresh
 service mysql stop
 rm -vf /var/lib/mysql/binlog.*
 service mysql start
@@ -78,20 +80,17 @@ service mysql start
 
 * On master in mysql
 ```
-reset master;
+reset master; -- removes gitd settings from master
 drop user if exists 'repl'@'%';
 drop user if exists 'remote'@'%';
 CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';
 GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
-GRANT all privileges ON *.* TO 'repl'@'%';
+
 CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
 GRANT all privileges ON *.* TO 'remote'@'%';
-```
 
-* On master in mysql
-```
- drop database if exists rep_test;
- create database rep_test;
+drop database if exists rep_test;
+create database rep_test;
 ```
 
 * On master in mysql in Linux
@@ -105,10 +104,15 @@ Output
 master ip = 192.168.0.217
 
 ```
+* On slave in linux
+    * For some reason replication doesn't work unless you manually connect. This is an unusual problem.
+```
+mysql -u repl -prepl -h 192.168.0.217 -e "show status"
+
+```
 
 * On slave in mysql
 ```
-stop slave;
  drop database if exists rep_test;
  CHANGE REPLICATION SOURCE TO
  SOURCE_HOST = '192.168.0.217',
@@ -116,6 +120,8 @@ stop slave;
  SOURCE_PASSWORD = 'repl',
  SOURCE_AUTO_POSITION = 1;
  start slave;
+
+select sleep (1);
 show slave status\G
 show databases like '%rep_test%';
 

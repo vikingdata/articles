@@ -67,8 +67,11 @@ Index
 * On slave in MySQL
 ```
 stop slave;
-reset slave all; --- removes slave settings
-reset master;    --- removes slave binlog gtid settings
+--  removes slave settings
+reset slave all;
+
+-- removes slave binlog gtid settings
+reset master;    
 ```
 * On both servers at Linux prompt
 ```

@@ -1,6 +1,8 @@
 # What to know : Snowflake
 
 
+* In Snowflake, what is the maximum retention period for Time Travel on Enterprise Edition or higher? 90 days.
+
 ---
 et
 

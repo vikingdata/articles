@@ -193,4 +193,6 @@ mysql -- sys.statement_analysis -- analyze queries : how to turn on and what to 
 
 msqyl rep -- parrallel master to serial slave,
   large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,
-  backups blocks DDL queries and hence slave in blocked,  
+  backups blocks DDL queries and hence slave in blocked,
+
+snowflake -- data masking and encryption

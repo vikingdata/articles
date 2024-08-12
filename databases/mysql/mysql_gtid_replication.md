@@ -73,6 +73,19 @@ reset slave all;
 -- removes slave binlog gtid settings
 reset master;    
 ```
+
+* On master in mysql
+```
+drop user if exists 'repl'@'%';
+drop user if exists 'remote'@'%';
+CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+
+CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
+GRANT all privileges ON *.* TO 'remote'@'%';
+
+```
+
 * On both servers at Linux prompt
 ```
   ## REmoves all binlogs, starts fresh
@@ -84,14 +97,6 @@ service mysql start
 * On master in mysql
 ```
 reset master; -- removes gitd settings from master
-drop user if exists 'repl'@'%';
-drop user if exists 'remote'@'%';
-CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';
-GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
-
-CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
-GRANT all privileges ON *.* TO 'remote'@'%';
-
 drop database if exists rep_test;
 create database rep_test;
 ```

@@ -31,6 +31,7 @@ Index
 
 0. [Links](#links)
 1. [Setup GTID](#setup)
+    * [Multiple MySQL in Linux under VirtualBox under Windows](https://github.com/vikingdata/articles/blob/main/databases/mysql/Multiple_MySQL_virtualbox.md)
 2. [Convert replication to GTID](#convert)
 3. Causing replication break with normal replication
     * Execute commands on master without recording it to binlog. 

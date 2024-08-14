@@ -16,16 +16,37 @@ Explanation
 3. gtid purged
 4. gtid next
 
+Other issues:
+* When slave is identical to a Master, if a slave executes commands in order they happened on the Master, there will be 0% errors. Let me repeat that, there will be 0 errors with identical servers
+where the SQL commands are issued in order.
+    * There are issues with this statement. What if the commands on the master affect each other?
+    The Master has many connections committing data almost at the same time. Those commands get converted most of the time to  linear set of commands on the slave(s).
+    All those connections committing data on the master
+    must NOT affect each other, or the commands executed on other server
+    may not yield the same result of data. 
+* For both normal and GTID replication, you can set the replication to a point in the binlogs of the
+master. GTID replication has other options to fix replication. 
 
 Index
 
 0. [Links](#links)
 1. [Setup GTID](#setup)
 2. [Convert replication to GTID](#convert)
-3. [Skipping query on Slave](#skip)
-4. [Resetting replication at a point](#reset)
-5. [Reset GTID replication](#reset2)
-6. [Reset normal replication](#reset3)
+3. Causing replication break with normal replication
+    * Execute commands on master without recording it to binlog. 
+    * Start a transaction and kill mysql before transaction ends.
+    * Make data or schema changes on Slave(s)
+6. Resetting normal replication
+   * Skipping a statement
+   * Reset to a point
+   * Backup, restore, start replication.
+7. Resetting GTID replication
+   * Skipping a statement by setting next_gtid.
+   * Skipping a statement
+   * Reset to a point
+8. Reset replication to beginning
+   * [Reset GTID replication to begining](#resetgtid)
+   * [Reset normal replication to beginning](#resetnormal)
 
 * * *
 <a name=links></a>Links
@@ -66,12 +87,42 @@ log-slave-updates=ON
 -----
 
 * * *
-<a name=skip></a>Skipping query on Slave
+<a name=break></a>Causing replication break with normal replication
 -----
 
+Execute commands on master without recording it to binlog.
+
+Start a transaction and kill mysql before transaction ends.
+
+Make data or schema changes on Slave(s)
+
 * * *
-<a name=reset></a>Resetting replication at a point
+<a name=resetnormal></a>Resetting normal replication
 -----
+
+Skipping a statement
+
+Reset to a point
+
+Backup, restore, start replication.
+
+* * *
+<a name=resetgtid></a>Resetting gtid replication
+-----
+
+Skipping a statement by setting next_gtid.
+
+Skipping a statement
+
+Reset to a point
+
+Reset replication to beginning
+			      
+* * *
+<a name=auto></a>Automatically skipping errors
+-----
+If you automatically skipping errors in replication you are probably doing 100% wrong.
+However, software should let you shoot yourself in the foot if you want -- you might have a reason. 
 
 
 * * *
@@ -186,19 +237,11 @@ set GLOBAL enforce_gtid_consistency=off;
 
 * On master
 ```
-show master status;
 drop database if exists rep_test;
 create database rep_test;
 
 ```
 
-Output -- Just need values for "File" and "Position"
-```
-| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set                        |
-+---------------+----------+--------------+------------------+------------------------------------------+
-| binlog.000001 |      153 |              |                  | 7ca9a3f5-f52b-11ee-b56f-080027a5063b:1-2 |
-
-```
 * On master in mysql in Linux
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
@@ -218,22 +261,27 @@ mysql -u repl -prepl -h 192.168.0.217 -e "show status"
 ```
 
 
-* On slave, you can configure replication with starting position or none to start
+* On slave, you can configure replication starting from the first statement if you do not give it
+a position to start from. 
 from the beginning;
 ```
 reset slave all;
 
+drop database if exists rep_test;
+3B
 CHANGE REPLICATION SOURCE TO
  SOURCE_HOST = '192.168.0.217',
  SOURCE_USER = 'repl',
  SOURCE_PASSWORD = 'repl';
+
 start slave; 
 stop SLAVE;
 select sleep (1);
 start slave;
 select sleep (1);
+  -- Verify replication is running fine without errors. 
 show slave status\G
+ -- Verify the rep_test database exists
 show databases like '%rep_test%';
-
 
 ```

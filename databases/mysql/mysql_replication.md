@@ -12,12 +12,6 @@ MySQL GTID Replication
 _**by Mark Nielsen
 Original Copyright June 2024**_
 
-Explanation
-1. anonymous
-2. gtid executed
-3. gtid purged
-4. gtid next
-
 Other issues:
 * When slave is identical to a Master, if a slave executes commands in order they happened on the Master, there will be 0% errors. Let me repeat that, there will be 0 errors with identical servers
 where the SQL commands are issued in order.
@@ -44,7 +38,7 @@ Index
    * Skipping a statement
    * Reset to a point
    * Backup, restore, start replication.
-7. [Reset replication to beginning](#resetbeginning)
+7. Reset replication to beginning
    * [Reset GTID replication to begining](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
 
@@ -247,7 +241,7 @@ show slave status\G
 
 
 * * *
-<a name=reset2></a>Reset gtid replication
+<a name=resetgtid></a>Reset gtid replication
 -----
 * On slave in MySQL
 ```
@@ -331,7 +325,7 @@ show databases like '%rep_test%';
 
 
 * * *
-<a name=reset3></a>Reset normal replication
+<a name=resetnormal></a>Reset normal replication
 -----
 * We assume no connections are written to master.
 * On mastger

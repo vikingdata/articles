@@ -33,19 +33,19 @@ Index
 1. [Setup GTID](#setup)
     * [Multiple MySQL in Linux under VirtualBox under Windows](https://github.com/vikingdata/articles/blob/main/databases/mysql/Multiple_MySQL_virtualbox.md)
 2. [Convert replication to GTID](#convert)
-3. Causing replication break with normal replication
+3. [Causing replication break with normal replication](#break)
     * Execute commands on master without recording it to binlog. 
     * Start a transaction and kill mysql before transaction ends.
     * Make data or schema changes on Slave(s)
-6. Resetting normal replication
+6. [Resetting normal replication](#resetnormal)
    * Skipping a statement
    * Reset to a point
    * Backup, restore, start replication.
-7. Resetting GTID replication
+7. [Resetting GTID replication](#resetgtid)
    * Skipping a statement by setting next_gtid.
    * Skipping a statement
    * Reset to a point
-8. Reset replication to beginning
+8. [Reset replication to beginning](#resetbeginning)
    * [Reset GTID replication to begining](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
 

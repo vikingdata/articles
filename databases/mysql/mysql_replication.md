@@ -88,7 +88,7 @@ log-slave-updates=ON
 -----
 
 * * *
-<a name=break></a>Causing replication break with normal replication
+<a name=break></a>Causing replication break with normal or GTID replication
 -----
 
 ### Execute commands on master without recording it to binlog.
@@ -105,7 +105,6 @@ SELECT * FROM performance_schema.global_variables
 
 SET sql_log_bin = 0;
 insert into t values (2);
-insert into t values (3);
 
 SET sql_log_bin = 1;
 SELECT * FROM performance_schema.global_variables
@@ -120,22 +119,64 @@ SELECT * FROM performance_schema.global_variables
 
 
 ### Start a transaction and kill mysql before transaction ends.
-* On MySQL master
+* On master in mysql get location of pid
+```
+mysql> show global variables like '%pid%';
++---------------+----------------------------+
+| Variable_name | Value                      |
++---------------+----------------------------+
+| pid_file      | /var/run/mysqld/mysqld.pid |
++---------------+----------------------------+
+```
 
+* On MySQL master
 ```
 create database if not exists test1;
 use test1
 create table if not exists t (t int, PRIMARY KEY (t));
+delete from t;
+insert into t values(3);
+insert into t values(4);
+
 begin;
-insert into table t values(10);
+insert into t values(10);
 select sleep(3600);
-insert into table t values(20);
+insert into t values(20);
 commit;
 ```
-* Execute show master logs and not LAST file.
+* In another connection, Execute show master logs and note LAST file and position: binlog.000001 and 2727
+```
+show master logs;
++---------------+-----------+-----------+
+| Log_name      | File_size | Encrypted |
++---------------+-----------+-----------+
+| binlog.000001 |      2727 | No        |
 
+
+
+```
 * Kill mysql with a hard kill -9 and restart
+```
+kill -9 `/var/run/mysqld/mysqld.pid`
+sleep 5
+service mysql start
+sleep 5
+
+```
+* Analyze "show slave status" on slave and note the position stopped.
+* Get the next position from the same file or use the first position of the next log file. 
+
+* Make a new connection, and note the last file
+```
+
+
+```
+
+
 ### Make data or schema changes on Slave(s)
+
+* To Fix on normal replication:
+    * Set Replication to the beginning of the next binlog.
 
 * * *
 <a name=resetnormal></a>Resetting normal replication
@@ -319,7 +360,6 @@ from the beginning;
 reset slave all;
 
 drop database if exists rep_test;
-3B
 CHANGE REPLICATION SOURCE TO
  SOURCE_HOST = '192.168.0.217',
  SOURCE_USER = 'repl',

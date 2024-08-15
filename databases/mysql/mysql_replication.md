@@ -181,9 +181,22 @@ select sleep(2);
 show slave status\G
 </pre>
    * Skip GTID by new method.
-       * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
+       * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/ <pre>
+STOP SLAVE;
+SET GTID_MODE=ON_PERMISSIVE;
+SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+START SLAVE;
 
-* Reset to a point
+select sleep(2);
+show slave status\G
+ -- if good
+SET GTID_MODE=ON;
+start slave;
+show slave status\G 
+</pre>
+
+
+* Reset to a point for normal or GTID
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
         * Ex: binlog.000001 and 637
     * On master, find next position <pre>
@@ -225,24 +238,11 @@ show slave status\G
             </pre>
 
 * Backup, restore, start replication.
-
-* * *
-<a name=resetgtid></a>Resetting gtid replication
------
-
-Skipping a statement by setting next_gtid.
-
-Skipping a statement
-
-Reset to a point
-
-Reset replication to beginning
-			      
-* * *
-<a name=auto></a>Automatically skipping errors
------
-If you automatically skipping errors in replication you are probably doing 100% wrong.
-However, software should let you shoot yourself in the foot if you want -- you might have a reason. 
+    * Normal replication
+        * https://www.linode.com/docs/guides/mysqldump-backups/
+    * GTID replication
+        * https://www.percona.com/blog/how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
+    * NOTE: Replication starting may be an issue. 
 
 
 * * *

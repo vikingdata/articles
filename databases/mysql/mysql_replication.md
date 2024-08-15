@@ -124,7 +124,7 @@ is restarted, you might end up with partial commands to the binlog which will er
 * Links
     * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
 > mysqlbinlog /var/lib/mysql/binlog.000004 --base64-output=decode-rows --verbose | head -n 100 | grep '^# at' | tail -n 10
- >mysqlbinlog /var/lib/mysql/binlog.000005 --base64-output=decode-rows --verbose | head -n 10 | grep '^# at'
+> mysqlbinlog /var/lib/mysql/binlog.000005 --base64-output=decode-rows --verbose | head -n 10 | grep '^# at'
 
     * test indent
 

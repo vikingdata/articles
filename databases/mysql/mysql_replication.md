@@ -159,7 +159,27 @@ is restarted, you might end up with partial commands to the binlog which will er
    * Skip GTID by empty commit
        * https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html
        * Steps:
-           * Get the
+           * <pre>
+mysql> SELECT * FROM performance_schema.global_variables   WHERE VARIABLE_NAME like 'gtid_executed';
++---------------+-----------------------------------------------------------------------------------+
+| VARIABLE_NAME | VARIABLE_VALUE                                                                    |
++---------------+-----------------------------------------------------------------------------------+
+| gtid_executed | 7ca9a3f5-f52b-11ee-b56f-080027a5063b:1-12,
+</pre>
+           * "13" is the "next" downloaded command you want to skip. Basically, add "1" to the highest executed number "12".<pre>
+stop slave;
+SET GTID_NEXT='7ca9a3f5-f52b-11ee-b56f-080027a5063b:13';
+BEGIN;
+COMMIT;
+SET GTID_NEXT='AUTOMATIC';
+
+SELECT * FROM performance_schema.global_variables   WHERE VARIABLE_NAME like 'gtid_executed';
+-- gtid_executed should be  7ca9a3f5-f52b-11ee-b56f-080027a5063b:1-13
+
+start slave;
+select sleep(2);
+show slave status\G
+</pre>
    * Skip GTID by new method.
        * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
 
@@ -167,14 +187,19 @@ is restarted, you might end up with partial commands to the binlog which will er
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
         * Ex: binlog.000001 and 637
     * On master, find next position <pre>
-/var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose | grep "&#35; at 537" -A 10 -B 10 | grep "&#35; at"
+/var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose \
+  | grep "&#35; at 537" -A 10 -B 10 \
+  | grep "&#35; at"
 &#35; at 421
 &#35; at 537
 &#35; at 610
                                    </pre>	   
         * position 610 is after 537
 	   * If there is no "next" position, then its the next log file binlog.000002B	   <pre>
-/home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verBbose | grep "&#35; at" | head -n1 "&#35; at"
+/home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verBbose \
+  | grep "&#35; at" \
+  | head -n1 "&#35; at"
+  "&#35; at4
            </pre>
 	   * example: binlog.000002 and 4 
    * On normal replication <pre>

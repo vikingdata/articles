@@ -37,7 +37,7 @@ Index
 2. [Convert replication to GTID](#convert)
 3. [Causing replication break with normal replication](#break)
     * Execute commands on master without recording it to binlog. 
-    * Start a transaction and kill mysql before transaction ends.
+    * Run out of diskspace on Master and restart Master.
     * Make data or schema changes on Slave(s)
 6. [Resetting replication](#replication)
    * Try start slave
@@ -120,26 +120,28 @@ SELECT * FROM performance_schema.global_variables
 ### Run out of diskspace
 When you run out of diskspace, you may end of with partially written commands to the binlog. If the service
 is restarted, you might end up with partial commands to the binlog which will error oout on slaves.
+
+The real fix would have been to free up diskspace if possible, or extend diskspace if VM, and then restart MySQL. 
+
 * Error
     * Got fatal error 1236 from source when reading data from binary log: 'Could not find first log file name in binary log index file', Error_code: MY-013114
     * Error reading packet from server for channel '': Could not find first log file name in binary log index file (server_errno=1236)
 * Links
     * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
 
-* Solution : Set replication to the next position
-    * Or either, on slave find Master_Log_File and Exec_Master_Log_Pos.
-       * Ex: binlog.000001 and 637
-    * On master, find next position ```
-    /var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose | grep "# at 537" -A 10 -B 10 | grep "# at"
+* Solution : [Set replication to the next position](#point)
+
                                     ```
 
 ### Make data or schema changes on Slave(s)
 
-* To Fix on normal replication:
-    * Set Replication to the beginning of the next binlog.
+* To Fix
+   * Execute commands on other servers with "SET SQL_LOG_BIN=0"
+   * If you don't know the commands, restore the server from Master or backup,.
+
 
 * * *
-<a name=replicato></a>Resetting  replication
+<a name=replicaton></a>Repairing  replication
 -----
 * Try starting slave
    * Just in mysql: "start slave; show slave status\G" and look at output.
@@ -196,7 +198,7 @@ show slave status\G
 </pre>
 
 
-* Reset to a point for normal or GTID
+* <a name=point></a>Reset to a point for normal or GTID
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
         * Ex: binlog.000001 and 637
     * On master, find next position <pre>

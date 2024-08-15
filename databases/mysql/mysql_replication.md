@@ -58,7 +58,7 @@ Index
     * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
     * https://mysqlwall.com/2021/11/30/how-to-skip-transaction-on-replica-when-gtid-replication-is-broken/
 * Other
-   * (A Useful GTID Feature for Migrating to MySQL GTID Replication – ASSIGN_GTIDS_TO_ANONYMOUS_TRANSACTIONS)[https://www.percona.com/blog/useful-gtid-feature-for-migrating-to-mysql-gtid-replication-assign_gtids_to_anonymous_transactions/]
+   * [A Useful GTID Feature for Migrating to MySQL GTID Replication – ASSIGN_GTIDS_TO_ANONYMOUS_TRANSACTIONS](https://www.percona.com/blog/useful-gtid-feature-for-migrating-to-mysql-gtid-replication-assign_gtids_to_anonymous_transactions/)
    * https://www.red-gate.com/simple-talk/blogs/a-beginners-guide-to-mysql-replication-part-4-using-gtid-based-replication/
    * https://percona.community/blog/2021/11/08/the-errant-gtid-pt1/
    * https://www.percona.com/sites/default/files/presentations/mysql_56_GTID_in_a_nutshell.pdf
@@ -125,6 +125,7 @@ is restarted, you might end up with partial commands to the binlog which will er
     * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
 > mysqlbinlog /var/lib/mysql/binlog.000004 --base64-output=decode-rows --verbose | head -n 100 | grep '^# at' | tail -n 10
  >mysqlbinlog /var/lib/mysql/binlog.000005 --base64-output=decode-rows --verbose | head -n 10 | grep '^# at'
+
     * test indent
 
 

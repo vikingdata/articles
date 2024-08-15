@@ -364,14 +364,12 @@ select 'gtid_executed from global variables should match Executed_Gtid_Set in sh
 ```
 
 * On slave in Linux
-    * In Linux
-```mysql  -e "show slave status\G" | grep Gtid ```
+    * In Linux ```mysql  -e "show slave status\G" | grep Gtid ```
 
-*     * in mysql
-```
+    * in mysql ```
 SELECT * FROM performance_schema.global_variables
   WHERE VARIABLE_NAME like 'gtid_executed'
         OR VARIABLE_NAME like 'gtid_purged';
-```
+               ```
     * "Executed_Gtid_Set" in show slave status should match gtid_executed in global variables.
     

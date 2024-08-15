@@ -91,11 +91,51 @@ log-slave-updates=ON
 <a name=break></a>Causing replication break with normal replication
 -----
 
-Execute commands on master without recording it to binlog.
+### Execute commands on master without recording it to binlog.
+* On the master
+```
+create database if not exists test1;
+use test1
+create table t (t int, PRIMARY KEY (t));
+insert into t values (1);
 
-Start a transaction and kill mysql before transaction ends.
+SELECT * FROM performance_schema.global_variables
+  WHERE VARIABLE_NAME like 'gtid_executed'
+      OR VARIABLE_NAME like 'gtid_purged';
 
-Make data or schema changes on Slave(s)
+SET sql_log_bin = 0;
+insert into t values (2);
+insert into t values (3);
+
+SET sql_log_bin = 1;
+SELECT * FROM performance_schema.global_variables
+  WHERE VARIABLE_NAME like 'gtid_executed'
+      OR VARIABLE_NAME like 'gtid_purged';
+
+```
+* To Fix: You may not be able to do so easily. Unknown data is committed on the Master and not other servers.
+    * If you know the changes, commit them with "set sql_log_bin=0;" on the other servers. 
+    * Backup and restore the Master to the other servers.
+    * Use pt_sync from Percona. 
+
+
+### Start a transaction and kill mysql before transaction ends.
+* On MySQL master
+
+```
+create database if not exists test1;
+use test1
+create table if not exists t (t int, PRIMARY KEY (t));
+begin;
+insert into table t values(10);
+select sleep(3600);
+insert into table t values(20);
+commit;
+```
+* Execute show master logs and not LAST file.
+
+* Kill mysql with a hard kill -9 and restart
+### Make data or schema changes on Slave(s)
 
 * * *
 <a name=resetnormal></a>Resetting normal replication
@@ -175,6 +215,16 @@ Output
 ```
   # NOTE your ip address will be different. 
 master ip = 192.168.0.217
+
+* On both is GTID is turned off
+```
+stop slave;
+set GLOBAL gtid_mode=off_permissive;
+set GLOBAL gtid_mode=on_PERMISSIVE;
+set GLOBAL enforce_gtid_consistency=on;
+set GLOBAL gtid_mode=on;
+CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 0;
+```
 
 ```
 * On slave in mysql

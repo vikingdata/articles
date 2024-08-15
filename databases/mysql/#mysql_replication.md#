@@ -183,13 +183,15 @@ show slave status\G
    * On GTID <pre>
 stop slave;
 change master to sOURCE_AUTO_POSITION=0;
-
-
-
 change master to  masteR_log_file='binlog.000001', master_log_pos = 610;
 start slave;
 select sleep(2);
 show slave status\G
+ -- if good
+stop slave;
+change master to sOURCE_AUTO_POSITION=1;
+start slave;
+
 
 
              </pre>

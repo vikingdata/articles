@@ -39,7 +39,7 @@ Index
     * Execute commands on master without recording it to binlog. 
     * Run out of diskspace on Master and restart Master.
     * Make data or schema changes on Slave(s)
-6. [Resetting replication](#replication)
+6. [Repairing replication](#replication)
    * Try start slave
    * Skipping a statement
    * Reset to a point
@@ -140,7 +140,7 @@ The real fix would have been to free up diskspace if possible, or extend diskspa
 
 
 * * *
-<a name=replicaton></a>Repairing  replication
+<a name=replication></a>Repairing  replication
 -----
 * Try starting slave
    * Just in mysql: "start slave; show slave status\G" and look at output.

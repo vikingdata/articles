@@ -214,6 +214,8 @@ service mysql start
 
 * On master in mysql
 ```
+stop slave;
+reset slave all;
 reset master; -- removes gitd settings from master
 drop database if exists rep_test;
 create database rep_test;
@@ -259,13 +261,6 @@ show databases like '%rep_test%';
 
 ```
 
-
-```
-
-SELECT * FROM performance_schema.global_variables
-  WHERE VARIABLE_NAME like 'gtid_executed'
-    OR VARIABLE_NAME like 'gtid_purged';
-```
 
 
 * * *
@@ -349,3 +344,35 @@ show slave status\G
 show databases like '%rep_test%';
 
 ```
+
+* * *
+<a name=checks></a>Checks
+-----
+* Master binlog position -- both master and slave. The positions on here should match show slave status on slave.
+On the master, is should be the most recent queries.
+* On master
+```
+
+SELECT * FROM performance_schema.global_variables
+  WHERE VARIABLE_NAME like 'gtid_executed'
+      OR VARIABLE_NAME like 'gtid_purged';
+
+show master status\G
+
+select 'gtid_executed from global variables should match Executed_Gtid_Set in show master status';
+
+```
+
+* On slave in Linux
+    * In Linux
+```
+mysql  -e "show slave status\G" | grep Gtid
+
+```
+    * in mysql
+```
+SELECT * FROM performance_schema.global_variables
+  WHERE VARIABLE_NAME like 'gtid_executed'
+        OR VARIABLE_NAME like 'gtid_purged';
+```
+    * "Executed_Gtid_Set" in show slave status should match gtid_executed in global variables. 

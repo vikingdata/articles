@@ -79,6 +79,31 @@ log-slave-updates=ON
 * * *
 <a name=convert></a>Convert replication to GTID
 -----
+* https://dev.mysql.com/doc/refman/8.4/en/replication-gtids-howto.html
+* https://www.percona.com/blog/convert-mariadb-binary-log-file-and-position-based-replication-to-gtid-replication/
+* https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
+
+NOTE: To can set gtid_mode and enforce-gtid-consistency in global variables without restarting. Try
+   * In mysql on master <pre>
+set GLOBAL enforce_gtid_consistency=on;
+set GLOBAL gtid_mode=OFF_PERMISSIVE;
+set GLOBAL gtid_mode=ON_PERMISSIVE;
+set GLOBAL gtid_mode=ON
+</pre>
+   * On Slave <pre>
+set GLOBAL gtid_mode=OFF_PERMISSIVE;
+set GLOBAL gtid_mode=ON_PERMISSIVE;
+start slave;
+select sleep(5);
+stop slave;
+set GLOBAL enforce_gtid_consistency=on;
+set GLOBAL gtid_mode=ON;
+</pre>
+    * On both master and slave in my.cnf <pre>
+gtid_mode=ON
+enforce-gtid-consistency=ON
+</pre>
+    
 
 * * *
 <a name=break></a>Causing replication break with normal or GTID replication

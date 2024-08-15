@@ -89,7 +89,7 @@ set GLOBAL enforce_gtid_consistency=on;
 set GLOBAL gtid_mode=OFF_PERMISSIVE;
 set GLOBAL gtid_mode=ON_PERMISSIVE;
 set GLOBAL gtid_mode=ON
-</pre>
+                        </pre>
    * On Slave <pre>
 set GLOBAL gtid_mode=OFF_PERMISSIVE;
 set GLOBAL gtid_mode=ON_PERMISSIVE;
@@ -98,11 +98,11 @@ select sleep(5);
 stop slave;
 set GLOBAL enforce_gtid_consistency=on;
 set GLOBAL gtid_mode=ON;
-</pre>
+             </pre>
     * On both master and slave in my.cnf <pre>
 gtid_mode=ON
 enforce-gtid-consistency=ON
-</pre>
+                                         </pre>
     
 
 * * *

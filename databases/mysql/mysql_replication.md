@@ -151,7 +151,11 @@ is restarted, you might end up with partial commands to the binlog which will er
        * This will skip all duplicate key errors. 
    * Skip for normal replication
        * https://dev.mysql.com/doc/refman/5.7/en/set-global-sql-slave-skip-counter.html
-       * example on Slave: <pre>stop slave; SET GLOBAL sql_slave_skip_counter = 1; start slave; select sleep(2); show slave status</pre>
+       * example on Slave: <pre>stop slave;
+       SET GLOBAL sql_slave_skip_counter = 1;
+       start slave;
+       select sleep(2);
+       show slave status</pre>
    * Skip GTID by empty commit
        * https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html
        * Steps:

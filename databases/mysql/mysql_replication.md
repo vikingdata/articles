@@ -1,4 +1,6 @@
 
+
+
 ---
 title : MySQL Replication
 author : Mark Nielsen
@@ -167,10 +169,8 @@ is restarted, you might end up with partial commands to the binlog which will er
 &#35; at 610
                                    </pre>	   
         * position 610 is after 537
-	   * If there is no "next" position, then its the next log file binlog.000002
-	   <pre>
-/home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verbose | grep "&#35; at" | head -n1
-&#35; at 4
+	   * If there is no "next" position, then its the next log file binlog.000002B	   <pre>
+/home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verBbose | grep "&#35; at" | head -n1 "&#35; at 4"
            </pre>
 	   * example: binlog.000002 and 4 
    * On normal replication <pre>
@@ -183,16 +183,15 @@ show slave status\G
    * On GTID <pre>
 stop slave;
 change master to sOURCE_AUTO_POSITION=0;
-
-
-
 change master to  masteR_log_file='binlog.000001', master_log_pos = 610;
 start slave;
 select sleep(2);
 show slave status\G
-
-
-             </pre>
+ -- if good
+stop slave;
+change master to sOURCE_AUTO_POSITION=1;
+start slave;
+           </pre>
 
 * Backup, restore, start replication.
 

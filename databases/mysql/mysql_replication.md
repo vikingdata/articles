@@ -167,11 +167,17 @@ is restarted, you might end up with partial commands to the binlog which will er
 &#35; at 610
                                    </pre>	   
         * position 610 is after 537
-   * On normal replication ```
+	   * If there is no "next" position, then its the next log file binlog.000001
+	   <pre>
+/home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verbose | grep "# at" | head -n1
+# at 4
+           </pre>
+	   * example: binlog.000002 and 4 
+   * On normal replication <pre>
 stop slave;
 change master to  masteR_log_file='binlog.000001', master_log_pos = 610;
 start slave;
-                           ```
+                           </pre>
 
 * Backup, restore, start replication.
 

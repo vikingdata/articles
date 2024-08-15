@@ -123,12 +123,10 @@ is restarted, you might end up with partial commands to the binlog which will er
     * Error reading packet from server for channel '': Could not find first log file name in binary log index file (server_errno=1236)
 * Links
     * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
-> mysqlbinlog /var/lib/mysql/binlog.000004 --base64-output=decode-rows --verbose | head -n 100 | grep '^# at' | tail -n 10
-> mysqlbinlog /var/lib/mysql/binlog.000005 --base64-output=decode-rows --verbose | head -n 10 | grep '^# at'
 
-    * test indent
-
-
+* Solution : Set replication to the next position
+    * Normal
+    * GTID
 
 ### Make data or schema changes on Slave(s)
 
@@ -200,7 +198,7 @@ drop user if exists 'repl'@'%';
 drop user if exists 'remote'@'%';
 CREATE USER if not exists 'repl'@'%' IDENTIFIED BY 'repl';
 GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
-
+GRANT REPLICATION client ON *.* TO 'repl'@'%';
 CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
 GRANT all privileges ON *.* TO 'remote'@'%';
 
@@ -242,7 +240,7 @@ set GLOBAL gtid_mode=on;
 CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 0;
 ```
 
-```
+
 * On slave in mysql
 ```
  drop database if exists rep_test;

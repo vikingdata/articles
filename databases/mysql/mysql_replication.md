@@ -160,12 +160,12 @@ is restarted, you might end up with partial commands to the binlog which will er
 * Reset to a point
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
         * Ex: binlog.000001 and 637
-    * On master, find next position ```
+    * On master, find next position <pre>
 /var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose | grep "&#35; at 537" -A 10 -B 10 | grep "&#35; at"
 &#35; at 421
 &#35; at 537
 &#35; at 610
-                                    ```		   
+                                   </pre>	   
         * position 610 is after 537
    * On normal replication ```
 stop slave;

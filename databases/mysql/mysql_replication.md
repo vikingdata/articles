@@ -131,7 +131,6 @@ The real fix would have been to free up diskspace if possible, or extend diskspa
 
 * Solution : [Set replication to the next position](#point)
 
-                                    ```
 
 ### Make data or schema changes on Slave(s)
 

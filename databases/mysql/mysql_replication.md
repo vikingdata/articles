@@ -125,8 +125,11 @@ is restarted, you might end up with partial commands to the binlog which will er
     * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
 
 * Solution : Set replication to the next position
-    * Normal
-    * GTID
+    * Or either, on slave find Master_Log_File and Exec_Master_Log_Pos.
+       * Ex: binlog.000001 and 637
+    * On master, find next position ```
+    /var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose | grep "# at 537" -A 10 -B 10 | grep "# at"
+                                    ```
 
 ### Make data or schema changes on Slave(s)
 
@@ -155,8 +158,20 @@ is restarted, you might end up with partial commands to the binlog which will er
        * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
 
 * Reset to a point
-   * Reset normal replication
-   * Reset GTID 
+    * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
+        * Ex: binlog.000001 and 637
+    * On master, find next position ```
+/var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose | grep "# at 537" -A 10 -B 10 | grep "# at"
+# at 421
+# at 537
+# at 610
+                                    ```		   
+        * position 610 is after 537
+   * On normal replication ```
+stop slave;
+change master to  masteR_log_file='binlog.000001', master_log_pos = 610;
+start slave;
+                           ```
 
 * Backup, restore, start replication.
 
@@ -372,4 +387,8 @@ SELECT * FROM performance_schema.global_variables
         OR VARIABLE_NAME like 'gtid_purged';
                ```
     * "Executed_Gtid_Set" in show slave status should match gtid_executed in global variables.
-    
+
+* Slave status info
+```
+mysql  -e "show slave status\G" | egrep -i "Gtid|master_log_file|master_log_pos|running:"
+```

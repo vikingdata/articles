@@ -37,15 +37,12 @@ Index
     * Execute commands on master without recording it to binlog. 
     * Start a transaction and kill mysql before transaction ends.
     * Make data or schema changes on Slave(s)
-6. [Resetting normal replication](#resetnormal)
+6. [Resetting replication](#replication)
+   * Try start slave
    * Skipping a statement
    * Reset to a point
    * Backup, restore, start replication.
-7. [Resetting GTID replication](#resetgtid)
-   * Skipping a statement by setting next_gtid.
-   * Skipping a statement
-   * Reset to a point
-8. [Reset replication to beginning](#resetbeginning)
+7. [Reset replication to beginning](#resetbeginning)
    * [Reset GTID replication to begining](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
 
@@ -118,59 +115,18 @@ SELECT * FROM performance_schema.global_variables
     * Use pt_sync from Percona. 
 
 
-### Start a transaction and kill mysql before transaction ends.
-* On master in mysql get location of pid
-```
-mysql> show global variables like '%pid%';
-+---------------+----------------------------+
-| Variable_name | Value                      |
-+---------------+----------------------------+
-| pid_file      | /var/run/mysqld/mysqld.pid |
-+---------------+----------------------------+
-```
+### Run out of diskspace
+When you run out of diskspace, you may end of with partially written commands to the binlog. If the service
+is restarted, you might end up with partial commands to the binlog which will error oout on slaves.
+* Error
+    * Got fatal error 1236 from source when reading data from binary log: 'Could not find first log file name in binary log index file', Error_code: MY-013114
+    * Error reading packet from server for channel '': Could not find first log file name in binary log index file (server_errno=1236)
+* Links
+    * https://www.percona.com/blog/mysql-replication-how-to-deal-with-the-got-fatal-error-1236-or-my-013114-error/
+> mysqlbinlog /var/lib/mysql/binlog.000004 --base64-output=decode-rows --verbose | head -n 100 | grep '^# at' | tail -n 10
+ >mysqlbinlog /var/lib/mysql/binlog.000005 --base64-output=decode-rows --verbose | head -n 10 | grep '^# at'
+    * test indent
 
-* On MySQL master
-```
-create database if not exists test1;
-use test1
-create table if not exists t (t int, PRIMARY KEY (t));
-delete from t;
-insert into t values(3);
-insert into t values(4);
-
-begin;
-insert into t values(10);
-select sleep(3600);
-insert into t values(20);
-commit;
-```
-* In another connection, Execute show master logs and note LAST file and position: binlog.000001 and 2727
-```
-show master logs;
-+---------------+-----------+-----------+
-| Log_name      | File_size | Encrypted |
-+---------------+-----------+-----------+
-| binlog.000001 |      2727 | No        |
-
-
-
-```
-* Kill mysql with a hard kill -9 and restart
-```
-kill -9 `/var/run/mysqld/mysqld.pid`
-sleep 5
-service mysql start
-sleep 5
-
-```
-* Analyze "show slave status" on slave and note the position stopped.
-* Get the next position from the same file or use the first position of the next log file. 
-
-* Make a new connection, and note the last file
-```
-
-
-```
 
 
 ### Make data or schema changes on Slave(s)
@@ -179,14 +135,31 @@ sleep 5
     * Set Replication to the beginning of the next binlog.
 
 * * *
-<a name=resetnormal></a>Resetting normal replication
+<a name=replicato></a>Resetting  replication
 -----
+* Try starting slave
+   * Just in mysql: "start slave; show slave status\G" and look at output.
+   
+* Skipping a statement
+   * Skip errors -- this is very very bad. Identical servers should be able to execute the same queries in order and have NO errors. Only do this if you KNOW the data won't matter. 
+       * https://www.ducea.com/2008/02/13/mysql-skip-duplicate-replication-errors/
+       * ex: SET global slave-skip-errors = 1062;
+       * This will skip all duplicate key errors. 
+   * Skip for normal replication
+       * https://dev.mysql.com/doc/refman/5.7/en/set-global-sql-slave-skip-counter.html
+       * example on Slave: "stop slave; SET GLOBAL sql_slave_skip_counter = 1; start slave; select sleep(2); show slave status\G"
+   * Skip GTID by empty commit
+       * https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html
+       * Steps:
+           * Get the
+   * Skip GTID by new method.
+       * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
 
-Skipping a statement
+* Reset to a point
+   * Reset normal replication
+   * Reset GTID 
 
-Reset to a point
-
-Backup, restore, start replication.
+* Backup, restore, start replication.
 
 * * *
 <a name=resetgtid></a>Resetting gtid replication
@@ -256,6 +229,7 @@ Output
 ```
   # NOTE your ip address will be different. 
 master ip = 192.168.0.217
+```
 
 * On both is GTID is turned off
 ```

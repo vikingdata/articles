@@ -3,6 +3,7 @@
 
 * In Snowflake, what is the maximum retention period for Time Travel on Enterprise Edition or higher? 90 days.
 
+* Do we have a fail-safe period for temporary & transient tables in Snowflake? No to both
 ---
 et
 

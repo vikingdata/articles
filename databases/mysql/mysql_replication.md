@@ -193,8 +193,7 @@ change master to sOURCE_AUTO_POSITION=1;
 start slave;
 select sleep(2);
 show slave status\G
- 
-           </pre>
+            </pre>
 
 * Backup, restore, start replication.
 

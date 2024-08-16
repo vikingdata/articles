@@ -159,7 +159,7 @@ The real fix would have been to free up diskspace if possible, or extend diskspa
 <a name=replication></a>Repairing  replication
 -----
 * Try starting slave
-   * Just in mysql: "start slave; show slave status\G" and look at output.
+   * Just in mysql: "start slave; select sleep(2); show slave status\G" and look at output.
    
 * Skipping a statement
    * Skip errors -- this is very very bad. Identical servers should be able to execute the same queries in order and have NO errors. Only do this if you KNOW the data won't matter. 

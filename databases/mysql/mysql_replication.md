@@ -189,10 +189,8 @@ SET GTID_NEXT='7ca9a3f5-f52b-11ee-b56f-080027a5063b:13';
 BEGIN;
 COMMIT;
 SET GTID_NEXT='AUTOMATIC';
-
 SELECT * FROM performance_schema.global_variables   WHERE VARIABLE_NAME like 'gtid_executed';
 -- gtid_executed should be  7ca9a3f5-f52b-11ee-b56f-080027a5063b:1-13
-
 start slave;
 select sleep(2);
 show slave status\G

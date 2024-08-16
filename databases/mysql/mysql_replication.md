@@ -302,7 +302,7 @@ drop database if exists rep_test;
 create database rep_test;
 ```
 
-* On master in mysql in Linux
+* On master in Linux
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "master ip = $ip"
@@ -383,7 +383,7 @@ create database rep_test;
 
 ```
 
-* On master in mysql in Linux
+* On master  in Linux
 ```
 ip=`ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3`
 echo "master ip = $ip"

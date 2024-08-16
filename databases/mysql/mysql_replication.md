@@ -227,7 +227,7 @@ show slave status\G
 /home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verbose \
   | grep "&#35; at" \
   | head -n1 "&#35; at"
-  "&#35; at4
+  "&#35; at 4
            </pre>
 	   * example: binlog.000002 and 4 
    * On normal replication <pre>

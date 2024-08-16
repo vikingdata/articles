@@ -10,7 +10,7 @@ copyright : August 2024
 MySQL GTID Replication
 ==============================
 _**by Mark Nielsen
-Original Copyright June 2024**_
+Original Copyright August 2024**_
 
 Other issues:
 * When slave is identical to a Master, if a slave executes commands in order they happened on the Master, there will be 0% errors. Let me repeat that, there will be 0 errors with identical servers

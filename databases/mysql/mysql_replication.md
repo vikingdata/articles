@@ -98,6 +98,9 @@ select sleep(5);
 stop slave;
 set GLOBAL enforce_gtid_consistency=on;
 set GLOBAL gtid_mode=ON;
+start slave;
+select sleep(2);
+show slave status\G
               </pre>
     * On both master and slave in my.cnf <pre>
 gtid_mode=ON

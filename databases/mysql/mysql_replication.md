@@ -201,7 +201,7 @@ STOP SLAVE;
 SET GTID_MODE=ON_PERMISSIVE;
 SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
 START SLAVE;
-
+&nbsp;
 select sleep(2);
 show slave status\G
  -- if good

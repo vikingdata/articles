@@ -154,12 +154,6 @@ The real fix would have been to free up diskspace if possible, or extend diskspa
 * Solution : [Set replication to the next position](#point)
 
 
-### Make data or schema changes on Slave(s)
-
-* To Fix
-   * Execute commands on other servers with "SET SQL_LOG_BIN=0"
-   * If you don't know the commands, restore the server from Master or backup,.
-
 
 * * *
 <a name=replication></a>Repairing  replication
@@ -182,13 +176,13 @@ The real fix would have been to free up diskspace if possible, or extend diskspa
    * Skip GTID by empty commit
        * https://dev.mysql.com/doc/refman/8.4/en/replication-administration-skip.html
        * Steps:
-           * <pre>
+           * Get current GTID position <pre>
 mysql> SELECT * FROM performance_schema.global_variables   WHERE VARIABLE_NAME like 'gtid_executed';
 +---------------+-----------------------------------------------------------------------------------+
 | VARIABLE_NAME | VARIABLE_VALUE                                                                    |
 +---------------+-----------------------------------------------------------------------------------+
 | gtid_executed | 7ca9a3f5-f52b-11ee-b56f-080027a5063b:1-12,
-</pre>
+                                       </pre>
            * "13" is the "next" downloaded command you want to skip. Basically, add "1" to the highest executed number "12".<pre>
 stop slave;
 SET GTID_NEXT='7ca9a3f5-f52b-11ee-b56f-080027a5063b:13';
@@ -216,7 +210,7 @@ show slave status\G
 SET GTID_MODE=ON;
 start slave;
 show slave status\G 
-</pre>
+                                                                                                </pre>
 
 
 * <a name=point></a>Reset to a point for normal or GTID

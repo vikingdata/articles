@@ -213,7 +213,7 @@ show slave status\G
 
 * <a name=point></a>Reset to a point for normal or GTID
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos.
-        * Ex: binlog.000001 and 637
+        * Ex: binlog.000001 and 610
     * On master, find next position <pre>
 /var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose \
   | grep "&#35; at 537" -A 10 -B 10 \
@@ -223,7 +223,7 @@ show slave status\G
 &#35; at 610
                                    </pre>	   
         * position 610 is after 537
-	   * If there is no "next" position, then its the next log file binlog.000002B	   <pre>
+	   * If there is no "next" position, then its the next log file binlog.000002	   <pre>
 /home/mark# mysqlbinlog /var/lib/mysql/binlog.000002 --base64-output=decode-rows --verBbose \
   | grep "&#35; at" \
   | head -n1 "&#35; at"

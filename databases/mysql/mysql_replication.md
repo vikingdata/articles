@@ -196,7 +196,7 @@ SELECT * FROM performance_schema.global_variables   WHERE VARIABLE_NAME like 'gt
 start slave;
 select sleep(2);
 show slave status\G
-</pre>
+                                                                                                                            </pre>
    * Skip GTID by new method.
        * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/ <pre>
 STOP SLAVE;

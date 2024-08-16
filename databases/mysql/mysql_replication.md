@@ -63,7 +63,7 @@ Index
 <a name=setup></a>Setup GTID
 -----
 
-* On both servers
+* On both servers in Linux
 ```
  ## Add this to /etc/my.cnf
 
@@ -358,7 +358,7 @@ GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
 CREATE USER if not exists 'remote'@'%' IDENTIFIED BY 'bad_password';
 GRANT all privileges ON *.* TO 'remote'@'%';
 ```
-* On both servers
+* On both servers in Linux
 ```
 service mysql stop
 rm -vf /var/lib/mysql/binlog.*

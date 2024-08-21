@@ -47,27 +47,24 @@ create database if not exists test1;
 use database test1;
 
 drop table if exists memory_temp;
-CREATE TEMPORARY TABLE memory_temp (
-  i int, c char(100), v varchar(255)
-  )
+CREATE TEMPORARY TABLE memory_temp (  i int, c char(100), v varchar(255)  )
   engine=Memory;
 
 drop table if exists innodb_temp;
-CREATE TEMPORARY TABLE innodb_temp (
-  i int, c char(100), v varchar(255)
-  )
+CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255)  )
+engine=Memory;
+
+drop table if exists innodb_temp_text;
+CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255), t text  )
 engine=Memory;
 
 drop table if exists innodb_plain;
-CREATE TEMPORARY TABLE innodb_plain (
-  i int, c char(100), v varchar(255)
-  )
+CREATE TEMPORARY TABLE innodb_plain (  i int, c char(100), v varchar(255), t text  )
 engine=Innodb;
 
 SELECT table_schema, table_name, engine
   FROM INFORMATION_SCHEMA.TEMPORARY_TABLES
   WHERE TABLE_SCHEMA = "test1"\G
-
 
 drop procedure if exists insert_test;
 
@@ -77,8 +74,10 @@ DELIMITER //
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024*1024 DO
         INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
+	INSERT INTO innodb_temp_text (i,c,v,'t') VALUES (i, 'a', 'b','t');
         INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b');
+        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b', 't');
+        INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't');
          SET i = i + 1;
     END WHILE;
 
@@ -88,18 +87,24 @@ DELIMITER ;
 delete from memory_temp;
 delete from innodb_temp;
 delete from innodb_plain;
+delete from innodb_temp_text;
+delete from innodb_plain_text;
+
 
 call insert_test();
-select count(1), 'memory1' from innodb_temp;
-select count(1), 'innodb1' from memory_temp;
-select count(1), 'innodb1' from innodb_plain;
+select count(1), 'memory_temp' from memory_temp;
+select count(1), 'innodb_temp' from innodb_temp;
+select count(1), 'innodb_plain' from innodb_plain;
+select count(1), 'innodb_temp_text' from innodb_temp;
+select count(1), 'innodb_plain_text' from innodb_plain;
+
 
 SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
 FROM  information_schema.TEMPORARY_TABLES;
 
 SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
 FROM  information_schema.TABLES
-where table_name = 'innodb_plain';
+where table_name like 'innodb_plain%';
 
 
 ```
@@ -118,12 +123,14 @@ where table_name = 'innodb_plain';
         * Each column uses the max amount of space per column even if there is only 1 byte of data. Ex: 1 bytes of data on a varchar(255) column occupies 255 bytes.
         * Cannot do blob or text fields -- I think. 
 
-* TempTable engine
+    * TempTable engine
         * Efficient storage of varchar, blob, and text fields
         * Unsure if other fields are padded to maximum.
 	* Unsure if memory is freed for deletions (not drops)
 	* TempTables are more efficent and faster. Not sure why. 
-
+   * Temp Innodb
+        * Like MEMORY, the temp tables use the max space for varchar.
+    
 * Status
     *  [Created_tmp_tables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Created_tmp_tables) : amount of temporary tables made.
     * [ Created_tmp_disk_tables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Created_tmp_disk_tables) : Amount of temporary tables converted to disk. This is normally bad. 

@@ -16,7 +16,7 @@ Original Copyright August 2024**_
 3. [Temp Engines](#temp)
     * TempTable 8.4 and greater
     * Memory
-    * Innodb -- for on disk
+    * Innodb 
 
 * * *
 <a name=links></a>Links
@@ -29,7 +29,7 @@ Original Copyright August 2024**_
 
 
 * * *
-<a name=engines></a>Temp Engines
+<a name=temp></a>Temp Engines
 -----
 * Variables
     * [tmp_table_size](https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html#sysvar_tmp_table_size) : max size of memory or temptable for internal use. Does not apply to user made memory tables. User made temptables is not supported. 

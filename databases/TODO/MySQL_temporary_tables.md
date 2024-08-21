@@ -79,7 +79,7 @@ DELIMITER //
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024*1024 DO
         INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_temp_text (i,c,v,'t') VALUES (i, 'a', 'b','t');
+        INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'a', 'b','t');
         INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
         INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b', 't');
         INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't');

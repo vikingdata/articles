@@ -79,10 +79,10 @@ DELIMITER //
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024 DO
         INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'a', 'b','t');
+        INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'a', 'b','t111111111');
         INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
         INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't');
+        INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't111111111');
          SET i = i + 1;
     END WHILE;
 
@@ -135,6 +135,8 @@ where table_name like 'innodb_plain%';
 	* TempTables are more efficent and faster. Not sure why. 
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
+	* InnoDB temp tables appear to be efficient with text columns.
+   * Information on TempTable is lacking.
     
 * Status
     *  [Created_tmp_tables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Created_tmp_tables) : amount of temporary tables made.

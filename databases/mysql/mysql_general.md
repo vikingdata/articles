@@ -250,3 +250,128 @@ Query OK, 0 rows affected (0.030 sec)
 mysqlbinlog  --base64-output=DECODE-ROWS --verbose FILE > FILE.sql
 
 ```
+
+* * *
+<a name=heap></a>Heap Tables
+-----
+* detect which engine
+
+* Different engines
+
+* detect if heap or tomprary tables are large enough
+
+* Make larger
+
+* Note : More memory assinged to heap tables take up more memory
+
+
+* * *
+<a name=encrypt></a>Encrypt Data 
+-----
+* Transit -- Use all. For MySQL, in the server or client you can force ssl. 
+
+* Encryption at rest. In general you need
+    * A module that does encryption for your data. The module takes care of
+    encrypting the data on disk, and maybe cached data. Normally doesn't affect
+    data in transit. Before data in transferred it is decrypted. 
+    * Encryptions keys are used to store the data on disk (and maybe memory cache). This means data backups need the keys to decrypt in order to read the data. It also means if you restore binary copies of the data the database service needs the keys to read and write to the existing data. 
+    * The module can read the encryption keys from disk or get them from another server. A more secure environment uses a server to store keys and which other
+    servers are allowed to have the keys.
+    * MySQL :
+        * https://www.mysql.com/products/enterprise/tde.html
+        * https://dev.mysql.com/doc/refman/8.4/en/innodb-data-encryption.html
+        * https://info.townsendsecurity.com/how-mysql-enterprise-transparent-data-encryption-works
+    * Percona
+        * https://www.percona.com/blog/percona-server-for-mysql-encryption-options-and-choices/
+        * https://www.percona.com/blog/transparent-data-encryption-tde/
+	* One issues with Percona in the past, which may be solved by now, is
+	that servers every 30 days needed to be restarted to get the keys. This
+	doesn't happen with MySQL Enterprise as I understand.
+
+Encrypting data
+
+* MySQL
+   * Setup a server to store the keys.
+   * Configure my.cnf to support encryption.
+       * https://dev.mysql.com/doc/refman/8.4/en/innodb-data-encryption.html#:~:text=To%20enable%20encryption%20for%20the,using%20an%20ALTER%20TABLESPACE%20statement.
+   * Tables should File-Per-Table
+   * Change the default for new tables to be encrypted with default_table_encryption. 
+   * For each table : ALTER TABLESPACE ts1 ENCRYPTION = 'Y';
+   * Also consider REDO and UNDO logs to be encrypted using  innodb_redo_log_encrypt and  innodb_redo_log_encrypt.
+* Percona
+* [AWS RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html)
+    * Use AWS KMS keys
+    * You have to turn on encryption while you make it.
+    * However, you can encrypt a copy of the database and restore it as
+    encrypted.
+        * Take snapshot, make an encrypted copy, restore encrypted copy. 
+* [AWS Aurora](*https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Overview.Encryption.html)
+    * Uses [ AWS Key Management Service-AWS KMS ](https://docs.aws.amazon.com/kms/latest/developerguide/)
+    * You have to turn on encryption while you make it.
+    * However, you can encrypt a copy of the database and restore it as
+    encrypted.
+        * Take snapshot, make an encrypted copy, restore encrypted copy.
+
+* * *
+<a name=Code></a>Code Review
+-----
+Code review just concerns itself with schema and stored procedure changes
+and scripts that are database related (like backup scripts).
+
+* Dev, QA, Staging, Prod cycle
+
+* 2 people review code
+
+* Test code : Note any locking changes to schema. 
+
+* * *
+<a name=spike></a CPU spikes changes
+-----
+* Are there any locks?
+
+* Are there any long running queries? Over 5 seconds.
+
+* What is the history of cpu spikes on graph?
+
+* Are there alarms for spikes at warning, error, and critical?
+
+* Are total connections way less than max connections?
+
+* Record queries and run explain on them. Look at slow long. 
+
+* * *
+<a name=joinsubquery></a>Join versus subquery
+-----
+* Links
+    * https://adamtlee.medium.com/sql-subqueries-vs-join-9bcb921a5b2e
+
+* For running explains,
+    * it is easier for joins to predict explain plans
+    * Making plans for subroutines might involve running sub queries
+    * Joins are made one to one with results. Subqueries may also be one to one with results. But using "in" with subqueries may result one more than one
+    run that isn't used in the reults returned but the subquery. Subqueries
+    can almost never be more efficient than joins. 
+
+Benefits of sub queries
+* easier to read
+* easier to change for flexibility
+* might run faster in some cases. If the sub queries have the same exectuion the results might be cached.
+
+
+Benefits of joins
+* Sub queries can almost always be converted to joins.
+* Sub queries have limitations, such as returning only one column,
+are only allowd in comparisons (In, exists =), cannot be used in outer join. 
+* Left joins can include NULL matches, but technically sub queries can too.
+* In most cases, joins will be more efficient -- if the indexes are correct.
+* Columns from all tables an be included in the result.
+* More complex queries can be easier to read when written properly.
+
+In general
+* Most nested queries can  be joins and vice versa.
+* write in the style easiest for you.
+* Check out the efficiency and speed of queries by
+   * Running an explain on the queries
+   * Between each run of a query, clear the cache if possible. You can do this
+   by selecting data from another table that is larger than cache. Then time it.
+* Consider using CTE for programming. 

@@ -119,7 +119,7 @@ where table_name like 'innodb_plain%';
     * Sequence
         * Temporary table made by user or internal.
              * MEMORY engine can ONLY be used by user. Can also specify InnoDB (but I believe you use disk also)
-        * If size of data exceeds max size allowed it switched to on disk temporary tables.
+        * If size of data exceeds max size allowed it switched to ondisk temporary tables.
         * On disk temporary tables use InnoDB. 
 * Notes
     * Memory engine
@@ -132,7 +132,7 @@ where table_name like 'innodb_plain%';
         * Efficient storage of varchar, blob, and text fields
         * Unsure if other fields are padded to maximum.
 	* Unsure if memory is freed for deletions (not drops)
-	* TempTables are more efficient and faster. Not sure why. 
+	* TempTables are more efficent and faster. Not sure why. 
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
 	* InnoDB temp tables appear to be efficient with text columns.

@@ -13,9 +13,7 @@ _**by Mark Nielsen
 Original Copyright August 2024**_
 
 1. [links](#links)
-2. [Sequence of events](#seq)
-3. Engines
-    * Heap less than 8.4
+3. [Temp Engines](#temp)
     * TempTable 8.4 and greater
     * Memory
     * Innodb -- for on disk
@@ -31,7 +29,7 @@ Original Copyright August 2024**_
 
 
 * * *
-<a name=seq></a>Sequence of events
+<a name=engines></a>Temp Engines
 -----
 * Variables
     * [tmp_table_size](https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html#sysvar_tmp_table_size) : max size of memory or temptable for internal use. Does not apply to user made memory tables. User made temptables is not supported. 
@@ -119,7 +117,7 @@ where table_name like 'innodb_plain%';
     * Sequence
         * Temporary table made by user or internal.
              * MEMORY engine can ONLY be used by user. Can also specify InnoDB (but I believe you use disk also)
-        * If size of data exceeds max size allowed it switched to on disk temporary tables.
+        * If size of data exceeds max size allowed it switches to on disk temporary tables.
         * On disk temporary tables use InnoDB. 
 * Notes
     * Memory engine
@@ -131,12 +129,12 @@ where table_name like 'innodb_plain%';
     * TempTable engine
         * Efficient storage of varchar, blob, and text fields
         * Unsure if other fields are padded to maximum.
-	* Unsure if memory is freed for deletions (not drops)
-	* TempTables are more efficient and faster. Not sure why. 
+        * Unsure if memory is freed for deletions (not drops)
+        * TempTables are more efficient and faster. Not sure why.
+	* Detailed information on TempTable is lacking.
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
 	* InnoDB temp tables appear to be efficient with text columns.
-   * Information on TempTable is lacking.
     
 * Status
     *  [Created_tmp_tables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Created_tmp_tables) : amount of temporary tables made.

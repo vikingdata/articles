@@ -22,7 +22,7 @@ Original Copyright August 2024**_
 <a name=links></a>Links
 -----
 * Engines
-    * [Memory] (https://dev.mysql.com/doc/refman/8.4/en/memory-storage-engine.html) which is also known as HEAP. 
+    * [Memory](https://dev.mysql.com/doc/refman/8.4/en/memory-storage-engine.html) which is also known as HEAP. 
     * [TempTable](https://dev.mysql.com/doc/refman/8.4/en/internal-temporary-tables.html#internal-temporary-tables-engines)
 * Temporary Table in general
     * [Internal Temporary Table Use in MySQL](https://dev.mysql.com/doc/refman/8.4/en/internal-temporary-tables.html)

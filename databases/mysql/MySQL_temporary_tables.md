@@ -45,23 +45,23 @@ create database if not exists test1;
 use database test1;
 
 drop table if exists memory_temp;
-CREATE TEMPORARY TABLE memory_temp (  i int, c char(100), v varchar(255), PRIMARY_key(i)  )
+CREATE TEMPORARY TABLE memory_temp (  i int, c char(100), v varchar(255), PRIMARY key(i)  )
   engine=Memory;
 
 drop table if exists innodb_temp;
-CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255),PRIMARY_key(i)  )
+CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255),PRIMARY key(i)  )
 engine=Memory;
 
 drop table if exists innodb_temp_text;
-CREATE temporARY TABLE innodb_temp_text (  i int, c char(100), v varchar(255), t text,PRIMARY_key(i)  )
+CREATE temporARY TABLE innodb_temp_text (  i int, c char(100), v varchar(255), t text,PRIMARY key(i)  )
 engine=Memory;
 
 drop table if exists innodb_plain;
-CREATE TABLE innodb_plain (  i int, c char(100), v varchar(255),PRIMARY_key(i))
+CREATE TABLE innodb_plain (  i int, c char(100), v varchar(255),PRIMARY key(i))
 engine=Innodb;
 
 drop table if exists innodb_plain_text;
-CREATE TABLE innodb_plain_text (  i int, c char(100), v varchar(255), t text,PRIMARY_key(i)  )
+CREATE TABLE innodb_plain_text (  i int, c char(100), v varchar(255), t text,PRIMARY key(i)  )
 engine=Innodb;
 
 

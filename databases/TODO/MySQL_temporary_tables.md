@@ -47,23 +47,22 @@ create database if not exists test1;
 use database test1;
 
 drop table if exists memory_temp;
-CREATE TEMPORARY TABLE memory1 (
+CREATE TEMPORARY TABLE memory_temp (
   i int, c char(100), v varchar(255)
   )
   engine=Memory;
 
 drop table if exists innodb_temp;
-CREATE TEMPORARY TABLE innodb1 (
+CREATE TEMPORARY TABLE innodb_temp (
   i int, c char(100), v varchar(255)
   )
 engine=Memory;
 
 drop table if exists innodb_plain;
-CREATE TEMPORARY TABLE innodb1 (
+CREATE TEMPORARY TABLE innodb_plain (
   i int, c char(100), v varchar(255)
   )
-engine=Memory;
-
+engine=Innodb;
 
 SELECT table_schema, table_name, engine
   FROM INFORMATION_SCHEMA.TEMPORARY_TABLES

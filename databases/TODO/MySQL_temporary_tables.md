@@ -55,12 +55,17 @@ CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255)  )
 engine=Memory;
 
 drop table if exists innodb_temp_text;
-CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255), t text  )
+CREATE temporARY TABLE innodb_temp (  i int, c char(100), v varchar(255), t text  )
 engine=Memory;
 
 drop table if exists innodb_plain;
-CREATE TEMPORARY TABLE innodb_plain (  i int, c char(100), v varchar(255), t text  )
+CREATE TABLE innodb_plain (  i int, c char(100), v varchar(255))
 engine=Innodb;
+
+drop table if exists innodb_plain_text;
+CREATE TABLE innodb_plain (  i int, c char(100), v varchar(255), t text  )
+engine=Innodb;
+
 
 SELECT table_schema, table_name, engine
   FROM INFORMATION_SCHEMA.TEMPORARY_TABLES

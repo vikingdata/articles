@@ -81,7 +81,7 @@ DELIMITER //
         INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
         INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'a', 'b','t');
         INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b', 't');
+        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b');
         INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't');
          SET i = i + 1;
     END WHILE;

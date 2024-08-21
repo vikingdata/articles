@@ -75,6 +75,7 @@ drop procedure if exists insert_test;
 
 DELIMITER //
   CREATE PROCEDURE insert_test()
+    BEGIN
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024*1024 DO
         INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
@@ -85,7 +86,7 @@ DELIMITER //
          SET i = i + 1;
     END WHILE;
 
-    //
+    END //
 DELIMITER ;
 
 delete from memory_temp;

@@ -46,13 +46,19 @@ show engines;
 create database if not exists test1;
 use database test1;
 
-drop table if exists memory1;
+drop table if exists memory_temp;
 CREATE TEMPORARY TABLE memory1 (
   i int, c char(100), v varchar(255)
   )
   engine=Memory;
 
-drop table if exists innodb1;
+drop table if exists innodb_temp;
+CREATE TEMPORARY TABLE innodb1 (
+  i int, c char(100), v varchar(255)
+  )
+engine=Memory;
+
+drop table if exists innodb_plain;
 CREATE TEMPORARY TABLE innodb1 (
   i int, c char(100), v varchar(255)
   )
@@ -71,22 +77,30 @@ DELIMITER //
     BEGIN
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024*1024 DO
-        INSERT INTO innodb1 (i,c,v) VALUES (i, 'a', 'bbbbbbbbbbbbbbbbbbbb');
-        INSERT INTO memory1 (i,c,v) VALUES (i, 'a', 'bbbbbbbbbbbbbbbbbbbb');
-        SET i = i + 1;
+        INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
+        INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
+        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b');
+         SET i = i + 1;
     END WHILE;
 
     END //
 DELIMITER ;
 
-delete from memory1;
-delete from innodb1;
+delete from memory_temp;
+delete from innodb_temp;
+delete from innodb_plain;
+
 call insert_test();
-select count(1), 'memory1' from memory1;
-select count(1), 'innodb1' from memory1;
+select count(1), 'memory1' from innodb_temp;
+select count(1), 'innodb1' from memory_temp;
+select count(1), 'innodb1' from innodb_plain;
 
 SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
 FROM  information_schema.TEMPORARY_TABLES;
+
+SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
+FROM  information_schema.TABLES
+where table_name = 'innodb_plain';
 
 
 ```

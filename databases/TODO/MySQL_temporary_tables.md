@@ -55,7 +55,7 @@ CREATE TEMPORARY TABLE innodb_temp (  i int, c char(100), v varchar(255)  )
 engine=Memory;
 
 drop table if exists innodb_temp_text;
-CREATE temporARY TABLE innodb_temp (  i int, c char(100), v varchar(255), t text  )
+CREATE temporARY TABLE innodb_temp_text (  i int, c char(100), v varchar(255), t text  )
 engine=Memory;
 
 drop table if exists innodb_plain;

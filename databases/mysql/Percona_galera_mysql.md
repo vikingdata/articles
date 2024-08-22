@@ -153,6 +153,7 @@ Undo
 ```
 apt list --installed | egrep -i "mysq|percona"
 
+apt-get -y remove percona-xtrabackup-24
 apt-get -y remove percona-xtradb-cluster-57 mysql-common percona-xtradb-cluster-client-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-server-5.7
 
 rm -rf /var/lib/mysql
@@ -168,8 +169,9 @@ ls -alh /etc/systemd/system/mysql.service /usr/lib/systemd/system/mysql
 rm -fv /etc/systemd/system/mysql.service
 rm -fv /usr/lib/systemd/system/mysql.serrvice
 
-rm /etc/systemd/system/*mysql
-rm /usr/lib/systemd/system/*mysql
+dpkg --force --purge percona-xtradb-cluster-server-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-client-5.7 percona-xtrabackup-24  percona-xtradb-cluster-common-5.7  mysql-common
+apt-get install --reinstall mysql-common
+apt-get purge mysql-common
 
 ```
 

@@ -136,9 +136,9 @@ apt -y install qpress
    # Enter root twice for password. Only for non-prod testing. 
 apt -y install percona-xtradb-cluster-57
 
-mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
-mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
-mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+mysql -e -u root -proot "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
+mysql -e -u root -proot "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
+mysql -e -u root -proot "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
 
 systemctl list-units -a | egrep -i "mysql|percona"
   # Stop mysql
@@ -156,10 +156,10 @@ apt list --installed | egrep -i "mysq|percona"
 apt-get -y remove percona-xtrabackup-24
 apt-get -y remove percona-xtradb-cluster-57 mysql-common percona-xtradb-cluster-client-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-server-5.7
 
-dpkg --force --purge percona-xtradb-cluster-server-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-client-5.7 percona-xtrabackup-24  percona-xtradb-cluster-common-5.7  mysql-common
+dpkg --purge percona-xtradb-cluster-server-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-client-5.7 percona-xtrabackup-24  percona-xtradb-cluster-common-5.7  mysql-common
 
-apt-get install --reinstall mysql-common
-apt-get purge mysql-common
+apt-get -y install --reinstall mysql-common
+apt-get -y purge mysql-common
 
 
 rm -rf /var/lib/mysql

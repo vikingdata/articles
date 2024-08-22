@@ -22,12 +22,15 @@ We will install it on one computer. It is meant for functional testing and not p
 * * *
 <a name=Links></a>Links
 -----
-* Adding ip via rc.local
+* Adding ip via rc.local and other
     * I couldn't figure out network.services
     * https://www.linuxbabe.com/linux-server/how-to-enable-etcrc-local-with-systemd
+    * https://www.baeldung.com/linux/create-remove-systemd-services
 * Install
+    * https://docs.percona.com/percona-xtrabackup/2.4/installation/apt_repo.html#installing-percona-xtrabackup-via-percona-release
     * https://docs.percona.com/percona-software-repositories/index.html
     * https://docs.percona.com/percona-xtradb-cluster/5.7/install/apt.html#apt
+    * https://repo.percona.com/
 * https://severalnines.com/blog/improve-performance-galera-cluster-mysql-or-mariadb/
 
 
@@ -35,6 +38,10 @@ We will install it on one computer. It is meant for functional testing and not p
 <a name=ip></a>Add ip addresses to Ubuntu
 -----
 ```
+   # Change to root first, execute next command by itself
+sudo bash
+
+
 echo "
 
 [Unit]
@@ -79,6 +86,15 @@ for i in 2 3 4 5 6; do ping -c 1 127.0.0.$i; done
   # enable it on reboot
 systemctl enable rc-local
 
+echo "
+127.0.0.2 localhost2
+127.0.0.3 localhost3
+127.0.0.4 localhost4
+127.0.0.5 localhost5
+127.0.0.6 localhost6
+
+" >> /etc/hosts
+
 ```
 
 * * *
@@ -87,25 +103,76 @@ systemctl enable rc-local
 
 ```
 
-apt remove apparmor
-apt update
-apt install curl 
+   # Change to root first, execute next command by itself
+sudo bash
 
+   # Optional : remove mysql or percona packages
+   # For every package listed do
+   # apt-get remove PACKAGE
+apt list --installed | egrep -i "mysq|percona"
+
+
+
+apt -y remove apparmor
+apt update
+apt -y install curl 
+
+mkdir -p /root/install
+cd /root/install
 
 curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
-apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
-sudo apt update
+apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+apt update
 
   ## we want 5.6, because we want to upgrade. 
   ## You will be asked to supply a password, for testing purposes only use "root" for password
-apt install percona-xtradb-cluster-56
+percona-release enable pxc-57 release
+# percona-release enable pxc-80 release
+percona-release enable-only tools release
 
 
+apt -y install percona-xtrabackup-24
+apt -y install qpress
+   # Enter root twice for password. Only for non-prod testing. 
+apt -y install percona-xtradb-cluster-57
+
+mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
+mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
+mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+
+systemctl list-units -a | egrep -i "mysql|percona"
   # Stop mysql
 
 service mysql stop
 
+
+ls -al /etc/my/conf
 ```
+
+Undo
+```
+apt list --installed | egrep -i "mysq|percona"
+
+apt-get -y remove percona-xtradb-cluster-57 mysql-common percona-xtradb-cluster-client-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-server-5.7
+
+rm -rf /var/lib/mysql
+rm -f /etc/my.cnf
+rm -rf /etc/mysql*
+
+apt list --installed | egrep -i "mysq|percona"
+
+systemctl status mysql
+systemctl disable mysql
+
+ls -alh /etc/systemd/system/mysql.service /usr/lib/systemd/system/mysql
+rm -fv /etc/systemd/system/mysql.service
+rm -fv /usr/lib/systemd/system/mysql.serrvice
+
+rm /etc/systemd/system/*mysql
+rm /usr/lib/systemd/system/*mysql
+
+```
+
 * * *
 <a name=vars></a>Variables to pay attention to
 -----

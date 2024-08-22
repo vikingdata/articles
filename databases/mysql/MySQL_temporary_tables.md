@@ -36,7 +36,9 @@ Original Copyright August 2024**_
     * [max_heap_table_size](https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html#sysvar_max_heap_table_size) : Max size user memory tables are permitted to grow. 
     *  internal_tmp_mem_storage_engine : Memory or TempTable
 
-* Create statements
+* Create statements to test diskspace on temporary tables.
+    * You can't analyze TempTable while a query is running. I don't understand why you can't
+    make tables with TempTable. 
 
 ```
 show engines;
@@ -76,11 +78,11 @@ DELIMITER //
     BEGIN
     DECLARE i int DEFAULT 0;
     WHILE i <= 1024 DO
-        INSERT INTO innodb_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'a', 'b','t111111111');
-        INSERT INTO memory_temp (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'a', 'b');
-        INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'a', 'b', 't111111111');
+        INSERT INTO innodb_temp (i,c,v) VALUES (i, 'aaaaaa', 'bbbbbb');
+        INSERT INTO innodb_temp_text (i,c,v,t) VALUES (i, 'aaaaaa', 'bbbbbb','t111111111');
+        INSERT INTO memory_temp (i,c,v) VALUES (i, 'aaaaaa', 'bbbbbb');
+        INSERT INTO innodb_plain (i,c,v) VALUES (i, 'aaaaaa', 'bbbbbb');
+        INSERT INTO innodb_plain_text (i,c,v,t) VALUES (i, 'aaaaaa', 'bbbbbb', 't111111111');
          SET i = i + 1;
     END WHILE;
 
@@ -112,6 +114,32 @@ where table_name like 'innodb_plain%';
 
 ```
 
+Output
+```
+mysql> SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
+    -> FROM  information_schema.TEMPORARY_TABLES;
++------------------+-------------+--------------+
+| Table            | DATA_LENGTH | INDEX_LENGTH |
++------------------+-------------+--------------+
+| innodb_temp_text |      383744 |       126984 |
+| innodb_temp      |      384032 |       102696 |
+| memory_temp      |      384032 |       102696 |
++------------------+-------------+--------------+
+3 rows in set (0.01 sec)
+
+mysql>
+mysql> SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
+    -> FROM  information_schema.TABLES
+    -> where table_name like 'innodb_plain%';
++-------------------+-------------+--------------+
+| Table             | DATA_LENGTH | INDEX_LENGTH |
++-------------------+-------------+--------------+
+| innodb_plain      |      147456 |            0 |
+| innodb_plain_text |      180224 |            0 |
++-------------------+-------------+--------------+
+2 rows in set (0.02 sec)
+```
+
 * Sequence of events
     * [AWS](https://aws.amazon.com/blogs/database/use-the-temptable-storage-engine-on-amazon-rds-for-mysql-and-amazon-aurora-mysql/)
     * Sequence
@@ -135,6 +163,9 @@ where table_name like 'innodb_plain%';
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
 	* InnoDB temp tables appear to be efficient with text columns.
+	* One thing to note, innodb temp tables use index space but normal innodb tables
+	do not. The PRIMARY index on innodb tables are clustered, but apparently not for
+	temp innodb tables. 
     
 * Status
     *  [Created_tmp_tables](https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Created_tmp_tables) : amount of temporary tables made.

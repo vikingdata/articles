@@ -53,7 +53,7 @@ echo "
 
 " > /etc/systemd/system/rc-local.service
 
-echo "#!/bin/bash
+echo '#!/bin/bash
 
 /usr/sbin/ifconfig lo:2 127.0.0.2 netmask 255.0.0.0 up
 /usr/sbin/ifconfig lo:3 127.0.0.3 netmask 255.0.0.0 up
@@ -61,7 +61,7 @@ echo "#!/bin/bash
 /usr/sbin/ifconfig lo:5 127.0.0.5 netmask 255.0.0.0 up
 /usr/sbin/ifconfig lo:6 127.0.0.6 netmask 255.0.0.0 up
 
-" > /etc/rc.local
+' > /etc/rc.local
 
 chmod +x /etc/rc.local
 

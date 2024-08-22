@@ -25,7 +25,9 @@ We will install it on one computer. It is meant for functional testing and not p
 * Adding ip via rc.local
     * I couldn't figure out network.services
     * https://www.linuxbabe.com/linux-server/how-to-enable-etcrc-local-with-systemd
-* https://docs.percona.com/percona-xtradb-cluster/5.7/install/apt.html#apt
+* Install
+    * https://docs.percona.com/percona-software-repositories/index.html
+    * https://docs.percona.com/percona-xtradb-cluster/5.7/install/apt.html#apt
 * https://severalnines.com/blog/improve-performance-galera-cluster-mysql-or-mariadb/
 
 
@@ -65,6 +67,16 @@ echo '#!/bin/bash
 
 chmod +x /etc/rc.local
 
+/etc/rc.local
+
+  # Test with ifconfig
+
+ifconfig | grep -i lo:
+
+  # Optional, test with ping
+for i in 2 3 4 5 6; do ping -c 1 127.0.0.$i; done
+
+  # enable it on reboot
 systemctl enable rc-local
 
 ```
@@ -73,6 +85,27 @@ systemctl enable rc-local
 <a name=install></a>Install on one server
 -----
 
+```
+
+apt remove apparmor
+apt update
+apt install curl 
+
+
+curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+sudo apt update
+
+  ## we want 5.6, because we want to upgrade. 
+  ## You will be asked to supply a password, for testing purposes only use "root" for password
+apt install percona-xtradb-cluster-56
+
+
+  # Stop mysql
+
+service mysql stop
+
+```
 * * *
 <a name=vars></a>Variables to pay attention to
 -----
@@ -93,3 +126,6 @@ systemctl enable rc-local
 <a name=backups></a>Backups
 -----
 
+* * *
+<a name=upgrade></a>Upgrade to 5.7
+-----

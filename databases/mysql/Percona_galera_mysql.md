@@ -184,10 +184,10 @@ Install config files for nodes
 echo '
 [mysqld]
 server-id=1
-datadir=/var/lib/mysql
-socket=/var/run/mysqld/mysqld.sock
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
+datadir=/database/cluster/node1/db
+socket=/database/cluster/node1/mysql.sock
+log-error=/database/cluster/node1/mysqld.log
+pid-file=/database/cluster/node1/mysqld.pid
 log-bin
 log_slave_updates
 expire_logs_days=7
@@ -211,8 +211,10 @@ wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
 
 '  > /etc/mysql/node1.cnf
 
-sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.2/' /etc/mysql/node1.cnf > /tmp/2.cnf
-sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2.cnf > /etc/mysql/node2.cnf
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.2/' /etc/mysql/node1.cnf > /tmp/2a.cnf
+sed -e 's/node1/node2' /tmp/2a.cnf | sed -e 's/server-id=1/server-id=2/' > /tmp/2b.cnf
+sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2b.cnf > /etc/mysql/node2.cnf
+
 
 sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.3/' /etc/mysql/node1.cnf > /tmp/3.cnf
 sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.3/' /tmp/3.cnf > /etc/mysql/node3.cnf

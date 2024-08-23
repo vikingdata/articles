@@ -178,6 +178,49 @@ rm -fv /usr/lib/systemd/system/mysql.serrvice
 
 ```
 
+Install config files for nodes
+```
+
+echo '
+[mysqld]
+server-id=1
+datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+log-bin
+log_slave_updates
+expire_logs_days=7
+
+bind-address=127.0.0.1
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+ wsrep_cluster_name=pxc-cluster
+ wsrep_cluster_address=gcomm://127.0.0.1,127.0.0.2,127.0.0.3
+ wsrep_node_name=pxc1
+ wsrep_node_address=127.0.0.1
+ wsrep_sst_method=xtrabackup-v2
+ wsrep_sst_auth=sstuser:password
+ pxc_strict_mode=ENFORCING
+ binlog_format=ROW
+ default_storage_engine=InnoDB
+ innodb_autoinc_lock_mode=2
+
+'  > /etc/mysql/node1.cnf
+
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.1.2/' /etc/mysql/node1.cnf /tmp/2.cnf
+sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2.cnf > /etc/mysql/node2.cnf
+
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.1.3/' /etc/mysql/node1.cnf /tmp/3.cnf
+sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.3/' /tmp/2.cnf > /etc/mysql/node3.cnf
+
+
+
+```
+
 * * *
 <a name=vars></a>Variables to pay attention to
 -----

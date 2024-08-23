@@ -159,7 +159,7 @@ mysql> SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
         * Unsure if other fields are padded to maximum.
         * Unsure if memory is freed for deletions (not drops)
         * TempTables are more efficient and faster. Not sure why.
-	* Detailed information on TempTable is lacking.
+        * Detailed information on TempTable is lacking.
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
 	* InnoDB temp tables appear to be efficient with text columns.

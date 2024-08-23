@@ -162,8 +162,8 @@ mysql> SELECT  TABLE_NAME AS `Table`,  DATA_LENGTH, INDEX_LENGTH
         * Detailed information on TempTable is lacking.
    * Temp Innodb
         * Like MEMORY, the temp tables use the max space for varchar.
-	* InnoDB temp tables appear to be efficient with text columns.
-	* One thing to note, innodb temp tables use index space but normal innodb tables
+        * InnoDB temp tables appear to be efficient with text columns.
+        * One thing to note, innodb temp tables use index space but normal innodb tables
 	do not. The PRIMARY index on innodb tables are clustered, but apparently not for
 	temp innodb tables. 
     

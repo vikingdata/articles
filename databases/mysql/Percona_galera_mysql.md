@@ -211,11 +211,11 @@ wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
 
 '  > /etc/mysql/node1.cnf
 
-sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.1.2/' /etc/mysql/node1.cnf /tmp/2.cnf
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.2/' /etc/mysql/node1.cnf > /tmp/2.cnf
 sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2.cnf > /etc/mysql/node2.cnf
 
-sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.1.3/' /etc/mysql/node1.cnf /tmp/3.cnf
-sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.3/' /tmp/2.cnf > /etc/mysql/node3.cnf
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.3/' /etc/mysql/node1.cnf > /tmp/3.cnf
+sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.3/' /tmp/3.cnf > /etc/mysql/node3.cnf
 
 
 

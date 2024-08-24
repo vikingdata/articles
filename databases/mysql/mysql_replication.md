@@ -83,7 +83,7 @@ log-slave-updates=ON
 * https://www.percona.com/blog/convert-mariadb-binary-log-file-and-position-based-replication-to-gtid-replication/
 * https://dev.mysql.com/doc/refman/8.4/en/replication-mode-change-online-enable-gtids.html
 
-NOTE: To can set gtid_mode and enforce-gtid-consistency in global variables without restarting. Try
+NOTE: You can set gtid_mode and enforce-gtid-consistency in global variables without restarting. Try
    * In mysql on master <pre>
 set GLOBAL enforce_gtid_consistency=on;
 set GLOBAL gtid_mode=OFF_PERMISSIVE;
@@ -205,6 +205,7 @@ START SLAVE;
 select sleep(2);
 show slave status\G
  -- if good
+stop slave;
 SET GTID_MODE=ON;
 start slave;
 show slave status\G 
@@ -213,7 +214,7 @@ show slave status\G
 
 * <a name=point></a>Reset to a point for normal or GTID
     * For normal or GTID replication, on slave find Master_Log_File and Exec_Master_Log_Pos from "show slave status\G".
-        * Ex: binlog.000001 and 610
+        * Ex: binlog.000001 and 537
     * On master, find next position <pre>
 /var/lib/mysql/binlog.000001 --base64-output=decode-rows --verbose \
   | grep "&#35; at 537" -A 10 -B 10 \

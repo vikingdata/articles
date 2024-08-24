@@ -221,6 +221,9 @@ sed -e 's/node1/node2/' /tmp/2a.cnf | sed -e 's/server-id=1/server-id=2/' > /tmp
 sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2b.cnf > /etc/mysql/node2.cnf
 
 
+sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.2/' /etc/mysql/node1.cnf > /tmp/2a.cnf
+sed -e 's/node1/node2/' /tmp/2a.cnf | sed -e 's/server-id=1/server-id=2/' > /tmp/2b.cnf
+sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2b.cnf > /etc/mysql/node2.cnf
 
 
 ```

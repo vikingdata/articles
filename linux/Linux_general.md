@@ -23,7 +23,9 @@ title: Linux general tips
 11. [List Services](#services)
 12. [cygwin font size](#cygwin)
 13. [ Parse text files](#parse)
-14. [remove binary fromn texzt file](#removebin)
+14. [remove binary fromn text file](#removebin)
+15. [Adding swapspace temporarily](#swap)
+16. [Deleted files still used.](#un)
 
 * * *
 
@@ -39,6 +41,8 @@ title: Linux general tips
     * [6 Linux Terminal Tips and Tricks to Get Things Done Quickl](https://www.makeuseof.com/linux-terminal-tips-and-tricks/)
     * (10 Linux Terminal Tips and Tricks to Enhance Your Workflow)[https://www.learnlinux.tv/10-linux-terminal-tips-and-tricks-to-enhance-your-workflow/]
         * I use screen instead of tmux
+
+* [Few Linux Commands](https://www.linkedin.com/posts/tuba-nimrah-13574828a_linux-networking-commands-activity-7230523794300264448-ndJp?utm_source=combined_share_message&utm_medium=member_desktop)
 ---
 * * *
 <a name=install></a>Disk Performance
@@ -442,3 +446,128 @@ free -h
 
 
 ```
+
+* * *
+<a name=un></a>Deleted files still used.
+---------------
+Sometime when you delete a file if it is still in use, diskspace is not given back.
+You need to tell if there are files deleted, but have not given diskspace back. 
+
+* Prepare
+```
+sudo bash
+
+dd if=/dev/zero of=/tmp/junk1 bs=1M count=10
+dd if=/dev/zero of=/tmp/junk2 bs=1M count=102
+dd if=/dev/zero of=/tmp/junk3 bs=1M count=1024
+dd if=/dev/zero of=/tmp/junk4 bs=1M count=2024
+
+```
+* Open 4 more terminals and "more" each file
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Terminal 1
+```
+more /tmp/junk1
+```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Terminal 2
+```
+more /tmp/junk1
+```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Terminal 3
+```
+more /tmp/junk1
+```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Terminal 4
+```
+more /tmp/junk1
+```
+* Go back to the original terminal. You shoud have 4 open files. Delete and then list deleted files still being used.
+
+```
+rm -vf /tmp/junk*
+
+  # List all deleted files
+ls -al /proc/*/fd | grep -i deleted
+
+  # Reduce it to just the junk files
+ls -al /proc/*/fd | grep -i deleted | grep junk
+
+  # List by size desc
+  # NOTE: lsof is hard to parse correctly.
+  # You might need to add more columns in awk : $1,$2,$3 etc
+  # $7 "should be" the size you want to sort by
+lsof | grep REG  | awk '{ print $7,$9,$10,$1 }' | sort -n -r -k1,1  | egrep "deleted"
+
+  # REduce it to just junk
+lsof | grep REG | awk '{ print $7,$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+
+  # megabytes
+  lsof | grep REG | awk '{ print int($7/1048576)"M",$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+
+  # gigabtyes
+
+   lsof | grep REG | awk '{ print int($7/1048576000)"G",$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+
+
+```
+
+Output 
+```
+root@mysql1:~# ls -al /proc/*/fd | grep -i deleted
+lrwx------ 1 mark mark 64 Aug 24 17:35 25 -> /memfd:pipewire-memfd (deleted)
+lrwx------ 1 mark mark 64 Aug 24 17:35 28 -> /memfd:pipewire-memfd (deleted)
+lrwx------ 1 mark mark 64 Aug 24 17:35 6 -> /memfd:pulseaudio (deleted)
+l-wx------ 1 root  root  64 Aug 24 17:35 1 -> /var/log/mysqld.log (deleted)
+lrwx------ 1 root  root  64 Aug 24 17:35 14 -> /tmp/ibsSgqxF (deleted)
+lrwx------ 1 root  root  64 Aug 24 17:35 15 -> /tmp/ibqUnxfE (deleted)
+lrwx------ 1 root  root  64 Aug 24 17:35 16 -> /tmp/ibgsBzx2 (deleted)
+lrwx------ 1 root  root  64 Aug 24 17:35 17 -> /tmp/ibpAD4kl (deleted)
+l-wx------ 1 root  root  64 Aug 24 17:35 2 -> /var/log/mysqld.log (deleted)
+lrwx------ 1 root  root  64 Aug 24 17:35 21 -> /tmp/ib5Mw39d (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk1 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk2 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk3 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk4 (deleted)
+
+root@mysql1:~# ls -al /proc/*/fd | grep -i deleted | grep junk
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk1 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk2 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk3 (deleted)
+lr-x------ 1 root root 64 Aug 24 17:41 4 -> /tmp/junk4 (deleted)
+
+root@mysql1:~# lsof | grep REG  | awk '{ print $7,$9,$10,$1 }' | sort -n -r -k1,1  | egrep "deleted"
+2122317824 /tmp/junk4 (deleted) more
+1073741824 /tmp/junk3 (deleted) more
+106954752 /tmp/junk2 (deleted) more
+67108864 /memfd:pulseaudio (deleted) pulseaudi
+10485760 /tmp/junk1 (deleted) more
+11361 /var/log/mysqld.log (deleted) mysqld
+11361 /var/log/mysqld.log (deleted) mysqld
+2312 /memfd:pipewire-memfd (deleted) pipewire
+2312 /memfd:pipewire-memfd (deleted) pipewire
+0 /tmp/ibsSgqxF (deleted) mysqld
+0 /tmp/ibqUnxfE (deleted) mysqld
+0 /tmp/ibpAD4kl (deleted) mysqld
+0 /tmp/ibgsBzx2 (deleted) mysqld
+0 /tmp/ib5Mw39d (deleted) mysqld
+
+root@mysql1:~# lsof | grep REG | awk '{ print $7,$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+2122317824 /tmp/junk4 (deleted) more
+1073741824 /tmp/junk3 (deleted) more
+106954752 /tmp/junk2 (deleted) more
+10485760 /tmp/junk1 (deleted) more
+
+root@mysql1:~# lsof | grep REG | awk '{ print int($7/(1024*1024))"M",$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+2024M /tmp/junk4 (deleted) more
+1024M /tmp/junk3 (deleted) more
+102M /tmp/junk2 (deleted) more
+10M /tmp/junk1 (deleted) more
+
+root@mysql1:~# lsof | grep REG | awk '{ print int($7/1048576000)"G",$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
+2G /tmp/junk4 (deleted) more
+1G /tmp/junk3 (deleted) more
+0G /tmp/junk2 (deleted) more
+0G /tmp/junk1 (deleted) more
+
+
+```
+

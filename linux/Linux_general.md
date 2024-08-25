@@ -507,6 +507,15 @@ lsof | grep REG | awk '{ print $7,$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|jun
 
    lsof | grep REG | awk '{ print int($7/1048576000)"G",$9,$10,$1 }' | egrep -i "junk1|junk2|junk3|junk4"  |sort -n -r -k1,1  | egrep "deleted"
 
+  # Get total size of all deleted files in megabytes
+
+lsof | grep REG | egrep "deleted" | awk '{ print int($7) }' | sort -n -r -k1,1   > /tmp/all_files
+lsof | grep REG | egrep "deleted" | grep -i "junk" | awk '{ print int($7) }' |sort -n -r -k1,1   > /tmp/junk_files
+
+  # sum of all sizes
+paste -sd+ /tmp/all_files | bc |  awk '{ print int($1/1048576)"M"}'
+  # sum of junk files
+paste -sd+ /tmp/junk_files | bc |  awk '{ print int($1/1048576)"M"}'
 
 ```
 
@@ -567,6 +576,11 @@ root@mysql1:~# lsof | grep REG | awk '{ print int($7/1048576000)"G",$9,$10,$1 }'
 1G /tmp/junk3 (deleted) more
 0G /tmp/junk2 (deleted) more
 0G /tmp/junk1 (deleted) more
+
+root@mysql1:~# paste -sd+ /tmp/all_files | bc |  awk '{ print int($1/1048576)"M"}'
+3224M
+root@mysql1:~# paste -sd+ /tmp/junk_files | bc |  awk '{ print int($1/1048576)"M"}'
+3160M
 
 
 ```

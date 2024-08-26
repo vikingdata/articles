@@ -210,6 +210,11 @@ done
 mkidr -p /database/cluster/etc
 chown -R mysql.mysql /database/cluster
 
+wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/my.cnf
+
+wget -O /tmp/mysql.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql.service
+
+wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql_init
 
 
 

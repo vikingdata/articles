@@ -183,12 +183,12 @@ kill -9 mysqld
 
 
 * Install
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Remove previous installation
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Install config files
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Initziation directories
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Start first node
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Add other nodes
-&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Check cluster
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Remove previous installation
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Install config files
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Initziation directories
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Start first node
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Add other nodes
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check cluster
 ```
 service --status-all  | grep mysql
 systemctl disable mysql
@@ -207,7 +207,7 @@ done
 for i in 1 2 3; do
   mkdir -p /database/cluster/node$i/db
 done
-mkidr -p /database/cluster/etc
+mkidr -p /database/cluster/etc/init.d
 chown -R mysql.mysql /database/cluster
 
 wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/my.cnf
@@ -215,6 +215,15 @@ wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/d
 wget -O /tmp/mysql.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql.service
 
 wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql_init
+
+
+for i in 1 2 3; do
+  sed -e 's/__NODE__/$i/g' /tmp/my.cnf > /database/cluster/etc/my$i.cnf
+  sed -e 's/__NODE__/$i/g' /tmp/mysql > /database/cluster/etc/init.d/mysql$i
+  sed -e 's/__NODE__/$i/g' /tmp/mysql.service > /etc/systemd/system/mysql$i.service 
+done
+
+ls /etc/systemd/system/mysql*
 
 
 

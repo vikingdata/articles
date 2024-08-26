@@ -177,53 +177,48 @@ rm -fv /usr/lib/systemd/system/mysql.serrvice
 
 
 ```
+kill mysqld
+sleep(2)
+kill -9 mysqld
 
-Install config files for nodes
+
+* Install
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Remove previous installation
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Install config files
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Initziation directories
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Start first node
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Add other nodes
+&bnsp;&bnsp;&bnsp;&bnsp;&bnsp;* Check cluster
 ```
+service --status-all  | grep mysql
+systemctl disable mysql
+systemctl disable mysqlrouter
+
+  # Skip this part if never installed before
+kill mysqld
+sleep(2)
+kill -9 mysqld
+for i in 1 2 3; do
+  rm -rf /database/cluster/node$i/db
+done
+
+# Setup config and directories
+
 for i in 1 2 3; do
   mkdir -p /database/cluster/node$i/db
 done
+mkidr -p /database/cluster/etc
 chown -R mysql.mysql /database/cluster
-
-
-echo '
-[mysqld]
-server-id=1
-datadir  = /database/cluster/node1/db
-socket   = /database/cluster/node1/mysql.sock
-log-error= /database/cluster/node1/mysqld.log
-pid-file = /database/cluster/node1/mysqld.pid
-log-bin
-log_slave_updates
-expire_logs_days=7
-
-bind-address=127.0.0.1
-
-# Disabling symbolic-links is recommended to prevent assorted security risks
-symbolic-links=0
-
-wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
- wsrep_cluster_name=pxc-cluster
- wsrep_cluster_address=gcomm://127.0.0.1,127.0.0.2,127.0.0.3
- wsrep_node_name=pxc1
- wsrep_node_address=127.0.0.1
- wsrep_sst_method=xtrabackup-v2
- wsrep_sst_auth=sstuser:password
- pxc_strict_mode=ENFORCING
- binlog_format=ROW
- default_storage_engine=InnoDB
- innodb_autoinc_lock_mode=2
-
-'  > /etc/mysql/node1.cnf
-
-sed -e 's/bind-address=127.0.0.1/bind-address=127.0.0.2/' /etc/mysql/node1.cnf > /tmp/2a.cnf
-sed -e 's/node1/node2/' /tmp/2a.cnf | sed -e 's/server-id=1/server-id=2/' > /tmp/2b.cnf
-sed -e 's/wsrep_node_address=127.0.0.1/wsrep_node_address=127.0.0.2/' /tmp/2b.cnf > /etc/mysql/node2.cnf
 
 
 
 
 ```
+
+* * *
+<a name=service></a>Make service and start
+-----
+
 
 * * *
 <a name=vars></a>Variables to pay attention to

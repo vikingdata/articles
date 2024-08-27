@@ -31,6 +31,7 @@ We will install it on one computer. It is meant for functional testing and not p
     * https://docs.percona.com/percona-software-repositories/index.html
     * https://docs.percona.com/percona-xtradb-cluster/5.7/install/apt.html#apt
     * https://repo.percona.com/
+    * https://galeracluster.com/library/training/tutorials/starting-cluster.html 
 * https://severalnines.com/blog/improve-performance-galera-cluster-mysql-or-mariadb/
 
 
@@ -185,7 +186,7 @@ kill -9 mysqld
 * Install
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Remove previous installation
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Install config files
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Initziation directories
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Init directories
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Start first node
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Add other nodes
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check cluster
@@ -207,24 +208,27 @@ done
 for i in 1 2 3; do
   mkdir -p /database/cluster/node$i/db
 done
-mkidr -p /database/cluster/etc/init.d
+mkdir -p /database/cluster/etc/init.d
 chown -R mysql.mysql /database/cluster
 
 wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/my.cnf
 
-wget -O /tmp/mysql.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql.service
+#wget -O /tmp/mysql.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql.service
 
-wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql_init
+wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql
 
 
 for i in 1 2 3; do
-  sed -e 's/__NODE__/$i/g' /tmp/my.cnf > /database/cluster/etc/my$i.cnf
-  sed -e 's/__NODE__/$i/g' /tmp/mysql > /database/cluster/etc/init.d/mysql$i
-  sed -e 's/__NODE__/$i/g' /tmp/mysql.service > /etc/systemd/system/mysql$i.service 
+  sed -e "s/__NODE__/$i/g" /tmp/my.cnf > /database/cluster/etc/my$i.cnf
+  sed -e "s/__NODE__/$i/g" /tmp/mysql > /etc/init.d/mysql$i
+#  sed -e "s/__NODE__/$i/g" /tmp/mysql.service > /etc/systemd/system/mysql$i.service 
+
+  mysqld  --defaults-file=/database/cluster/etc/my$i.cnf --initialize
 done
 
 ls /etc/systemd/system/mysql*
-
+ls /database/cluster/etc/my*
+ls /database/cluster/etc/init.d/mysql*
 
 
 ```
@@ -232,6 +236,8 @@ ls /etc/systemd/system/mysql*
 * * *
 <a name=service></a>Make service and start
 -----
+
+
 
 
 * * *

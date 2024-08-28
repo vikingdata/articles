@@ -210,5 +210,16 @@ to each server.
 -----
 What is the purpose of the slave? Mainly, to run long queries or many queries to take load off
 the cluster. The slowest node of the cluster determines the speed of the cluster in general. 
+* Add the slave to one of the nodes
+    * Create an account for slave replication.
+    * Take backup and restore to other server.
+    * Change the replication on the slave to replicate from the node.
 
+NOTE: Data in the cluster will only be reocorded to all the nodes binlogs IF they use the innodb engine.
+
+I may add examples here, but for now some links:
+   * https://www.digitalocean.com/community/tutorials/how-to-set-up-replication-in-mysql
+   * https://hevodata.com/learn/mysql-master-slave-replication/
+   * https://phoenixnap.com/kb/mysql-master-slave-replication
+   * https://airbyte.com/data-engineering-resources/master-slave-replication
 

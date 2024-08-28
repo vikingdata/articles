@@ -53,12 +53,13 @@ umask 077
 #
 # Usage: void mysqld_get_param option
 mysqld_get_param() {
-	"${PERCONA_PREFIX}"/sbin/mysqld  --defaults-file=$CONF --print-defaults\ 
+        "${PERCONA_PREFIX}"/sbin/mysqld --defaults-file=$CONF --print-defaults \
                 | tr " " "\n" | awk -F= '{if ($1 ~ /_/) { gsub(/_/,"-",$1); print $1"="$2 } else { print $0 }}' \
-		| grep -- "--$1=" \
-		| tail -n 1 \
-		| cut -d= -f2
+                | grep -- "--$1=" \
+                | tail -n 1 \
+                | cut -d= -f2
 }
+
 
 ## Do some sanity checks before even trying to start mysqld.
 sanity_checks() {

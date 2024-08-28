@@ -34,73 +34,13 @@ We will install it on one computer. It is meant for functional testing and not p
     * https://galeracluster.com/library/training/tutorials/starting-cluster.html 
 * https://severalnines.com/blog/improve-performance-galera-cluster-mysql-or-mariadb/
 
-
 * * *
-<a name=ip></a>Add ip addresses to Ubuntu
+<a name=install></a>Install  on 3 servers
 -----
-```
-   # Change to root first, execute next command by itself
-sudo bash
+* Install 3 Linux servers in  VWmware
+   * Use NAT networking
 
-
-echo "
-
-[Unit]
- Description=/etc/rc.local Compatibility
- ConditionPathExists=/etc/rc.local
-
-[Service]
- Type=forking
- ExecStart=/etc/rc.local start
- TimeoutSec=0
- StandardOutput=tty
- RemainAfterExit=yes
- SysVStartPriority=99
-
-[Install]
- WantedBy=multi-user.target
-
-
-" > /etc/systemd/system/rc-local.service
-
-echo '#!/bin/bash
-
-/usr/sbin/ifconfig lo:2 127.0.0.2 netmask 255.0.0.0 up
-/usr/sbin/ifconfig lo:3 127.0.0.3 netmask 255.0.0.0 up
-/usr/sbin/ifconfig lo:4 127.0.0.4 netmask 255.0.0.0 up
-/usr/sbin/ifconfig lo:5 127.0.0.5 netmask 255.0.0.0 up
-/usr/sbin/ifconfig lo:6 127.0.0.6 netmask 255.0.0.0 up
-
-' > /etc/rc.local
-
-chmod +x /etc/rc.local
-
-/etc/rc.local
-
-  # Test with ifconfig
-
-ifconfig | grep -i lo:
-
-  # Optional, test with ping
-for i in 2 3 4 5 6; do ping -c 1 127.0.0.$i; done
-
-  # enable it on reboot
-systemctl enable rc-local
-
-echo "
-127.0.0.2 localhost2
-127.0.0.3 localhost3
-127.0.0.4 localhost4
-127.0.0.5 localhost5
-127.0.0.6 localhost6
-
-" >> /etc/hosts
-
-```
-
-* * *
-<a name=install></a>Install on one server
------
+* Login as root and run commands on each server. 
 
 ```
 
@@ -112,7 +52,8 @@ sudo bash
    # apt-get remove PACKAGE
 apt list --installed | egrep -i "mysq|percona"
 
-
+# Change to multi user mode -- use less memory
+systemctl set-default multi-user.target
 
 apt -y remove apparmor
 apt update
@@ -178,110 +119,26 @@ rm -fv /usr/lib/systemd/system/mysql.serrvice
 
 
 ```
-kill mysqld
-sleep(2)
-kill -9 mysqld
-
-
-* Install
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Remove previous installation
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Install config files
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Init directories
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Start first node
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Add other nodes
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check cluster
-```
-service --status-all  | grep mysql
-systemctl disable mysql
-systemctl disable mysqlrouter
-
-  # Skip this part if never installed before
-kill mysqld
-sleep(2)
-kill -9 mysqld
-for i in 1 2 3; do
-  rm -rf /database/cluster/node$i/db
-  echo "rm -vf /etc/rc*/*mysql$i "
-  rm -vf /etc/rc*/*mysql$i
-  rm -f /run/systemd/generator.late/mysql$i.service
-  rm -f /run/systemd/generator.late/multi-user.target.wants/mysql$i.service
-  rm -f /run/systemd/generator.late/graphical.target.wants/mysql$i.service
-done
-
-# Setup config and directories
-
-for i in 1 2 3; do
-  mkdir -p /database/cluster/node$i/db
-done
-mkdir -p /database/cluster/etc/init.d
-chown -R mysql.mysql /database/cluster
-
-wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/my.cnf
-
-#wget -O /tmp/mysql.service https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql.service
-
-wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql
-
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';" >/database/cluster/etc/mysqlinit.sql
-
-for i in 1 2 3; do
-  sed -e "s/__NODE__/$i/g" /tmp/my.cnf > /database/cluster/etc/my$i.cnf
-  sed -e "s/__NODE__/$i/g" /tmp/mysql > /etc/init.d/mysql$i
-  sed -e "s/__NODE__/$i/g" /tmp/mysql.service > /run/systemd/generator.late/mysql$i.service
-
-  ln -s /run/systemd/generator.late/mysql$i.service /run/systemd/generator.late/multi-user.target.wants/mysql$i.service
-  ln -s /run/systemd/generator.late/mysql$i.service /run/systemd/generator.late/graphical.target.wants/mysql$i.service
-
-  mysqld  --defaults-file=/database/cluster/etc/my$i.cnf --initialize
-  chmod -R 755 /etc/init.d/mysql$i
-
-  mkdir -p /database/cluster/node$i/bin
-  chown -R mysql.mysql /database/cluster
-
-  ln -s /etc/init.d/mysql$i /etc/rc0.d/K01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc1.d/K01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc2.d/S01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc3.d/S01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc4.d/S01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc5.d/S01mysql$i
-  ln -s /etc/init.d/mysql$i /etc/rc6.d/K01mysql$i
-
-done
-
-ls /etc/systemd/system/mysql*
-ls /database/cluster/etc/my*
-ls /database/cluster/etc/init.d/mysql*
-
-ln -s /usr/lib/galera3 /usr/lib64/galera3
-
-sudo -u mysql /etc/init.d/mysql1 bootstrap-pxc
-sleep(5)
-mysql -u root -proot -S /database/cluster/node1/mysql.sock "select * from performance_schema.replication_group_members;"
-
-show status like 'wsrep%';
-show status like 'wsrep_cluster_status';
-show status like 'wsrep_ready';
-SHOW STATUS LIKE 'wsrep_cluster_size';
-
-```
-
 * * *
-<a name=service></a>Make service and start
+<a name=cluster></a>Configure cluster
 -----
 
 
-
-
-* * *
-<a name=vars></a>Variables to pay attention to
------
+* Reset networking to
+   * Shutdown each server
+   * In VWmare change networking to "Briudged Adapter"
+       * This is because the connection to the internet has a problems with "Bridged Adapter", but we don't
+       need the internet anymore. But we do need the nodes to see each other.
+       * If you need internet access, you can probably setup a proxy. 
+* bootstrap first node
+* Add 2and 3rd node
 
 * * *
 <a name=mon></a>Command line monitoring
 -----
 
 * * *
-<a name=add></a>Add a Node
+<a name=backups></a>Backups
 -----
 
 * * *
@@ -289,7 +146,11 @@ SHOW STATUS LIKE 'wsrep_cluster_size';
 -----
 
 * * *
-<a name=backups></a>Backups
+<a name=add></a>Add a Node
+-----
+
+* * *
+<a name=restore></a>Restore from backup
 -----
 
 * * *

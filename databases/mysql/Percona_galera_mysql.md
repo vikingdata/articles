@@ -21,7 +21,7 @@ We will install it on one computer. It is meant for functional testing and not p
 * [Remove a Node](#remove)
 * [Add a node](#add)
 * [Add a slave](#slave)
-
+  
 * * *
 <a name=Links></a>Links
 -----

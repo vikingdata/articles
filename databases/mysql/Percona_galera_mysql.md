@@ -1,18 +1,19 @@
 
 ---
-title : Percona Galera Mysql
+title : Percona Galera Mysql 5.7
 author : Mark Nielsen
 copyright : August 2024 
 ---
 
 
-Percona Galera Mysql
+Percona Galera Mysql 5.7
 ==============================
 
 _**by Mark Nielsen
 Original Copyright August 2024**_
 
-We will install it on one computer. It is meant for functional testing and not performance. 
+We will install it on one computer. It is meant for functional testing and not performance.
+Why 5.7? Will write another article for upgrade to 8.0. 
 
 * [Links](#links)
 * [Install on 3 servers](#install)

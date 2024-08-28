@@ -125,10 +125,15 @@ Make sure you change the ip address for the node.
 [mysqld]
  wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
  wsrep_cluster_name=pxc-cluster
+
  wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>
-   # pxc2 and pxc3 for node 2 and node 3  
+   ex: gcomm://192.168.0.162,192.168.0.244,192.168.0.238
  wsrep_node_name=pxc1
+   # pxc2 and pxc3 for node 2 and node 3
+   # wsrep_node_name needs to be unique
  wsrep_node_address=<my ip>
+   # ex: 192.168.0.162
+   # wsrep_node_address needs to be unique
  wsrep_sst_method=rsync
  wsrep_sst_auth=sstuser:passw0rd
  pxc_strict_mode=ENFORCING
@@ -137,7 +142,8 @@ Make sure you change the ip address for the node.
  innodb_autoinc_lock_mode=2
 ```
  ### config /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
-Change server-id=1 to server-id=2 and server-id=3 for node 2 and node 3
+Change server-id=1 to server-id=2 and server-id=3 for node 2 and node 3.
+Each server must have a unique server-id
 
 * bootstrap first node
 

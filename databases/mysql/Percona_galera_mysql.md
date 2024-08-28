@@ -155,7 +155,7 @@ Undo
 apt list --installed | egrep -i "mysq|percona"
 
 apt-get -y remove percona-xtrabackup-24
-apt-get -y remove percona-xtradb-cluster-57 mysql-common percona-xtradb-cluster-client-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-server-5.7
+apt-get -y remove percona-xtradb-cluster-57 mysql-common percona-xtradb-cluster-client-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-server-5.7 percona-xtrabackup-24
 
 dpkg --purge percona-xtradb-cluster-server-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-client-5.7 percona-xtrabackup-24  percona-xtradb-cluster-common-5.7  mysql-common
 
@@ -217,6 +217,7 @@ wget -O /tmp/my.cnf https://raw.githubusercontent.com/vikingdata/articles/main/d
 
 wget -O /tmp/mysql https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/Percona_galera_mysql_files/mysql
 
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';" >/database/cluster/etc/mysqlinit.sql
 
 for i in 1 2 3; do
   sed -e "s/__NODE__/$i/g" /tmp/my.cnf > /database/cluster/etc/my$i.cnf
@@ -224,12 +225,26 @@ for i in 1 2 3; do
 #  sed -e "s/__NODE__/$i/g" /tmp/mysql.service > /etc/systemd/system/mysql$i.service 
 
   mysqld  --defaults-file=/database/cluster/etc/my$i.cnf --initialize
+  chmod -R 755 /etc/init.d/mysql$i
+
+  mkdir -p /database/cluster/node$i/bin
+  chown -R mysql.mysql /database/cluster
 done
 
 ls /etc/systemd/system/mysql*
 ls /database/cluster/etc/my*
 ls /database/cluster/etc/init.d/mysql*
 
+ln -s /usr/lib/galera3 /usr/lib64/galera3
+
+sudo -u mysql /etc/init.d/mysql1 bootstrap-pxc
+sleep(5)
+mysql -u root -proot -S /database/cluster/node1/mysql.sock "select * from performance_schema.replication_group_members;"
+
+show status like 'wsrep%';
+show status like 'wsrep_cluster_status';
+show status like 'wsrep_ready';
+SHOW STATUS LIKE 'wsrep_cluster_size';
 
 ```
 

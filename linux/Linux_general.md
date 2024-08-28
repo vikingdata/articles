@@ -585,3 +585,31 @@ root@mysql1:~# paste -sd+ /tmp/junk_files | bc |  awk '{ print int($1/1048576)"M
 
 ```
 
+* * *
+<a name=servuce></a>Managing services in Linux.
+---------------
+* Links
+    * https://bash.cyberciti.biz/guide/Service_command
+    * https://www.baeldung.com/linux/differences-systemctl-service
+    * https://www.linode.com/docs/guides/introduction-to-systemctl/
+    
+* See files :
+```
+systemctl show mysql.service | grep Path
+FragmentPath=/run/systemd/generator.late/mysql.service
+SourcePath=/etc/init.d/mysql
+```
+* See if mysql has start files
+```
+root@mysql1:~/install# service --status-all |grep -i mysql
+ [ + ]  mysql
+ [ + ]  mysqlrouter
+````
+* Locate service files
+```
+root@mysql1:~/install# locate mysql.service
+/var/lib/systemd/deb-systemd-helper-enabled/mysql.service.dsh-also
+/var/lib/systemd/deb-systemd-helper-enabled/multi-user.target.wants/mysql.service
+/var/lib/systemd/deb-systemd-helper-masked/mysql.service
+````
+

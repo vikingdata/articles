@@ -181,7 +181,7 @@ mysql -u root -proot \
   -e "SHOW GLOBAL VARIABLES WHERE Variable_name in ('wsrep_cluster_address','wsrep_node_address',  \
      'wsrep_node_name', 'wsrep_sst_method');"
 
-``
+```
 
 
 * * *

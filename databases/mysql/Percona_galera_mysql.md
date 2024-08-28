@@ -38,7 +38,7 @@ We will install it on one computer. It is meant for functional testing and not p
 <a name=install></a>Install  on 3 servers
 -----
 * Install 3 Linux servers in  VWmware
-   * Use NAT networking
+   * Use Bridged Adapter
 
 * Login as root and run commands on each server. 
 
@@ -54,6 +54,10 @@ apt list --installed | egrep -i "mysq|percona"
 
 # Change to multi user mode -- use less memory
 systemctl set-default multi-user.target
+apt-get -y install ssh net-tools emacs plocate
+mkdir -p /usr/lib64/galera3/
+ln -s /usr/lib/galera3/libgalera_smm.so /usr/lib64/galera3/libgalera_smm.so
+ls -al /usr/lib64/galera3/libgalera_smm.so
 
 apt -y remove apparmor
 apt update
@@ -78,17 +82,16 @@ apt -y install qpress
    # Enter root twice for password. Only for non-prod testing. 
 apt -y install percona-xtradb-cluster-57
 
-mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
-mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
-mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';" > /etc/mysql/root_init.sql
+echo "CREATE USER 'sstuser'@'localhost' IDENTIFIED BY 'passw0rd';" >> /etc/mysql/root_init.sql
+echo "GRANT RELOAD, LOCK TABLES, PROCESS, REPLICATION CLIENT ON *.* TO 'sstuser'@'localhost'; " >>/etc/mysql/root_init.sql
 
-systemctl list-units -a | egrep -i "mysql|percona"
-  # Stop mysql
+echo "" >> /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
+echo "init-file=/etc/mysql/root_init.sql" >> /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
 
-service mysql stop
+my_ip=`ifconfig  | grep "inet "| grep -v 127 | sed -e "s/  */ /g" | cut -d ' ' -f3`
+echo  "my external ip is $my_ip"
 
-
-ls -al /etc/my/conf
 ```
 
 Undo
@@ -122,16 +125,52 @@ rm -fv /usr/lib/systemd/system/mysql.serrvice
 * * *
 <a name=cluster></a>Configure cluster
 -----
+* Config each server1
+&nbsp;&nbsp;&nbsp;&nbsp;* config /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
+Add to /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
+Make sure you change the ip address for the node.
+```
+[mysqld]
+ wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+ wsrep_cluster_name=pxc-cluster
+ wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>
+   # pxc2 and pxc3 for node 2 and node 3  
+ wsrep_node_name=pxc1
+ wsrep_node_address=<my ip>
+ wsrep_sst_method=xtrabackup-v2
+ wsrep_sst_auth=sstuser:passw0rd
+ pxc_strict_mode=ENFORCING
+ binlog_format=ROW
+ default_storage_engine=InnoDB
+ innodb_autoinc_lock_mode=2
+```
+&nbsp;&nbsp;&nbsp;&nbsp;* config /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
+Change server-id=1 to server-id=2 and server-id=3 for node 2 and node 3
 
-
-* Reset networking to
-   * Shutdown each server
-   * In VWmare change networking to "Briudged Adapter"
-       * This is because the connection to the internet has a problems with "Bridged Adapter", but we don't
-       need the internet anymore. But we do need the nodes to see each other.
-       * If you need internet access, you can probably setup a proxy. 
 * bootstrap first node
-* Add 2and 3rd node
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* On first node
+```
+/etc/init.d/mysql bootstrap-pxc
+sleep 5
+mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
+mysql -u root -proot \
+  -e "SHOW GLOBAL VARIABLES WHERE Variable_name in ('wsrep_cluster_address','wsrep_node_address','wsrep_node_name');"
+
+```
+
+* Add 2nd and  3rd node
+    * Configure node2 and node3 like node1, but change the ip address, server-id, wsrep_node_name and 
+ wsrep_node_address
+    * Just start each server : service mysql stop
+    * mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
+* Execute on each server
+
+```
+mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
+mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
+mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+
+```
 
 * * *
 <a name=mon></a>Command line monitoring

@@ -15,9 +15,11 @@ Original Copyright August 2024**_
 We will install it on one computer. It is meant for functional testing and not performance. 
 
 * [Links](#links)
-* [Install on one server](#install)
-* [Variables to pay attention to](#vars)
-* [Command line monitoring](#mon)
+* [Install on 3 servers](#install)
+* [Configure cluster](#configure)
+* [Remove a Node](#remove)
+* [Add a node](#add)
+* [Add a slave](#slave)
 
 * * *
 <a name=Links></a>Links
@@ -116,7 +118,7 @@ apt list --installed | egrep -i "mysq|percona"
 -----
 * Config each server1
 
-#### config /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
+### config /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
 Add to /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
 Make sure you change the ip address for the node.
 ```

@@ -201,6 +201,11 @@ sleep(2)
 kill -9 mysqld
 for i in 1 2 3; do
   rm -rf /database/cluster/node$i/db
+  echo "rm -vf /etc/rc*/*mysql$i "
+  rm -vf /etc/rc*/*mysql$i
+  rm -f /run/systemd/generator.late/mysql$i.service
+  rm -f /run/systemd/generator.late/multi-user.target.wants/mysql$i.service
+  rm -f /run/systemd/generator.late/graphical.target.wants/mysql$i.service
 done
 
 # Setup config and directories
@@ -222,7 +227,7 @@ echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';" >/database/cluster/et
 for i in 1 2 3; do
   sed -e "s/__NODE__/$i/g" /tmp/my.cnf > /database/cluster/etc/my$i.cnf
   sed -e "s/__NODE__/$i/g" /tmp/mysql > /etc/init.d/mysql$i
-#  sed -e "s/__NODE__/$i/g" /tmp/mysql.service > /run/systemd/generator.late/mysql$i.service
+  sed -e "s/__NODE__/$i/g" /tmp/mysql.service > /run/systemd/generator.late/mysql$i.service
 
   ln -s /run/systemd/generator.late/mysql$i.service /run/systemd/generator.late/multi-user.target.wants/mysql$i.service
   ln -s /run/systemd/generator.late/mysql$i.service /run/systemd/generator.late/graphical.target.wants/mysql$i.service
@@ -233,15 +238,13 @@ for i in 1 2 3; do
   mkdir -p /database/cluster/node$i/bin
   chown -R mysql.mysql /database/cluster
 
-  ln -s /etc/init.d/mysql$i /etc/rc0.d/K01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc1.d/K01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc2.d/S01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc3.d/S01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc4.d/S01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc5.d/S01mysql
-  ln -s /etc/init.d/mysql$i /etc/rc6.d/K01mysql
-
-
+  ln -s /etc/init.d/mysql$i /etc/rc0.d/K01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc1.d/K01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc2.d/S01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc3.d/S01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc4.d/S01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc5.d/S01mysql$i
+  ln -s /etc/init.d/mysql$i /etc/rc6.d/K01mysql$i
 
 done
 

@@ -70,7 +70,6 @@ curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
 apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
 apt update
 
-  ## we want 5.6, because we want to upgrade. 
   ## You will be asked to supply a password, for testing purposes only use "root" for password
 percona-release enable pxc-57 release
 # percona-release enable pxc-80 release
@@ -126,7 +125,8 @@ rm -fv /usr/lib/systemd/system/mysql.serrvice
 <a name=cluster></a>Configure cluster
 -----
 * Config each server1
-&nbsp;&nbsp;&nbsp;&nbsp;* config /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
+
+#### config /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
 Add to /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
 Make sure you change the ip address for the node.
 ```
@@ -137,61 +137,78 @@ Make sure you change the ip address for the node.
    # pxc2 and pxc3 for node 2 and node 3  
  wsrep_node_name=pxc1
  wsrep_node_address=<my ip>
- wsrep_sst_method=xtrabackup-v2
+ wsrep_sst_method=rsync
  wsrep_sst_auth=sstuser:passw0rd
  pxc_strict_mode=ENFORCING
  binlog_format=ROW
  default_storage_engine=InnoDB
  innodb_autoinc_lock_mode=2
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;* config /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
+ ### config /etc/mysql/percona-xtradb-cluster.conf.d/mysqld.cnf
 Change server-id=1 to server-id=2 and server-id=3 for node 2 and node 3
 
 * bootstrap first node
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* On first node
+
 ```
 /etc/init.d/mysql bootstrap-pxc
 sleep 5
 mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
 mysql -u root -proot \
-  -e "SHOW GLOBAL VARIABLES WHERE Variable_name in ('wsrep_cluster_address','wsrep_node_address','wsrep_node_name');"
+  -e "SHOW GLOBAL VARIABLES WHERE Variable_name in ('wsrep_cluster_address','wsrep_node_address',  \
+     'wsrep_node_name', 'wsrep_sst_method');"
 
 ```
 
 * Add 2nd and  3rd node
     * Configure node2 and node3 like node1, but change the ip address, server-id, wsrep_node_name and 
- wsrep_node_address
+ wsrep_node_address for wsrep.conf and my.conf
     * Just start each server : service mysql stop
-    * mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
 * Execute on each server
 
 ```
 mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
 mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
 mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
 
 ```
 
 * * *
 <a name=mon></a>Command line monitoring
 -----
+```
+mysql -u root -proot -e "SHOW GLOBAL status WHERE Variable_name in ('wsrep_ready','wsrep_cluster_size');"
+mysql -u root -proot \
+  -e "SHOW GLOBAL VARIABLES WHERE Variable_name in ('wsrep_cluster_address','wsrep_node_address',  \
+     'wsrep_node_name', 'wsrep_sst_method');"
 
-* * *
-<a name=backups></a>Backups
------
+``
+
 
 * * *
 <a name=remove></a>Remove a Node
 -----
+* Shutdown the servers.
+* Remove the ip address from the other servers in
+```
+wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>,<ip4>,etc
+```
+* On the server to want to remove, comment out 'wsrep_cluster_address' in wresp.cnf
 
 * * *
 <a name=add></a>Add a Node
 -----
+To add a 4th or more node, install is like node 2 or 3, but add the ip address to
+```
+wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>,<ip4>,etc
+```
+to each server. 
 
-* * *
-<a name=restore></a>Restore from backup
------
 
-* * *
-<a name=upgrade></a>Upgrade to 5.7
+***
+<a name=slave></a>Add a slave
 -----
+What is the purpose of the slave? Mainly, to run long queries or many queries to take load off
+the cluster. The slowest node of the cluster determines the speed of the cluster in general. 
+
+

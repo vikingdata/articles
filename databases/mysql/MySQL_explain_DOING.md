@@ -83,7 +83,7 @@ DELIMITER //
     WHILE i <= 1024 DO
         WHILE j <= 50 DO
 	    SET j = j + 1;
-            CALL log(concat('INSERT INTO table3 (table3_id, table2_id_ref) values ',i,j));
+            select 'INSERT INTO table3 (table3_id, table2_id_ref) values 'i,j));
             INSERT INTO table3 (table3_id, table2_id_ref) values  (i,j);
         END WHILE;
         SET i = i + 1;

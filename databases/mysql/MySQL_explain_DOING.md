@@ -74,7 +74,7 @@ DELIMITER //
 
     set i = 0;
     WHILE i <= 1024 DO
-        INSERT INTO table1 (table2_id, table1_id_ref) values  (i,i);
+        INSERT INTO table2 (table2_id, table1_id_ref) values  (i,i);
          SET i = i + 1;
     END WHILE;
 
@@ -93,10 +93,10 @@ DELIMITER //
 DELIMITER ;
 
 
-call insert_test();
-select count(1) from test1;
-select count(1) from test2;
-select count(1) from test3;
+call insert_data();
+select count(1) from table1;
+select count(1) from table2;
+select count(1) from table3;
 
 ```
 

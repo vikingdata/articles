@@ -30,10 +30,12 @@ Execute on a mysql database server.
 create database if not exists test1;
 use test1;
 
+drop table if exists table3;
+drop table if exists table2;
 drop table if exists table1;
+
 CREATE TABLE table1 (  table1_id int, primary key(table1_id)  );
 
-drop table if exists table2;
 CREATE TABLE table2 (
 table2_id int,
 table1_id_ref int,
@@ -46,7 +48,6 @@ primary key(table2_id),
 	
 );
 
-drop table if exists table3;
 CREATE TABLE table3 (
 table3_id int,
 table2_id_ref int,

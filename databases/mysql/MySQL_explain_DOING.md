@@ -60,8 +60,7 @@ key(table3_id),
 );
 
 
-drop procedure if exists insert_test;
-
+drop procedure if exists insert;
 DELIMITER //
   CREATE PROCEDURE insert()
     BEGIN
@@ -92,9 +91,6 @@ DELIMITER //
         END WHILE;
         SET i = i + 1;
     END WHILE;
-
-
-
 
     END //
 DELIMITER ;

@@ -87,7 +87,6 @@ DELIMITER //
         END WHILE;
 	set j = 0;
         SET i = i + 1;
-	);
     END WHILE;
 
     END //

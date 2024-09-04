@@ -60,9 +60,9 @@ key(table3_id),
 );
 
 
-drop procedure if exists insert;
+drop procedure if exists insert_data;
 DELIMITER //
-  CREATE PROCEDURE insert()
+  CREATE PROCEDURE insert_data()
     BEGIN
     DECLARE i int DEFAULT 0;
     DECLARE j int DEFAULT 0;

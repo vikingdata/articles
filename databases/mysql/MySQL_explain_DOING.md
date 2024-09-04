@@ -53,7 +53,7 @@ table3_id int,
 table2_id_ref int,
 
 key(table2_id_ref),
-primary key(table3_id),
+primary key(table3_id,table2_id_ref),
 
   FOREIGN KEY (table2_id_ref)
         REFERENCES table2(table2_id)

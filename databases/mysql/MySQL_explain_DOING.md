@@ -6,27 +6,29 @@ copyright : September 2024
 ---
 
 
-MySQL Temporary Tables
+MySQL Explain
 ==============================
 
 _**by Mark Nielsen
 Original Copyright September 2024**_
 
 1. [links](#links)
-3. [SetupTemp Engines](#setup)
+3. [Setup](#setup)
 
 * * *
 <a name=links></a>Links
 -----
 
 * * *
-<a name=links></a>Links
+<a name=setup></a>Setup
 -----
+
+Execute on a mysql database server.
 
 ```
 
 create database if not exists test1;
-use database test1;
+use test1;
 
 drop table if exists table1;
 CREATE TABLE table1 (  table1_id int, key(i)  );

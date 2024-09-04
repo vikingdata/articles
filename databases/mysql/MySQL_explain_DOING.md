@@ -83,11 +83,11 @@ DELIMITER //
     WHILE i <= 1024 DO
         WHILE j <= 50 DO
 	    SET j = j + 1;
-            select concat('INSERT INTO table3 (table3_id, table2_id_ref) values ', '(' ,i ,',' ,j, ');');
             INSERT INTO table3 (table3_id, table2_id_ref) values  (i,j);
         END WHILE;
+	set j = 0;
         SET i = i + 1;
-	select concat('values  ', i ,' ' ,j);
+	);
     END WHILE;
 
     END //

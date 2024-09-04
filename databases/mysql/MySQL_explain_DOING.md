@@ -38,7 +38,7 @@ CREATE TABLE table2 (
 table2_id int,
 table1_id_ref int,
 
-key(table1_id),
+key(table1_id_ref),
 key(table2_id),
 
   FOREIGN KEY (table1_id_ref)

@@ -31,7 +31,7 @@ create database if not exists test1;
 use test1;
 
 drop table if exists table1;
-CREATE TABLE table1 (  table1_id int, key(table1_id)  );
+CREATE TABLE table1 (  table1_id int, primary key(table1_id)  );
 
 drop table if exists table2;
 CREATE TABLE table2 (
@@ -39,7 +39,7 @@ table2_id int,
 table1_id_ref int,
 
 key(table1_id_ref),
-key(table2_id),
+primary key(table2_id),
 
   FOREIGN KEY (table1_id_ref)
         REFERENCES table1(table1_id)
@@ -52,7 +52,7 @@ table3_id int,
 table2_id_ref int,
 
 key(table2_id_ref),
-key(table3_id),
+primary key(table3_id),
 
   FOREIGN KEY (table2_id_ref)
         REFERENCES table2(table2_id)
@@ -68,15 +68,11 @@ DELIMITER //
     DECLARE j int DEFAULT 0;
     WHILE i <= 1024 DO
         INSERT INTO table1 (table1_id) values  (i);
-        INSERT INTO table1 (table1_id) values  (i);
-        INSERT INTO table1 (table1_id) values  (i);
-        INSERT INTO table1 (table1_id) values  (i);
         SET i = i + 1;
     END WHILE;
 
     set i = 0;
     WHILE i <= 1024 DO
-        INSERT INTO table1 (table2_id, table1_id_ref) values  (i,i);
         INSERT INTO table1 (table2_id, table1_id_ref) values  (i,i);
          SET i = i + 1;
     END WHILE;

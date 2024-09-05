@@ -24,6 +24,7 @@ TODO: simple performance_schema queries, information_schema queries
 6. [Unused indexes](#unused)
 7. [List stored procedures, functions, triggers](#list1)
 8. [find keyword in field, table, database](#find1)
+9. [count tables](#count)
 
 * * *
 
@@ -332,7 +333,29 @@ SELECT schema_name, '', ''
     FROM INFORMATION_SCHEMA.schemata
     WHERE schema_NAME like concat ('%', @field, '%')
 ;
+```
+
+* * *
+<a name=count></a>Count tables.
+-----
+```
 
 
+SELECT count(1), table_schema
+    FROM INFORMATION_SCHEMA.tables
+    WHERE 
+      TABLE_SCHEMa not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema')
+    group by table_schema;
+
+;
+
+
+SELECT count(1), table_schema
+    FROM INFORMATION_SCHEMA.tables
+    WHERE 
+     TABLE_SCHEMa not in ('sys', 'mysql', 'mysql_innodb_cluster_metadata', 'information_schema', 'performance_schema')
+     and table_schema like '%pattern%'
+    group by table_schema;
+ ;
 
 ```

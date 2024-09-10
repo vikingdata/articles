@@ -401,7 +401,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;
     * service mysqld restart
 * Show grants : Grants for root@localhost
 ```
-+--------------------------------------------------------------------------------------------------------------------------------
++----------------------------------------------------
 | Grants for root@localhost
 +----------------------------------------------------
 | GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'
@@ -415,3 +415,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;
 Method 2: If root still has grant option
 * As mysql root: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;
     * Note: This works in some versions of MySQL. Need to test various versions.
+
+* * *
+<a name=test></a>test
+-----

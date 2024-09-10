@@ -391,8 +391,6 @@ Method 1
 
 
 Method 2: If root still has grant option
-* As mysql root: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;
-    * Note: This works in some versions of MySQL. Need to test various versions.
 
 * * *
 <a name=test></a>test

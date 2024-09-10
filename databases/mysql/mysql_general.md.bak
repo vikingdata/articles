@@ -263,11 +263,11 @@ mysqlbinlog  --base64-output=DECODE-ROWS --verbose FILE > FILE.sql
 
 * Different engines
 
-* detect if heap or temporary tables are large enough
+* detect if heap or tomprary tables are large enough
 
 * Make larger
 
-* Note : More memory assigned to heap tables take up more memory
+* Note : More memory assinged to heap tables take up more memory
 
 
 * * *
@@ -279,7 +279,7 @@ mysqlbinlog  --base64-output=DECODE-ROWS --verbose FILE > FILE.sql
     * A module that does encryption for your data. The module takes care of
     encrypting the data on disk, and maybe cached data. Normally doesn't affect
     data in transit. Before data in transferred it is decrypted. 
-    * Encryption keys are used to store the data on disk (and maybe memory cache). This means data backups need the keys to decrypt in order to read the data. It also means if you restore binary copies of the data the database service needs the keys to read and write to the existing data. 
+    * Encryptions keys are used to store the data on disk (and maybe memory cache). This means data backups need the keys to decrypt in order to read the data. It also means if you restore binary copies of the data the database service needs the keys to read and write to the existing data. 
     * The module can read the encryption keys from disk or get them from another server. A more secure environment uses a server to store keys and which other
     servers are allowed to have the keys.
     * MySQL :
@@ -354,19 +354,19 @@ and scripts that are database related (like backup scripts).
     * it is easier for joins to predict explain plans
     * Making plans for subroutines might involve running sub queries
     * Joins are made one to one with results. Subqueries may also be one to one with results. But using "in" with subqueries may result one more than one
-    run that isn't used in the results returned but the subquery. Subqueries
+    run that isn't used in the reults returned but the subquery. Subqueries
     can almost never be more efficient than joins. 
 
 Benefits of sub queries
 * easier to read
 * easier to change for flexibility
-* might run faster in some cases. If the sub queries have the same execution the results might be cached.
+* might run faster in some cases. If the sub queries have the same exectuion the results might be cached.
 * Used for "select * from table  t where t.id in (select max(id) from TABLE)".
 
 Benefits of joins
 * Sub queries can almost always be converted to joins.
 * Sub queries have limitations, such as returning only one column,
-are only allowed in comparisons (In, exists =), cannot be used in outer join. 
+are only allowd in comparisons (In, exists =), cannot be used in outer join. 
 * Left joins can include NULL matches, but technically sub queries can too.
 * In most cases, joins will be more efficient -- if the indexes are correct.
 * Columns from all tables an be included in the result.

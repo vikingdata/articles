@@ -189,7 +189,14 @@ mysql -- sys.statement_analysis -- analyze queries : how to turn on and what to 
   1. Look for exec_count, and avg and lock latency
   2. performance_schema, threads threads,processlist_id and other thread tables
   . performance_schema, metadata_locks, threads, join by owner_thread_id and thread_id, with processlist_id on threads.
-
+  3. percona xtrabakcup, and streaming
+  4. retore root permissions, account.
+  5. index merge, explain explain
+  6. dad, get df mem cpu, global vriables, status, show processlist
+  7. roles
+  8. reststore root permissions
+  9. Restore self permissions if you have grant option.
+  10. backup doc with streaming
 
 msqyl rep -- parrallel master to serial slave,
   large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,

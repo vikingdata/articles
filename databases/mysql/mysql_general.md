@@ -388,7 +388,7 @@ In general
 Method 1
 * As mysql root : "REVOKE INSERT ON *.* FROM 'root'@'localhost';"
 * Edit my.cnf and add
-```
+
 
 Method 2: If root still has grant option
 * As mysql root: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;

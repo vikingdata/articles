@@ -400,7 +400,12 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;
 * Restart mysql
     * service mysqld restart
 * Grants for root@localhost
-
+```
+ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'
+  IDENTIFIED BY PASSWORD '*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'
+  WITH GRANT OPTION |
+ GRANT PROXY ON ''@'%' TO 'root'@'localhost' WITH GRANT OPTION                                      
+```
 
 Method 2: If root still has grant option
 * As mysql root: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' ;

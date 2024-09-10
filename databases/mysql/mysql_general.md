@@ -28,7 +28,7 @@ This article will grow over time.
 * Code Review -- doing
 * CPU spikes changes -- doing
 * [Join versus subquery](#join)
-
+* [Fix root permissions](#root)
 * * *
 <a name=tailgzip></a>Tail a gzipped file
 -----

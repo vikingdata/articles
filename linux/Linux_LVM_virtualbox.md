@@ -41,7 +41,7 @@ and I list other articles
 * Shutdown Linux in Virtual Box
 * Click Settings
 * In the left menu, click Storage
-* Next to "Sata Controller, you will see a circle and a square. When You hover over the square, it should say "Add Hard disk". Click on that.
+* Next to "Sata Controller", you will see a circle and a square. When You hover over the square, it should say "Add Hard disk". Click on that.
 * Click on "Create new Disk"
    * Select VDI
    * Click Next
@@ -91,7 +91,7 @@ pvcreate /dev/sdb
   # Create volume group
 vgcreate volume_group1 /dev/sdb
 
-  # Create lvm partition from volum group
+  # Create lvm partition from volume group
   # I have 25 gigs available So I will add 20 gig
 lvcreate -L20G -n lv1 volume_group1
 
@@ -115,7 +115,7 @@ mount -a
 
 ```
 sudo bash
-pvcreate /dev/sdb
+pvcreate /dev/sdc
 
   # Display pv display
 pvdisplay |grep dev

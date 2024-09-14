@@ -203,3 +203,11 @@ msqyl rep -- parrallel master to serial slave,
   backups blocks DDL queries and hence slave in blocked,
 
 snowflake -- data masking and encryption
+
+lvm -- with vg
+  make virtual box and add diskspace
+  initilize disk for vg
+  extend vg with another diskspace3B
+  extend lvm
+  resize
+  do lsblk abd df after each command

@@ -1,0 +1,77 @@
+
+
+  DONE cli and dpt setup - done, post it
+  DONE vscode setup
+    https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
+  DONE snowsql setup
+  DONE events
+  DONE simple dpt
+object versus dict
+  DONE data generation
+streamlit
+events versus cpt and cronjobs
+
+DONE different guis, vscode, and other
+
+whats this --- t and l and i between mysql and snowflake. 
+
+Better SQL programming, CTE
+
+certifications
+
+badges for courses
+
+
+
+database festures (mysql, postgresql, snowflake)
+	 DONE xprimary keys
+	 materialized views
+	   sf has materialze views with dynamic tables
+	 views
+	 window functions --- mysql, postgresql, snowflake
+	 roles -- mysql and posgresql
+	 languages -- mysql and postgresql
+	 sequences -- mysql and postgresql
+	 information_schema - mysql, postrgresql, snowflake
+	 engines -- mysql and postgresql
+	     rules can simulate engines in postgresql
+
+Snowflake 
+  https://www.kaggle.com/c/titanic, titanic file, and ml
+  pytorch , sklearn, data science
+  Window functions, snowflake, postgresql, mysql, mongodb  in one article
+DONE  extract data from mysql and load into snowflake, take care of datatypes.
+
+  different stages examples, user, table, named
+  flatten and queryng json files - -nested json queries
+  sci anaconda -- use external app, in virtual env
+  different stages
+  defining and enforcement of contraints -- examples
+   unie, primary, foriegn, not null and not null is only one enforced.
+  File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger.
+  pipe example, internal and external
+IGNORE uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
+
+  file loading
+    loading csvs into snowflake and null mgmt
+    flexible schema mgmt with variant
+    another article: loading into snowflake with (modern) zstandard vs (old schoo) gzip
+
+1st dpt project in postgresql
+  copy data to snowflake
+  execute in snowflake
+  compare reports
+
+
+monitoring -- with mysql, postghesql, snowflake
+	new relic
+	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
+	telegraph -- used with promethesus
+
+inline views
+
+
+roles -- mysql, cockroachdb, postgresql, snoflake
+
+snowflake -- data masking and encryption
+

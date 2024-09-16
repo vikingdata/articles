@@ -1,46 +1,3 @@
-
-
-  DONE cli and dpt setup - done, post it
-  DONE vscode setup
-    https://discourse.getdbt.com/t/how-we-set-up-our-computers-for-working-on-dbt-projects/243
-  DONE snowsql setup
-  DONE events
-  DONE simple dpt
-object versus dict
-  DONE data generation
-streamlit
-events versus cpt and cronjobs
-
-DONE different guis, vscode, and other
-
-whats this --- t and l and i between mysql and snowflake. 
-
-Better SQL programming, CTE
-
-DONE mysql install and dpt
-
-certifications
-
-badges for courses
-
-put mongo and mysql and other docs on github.
-
-
-ansible
-  mysql installlation
-  mysql with replication
-  mysql with cluster
-  mysql with backups, monitoring
-  pythn modules
-  modult utils, library, filter_plugins
-
-
-postgresql - diff between database and schema
-   rules -- rules for data into tables or views. 
-   savepoints in transactions -- does mysql have it?
-   prepare/execute not is stord proecdures, saving variables, sql inbetween.
-   domains -- creates new data types
-
 database festures (mysql, postgresql, snowflake)
 	 DONE xprimary keys
 	 materialized views
@@ -54,25 +11,7 @@ database festures (mysql, postgresql, snowflake)
 	 engines -- mysql and postgresql
 	     rules can simulate engines in postgresql
 
-mongo -- multie replica set on on server
-      Python scripts to display health from status, rs.status, and others
-      	     make library which can be used by Dad or standalone
-
-
-ssh to 6 or centos 7, disable keys, and other options
-AWS reboots mysql with certificates
-Ansible --- python definition, other settings
-Mongo -- do recommendations from doc
-
 mysql -- query cache threshold, low usage
-
-acceess vcc_rpt_logs through Kevanna
-
-
-Install DNS, install LDAP, then LDAP for MySQL and Mongo or other
-https://www.cherryservers.com/blog/how-to-install-and-configure-a-private-bind-dns-server-on-ubuntu-22-04
-But need to change linux and windows clients to use your server.
-https://mittaltarun9715.medium.com/how-to-setup-openldap-server-and-client-installation-in-ubuntu-18-04-with-password-caching-d508a9e80642
 
 RDS - failover, upgrades without downtime, using route
    https://stratusgrid.com/blog/how-to-perform-amazon-rds-upgrades-with-near-zero-downtime
@@ -80,16 +19,6 @@ RDS - failover, upgrades without downtime, using route
    can't do uncrypted and encrypted in an RDS mysql clsuter
       https://aws.amazon.com/blogs/database/encrypt-an-unencrypted-amazon-aurora-mysql-cluster-with-minimal-downtime-using-aws-dms-homogeneous-data-migrations/
       https://medium.com/swlh/how-to-encrypt-aws-rds-mysql-replica-set-with-zero-downtime-and-zero-data-loss-b145cbf1ecf0
-
-mongo --
-   bulkwrite, 1st command will roll back, multiple commands won't (each command suceeded comitted), unless inside a transaction
-      ways data can be reuined
-      	   Incomplete replica failovers, use write concrn to avoid this
-	   Sharding, orphaned rows -- use read concern to avoid this. 
-   time series
-   stream
-   atlas
-   ops manager
 
 RDS amd Aurora
     system upgrade
@@ -104,33 +33,6 @@ RDS amd Aurora
     	unencryped cannot replicate to encrypted RDS and Aurora.
 
 mysql -- setup clusterset in mysql on one server.
-
-Snowflake 
-  https://www.kaggle.com/c/titanic, titanic file, and ml
-  pytorch , sklearn, data science
-  Window functions, snowflake, postgresql, mysql, mongodb  in one article
-DONE  extract data from mysql and load into snowflake, take care of datatypes.
-
-  different stages examples, user, table, named
-  flatten and queryng json files - -nested json queries
-  sci anaconda -- use external app, in virtual env
-  different stages
-  defining and enforcement of contraints -- examples
-   unie, primary, foriegn, not null and not null is only one enforced.
-  File uploads and row size (not more than 16MB). Through snow gui, python connector, do 50 MB files and larger.
-  pipe example, internal and external
-IGNORE uploading data, new data might not fit in, error out on any errors, fix table, load, and repeat until no errors
-
-  file loading
-    loading csvs into snowflake and null mgmt
-    flexible schema mgmt with variant
-    another article: loading into snowflake with (modern) zstandard vs (old schoo) gzip
-
-1st dpt project in postgresql
-  copy data to snowflake
-  execute in snowflake
-  compare reports
-
 
 monitoring -- with mysql, postghesql, snowflake
 	new relic
@@ -161,16 +63,8 @@ explain these questions
 
 DONE mysql
 	mysqldump, nob-blcokingm rtgigger and stored proedure, and gzip
-DONE linux
-	list services
 
-pipeline ansible git rundeck, git runner, etc
-       git brach and merge, with request and approval for code
-       kubernetes, orchestrator
 
-cockroach -- install
-    feaures
-    qquery data with flashback
 
 processlist, slow logs, current status, replication group info
     mysql, mongo, other databases
@@ -202,12 +96,3 @@ msqyl rep -- parrallel master to serial slave,
   large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,
   backups blocks DDL queries and hence slave in blocked,
 
-snowflake -- data masking and encryption
-
-lvm -- with vg
-  make virtual box and add diskspace
-  initilize disk for vg
-  extend vg with another diskspace3B
-  extend lvm
-  resize
-  do lsblk abd df after each command

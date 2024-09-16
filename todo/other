@@ -1,0 +1,81 @@
+
+
+ansible
+  mysql installlation
+  mysql with replication
+  mysql with cluster
+  mysql with backups, monitoring
+  pythn modules
+  modult utils, library, filter_plugins
+
+
+postgresql - diff between database and schema
+   rules -- rules for data into tables or views. 
+   savepoints in transactions -- does mysql have it?
+   prepare/execute not is stord proecdures, saving variables, sql inbetween.
+   domains -- creates new data types
+
+database festures (mysql, postgresql, snowflake)
+	 DONE xprimary keys
+	 materialized views
+	   sf has materialze views with dynamic tables
+	 views
+	 window functions --- mysql, postgresql, snowflake
+	 roles -- mysql and posgresql
+	 languages -- mysql and postgresql
+	 sequences -- mysql and postgresql
+	 information_schema - mysql, postrgresql, snowflake
+	 engines -- mysql and postgresql
+	     rules can simulate engines in postgresql
+
+mongo -- multie replica set on on server
+      Python scripts to display health from status, rs.status, and others
+      	     make library which can be used by Dad or standalone
+
+
+ssh to 6 or centos 7, disable keys, and other options
+AWS reboots mysql with certificates
+Ansible --- python definition, other settings
+Mongo -- do recommendations from doc
+
+
+Install DNS, install LDAP, then LDAP for MySQL and Mongo or other
+https://www.cherryservers.com/blog/how-to-install-and-configure-a-private-bind-dns-server-on-ubuntu-22-04
+But need to change linux and windows clients to use your server.
+https://mittaltarun9715.medium.com/how-to-setup-openldap-server-and-client-installation-in-ubuntu-18-04-with-password-caching-d508a9e80642
+
+mongo --
+   bulkwrite, 1st command will roll back, multiple commands won't (each command suceeded comitted), unless inside a transaction
+      ways data can be reuined
+      	   Incomplete replica failovers, use write concrn to avoid this
+	   Sharding, orphaned rows -- use read concern to avoid this. 
+   time series
+   stream
+   atlas
+   ops manager
+
+
+monitoring -- with mysql, postghesql, snowflake
+	new relic
+	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
+	telegraph -- used with promethesus
+
+grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 10 minutes to reduce traffic -- unless server is in the same domain AWS)
+
+
+
+pipeline ansible git rundeck, git runner, etc
+       git brach and merge, with request and approval for code
+       kubernetes, orchestrator
+
+cockroach -- install
+    feaures
+    qquery data with flashback
+
+DONE lvm -- with vg
+  make virtual box and add diskspace
+  initilize disk for vg
+  extend vg with another diskspace3B
+  extend lvm
+  resize
+  do lsblk abd df after each command

@@ -1,0 +1,23 @@
+
+
+database festures (mysql, postgresql, snowflake)
+	 DONE xprimary keys
+	 materialized views
+	   sf has materialze views with dynamic tables
+	 views
+	 window functions --- mysql, postgresql, snowflake
+	 roles -- mysql and posgresql
+	 languages -- mysql and postgresql
+	 sequences -- mysql and postgresql
+	 information_schema - mysql, postrgresql, snowflake
+	 engines -- mysql and postgresql
+	     rules can simulate engines in postgresql
+
+monitoring -- with mysql, postghesql, snowflake
+	new relic
+	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
+	telegraph -- used with promethesus
+
+grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 10 minutes to reduce traffic -- unless server is in the same domain AWS)
+
+

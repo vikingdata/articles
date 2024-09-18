@@ -91,6 +91,9 @@ select *, @@time_zone from t; Select *, @@time_zone from t_now;
 select convert_tz(t,@@session.time_zone,'+00:00') from t;
 select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
 
+select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) as UT_t  from t;
+select UNIX_TIMESTAMP(STR_TO_DATE(t_now, '%Y-%m-%d %H:%i:%s')) as UT_t_now  from t_now;
+
 ```
 * 5.6 output
 
@@ -186,12 +189,28 @@ mysql> select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
 +------------------------------------------------+
 3 rows in set (0.01 sec)
 
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) as UT_t  from t;
++------------+
+| UT_t       |
++------------+
+| 1726619112 |
+| 1726593912 |
+| 1726590312 |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t_now, '%Y-%m-%d %H:%i:%s')) as UT_t_now  from t_now;
++------------+
+| UT_t_now   |
++------------+
+| 1726619112 |
+| 1726619112 |
+| 1726619112 |
++------------+
+3 rows in set (0.00 sec)
+
 
 ```
-
-* 5.6 conclusion
-
-
 
 * 8.0 output
 ```
@@ -290,5 +309,108 @@ mysql> select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
 +------------------------------------------------+
 3 rows in set (0.00 sec)
 
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) as UT_t  from t;
++------------+
+| UT_t       |
++------------+
+| 1726619375 |
+| 1726594175 |
+| 1726590575 |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t_now, '%Y-%m-%d %H:%i:%s')) as UT_t_now  from t_now;
++------------+
+| UT_t_now   |
++------------+
+| 1726619375 |
+| 1726619375 |
+| 1726619375 |
++------------+
+
 
 ```
+
+
+Conclusion
+* When you use the function now() it correctly converts the time to UTC. When displayed, it corretly
+displays the real time the insert happened. If you change time zones real quick after each insert
+and select the data, the inserts happen at roughly the same time. This is expected. If you have
+a dual Master-Master setup in San Jose and New York, and both sides of MySQL insert data at
+the same time and then you select the data, the inserts have the same date. San Jose will display
+all the inserts 3 hours before New York, but to San Jose all the inserts will have happened at the
+sane time and in New York they will be displayed at the same time, just 3 hours ahead.
+
+* When you insert a date into a timezone field, 
+
+SET @@session.time_zone = "+01:00";
+SET GLOBAL time_zone = '+01:00';
+select @t:=now();
+
+drop table if exists t1;
+create table t1 (t timestamp, note varchar(255) , primary key (note));
+
+select @t:=now();
+insert into t1 values (now(), 'now() 1'), (@t, '@t 1');
+select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+  from t1;
+
+SET @@session.time_zone = "+02:00";
+SET GLOBAL time_zone = '+02:00';
+
+insert into t1 values (now(), 'now() 2'), (@t, '@t 2');
+select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+  from t1;
+
+SET @@session.time_zone = "+03:00";
+SET GLOBAL time_zone = '+03:00';
+insert into t1 values (now(), 'now() 3'), (@t, '@t 3');
+
+select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+  from t1;
+
+* Output of of select queries. 
+```
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+    ->   from t1;
++------------+---------+---------------------+
+| UT         | note    | t                   |
++------------+---------+---------------------+
+| 1726622765 | @t 1    | 2024-09-18 02:26:05 |
+| 1726622765 | now() 1 | 2024-09-18 02:26:05 |
++------------+---------+---------------------+
+2 rows in set (0.00 sec)
+
+
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+    ->   from t1;
++------------+---------+---------------------+
+| UT         | note    | t                   |
++------------+---------+---------------------+
+| 1726622765 | @t 1    | 2024-09-18 03:26:05 |
+| 1726619165 | @t 2    | 2024-09-18 02:26:05 |
+| 1726622765 | now() 1 | 2024-09-18 03:26:05 |
+| 1726622765 | now() 2 | 2024-09-18 03:26:05 |
++------------+---------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
+    ->   from t1;
++------------+---------+---------------------+
+| UT         | note    | t                   |
++------------+---------+---------------------+
+| 1726622765 | @t 1    | 2024-09-18 04:26:05 |
+| 1726619165 | @t 2    | 2024-09-18 03:26:05 |
+| 1726615565 | @t 3    | 2024-09-18 02:26:05 |
+| 1726622765 | now() 1 | 2024-09-18 04:26:05 |
+| 1726622765 | now() 2 | 2024-09-18 04:26:05 |
+| 1726622765 | now() 3 | 2024-09-18 04:26:05 |
++------------+---------+---------------------+
+6 rows in set (0.00 sec)
+
+```
+* Explanation : I don't know why it happens.
+    * When you use now(), insert and select follows the time zone.
+    * When you insert a hard date, the insert does not follow the timezone, but the select does. 
+    * Perhaps it is suppose to be like this, but it is good to be aware of it and testing should
+    be done when changing timezones. 

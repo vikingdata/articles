@@ -1,7 +1,9 @@
  
 ---
 title : MySQL Timezone : now() and hard date
+
 author : Mark Nielsen  
+
 copyright : June 2024  
 ---
 

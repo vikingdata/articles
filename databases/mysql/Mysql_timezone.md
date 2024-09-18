@@ -342,6 +342,7 @@ Conclusion : Something is going on when you insert now() compared to @t which sh
 
 * When you insert a date into a timezone field, 
 
+```
 SET @@session.time_zone = "+01:00";
 SET GLOBAL time_zone = '+01:00';
 select @t:=now();
@@ -368,6 +369,7 @@ insert into t1 values (now(), 'now() 3'), (@t, '@t 3'), ('2000-01-01', 'date 3')
 select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
   from t1;
 
+```
 * Output of of select queries. 
 ```
 +------------+---------+---------------------+

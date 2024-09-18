@@ -18,6 +18,7 @@ Will test in various versions.
 1. [Links](#links)
 2. [setup master-slave virtualbox](#install)
 3. [test timezones](#test)
+4. [Test with one table](#one)
 
 <a name=Links></a>Links
 -----
@@ -332,14 +333,12 @@ mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t_now, '%Y-%m-%d %H:%i:%s')) as UT_t_no
 ```
 
 
-Conclusion
-* When you use the function now() it correctly converts the time to UTC. When displayed, it corretly
-displays the real time the insert happened. If you change time zones real quick after each insert
-and select the data, the inserts happen at roughly the same time. This is expected. If you have
-a dual Master-Master setup in San Jose and New York, and both sides of MySQL insert data at
-the same time and then you select the data, the inserts have the same date. San Jose will display
-all the inserts 3 hours before New York, but to San Jose all the inserts will have happened at the
-sane time and in New York they will be displayed at the same time, just 3 hours ahead.
+Conclusion : Something is going on when you insert now() compared to @t which should be equal to now() but might be conisderd a datetime value. 
+
+* * *
+<a name=one></a>Test with one table
+-----
+
 
 * When you insert a date into a timezone field, 
 
@@ -351,66 +350,65 @@ drop table if exists t1;
 create table t1 (t timestamp, note varchar(255) , primary key (note));
 
 select @t:=now();
-insert into t1 values (now(), 'now() 1'), (@t, '@t 1');
+insert into t1 values (now(), 'now() 1'), (@t, '@t 1'), ('2000-01-01', 'date 1');
 select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
   from t1;
 
 SET @@session.time_zone = "+02:00";
 SET GLOBAL time_zone = '+02:00';
-
-insert into t1 values (now(), 'now() 2'), (@t, '@t 2');
+insert into t1 values (now(), 'now() 3'), (@t, '@t 3'), ('2000-01-01', 'date 3');
 select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
   from t1;
 
+
 SET @@session.time_zone = "+03:00";
 SET GLOBAL time_zone = '+03:00';
-insert into t1 values (now(), 'now() 3'), (@t, '@t 3');
+insert into t1 values (now(), 'now() 3'), (@t, '@t 3'), ('2000-01-01', 'date 3');
 
 select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
   from t1;
 
 * Output of of select queries. 
 ```
-mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
-    ->   from t1;
 +------------+---------+---------------------+
 | UT         | note    | t                   |
 +------------+---------+---------------------+
-| 1726622765 | @t 1    | 2024-09-18 02:26:05 |
-| 1726622765 | now() 1 | 2024-09-18 02:26:05 |
+| 1726623490 | @t 1    | 2024-09-18 02:38:10 |
+|  946681200 | date 1  | 2000-01-01 00:00:00 |
+| 1726623490 | now() 1 | 2024-09-18 02:38:10 |
 +------------+---------+---------------------+
-2 rows in set (0.00 sec)
 
-
-mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
-    ->   from t1;
 +------------+---------+---------------------+
 | UT         | note    | t                   |
 +------------+---------+---------------------+
-| 1726622765 | @t 1    | 2024-09-18 03:26:05 |
-| 1726619165 | @t 2    | 2024-09-18 02:26:05 |
-| 1726622765 | now() 1 | 2024-09-18 03:26:05 |
-| 1726622765 | now() 2 | 2024-09-18 03:26:05 |
+| 1726623490 | @t 1    | 2024-09-18 03:38:10 |
+| 1726619890 | @t 2    | 2024-09-18 02:38:10 |
+|  946681200 | date 1  | 2000-01-01 01:00:00 |
+|  946677600 | date 2  | 2000-01-01 00:00:00 |
+| 1726623490 | now() 1 | 2024-09-18 03:38:10 |
+| 1726623491 | now() 2 | 2024-09-18 03:38:11 |
 +------------+---------+---------------------+
-4 rows in set (0.00 sec)
 
-mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
-    ->   from t1;
 +------------+---------+---------------------+
 | UT         | note    | t                   |
 +------------+---------+---------------------+
-| 1726622765 | @t 1    | 2024-09-18 04:26:05 |
-| 1726619165 | @t 2    | 2024-09-18 03:26:05 |
-| 1726615565 | @t 3    | 2024-09-18 02:26:05 |
-| 1726622765 | now() 1 | 2024-09-18 04:26:05 |
-| 1726622765 | now() 2 | 2024-09-18 04:26:05 |
-| 1726622765 | now() 3 | 2024-09-18 04:26:05 |
+| 1726623490 | @t 1    | 2024-09-18 04:38:10 |
+| 1726619890 | @t 2    | 2024-09-18 03:38:10 |
+| 1726616290 | @t 3    | 2024-09-18 02:38:10 |
+|  946681200 | date 1  | 2000-01-01 02:00:00 |
+|  946677600 | date 2  | 2000-01-01 01:00:00 |
+|  946674000 | date 3  | 2000-01-01 00:00:00 |
+| 1726623490 | now() 1 | 2024-09-18 04:38:10 |
+| 1726623491 | now() 2 | 2024-09-18 04:38:11 |
+| 1726623491 | now() 3 | 2024-09-18 04:38:11 |
 +------------+---------+---------------------+
-6 rows in set (0.00 sec)
+
 
 ```
 * Explanation : I don't know why it happens.
     * When you use now(), insert and select follows the time zone.
-    * When you insert a hard date, the insert does not follow the timezone, but the select does. 
+    * When you insert a hard date, the insert does not follow the timezone, but the select does.
+        * @t apparently gets converted to a hard date. 
     * Perhaps it is suppose to be like this, but it is good to be aware of it and testing should
     be done when changing timezones. 
+

@@ -32,9 +32,10 @@ Original Copyright September 2024**_
 cd
 python3.6 -m venv pythonenv
 source /home/mark/pythonenv/bin/activate
-
 echo "" >> ~/.bashrc
 echo "source /home/mark/pythonenv/bin/activate" >> ~/.bashrc
+
+apt install python3-pip
 
   # 8.0 will error out, but it should tell you a close version. 
 pip install mysql-connector-python==8.0.5

@@ -31,21 +31,13 @@ It is beyond this article to install Linux and MySQL in VirtualBox. Get Linux an
 * * *
 <a name=test></a> test timezones
 -----
-* on master in Linux
+* on 5.6 in Linux
 ```
 timedatectl status | grep "zone"
 ```
-* on slave
-```
-SET GLOBAL pxc_strict_mode=PERMISSIVE;
-SET GLOBAL time_zone = 'SYSTEM';
-SET @@session.time_zone = "SYSTEM";
-```
 
-
-* on master
+* on 5.6 and 8.0
 ```
-SET GLOBAL pxc_strict_mode=PERMISSIVE;
 SET GLOBAL time_zone = 'SYSTEM';
 SET @@session.time_zone = "SYSTEM";
 
@@ -58,146 +50,245 @@ drop table if exists t;
 create table t (t timestamp, timezone varchar(255), note varchar(255));
 
 drop table if exists t_now;
-create table t_now (t timestamp, timezone varchar(255), note varchar(255));
+create table t_now (t_now timestamp, timezone varchar(255), note varchar(255));
 
-insert into t values ('2024-01-01', @t, "master 1: before timechange");
-insert into t_now values (now(), @t, "master 1: before timechange");
+select @n:=now();
+insert into t values (@n, @t, "5.6 1: before timechange");
+insert into t_now values (now(), @t, "5.6 1: before timechange");
 
 SET GLOBAL time_zone = '+00:00';
 SET @@session.time_zone = "+00:00";
 
-insert into t values ('2024-01-01', @@time_zone, "master 2: after timechange +00:00");
-insert into t_now values (now(), @@time_zone, "master 2: after timechange +00:00");
+insert into t values (@n, @@time_zone, "5.6 2: after timechange +00:00");
+insert into t_now values (now(), @@time_zone, "5.6 2: after timechange +00:00");
  
 SET GLOBAL time_zone = '+01:00';
 SET @@session.time_zone = "+01:00";
 
-insert into t values ('2024-01-01', @@time_zone, "master 2: after timechange +01:00");
-insert into t_now values (now(), @@time_zone, "master 2: after timechange +01:00");
+insert into t values (@n, @@time_zone, "5.6 2: after timechange +01:00");
+insert into t_now values (now(), @@time_zone, "5.6 2: after timechange +01:00");
 
 
 ```
 
-* on slave
-```
-use TEST_timezone;
-select @t:=timediff(now(),convert_tz(now(),@@session.time_zone,'+00:00'));
-
-insert into t values  ('2024-01-01', @t, "slave 1: before timechange");
-insert into t_now values  (now(), @t, "slave 1: before timechange");
-
-SET GLOBAL time_zone = '+00:00';
-SET @@session.time_zone = "+00:00";
-
-insert into t values  ('2024-01-01', @@time_zone, "slave 2: after timechange 1 +01:00");
-insert into t_now values  (now(), @@time_zone, "slave 2: after timechange 1 +01:00");
-
-SET GLOBAL time_zone = '+01:00';
-SET @@session.time_zone = "+01:00";
-
-insert into t values  ('2024-01-01', @@time_zone, "slave 3: after timechange 1 +00:00");
-insert into t_now values  (now(), @@time_zone, "slave 3: after timechange 1 +00:00");
-
-stop slave;
-start slave;
-show slave status\G
-```
-
-* on master
-```
-insert into t values  ('2024-01-01', @@time_zone, "master 4: same timestamp");
-insert into t_now values  (now(), @@time_zone, "master 4: before same timestamp");
-
-```
 
 Compare timestamps when timezones were changed.
 
-* on master
+* on 5.6 and 8.0
 ```
+SET GLOBAL time_zone = 'SYSTEM';
+SET @@session.time_zone = "SYSTEM";
+select *, @@time_zone from t; Select *, @@time_zone from t_now;
+
 SET GLOBAL time_zone = '+00:00';
 SET @@session.time_zone = "+00:00";
-
 select *,@@time_zone from t; Select *, @@time_zone from t_now;
 
 SET GLOBAL time_zone = '+01:00';
 SET @@session.time_zone = "+01:00";
-
 select *, @@time_zone from t; Select *, @@time_zone from t_now;
-```
-* master output
+
+select convert_tz(t,@@session.time_zone,'+00:00') from t;
+select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
 
 ```
-+---------------------+-----------+-----------------------------------+-------------+
-| t                   | timezone  | note                              | @@time_zone |
-+---------------------+-----------+-----------------------------------+-------------+
-| 2024-01-01 08:00:00 | -07:00:00 | master 1: before timechange       | +00:00      |
-| 2024-01-01 00:00:00 | +00:00    | master 2: after timechange +00:00 | +00:00      |
-| 2023-12-31 23:00:00 | +01:00    | master 2: after timechange +01:00 | +00:00      |
-| 2023-12-31 23:00:00 | +01:00    | master 4: same timestamp          | +00:00      |
-+---------------------+-----------+-----------------------------------+-------------+
-4 rows in set (0.00 sec)
+* 5.6 output
 
-+---------------------+-----------+-----------------------------------+-------------+
-| t                   | timezone  | note                              | @@time_zone |
-+---------------------+-----------+-----------------------------------+-------------+
-| 2024-09-17 18:28:50 | -07:00:00 | master 1: before timechange       | +00:00      |
-| 2024-09-17 18:28:50 | +00:00    | master 2: after timechange +00:00 | +00:00      |
-| 2024-09-17 18:28:50 | +01:00    | master 2: after timechange +01:00 | +00:00      |
-| 2024-09-17 18:31:14 | +01:00    | master 4: before same timestamp   | +00:00      |
-+---------------------+-----------+-----------------------------------+-------------+
+```
+mysql> select *, @@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-17 17:25:12 | -07:00:00 | 5.6 1: before timechange       | SYSTEM      |
+| 2024-09-17 10:25:12 | +00:00    | 5.6 2: after timechange +00:00 | SYSTEM      |
+| 2024-09-17 09:25:12 | +01:00    | 5.6 2: after timechange +01:00 | SYSTEM      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
 
-After timezone change
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-17 17:25:12 | -07:00:00 | 5.6 1: before timechange       | SYSTEM      |
+| 2024-09-17 17:25:12 | +00:00    | 5.6 2: after timechange +00:00 | SYSTEM      |
+| 2024-09-17 17:25:12 | +01:00    | 5.6 2: after timechange +01:00 | SYSTEM      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
 
-+---------------------+-----------+-----------------------------------+-------------+
-| t                   | timezone  | note                              | @@time_zone |
-+---------------------+-----------+-----------------------------------+-------------+
-| 2024-01-01 09:00:00 | -07:00:00 | master 1: before timechange       | +01:00      |
-| 2024-01-01 01:00:00 | +00:00    | master 2: after timechange +00:00 | +01:00      |
-| 2024-01-01 00:00:00 | +01:00    | master 2: after timechange +01:00 | +01:00      |
-| 2024-01-01 00:00:00 | +01:00    | master 4: same timestamp          | +01:00      |
-+---------------------+-----------+-----------------------------------+-------------+
-4 rows in set (0.00 sec)
 
-+---------------------+-----------+-----------------------------------+-------------+
-| t                   | timezone  | note                              | @@time_zone |
-+---------------------+-----------+-----------------------------------+-------------+
-| 2024-09-17 19:28:50 | -07:00:00 | master 1: before timechange       | +01:00      |
-| 2024-09-17 19:28:50 | +00:00    | master 2: after timechange +00:00 | +01:00      |
-| 2024-09-17 19:28:50 | +01:00    | master 2: after timechange +01:00 | +01:00      |
-| 2024-09-17 19:31:14 | +01:00    | master 4: before same timestamp   | +01:00      |
-+---------------------+-----------+-----------------------------------+-------------+
+mysql> SET GLOBAL time_zone = '+00:00';
+Query OK, 0 rows affected (0.00 sec)
 
+mysql> SET @@session.time_zone = "+00:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *,@@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 00:25:12 | -07:00:00 | 5.6 1: before timechange       | +00:00      |
+| 2024-09-17 17:25:12 | +00:00    | 5.6 2: after timechange +00:00 | +00:00      |
+| 2024-09-17 16:25:12 | +01:00    | 5.6 2: after timechange +01:00 | +00:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 00:25:12 | -07:00:00 | 5.6 1: before timechange       | +00:00      |
+| 2024-09-18 00:25:12 | +00:00    | 5.6 2: after timechange +00:00 | +00:00      |
+| 2024-09-18 00:25:12 | +01:00    | 5.6 2: after timechange +01:00 | +00:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SET GLOBAL time_zone = '+01:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @@session.time_zone = "+01:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *, @@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 01:25:12 | -07:00:00 | 5.6 1: before timechange       | +01:00      |
+| 2024-09-17 18:25:12 | +00:00    | 5.6 2: after timechange +00:00 | +01:00      |
+| 2024-09-17 17:25:12 | +01:00    | 5.6 2: after timechange +01:00 | +01:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 01:25:12 | -07:00:00 | 5.6 1: before timechange       | +01:00      |
+| 2024-09-18 01:25:12 | +00:00    | 5.6 2: after timechange +00:00 | +01:00      |
+| 2024-09-18 01:25:12 | +01:00    | 5.6 2: after timechange +01:00 | +01:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql> select convert_tz(t,@@session.time_zone,'+00:00') from t;
++--------------------------------------------+
+| convert_tz(t,@@session.time_zone,'+00:00') |
++--------------------------------------------+
+| 2024-09-18 00:25:12                        |
+| 2024-09-17 17:25:12                        |
+| 2024-09-17 16:25:12                        |
++--------------------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
++------------------------------------------------+
+| convert_tz(t_now,@@session.time_zone,'+00:00') |
++------------------------------------------------+
+| 2024-09-18 00:25:12                            |
+| 2024-09-18 00:25:12                            |
+| 2024-09-18 00:25:12                            |
++------------------------------------------------+
+3 rows in set (0.01 sec)
 
 
 ```
 
-* Master conclusion
-   * Timezones using now() change according to that timezone is defined. The data for now() is inserted in the the same default timezone (probably UTC) so that it is interpreted correctly when the
-   timezone changes.
-   * When timezone is inserted with a value, its value is using localtime of the timezone it is
-   defined in. 
+* 5.6 conclusion
+
+
+
+* 8.0 output
+```
+mysql> SET GLOBAL time_zone = 'SYSTEM';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @@session.time_zone = "SYSTEM";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *, @@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-17 17:29:35 | -07:00:00 | 5.6 1: before timechange       | SYSTEM      |
+| 2024-09-17 10:29:35 | +00:00    | 5.6 2: after timechange +00:00 | SYSTEM      |
+| 2024-09-17 09:29:35 | +01:00    | 5.6 2: after timechange +01:00 | SYSTEM      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-17 17:29:35 | -07:00:00 | 5.6 1: before timechange       | SYSTEM      |
+| 2024-09-17 17:29:35 | +00:00    | 5.6 2: after timechange +00:00 | SYSTEM      |
+| 2024-09-17 17:29:35 | +01:00    | 5.6 2: after timechange +01:00 | SYSTEM      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.01 sec)
+
+mysql> SET GLOBAL time_zone = '+00:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @@session.time_zone = "+00:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *,@@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 00:29:35 | -07:00:00 | 5.6 1: before timechange       | +00:00      |
+| 2024-09-17 17:29:35 | +00:00    | 5.6 2: after timechange +00:00 | +00:00      |
+| 2024-09-17 16:29:35 | +01:00    | 5.6 2: after timechange +01:00 | +00:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 00:29:35 | -07:00:00 | 5.6 1: before timechange       | +00:00      |
+| 2024-09-18 00:29:35 | +00:00    | 5.6 2: after timechange +00:00 | +00:00      |
+| 2024-09-18 00:29:35 | +01:00    | 5.6 2: after timechange +01:00 | +00:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SET GLOBAL time_zone = '+01:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @@session.time_zone = "+01:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *, @@time_zone from t; Select *, @@time_zone from t_now;
++---------------------+-----------+--------------------------------+-------------+
+| t                   | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 01:29:35 | -07:00:00 | 5.6 1: before timechange       | +01:00      |
+| 2024-09-17 18:29:35 | +00:00    | 5.6 2: after timechange +00:00 | +01:00      |
+| 2024-09-17 17:29:35 | +01:00    | 5.6 2: after timechange +01:00 | +01:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
++---------------------+-----------+--------------------------------+-------------+
+| t_now               | timezone  | note                           | @@time_zone |
++---------------------+-----------+--------------------------------+-------------+
+| 2024-09-18 01:29:35 | -07:00:00 | 5.6 1: before timechange       | +01:00      |
+| 2024-09-18 01:29:35 | +00:00    | 5.6 2: after timechange +00:00 | +01:00      |
+| 2024-09-18 01:29:35 | +01:00    | 5.6 2: after timechange +01:00 | +01:00      |
++---------------------+-----------+--------------------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select convert_tz(t,@@session.time_zone,'+00:00') from t;
++--------------------------------------------+
+| convert_tz(t,@@session.time_zone,'+00:00') |
++--------------------------------------------+
+| 2024-09-18 00:29:35                        |
+| 2024-09-17 17:29:35                        |
+| 2024-09-17 16:29:35                        |
++--------------------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select convert_tz(t_now,@@session.time_zone,'+00:00') from t_now;
++------------------------------------------------+
+| convert_tz(t_now,@@session.time_zone,'+00:00') |
++------------------------------------------------+
+| 2024-09-18 00:29:35                            |
+| 2024-09-18 00:29:35                            |
+| 2024-09-18 00:29:35                            |
++------------------------------------------------+
+3 rows in set (0.00 sec)
 
 
 ```
-* on slave
-```
-SET GLOBAL time_zone = '+00:00';
-SET @@session.time_zone = "+00:00";
-
-select * from t; Select * from t_now;
-
-SET GLOBAL time_zone = '+01:00';
-SET @@session.time_zone = "+01:00";
-
-select * from t; Select * from t_now;
-```
-
-
-
-* slave output
-```
-
-```
-
-Conclusion: The timezone data does not change when you change the time_zone in MySQL. The
-interpretation changes when the timezone changes. If you 

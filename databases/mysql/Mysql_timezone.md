@@ -417,8 +417,8 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
         * The hard date gets converted to UTC for its timezone. When the time zone increases,
 	its UTC time becomes less for the same date. This is why earlier inserted dates have higher
 	value.
-	* For selects, when the time zone changes, the date follows the time zone change, because
-	its uses its UTC time and gets converted to local time. 
+        * For selects, when the time zone changes, the date follows the time zone change, because
+        its uses its UTC time and gets converted to local time. 
         * @t apparently gets converted to a hard date. 
     * It is good to be aware inserting now() behaves differently
     than inserting a hard date into a timezone

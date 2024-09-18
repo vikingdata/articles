@@ -1,19 +1,18 @@
  
 ---
-title : MySQL Timezone
+title : MySQL Timezone : now() and hard date
 author : Mark Nielsen  
 copyright : June 2024  
 ---
 
 
-MySQL Timezone
+MySQL Timezone : now() and hard date
 ==============================
 
 _**by Mark Nielsen
 Original Copyright September 2024**_
 
-This is for MySQL 5.7, I believe it works in 8.0, need to test 8.4.
-Will test in various versions.
+This is for MySQL 5.7 and 8.0. Probably the same in other versions.
 
 1. [Links](#links)
 2. [setup master-slave virtualbox](#install)

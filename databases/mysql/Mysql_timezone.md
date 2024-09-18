@@ -420,7 +420,8 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
 	* For selects, when the time zone changes, the date follows the time zone change, because
 	its uses its UTC time and gets converted to local time. 
         * @t apparently gets converted to a hard date. 
-    * It is good to be aware now() behaves differently that inserting a hard date into a timezone
+    * It is good to be aware inserting now() behaves differently
+    than inserting a hard date into a timezone
     field. In general, never set a hard date for a timestamp. 
 
 * also

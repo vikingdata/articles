@@ -10,7 +10,7 @@ MySQL Timezone
 ==============================
 
 _**by Mark Nielsen
-Original Copyright september 2024**_
+Original Copyright September 2024**_
 
 This is for MySQL 5.7, I believe it works in 8.0, need to test 8.4.
 Will test in various versions.
@@ -22,6 +22,8 @@ Will test in various versions.
 
 <a name=Links></a>Links
 -----
+* https://dev.mysql.com/doc/refman/8.4/en/time-zone-support.html
+
 
 * * *
 <a name=install></a>setup master-slave virtualbox
@@ -333,7 +335,7 @@ mysql> select UNIX_TIMESTAMP(STR_TO_DATE(t_now, '%Y-%m-%d %H:%i:%s')) as UT_t_no
 ```
 
 
-Conclusion : Something is going on when you insert now() compared to @t which should be equal to now() but might be conisderd a datetime value. 
+Conclusion : Something is going on when you insert now() compared to @t which should be equal to now() but might be considered a datetime value. 
 
 * * *
 <a name=one></a>Test with one table
@@ -388,7 +390,7 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
 |  946681200 | date 1  | 2000-01-01 01:00:00 |
 |  946677600 | date 2  | 2000-01-01 00:00:00 |
 | 1726623490 | now() 1 | 2024-09-18 03:38:10 |
-| 1726623491 | now() 2 | 2024-09-18 03:38:11 |
+| 1726623490 | now() 2 | 2024-09-18 03:38:10 |
 +------------+---------+---------------------+
 
 +------------+---------+---------------------+
@@ -401,16 +403,100 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
 |  946677600 | date 2  | 2000-01-01 01:00:00 |
 |  946674000 | date 3  | 2000-01-01 00:00:00 |
 | 1726623490 | now() 1 | 2024-09-18 04:38:10 |
-| 1726623491 | now() 2 | 2024-09-18 04:38:11 |
-| 1726623491 | now() 3 | 2024-09-18 04:38:11 |
+| 1726623490 | now() 2 | 2024-09-18 04:38:10 |
+| 1726623490 | now() 3 | 2024-09-18 04:38:10 |
 +------------+---------+---------------------+
 
+```
+* Explanation : This happens because now() uses UTC time, but a hard date in a timezone field
+    uses the UTC time converted from its time zone.
+    * When you use now()
+        * inserts insert the same UTC time (the inserts happen within the same second).
+        * The select value changes with the time zone, but they are all the same value. 
+    * When you insert a hard date, it follows the time zone for inserts and selects. 
+        * The hard date gets converted to UTC for its timezone. When the time zone increases,
+	its UTC time becomes less for the same date. This is why earlier inserted dates have higher
+	value.
+	* For selects, when the time zone changes, the date follows the time zone change, because
+	its uses its UTC time and gets converted to local time. 
+        * @t apparently gets converted to a hard date. 
+    * It is good to be aware now() behaves differenly that inserting a hard date into a timezone
+    field. In general, never set a hard date for a timestamp. 
+
+* also
+```
+SET @@session.time_zone = "+00:00";
+SET GLOBAL time_zone = '+00:00';
+select @t:=now();
+
+select now(), @t;
+
+SET @@session.time_zone = "+01:00";
+SET GLOBAL time_zone = '+01:00';
+select now(), @t;
+
+SET @@session.time_zone = "+02:00";
+SET GLOBAL time_zone = '+02:00';
+select now(), @t;
 
 ```
-* Explanation : I don't know why it happens.
-    * When you use now(), insert and select follows the time zone.
-    * When you insert a hard date, the insert does not follow the timezone, but the select does.
-        * @t apparently gets converted to a hard date. 
-    * Perhaps it is suppose to be like this, but it is good to be aware of it and testing should
-    be done when changing timezones. 
 
+* Output
+
+```
+mysql> SET @@session.time_zone = "+00:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET GLOBAL time_zone = '+00:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @t:=now();
++---------------------+
+
+| @t:=now()           |
++---------------------+
+| 2024-09-18 03:12:15 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> select now(), @t;
++---------------------+---------------------+
+| now()               | @t                  |
++---------------------+---------------------+
+| 2024-09-18 03:12:15 | 2024-09-18 03:12:15 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> SET @@session.time_zone = "+01:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET GLOBAL time_zone = '+01:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select now(), @t;
++---------------------+---------------------+
+| now()               | @t                  |
++---------------------+---------------------+
+| 2024-09-18 04:12:15 | 2024-09-18 03:12:15 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> SET @@session.time_zone = "+02:00";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET GLOBAL time_zone = '+02:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select now(), @t;
++---------------------+---------------------+
+| now()               | @t                  |
++---------------------+---------------------+
+| 2024-09-18 05:12:15 | 2024-09-18 03:12:15 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+```
+* We see @t stays the same value because it is a hard date, but now() changes when time zone changes. 

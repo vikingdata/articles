@@ -605,5 +605,5 @@ select * from ts;
 4 rows in set (0.00 sec)
 ```
 
-* It seems like now() and hard date are the same when timezone is set to SYSTEM even if you change the Linux
-time zone and restart mysql. It when you change time zone inside MySQL that you have an issue. 
+* Its seems like now() and hard date are the same when timezone is set to SYSTEM even if you change the Linux
+time zone and restart mysql. Its when you change time zone inside MySQL that you have an issue. 

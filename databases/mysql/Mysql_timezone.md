@@ -18,6 +18,7 @@ This is for MySQL 5.7 and 8.0. Probably the same in other versions.
 2. [setup master-slave virtualbox](#install)
 3. [test timezones](#test)
 4. [Test with one table](#one)
+5. [Test with tables created with different timezones](#tables)
 
 <a name=Links></a>Links
 -----
@@ -412,7 +413,10 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
     * When you use now()
         * inserts insert the same UTC time (the inserts happen within the same second).
         * The select value changes with the time zone, but they are all the same value. 
-    * When you insert a hard date, it follows the time zone for inserts and selects. 
+    * When you insert a hard date
+        * Initially it seems to insert the correct UTC seconds like now() when timezone is set to 'SYSTEM'.
+	But if you change the time zone
+	  inserts change according to what timezone you changed it to.
         * The hard date gets converted to UTC for its timezone. When the time zone increases,
 	its UTC time becomes less for the same date. This is why earlier inserted dates have higher
 	value.
@@ -421,7 +425,7 @@ select UNIX_TIMESTAMP(STR_TO_DATE(t, '%Y-%m-%d %H:%i:%s')) UT, note, t
         * @t apparently gets converted to a hard date. 
     * It is good to be aware inserting now() behaves differently
     than inserting a hard date into a timezone
-    field. In general, never set a hard date for a timestamp. 
+    field when the time zone is changed. In general, never set a hard date for a timestamp. 
 
 * also
 ```
@@ -499,4 +503,107 @@ mysql> select now(), @t;
 1 row in set (0.00 sec)
 
 ```
-* We see @t stays the same value because it is a hard date, but now() changes when time zone changes. 
+* We see @t stays the same value because it is a hard date, but now() changes when time zone changes.
+
+* * *
+<a name=tables></a> Test with tables created with different timezones
+-----
+
+Create tables with different timezones and insert one line.
+
+```
+SET @@session.time_zone = "SYSTEM";
+SET GLOBAL time_zone = 'SYSTEM';
+select @t:=now();
+
+drop table if exists ts;
+create table ts (t timestamp, note varchar(255) , primary key (note));
+insert into ts values (now(), 'ts now() 1'), (@t, 'ts');
+
+SET @@session.time_zone = "+00:00";
+SET GLOBAL time_zone = '+00:00';
+
+drop table if exists t0;
+create table t0 (t timestamp, note varchar(255) , primary key (note));
+insert into t0 values (now(), 't1 now() 1'), (@t, 't1');
+
+SET @@session.time_zone = "+01:00";
+SET GLOBAL time_zone = '+01:00';
+
+drop table if exists t1;
+create table t1 (t timestamp, note varchar(255) , primary key (note));
+insert into t1 values (now(), 't2 now() 1'), (@t, 't2');
+
+select * from ts
+union
+select * from t0
+union
+select * from t1;
+```
+
+Select output
+```
+mysql> select * from ts
+union
+select * from t0
+union
+select * from t1;
++---------------------+------------+
+| t                   | note       |
++---------------------+------------+
+| 2024-09-19 03:30:31 | ts         |
+| 2024-09-19 03:30:31 | ts now() 1 |
+| 2024-09-18 20:30:31 | t1         |
+| 2024-09-19 03:30:38 | t1 now() 1 |
+| 2024-09-18 19:30:31 | t2         |
+| 2024-09-19 03:30:51 | t2 now() 1 |
++---------------------+------------+
+6 rows in set (0.00 sec)
+```
+
+* It seems now() and the hard date are the same when MySQL is set to SYSTEM.
+
+* Changing SYSTEM in linux
+* In Linux
+```
+sudo timedatectl set-timezone Etc/GMT+1
+sudo service mysql restart
+```
+
+* In MySQL
+```
+select @t:=now();
+drop table if exists ts;
+create table ts (t timestamp, note varchar(255) , primary key (note));
+insert into ts values (now(), 'ts now() 1'), (@t, 'ts 1');
+select * from ts;
+```
+
+* In Linux
+```
+sudo timedatectl set-timezone Etc/GMT+2
+sudo service mysql restart
+```
+* In mysql
+```
+select @t:=now();
+insert into ts values (now(), 'ts now() 2'), (@t, 'ts 2');
+select * from ts;
+
+```
+
+* Select output
+```
++---------------------+------------+
+| t                   | note       |
++---------------------+------------+
+| 2024-09-19 00:44:24 | ts 1       |
+| 2024-09-19 00:45:02 | ts 2       |
+| 2024-09-19 00:44:24 | ts now() 1 |
+| 2024-09-19 00:45:02 | ts now() 2 |
++---------------------+------------+
+4 rows in set (0.00 sec)
+```
+
+* It seems like now() and hard date are the same when timezone is set to SYSTEM even if you change the Linux
+time zone and restart mysql. It when you change time zone inside MySQL that you have an issue. 

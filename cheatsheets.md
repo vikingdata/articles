@@ -1,11 +1,14 @@
 
 
 * [SQL cheatsheet)(https://prog.connect4techs.com/sql-cheat-sheet-reference/)
-    * [pdf](sql_cheatsheet1.pdf)
+    * [pdf](databases/sql_cheatsheet1.pdf)
     * [2](https://www.sqltutorial.org/sql-cheat-sheet)
     * [Window Function](https://www.knowledgehut.com/_next/image?url=https%3A%2F%2Fd2o2utebsixu4k.cloudfront.net%2Fmedia%2Fimages%2F1653030012705-Image-2%20(3).png&w=1200&q=75)
     * [Basics](https://www.knowledgehut.com/_next/image?url=https%3A%2F%2Fd2o2utebsixu4k.cloudfront.net%2Fmedia%2Fimages%2F1653029896275-Image-1%20(12).png&w=1200&q=75)
     * [Basics](https://images.datacamp.com/image/upload/v1675360372/Marketing/Blog/SQL_Basics_For_Data_Science.pdf)
+    * https://learnsql.com/blog/sql-basics-cheat-sheet/sql-basics-cheat-sheet-a4.pdf
+    * https://www.dbvis.com/wp-content/uploads/2024/04/SQL-Cheat-Sheet.pdf
+    * https://www.sqltutorial.org/sql-cheat-sheet/
     * With CTE
         * [1](https://learnsql.com/blog/sql-for-data-analysis-cheat-sheet/sql-for-data-analysis-cheat-sheet-a4.pdf)
         	

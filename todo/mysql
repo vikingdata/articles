@@ -96,3 +96,12 @@ msqyl rep -- parrallel master to serial slave,
   large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,
   backups blocks DDL queries and hence slave in blocked,
 
+
+Handle heap tables or how to encrypt data in MySQL 
+• How to add an additional node to an AWS auto scaling group
+• Code review experience and a question regarding how to handle a spike in CPU
+• When you might use a join vs a subquery – besides indexing
+• Convinced to uninstall the MySQL engine to do an OS upgrade
+
+Handle heap tables 
+   temporary storage engine is heap, temptable, or defined engine

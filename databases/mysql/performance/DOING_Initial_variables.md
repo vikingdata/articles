@@ -20,6 +20,7 @@ Copyright December 2023**_
     * AWS RDS MySQL 8.0/8.1
     * MySQL 8.0/8.1
     * 5.7 to 8.0/8.1 differences
+4. Linu
 
 * * *
 <a name=links></a>Links
@@ -48,6 +49,8 @@ Copyright December 2023**_
        * [part 3](https://aws.amazon.com/blogs/database/best-practices-for-configuring-parameters-for-amazon-rds-for-mysql-part-3-parameters-related-to-security-operational-manageability-and-connectivity-timeout/)
 * Other
     * [21 settings for RDS MySQL](https://hackmysql.com/post/21-parameter-group-values-to-change-in-amazon-rds-for-mysql/)
+    * https://www.percona.com/blog/dont-start-using-your-mysql-server-until-youve-configured-your-os/
+    * https://dba.stackexchange.com/questions/246934/mysql-swaps-on-system-with-more-than-enough-ram
 
 * * *
 <a name=Setup></a>Setup
@@ -125,6 +128,8 @@ Copyright December 2023**_
 ## General Variables
 
 ### Important Variables
+* jemalloc
+* disable huge trasnparent pages
 * innodb_buffer_pool_size
 * innodb_buffer_pool_instances
 * innodb_log_file_size -- redo logs
@@ -154,7 +159,7 @@ Copyright December 2023**_
 * innodb_rollback_on_timeout
 
 ### Only if you need to change these
-
+* big pages
 * sort_buffer_size
 * read_buffer_size
 * read_rnd_buffer_size
@@ -185,3 +190,10 @@ Copyright December 2023**_
 * [Aurora parameters](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Reference.ParameterGroups.html)
 * [Best practices for Amazon Aurora MySQL database configuration](https://aws.amazon.com/blogs/database/best-practices-for-amazon-aurora-mysql-database-configuration/)
 
+* * *
+<a name=Linux></a>Linux
+-----
+* swapiness
+* mount options, atime, nodirtime
+* scheduler, none deadlkine, avid cfq
+* mem, pur, diskspace -- use LVM

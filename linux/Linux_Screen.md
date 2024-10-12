@@ -75,8 +75,6 @@ while ps -p \$ppid > /dev/null; do sleep 2; done
 echo "screen pid is \$ppid"
 echo "Exiting script \$ppid"
 
-sleep 10
-
  " >> ex.bash
 ```
 

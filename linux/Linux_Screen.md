@@ -59,22 +59,23 @@ screen -S example -X screen  emacs -nw example/file1.txt
 screen -S example -X screen  emacs -nw example/file2.txt
 
   # record the parent pid of the shell which is screen
-screen -S example -X screen sh -c 'cat /proc/$$/ppid > /tmp/screen.pid; sleep 1'
-
+screen -S example -X screen sh -c 'cat /proc/\$\$/ppid > /tmp/screen.pid; sleep 1'
+ 
 sleep 2
 
+  #
   # Now check every second to see if screen is running
   # If not print message and exit. 
 ppid=\`cat /tmp/screen.pid\`
-  #
+  
 echo "screen pid is \$ppid"
 
 while ps -p \$ppid > /dev/null; do sleep 2; done
 
 echo "screen pid is \$ppid"
-echo 'Exiting script \$ppid'
+echo "Exiting script \$ppid"
 
-sleep 1111
+sleep 10
 
  " >> ex.bash
 ```

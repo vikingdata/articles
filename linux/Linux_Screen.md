@@ -65,7 +65,7 @@ sleep 2
 
   # Now check every second to see if screen is running
   # If not print message and exit. 
-ppid=`cat /tmp/screen.pid`
+ppid=\`cat /tmp/screen.pid\`
   #
   
   while ps -p $ppid > /dev/null; do sleep 2; done

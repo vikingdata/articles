@@ -84,12 +84,12 @@ mysql -- sys.statement_analysis -- analyze queries : how to turn on and what to 
   2. performance_schema, threads threads,processlist_id and other thread tables
   . performance_schema, metadata_locks, threads, join by owner_thread_id and thread_id, with processlist_id on threads.
   3. percona xtrabakcup, and streaming
-  4. retore root permissions, account.
+DONE   4. retore root permissions, account.
   5. index merge, explain explain
   6. dad, get df mem cpu, global vriables, status, show processlist
   7. roles
-  8. reststore root permissions
-  9. Restore self permissions if you have grant option.
+DONE  8. reststore root permissions
+DONE   9. Restore self permissions if you have grant option.
   10. backup doc with streaming
 
 msqyl rep -- parrallel master to serial slave,
@@ -97,11 +97,24 @@ msqyl rep -- parrallel master to serial slave,
   backups blocks DDL queries and hence slave in blocked,
 
 
-Handle heap tables or how to encrypt data in MySQL 
-• How to add an additional node to an AWS auto scaling group
-• Code review experience and a question regarding how to handle a spike in CPU
-• When you might use a join vs a subquery – besides indexing
-• Convinced to uninstall the MySQL engine to do an OS upgrade
+DONE Handle heap tables or how to encrypt data in MySQL 
 
-Handle heap tables 
+ How to add an additional node to an AWS auto scaling group
+ Code review experience and a question regarding how to handle a spike in CPU
+ When you might use a join vs a subquery – besides indexing
+ Convinced to uninstall the MySQL engine to do an OS upgrade
+
+DONE Handle heap tables 
    temporary storage engine is heap, temptable, or defined engine
+
+Differences in MariaDB and Mysql
+
+Finish
+	pt=tools
+	upgrde from 5.1 to 8.0, to 8.1, to 8.4
+	       most important changes
+	upgare AWS
+	       EC2
+	       RDS
+	       Aurora
+	       

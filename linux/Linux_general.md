@@ -612,4 +612,3 @@ root@mysql1:~/install# locate mysql.service
 /var/lib/systemd/deb-systemd-helper-enabled/multi-user.target.wants/mysql.service
 /var/lib/systemd/deb-systemd-helper-masked/mysql.service
 ````
-

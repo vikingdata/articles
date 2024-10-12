@@ -1,15 +1,18 @@
---------
-title: Linux Screen
-
---------
-
-# Linux General Tips
-
-*by Mark Nielsen*  
-* Original Copyright October 2024*
-
-
 ---
+title : Linux Screen
+author : Mark Nielsen
+copyright : October 2024
+---
+
+
+Linux Screen
+==============================
+
+_**by Mark Nielsen
+Original Copyright October 2024**_
+
+I wanted to run screen with multiple windows. It needs to wipe out dead screens
+and start a new one. It needs to exit properly. 
 
 1. [Links](#links)
 2. [Opening with multiple screen](#mul)
@@ -43,9 +46,7 @@ screen -wipe
 sleep 1 "  > ex.bash
 echo " \`sleep 1; screen -S example ;  echo $! > /tmp/ex.pid \` & " >> ex.bash
 
-
 echo "
-
 sleep 3
 screen -S example -X screen echo $! > /tmp/ex.pid
    # run command every 1 second
@@ -56,7 +57,6 @@ screen -dmS example -X screen sh -c 'sleep 1; bash'
 screen -S example -X screen  emacs -nw example/file1.txt
    # edit a file
 screen -S example -X screen  emacs -nw example/file2.txt
-
 
   # record the parent pid of the shell which is screen
 screen -S example -X screen sh -c 'cat /proc/$$/ppid > /tmp/screen.pid; sleep 1'

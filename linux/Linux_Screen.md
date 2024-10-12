@@ -70,6 +70,8 @@ screen -S example -X screen sh -c 'cat /proc/$$/ppid > /tmp/screen.pid; sleep 1'
 
   echo 'Exiting script $ppid'
 
+sleep 1111
+
  " >> ex.bash
 ```
 

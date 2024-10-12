@@ -67,10 +67,12 @@ sleep 2
   # If not print message and exit. 
 ppid=\`cat /tmp/screen.pid\`
   #
-  
-  while ps -p $ppid > /dev/null; do sleep 2; done
+echo "screen pid is $ppid"
 
-  echo 'Exiting script $ppid'
+while ps -p $ppid > /dev/null; do sleep 2; done
+
+echo "screen pid is $ppid"
+echo 'Exiting script $ppid'
 
 sleep 1111
 

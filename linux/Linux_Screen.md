@@ -15,19 +15,21 @@ I wanted to run screen with multiple windows. It needs to wipe out dead screens
 and start a new one. It needs to exit properly. 
 
 1. [Links](#links)
-2. [Opening with multiple screen](#mul)
+2. [Opening with multiple screens](#mul)
 
 * * *
 
 <a name=links></a>Links
 -----
+* https://linuxize.com/post/how-to-use-linux-screen/
 * https://kapeli.com/cheat_sheets/screen.docset/Contents/Resources/Documents/index
-* https://www.baeldung.com/linux/background-command-with-delay#:~:text=One%20approach%20is%20to%20create,the%20terminal%20for%20other%20tasks.
+* https://www.baeldung.com/linux/background-command-with-delay
 
 * * *
-<a name=mul></a>Opening with multiple screen
+<a name=mul></a>Opening with multiple screens
 -----
 
+First, read this: https://linuxize.com/post/how-to-use-linux-screen/
 
 1. First make directories and files
 
@@ -64,11 +66,8 @@ sleep 2
   # If not print message and exit. 
 ppid=\`cat /tmp/screen.pid\`
   
-echo "screen pid is \$ppid"
+while ps -p \$ppid > /dev/null; do sleep 1; done
 
-while ps -p \$ppid > /dev/null; do sleep 2; done
-
-echo "screen pid is \$ppid"
 echo "Exiting script \$ppid"
 
  " >> ex.bash

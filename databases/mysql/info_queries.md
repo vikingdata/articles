@@ -19,12 +19,13 @@ TODO: simple performance_schema queries, information_schema queries
 1. [table files](#files)
 2. [InnoDB buffer pool ratio](#ibpr)
 3. [Size of database/tables](#size)
-4. [No index](#noindex)
-5. [Busiest tables](#busy)
-6. [Unused indexes](#unused)
-7. [List stored procedures, functions, triggers](#list1)
-8. [find keyword in field, table, database](#find1)
-9. [count tables](#count)
+4. [Free space of tables](#free)
+5. [No index](#noindex)
+6. [Busiest tables](#busy)
+7. [Unused indexes](#unused)
+8. [List stored procedures, functions, triggers](#list1)
+9. [find keyword in field, table, database](#find1)
+910. [count tables](#count)
 
 * * *
 
@@ -117,7 +118,24 @@ limit 10;
 
 ```
 
+* * *
 
+<a name=free></a>Free space in tables
+-----
+```
+
+set @gig = 1024*1024*1024;
+set @meg = 1024*1024;
+select @meg, @gig;
+
+SELECT table_schema, table_name, data_free/@meg as data_free_meg
+        , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg
+FROM information_schema.tables
+GROUP BY table_schema, table_name
+order by data_free_meg desc
+limit 10;
+
+```
 
 * * *
 

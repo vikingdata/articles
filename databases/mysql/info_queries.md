@@ -77,6 +77,8 @@ SELECT table_schema
         , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg 
 	, ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
 FROM information_schema.tables 
+where table_schema not in
+ ('mysql', 'information_schema', 'performance_schema', 'sys')
 GROUP BY table_schema
 order by db_size_in_meg desc
 limit 10;
@@ -91,6 +93,8 @@ SELECT table_schema, table_name
         , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg
         , ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
 FROM information_schema.tables
+where table_schema not in
+ ('mysql', 'information_schema', 'performance_schema', 'sys')
 GROUP BY table_schema, table_name
 order by db_size_in_meg desc
 limit 10;
@@ -101,6 +105,9 @@ SELECT table_schema
 	, ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
 	, MIN(create_time) AS min_reation_time_table
 FROM information_schema.tables 
+where table_schema not in
+ ('mysql', 'information_schema', 'performance_schema', 'sys')
+
 GROUP BY table_schema
 order by db_size_in_gig desc
 limit 10;
@@ -135,7 +142,7 @@ where table_schema not in
  ('mysql', 'information_schema', 'performance_schema', 'sys')
 GROUP BY table_schema, table_name
 order by data_free_meg desc
-limit 10;
+;
 
 ```
 

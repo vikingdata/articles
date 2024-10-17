@@ -140,7 +140,7 @@ SELECT table_schema, table_name, data_free/@meg as data_free_meg
 FROM information_schema.tables
 where table_schema not in
  ('mysql', 'information_schema', 'performance_schema', 'sys')
-  and data_free > 100*@meg 
+  and data_free > 4*@meg 
 GROUP BY table_schema, table_name, data_free
 order by data_free_meg desc
 ;

@@ -1,0 +1,60 @@
+Make a dictionary. Keys have order.
+print keys in order in the dictionary.
+c
+d
+a
+b
+
+print dictionary keys sorted.
+d
+b
+c
+a
+
+print dictionary keys sorted with value.
+d 1
+b 2
+c 3
+a 4
+
+print dictionary keys sorted with value but make a list of keys first.
+d 1
+b 2
+c 3
+a 4
+
+print dictionary keys sorted with value with key list reversed.
+a 4
+c 3
+b 2
+d 1
+
+print dictionary keys sorted with value in reverse by creating reversed dictionary in one step.
+a 4
+c 3
+b 2
+d 1
+
+print dictionary keys sorted by keys.
+a 4
+b 2
+c 3
+d 1
+
+print dictionary keys sorted by keys in reverse.
+d 1
+c 3
+b 2
+a 4
+
+print dictionary keys sorted with key with key list.
+a 4
+b 2
+c 3
+d 1
+
+print dictionary keys sorted with key with key list reversed.
+d 1
+c 3
+b 2
+a 4

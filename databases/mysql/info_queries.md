@@ -136,12 +136,10 @@ set @meg = 1024*1024;
 select @meg, @gig;
 
 SELECT table_schema, table_name, data_free/@meg as data_free_meg
-        , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg
+        , (data_length + index_length) / @meg  as db_size_in_meg
 FROM information_schema.tables
-where table_schema not in
- ('mysql', 'information_schema', 'performance_schema', 'sys')
+where table_schema not in ('mysql', 'information_schema', 'performance_schema', 'sys')
   and data_free > 4*@meg 
-GROUP BY table_schema, table_name, data_free
 order by data_free_meg desc
 ;
 

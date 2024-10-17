@@ -131,6 +131,8 @@ select @meg, @gig;
 SELECT table_schema, table_name, data_free/@meg as data_free_meg
         , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg
 FROM information_schema.tables
+where table_schema not in
+ ('mysql', 'information_schema', 'performance_schema', 'sys')
 GROUP BY table_schema, table_name
 order by data_free_meg desc
 limit 10;

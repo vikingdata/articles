@@ -250,6 +250,14 @@ start slave;
 select sleep(2);
 show slave status\G
             </pre>
+   * If that doesn't work with GTID, reset the slave to the master's gtid. TODO
+       * Find gtid position on master
+           * show global variables like 'GTID_EXECUTED'
+       * reset master on slave;
+       * set gtid_purged on slave
+           * set global GTID_PURGED="<gtid from master>";
+       * start slave;
+       * TODO : give example 
 
 * Backup, restore, start replication.
     * Normal replication

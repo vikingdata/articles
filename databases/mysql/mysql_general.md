@@ -29,6 +29,7 @@ This article will grow over time.
 * CPU spikes changes -- doing
 * [Join versus subquery](#join)
 * [Fix root permissions](#root)
+* [Fix account from 5.7 to 8.0 replication](#accountrep)
 * * *
 <a name=tailgzip></a>Tail a gzipped file
 -----
@@ -412,5 +413,18 @@ Method 2: If root still has grant option
     * Note: This works in some versions of MySQL. Need to test various versions.
 
 * * *
-<a name=test></a>test
+<a name=accountrep></a>Fix account from 5.7 to 8.0 replication
 -----
+
+If you create an account on 5.7 using grants and then replicate to 8.0 it will break.
+To fix this...
+
+Create problem
+```
+ -- on mysql master 5.7 execute this
+
+create database if not exists  test1;
+use test1;
+create table if not exists t1 (i int);
+grant select on test1.t1 to dummy@localhost identified by 'dummy';
+```

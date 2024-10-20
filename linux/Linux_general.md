@@ -439,10 +439,13 @@ swapoff -a
 dd if=/dev/zero of=$SWAPFILE bs=1024 count=8048576
 mkswap $SWAPFILE
 chmod 600 $SWAPFILE
-echo "$SWAPFILE    none    swap    sw    0    0" >> /etc/fstab
-swapon -a
+swapon -a $SWAPFILE
 swapon -s
 free -h 
+
+# TO add to /etc/fstab
+echo "$SWAPFILE    none    swap    sw    0    0" >> /etc/fstab
+
 
 
 ```

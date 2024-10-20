@@ -428,3 +428,75 @@ use test1;
 create table if not exists t1 (i int);
 grant select on test1.t1 to dummy@localhost identified by 'dummy';
 ```
+
+show grants on master
+```
+mysql> show grants for dummy@localhost;
++-----------------------------------------------------+
+| Grants for dummy@localhost                          |
++-----------------------------------------------------+
+| GRANT USAGE ON *.* TO 'dummy'@'localhost'           |
+| GRANT SELECT ON `test1`.`t1` TO 'dummy'@'localhost' |
++-----------------------------------------------------+
+mysql> select user,host,plugin,authentication_string from mysql.user where user='dummy';
++-------+-----------+-----------------------+-------------------------------------------+
+| user  | host      | plugin                | authentication_string                     |
++-------+-----------+-----------------------+-------------------------------------------+
+| dummy | localhost | mysql_native_password | *73C1134F9B58C3F6BAB62DD1F9172A6B2D59E235 |
++-------+-----------+-----------------------+-------------------------------------------+
+
+```
+
+Fix on 8.0
+```
+set SQL_LOG_BIN=0;
+
+create user 'dummy'@'localhost';
+GRANT SELECT ON `test1`.`t1` TO 'dummy'@'localhost';
+alter user 'dummy'@'localhost' IDENTIFIED WITH mysql_native_password AS '*73C1134F9B58C3F6BAB62DD1F9172A6B2D59E235';
+```
+
+Test it on slave
+```
+mysql -u dummy -pdummy -e "select now()"
++---------------------+
+| now()               |
++---------------------+
+| 2024-10-20 15:47:10 |
++---------------------+
+
+```
+
+Now skip account creation.
+* If normal replication
+```
+ -- on slave
+stop slave;
+SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+START SLAVE;
+select sleep(2);
+show slave status\G
+```
+* Is GTID
+```
+-- on slave
+show global variables like 'GTID_EXECUTED';
++---------------+--------------------------------------------+
+| Variable_name | Value                                      |
++---------------+--------------------------------------------+
+| gtid_executed | f067a931-9b23-ee10-5bc7-4d8fb2e86c57:1-318 |
++---------------+--------------------------------------------+
+```
+
+Add one and set to purge to 319 at the end of gtid. 
+```
+stop slave;
+reset master;
+set GLOBAL GTID_PURGED = 'f067a931-9b23-ee10-5bc7-4d8fb2e86c57:1-319';
+
+start slave;
+select sleep(2);
+show slave status\G
+ -- verify you are 0 seconds behind and slave_io_running and slave_running are YEs
+
+```

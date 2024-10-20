@@ -255,7 +255,7 @@ show slave status\G
            * show global variables like 'GTID_EXECUTED'
        * reset master on slave;
        * set gtid_purged on slave
-           * set global GTID_PURGED="<gtid from master>";
+           * set global GTID_PURGED="&lt;gtid from master&gt;";
        * start slave;
        * TODO : give example 
 

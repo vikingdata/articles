@@ -246,19 +246,20 @@ select sleep(2);
 show slave status\G
  -- if good
 stop slave;
+  -- This should be okay, since purged and executed gtid is set. 
 change master to sOURCE_AUTO_POSITION=1;
 start slave;
 select sleep(2);
 show slave status\G
             </pre>
-   * If that doesn't work with GTID, reset the slave to the master's gtid. TODO
+   * If that doesn't work with GTID, reset the slave to the master's gtid. 
        * Find gtid position on master
            * show global variables like 'GTID_EXECUTED'
        * reset master on slave;
        * set gtid_purged on slave
            * set global GTID_PURGED="&lt;gtid from master&gt;";
        * start slave;
-       * TODO : give example 
+       * Or you may just need to skip commands on slave. 
 
 * Backup, restore, start replication.
     * Normal replication

@@ -19,7 +19,7 @@ TODO: simple performance_schema queries, information_schema queries
 1. [table files](#files)
 2. [InnoDB buffer pool ratio](#ibpr)
 3. [Size of database/tables](#size)
-4. [Free space of tables](#free)
+4. [Free spac of tables](#free)
 5. [No index](#noindex)
 6. [Busiest tables](#busy)
 7. [Unused indexes](#unused)
@@ -142,6 +142,17 @@ where table_schema not in ('mysql', 'information_schema', 'performance_schema', 
   and data_free > 4*@meg 
 order by data_free_meg desc
 ;
+
+
+ -- list by smallet first might be best.
+SELECT table_schema, table_name, data_free/@meg as data_free_meg
+        , (data_length + index_length) / @meg  as db_size_in_meg
+FROM information_schema.tables
+where table_schema not in ('mysql', 'information_schema', 'performance_schema', 'sys')
+  and data_free > 4*@meg
+order by data_free_meg
+;
+
 
 ```
 

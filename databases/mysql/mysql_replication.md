@@ -38,7 +38,7 @@ Index
 7. Reset replication to beginning
    * [Reset GTID replication to beginning](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
-8. [Analzye relay logs](#relay)
+8. [Analyze relay logs](#relay)
 
 * * *
 <a name=links></a>Links
@@ -47,7 +47,7 @@ Index
 * Setup GTID
     * [Setting Up Replication Using GTIDs](https://dev.mysql.com/doc/mysql-replication-excerpt/8.0/en/replication-gtids-howto.html)
     
-* SKip Query GTID
+* Skip Query GTID
     * [MySQL replication — Skipped GTID and how to fix it](https://medium.com/@brianlie/mysql-replication-skipped-gtid-and-how-to-fix-it-a2d836452724)
     * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
     * https://www.percona.com/blog/how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
@@ -238,7 +238,7 @@ show slave status\G
    * On GTID <pre>
 stop slave;
 change master to sOURCE_AUTO_POSITION=0;
-change master to  masteR_log_file='binlog.000001', master_log_pos = 610;
+change master to  Master_log_file='binlog.000001', master_log_pos = 610;
 start slave;
 select sleep(2);
 show slave status\G
@@ -355,7 +355,7 @@ show databases like '%rep_test%';
 <a name=resetnormal></a>Reset normal replication
 -----
 * We assume no connections are written to master.
-* On masteR
+* On Master
 ```
 drop user if exists 'repl'@'%';
 drop user if exists 'remote'@'%';
@@ -467,7 +467,7 @@ mysql  -e "show slave status\G" | egrep -i "Gtid|master_log_file|master_log_pos|
 ```
 
 * * *
-<a name=relay></a>Analzye relay logs
+<a name=relay></a>Analyze relay logs
 -----
 If you are wondering why replication stopped...
 

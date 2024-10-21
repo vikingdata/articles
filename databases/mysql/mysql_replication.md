@@ -1,10 +1,10 @@
----
-title : MySQL Replication
+\---
+title : MySQL Replication (GTID and normal)
 author : Mark Nielsen
 copyright : August 2024 
 ---
 
-MySQL GTID Replication
+MySQL Replication (GTID and normal)
 ==============================
 _**by Mark Nielsen
 Original Copyright August 2024**_

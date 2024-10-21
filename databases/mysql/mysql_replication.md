@@ -1,6 +1,3 @@
-
-
-
 ---
 title : MySQL Replication
 author : Mark Nielsen
@@ -41,6 +38,7 @@ Index
 7. Reset replication to beginning
    * [Reset GTID replication to beginning](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
+8. [Analzye relay logs](#relay)
 
 * * *
 <a name=links></a>Links
@@ -467,3 +465,76 @@ SELECT * FROM performance_schema.global_variables
 ```
 mysql  -e "show slave status\G" | egrep -i "Gtid|master_log_file|master_log_pos|running:"
 ```
+
+* * *
+<a name=relay></a>Analzye relay logs
+-----
+If you are wondering why replication stopped...
+
+* Get relay logs basename on slave
+```
+mysql> show global variables like '%relay_log_basename%';
++--------------------+--------------------------+
+| Variable_name      | Value                    |
++--------------------+--------------------------+
+| relay_log_basename | /var/lib/mysql/relay-bin |
++--------------------+--------------------------+
+1 row in set (0.00 sec)
+
+```
+
+See which relay logs it was and the end_pos
+```
+mysql -u mark -pmark -e "show slave status\G" | egrep -i "relay_log_file|sql_error:"
+               Relay_Log_File: relay-bin.000004
+               Last_SQL_Error: Coordinator stopped because there were error(s) in the worker(s). The most recent failure being: Worker 1 failed executing transaction 'f067a931-9b23-ee10-5bc7-4d8fb2e86c57:321' at source log mysql1-bin.000032, end_log_pos 599. See error log and/or performance_schema.replication_applier_status_by_worker table for more details about this failure or others, if any.
+```
+
+Relay log = relay-bin.000004. or  /var/lib/mysql/relay-bin.000004
+
+end pos = "end_log_pos 599 "
+
+Find out sql
+```
+ sudo mysqlbinlog  /var/lib/mysql/relay-bin.000004 --base64-output=DECODE-ROWS  --verbose |  grep "end_log_pos 599 " -A 5
+ #241021 14:36:24 server id 1  end_log_pos 599 CRC32 0x30363252  Write_rows: table id 111 flags: STMT_END_F
+### INSERT INTO `test1`.`t3`
+### SET
+###   @1=1
+# at 769
+#241021 14:36:24 server id 1  end_log_pos 630 CRC32 0x17ab0fd6  Xid = 388
+
+```
+
+Compare to errocode
+```
+mysql -u mark -pmark -e "show slave status\G" | egrep -i Last_SQL_Errno
+               Last_SQL_Errno: 1062
+```
+
+1062 is an insert error, which confirms with the code in the relay log. Look at table.
+
+```
+mysql> show create table test1.t3;
++-------+----------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                       |
++-------+----------------------------------------------------------------------------------------------------+
+| t3    | CREATE TABLE `t3` (
+  `t` int NOT NULL,
+  PRIMARY KEY (`t`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+----------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from t3 where t = 1;
++---+
+| t |
++---+
+| 1 |
++---+
+1 row in set (0.00 sec)
+
+
+```
+
+The table has a primary key and its value "1" is already there, which confirms the issue. 

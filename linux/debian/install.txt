@@ -1,0 +1,21 @@
+ip addr
+
+wget -O /usr/share/keyrings/deriv-archive-keyring.pgp https://deriv.example.net/debian/deriv-archive-keyring.pgp
+
+echo "
+Types: deb deb-src
+URIs: https://deriv.example.net/debian/
+Suites: stable
+Architectures: i386 amd64
+Components: main
+Signed-By: /usr/share/keyrings/deriv-archive-keyring.pgp
+" > /etc/apt/sources.list.d/deriv.sources
+
+echo "
+Package: *
+Pin: origin deriv.example.net
+Pin-Priority: 100
+" > /etc/apt/preferences.d/deriv.pref
+
+
+ apt-get update

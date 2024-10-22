@@ -32,6 +32,7 @@ https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/
 * [Incompatabilities and Feature Differences](https://mariadb.com/kb/en/incompatibilities-and-feature-differences-between-mariadb-10-5-and-mysql-8-/)
 
 MariaDB
+* differences
     * Flush Tables by default in MariaDB skips tables in use, and hence won't lock further queries from those tables.
     * MariaDB allows killing all queries for a user. I am still waiting on
 killing queries above a certain time.

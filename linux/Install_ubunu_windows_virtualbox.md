@@ -11,6 +11,9 @@ Quick VirtualBox Linux Image
 _**by Mark Nielsen
 Original Copyright October 2024**_
 
+Installing Linus under VirtualBox for Windoze.
+The issue is, cygwin is not 100% compatible with some software, its a pain.
+I want a real Linux box to issue commands with. Cygwin is pretty good. WSL is another option than Cygwin. 
 
 * Download Ubuntu 22.04 iso image.
     * Reference : https://ubuntu.com/download/desktop

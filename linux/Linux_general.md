@@ -435,7 +435,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 export SWAPFILE='/swapfile'
 
-swapoff -a
+# swapoff -a
 dd if=/dev/zero of=$SWAPFILE bs=1024 count=8048576
 mkswap $SWAPFILE
 chmod 600 $SWAPFILE

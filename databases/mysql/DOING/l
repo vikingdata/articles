@@ -1,27 +1,21 @@
---------------
-SELECT * FROM performance_schema.metadata_locks
---------------
 
-+---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
-| OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME     | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE           | LOCK_DURATION | LOCK_STATUS | SOURCE             | OWNER_THREAD_ID | OWNER_EVENT_ID |
-+---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
-| TABLE         | performance_schema | metadata_locks  | NULL        |       137180987078352 | SHARED_READ         | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              88 |              2 |
-| TABLE         | lock_test          | locks           | NULL        |       137181199687296 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              60 |            134 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181255481248 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              64 |             13 |
-| TABLE         | lock_test          | locks           | NULL        |       137181255484752 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              64 |             13 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181389711728 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              65 |             12 |
-| TABLE         | lock_test          | locks           | NULL        |       137181391220992 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              65 |             12 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137182115157040 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              67 |             12 |
-| TABLE         | lock_test          | locks           | NULL        |       137182115158608 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              67 |             12 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181930334304 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:5548   |              68 |             40 |
-| BACKUP LOCK   | NULL               | NULL            | NULL        |       137181930269360 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5560   |              68 |             40 |
-| SCHEMA        | lock_test          | NULL            | NULL        |       137181930334832 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5535   |              68 |             40 |
-| TABLE         | lock_test          | locks           | NULL        |       137181930309072 | SHARED_UPGRADABLE   | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              68 |             40 |
-| BACKUP TABLES | NULL               | NULL            | NULL        |       137181930701760 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | lock.cc:1260       |              68 |             40 |
-| TABLESPACE    | NULL               | lock_test/locks | NULL        |       137181930125744 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | lock.cc:813        |              68 |             40 |
-| TABLE         | lock_test          | #sql-279d_20    | NULL        |       137181930746544 | EXCLUSIVE           | STATEMENT     | GRANTED     | sql_table.cc:17580 |              68 |             40 |
-| TABLE         | lock_test          | locks           | NULL        |       137181930289920 | EXCLUSIVE           | TRANSACTION   | PENDING     | mdl.cc:3776        |              68 |             41 |
-+---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
-16 rows in set (0.001 sec)
+show open tables where in_use > 0;
 
-Bye
+
+SELECT * FROM performance_schema.metadata_locks;
+
+select  t.thread_id as thread_id
+  , t.processlist_id as pid
+  , t.PROCESSLIST_DB as db
+  , t.PROCESSLIST_COMMAND as psql
+  , t.PROCESSLIST_STATE as pstate
+  , t.PROCESSLIST_INFO as info
+  , t.PROCESSLIST_TIME as ptime
+  , group_concat(ml.lock_type) as lock_type
+from performance_schema.metadata_locks ml
+  join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
+  join performance_schema.processlist p on (p.id = t.processlist_id) 
+
+where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
+group by thread_id, pid, db, psql, pstate, info, time;
+;

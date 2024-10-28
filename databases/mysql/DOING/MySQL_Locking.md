@@ -32,18 +32,7 @@ Copyright October 2024**_
 * * *
 <a name=queries></a>Queries
 -----
-* General query
-```
-select
-  object_schema as db,
-  object_name as name,
-  GROUP_CONCAT(DISTINCT EXTERNAL_LOCK) as locks
-from
-  performance_schema.table_handles 
-where external_lock is not null
-group by db, name;
 
-```
 
 * Open tables
 ```
@@ -73,6 +62,7 @@ from performance_schema.metadata_locks ml
 where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
 group by thread_id, pid, db, psql, pstate, info, time;
 ;
+```
 
 * Use the INFORMATION_SCHEMA.INNODB_TRX table.
 ```

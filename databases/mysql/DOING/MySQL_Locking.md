@@ -13,7 +13,7 @@ _**by Mark Nielsen
 Copyright October 2024**_
 
 1. [Links](#links)
-2. [Queries](#methods)
+2. [Queries](#queries)
 3. [Setup](#setup)
 4. [Output](#output)
 * * *

@@ -14,6 +14,10 @@ Copyright October 2024**_
 
 This is for MySQL 8. MySQL 5.7 has different tables and columns. Did not check 8.1 or 8.4, but expect changes. 
 
+Wanted to make a good example of locks in MySQL. I wanted to demonstrate GAP locks, Next Key Locks, update locks, and alter table locks. Funny thing, for alter table locks, I couldn't list what was blocking it. I think it was because it is outside a row level lock. Also, for next key lock, I had to insert two numbers at the end in order to avoid next key lock above 100. This doesn't happen with single row updates. 
+
+
+
 1. [Links](#links)
 2. [Queries](#queries)
 3. [Setup](#setup)

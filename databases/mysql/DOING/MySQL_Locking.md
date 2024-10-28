@@ -13,25 +13,21 @@ _**by Mark Nielsen
 Copyright October 2024**_
 
 1. [Links](#links)
-2. [Methods](#methods)
-
+2. [Queries](#methods)
+3. [Setup](#setup)
+4. [Output](#output)
 * * *
 <a name=links></a>Links
 -----
 * https://severalnines.com/blog/how-fix-lock-wait-timeout-exceeded-error-mysql/
 * https://www.alibabacloud.com/help/en/kb-articles/latest/how-do-i-view-the-lock-information-of-a-mysql-database
 
-* * *
-<a name=methods></a>Methods
------
 
-* show processlist
-* show innodb status
-* by queries
 
 * * *
 <a name=queries></a>Queries
 -----
+There is also "show engine innodb status".
 
 
 * Open tables
@@ -125,7 +121,11 @@ where dlw.engine is Null and pl.state like '%lock%'
 
 ```
 
-Setup the locks. Start 3 mysql session. We will call them Session 1, 2 and 3. Screen or tmux might be helpful here.
+* * *
+<a name=setup></a>Setup
+-----
+
+Setup the locks. Start 5 mysql sessions. We will call them Session 1, 2, 3, 4 and 5. Screen or tmux might be helpful here.
 
 * In Session 1
 ```
@@ -177,7 +177,9 @@ insert into locks values (4);
 use lock_test;
 alter table locks add column (text varchar(1));
 ```
-
+* * *
+<a name=ouptut></a>Output
+-----
 
 * The output of the lock queries
 
@@ -223,7 +225,6 @@ MySQL [lock_test]> source l
 +-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
 5 rows in set, 2 warnings (0.001 sec)
 
-ERROR: No query specified
 
 +--------+-----------+-----+----+----+
 | TRX_ID | TRX_STATE | MID | TL | rl |

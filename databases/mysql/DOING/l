@@ -1,137 +1,10 @@
-
----
-title : MySQL Locking
-author : Mark Nielsen
-copyright : October 2024
----
-
-
-MySQL Locking
-==============================
-
-_**by Mark Nielsen
-Copyright October 2024**_
-
-1. [Links](#links)
-2. [Methods](#methods)
-
-* * *
-<a name=links></a>Links
------
-* https://severalnines.com/blog/how-fix-lock-wait-timeout-exceeded-error-mysql/
-
-* * *
-<a name=methods></a>Methods
------
-
-* show processlist
-* show innodb status
-* by queries
-
-* * *
-<a name=queries></a>Queries
------
-* General query
-```
-select
-  object_schema as db,
-  object_name as name,
-  GROUP_CONCAT(DISTINCT EXTERNAL_LOCK) as locks
-from
-  performance_schema.table_handles 
-where external_lock is not null
-group by db, name;
-
-```
-
-*  Select metalocks
-```
-SELECT * FROM performance_schema.metadata_locks;
-```
-
-*
-```
-
-select t.thread_id, t.processlist_id
-
-from performance_schema.metadata_locks ml
-  join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
-  join performance_schema.processlist p on (p.id = t.processlist_id) 
-
-
-  -> WHERE OBJECT_TYPE='USER LEVEL LOCK'
-    -> AND OBJECT_NAME='foobarbaz';
- 
-mysql> SELECT PROCESSLIST_ID FROM performance_schema.threads
-    -> WHERE THREAD_ID=35;
-
-
-```
-
-
-Setup the locks. Start 3 mysql session. We will call them Session 1, 2 and 3. Screen or tmux might be helpful here.
-
-* In Session 1
-```
-create database if not exists lock_test;
-use lock_test;
-drop table if exists locks;
-create table if not exists locks (i int, primary key (i));
-
-  -- Here we have to insert 100 and 101 to prevent next-key locks above 100. 
-insert into locks values (1),(3),(100),(101);
-
-  # default 50
-set GLOBAL innodb_lock_wait_timeout=5000;
-
-```
-
-* In Session 1. This will do GAP locks, Next Key Locks, Alter locks, and update locks. If we just insert 1 row, it won't
-GAP and Next Key locks won't happen. We had to insert 100 and 101 to stop Next Key above 100. If this is true, I consider
-it a bug. I tested it over and over and Next Key shouldn't happen if just 100 is inserted, but it needs 101 as well. You
-can test this. 
-
-```
-begin;
-select * from locks where i = 1 or i = 3 for update;
-
-```
-
-
-* In session 2. We will do an update lock. 
-```
-use lock_test;
-update locks set i = 4 where i = 1;
-```
-
-* In Session 3 we will do a GAP lock. 
-```
-use lock_test;
-insert into locks values (2);
-```
-
-* In Session 4, we will do a Next Key Lock
-```
-use lock_test;
-insert into locks values (4);
-```
-
-* In Session 5, we will do an alter
-```
-use lock_test;
-alter table locks add column (text varchar(1));
-```
-
-
-* See the locks
-```
 --------------
 SELECT * FROM performance_schema.metadata_locks
 --------------
 
-
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
 | OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME     | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE           | LOCK_DURATION | LOCK_STATUS | SOURCE             | OWNER_THREAD_ID | OWNER_EVENT_ID |
-
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
 | TABLE         | performance_schema | metadata_locks  | NULL        |       137180987078352 | SHARED_READ         | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              88 |              2 |
 | TABLE         | lock_test          | locks           | NULL        |       137181199687296 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              60 |            134 |
 | GLOBAL        | NULL               | NULL            | NULL        |       137181255481248 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              64 |             13 |
@@ -148,5 +21,7 @@ SELECT * FROM performance_schema.metadata_locks
 | TABLESPACE    | NULL               | lock_test/locks | NULL        |       137181930125744 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | lock.cc:813        |              68 |             40 |
 | TABLE         | lock_test          | #sql-279d_20    | NULL        |       137181930746544 | EXCLUSIVE           | STATEMENT     | GRANTED     | sql_table.cc:17580 |              68 |             40 |
 | TABLE         | lock_test          | locks           | NULL        |       137181930289920 | EXCLUSIVE           | TRANSACTION   | PENDING     | mdl.cc:3776        |              68 |             41 |
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
+16 rows in set (0.001 sec)
 
-```
+Bye

@@ -41,39 +41,24 @@ from performance_schema.data_lock_waits;
 select  dlw.BLOCKING_THREAD_ID as thread_id1
   , t1.PROCESSLIST_ID as p1
   , t1.PROCESSLIST_INFO as info1
-  , ' blocks ' 
-  , dlw.REQUESTING_THREAD_ID as thred_id2
-  , t2.PROCESSLIST_ID as p2
-  , t2.PROCESSLIST_INFO as info2
-
-from performance_schema.data_lock_waits dlw
-  join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
-  join performance_schema.threads t2 on (t2.thread_id = dlw.REQUESTING_THREAD_ID)
-;
-
-use lock_test;
-drop temporary table if exists temp_locks;
-create temporary table temp_locks select distinct  THREAD_ID from performance_schema.data_locks;
-
-select  dlw.BLOCKING_THREAD_ID as thread_id1
-  , t1.PROCESSLIST_ID as p1
-  , t1.PROCESSLIST_INFO as info1
+  , t1.PROCESSLIST_TIME as ptime1
   , ' blocks '
   , dlw.REQUESTING_THREAD_ID as thread_id2
   , t2.PROCESSLIST_ID as p2
   , t2.PROCESSLIST_INFO as info2
-
-from temp_locks tl
-  join performance_schema.threads t2 on (t2.thread_id = tl.thread_id)
-  left join performance_schema.data_lock_waits dlw on (dlw.REQUESTING_THREAD_ID = tl.thread_id)
-  left join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
-
+  , t2.PROCESSLIST_TIME as ptime2
+from performance_schema.data_lock_waits dlw
+  join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
+  join performance_schema.threads t2 on (t2.thread_id = dlw.REQUESTING_THREAD_ID)
+order by ptime2 desc
 ;
 
-
-select 'missing locks ', t.thread_id, t.processlist_id as pid, t.processlist_info as info
-  from information_schema.processlist pl
-    join performance_schema.threads t on  (t.processlist_id = pl.id)
-    left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
+select 'missing locks '
+  , t.thread_id
+  , t.processlist_id as pid
+  , t.processlist_info as info
+  , t.PROCESSLIST_TIME as ptime
+from information_schema.processlist pl
+  join performance_schema.threads t on  (t.processlist_id = pl.id)
+  left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
 where dlw.engine is Null and pl.state like '%lock%'
-;

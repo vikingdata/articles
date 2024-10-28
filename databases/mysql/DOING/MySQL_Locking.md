@@ -93,13 +93,13 @@ from performance_schema.data_lock_waits;
 
 * Combine them together to tell what blocks what, except the alter command. Notice the blocking query is Null because
 it is a "select for update", which means the command is done. If it was an update command or something else the query
-might show up. 
+might show up. Also Table locks don't know up from alters. We will try to address this. 
 ```
 select  dlw.BLOCKING_THREAD_ID as thread_id1
   , t1.PROCESSLIST_ID as p1
   , t1.PROCESSLIST_INFO as info1
   , ' blocks ' 
-  , dlw.REQUESTING_THREAD_ID as thred_id2
+  , dlw.REQUESTING_THREAD_ID as thread_id2
   , t2.PROCESSLIST_ID as p2
   , t2.PROCESSLIST_INFO as info2
 
@@ -107,31 +107,16 @@ from performance_schema.data_lock_waits dlw
   join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
   join performance_schema.threads t2 on (t2.thread_id = dlw.REQUESTING_THREAD_ID)
 ;
-```
 
-* Use performance_schema.threads joined to performance_schema.data_lock_waits
-```
-use lock_test;
-drop temporary table if exists temp_locks;
-create temporary table temp_locks select distinct  THREAD_ID from performance_schema.data_locks;
-
-select  dlw.BLOCKING_THREAD_ID as thread_id1
-  , t1.PROCESSLIST_ID as p1
-  , t1.PROCESSLIST_INFO as info1
-  , ' blocks '
-  , dlw.REQUESTING_THREAD_ID as thread_id2
-  , t2.PROCESSLIST_ID as p2
-  , t2.PROCESSLIST_INFO as info2
-
-from temp_locks tl
-  join performance_schema.threads t2 on (t2.thread_id = tl.thread_id)
-  left join performance_schema.data_lock_waits dlw on (dlw.REQUESTING_THREAD_ID = tl.thread_id)
-  left join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
-
+select 'missing locks ', t.thread_id, t.processlist_id as pid, t.processlist_info as info
+  from information_schema.processlist pl
+    join performance_schema.threads t on  (t.processlist_id = pl.id)
+    left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
+where dlw.engine is Null and pl.state like '%lock%'
 ;
 
-```
 
+```
 
 Setup the locks. Start 3 mysql session. We will call them Session 1, 2 and 3. Screen or tmux might be helpful here.
 
@@ -187,30 +172,121 @@ alter table locks add column (text varchar(1));
 ```
 
 
-* See the locks
+* The output of the lock queries
+
 ```
---------------
-SELECT * FROM performance_schema.metadata_locks
---------------
+MySQL [lock_test]> source l
++-----------+-------+--------+-------------+
+| Database  | Table | In_use | Name_locked |
++-----------+-------+--------+-------------+
+| lock_test | locks |      4 |           0 |
++-----------+-------+--------+-------------+
+1 row in set (0.001 sec)
 
-
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
 | OBJECT_TYPE   | OBJECT_SCHEMA      | OBJECT_NAME     | COLUMN_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE           | LOCK_DURATION | LOCK_STATUS | SOURCE             | OWNER_THREAD_ID | OWNER_EVENT_ID |
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
+| TABLE         | lock_test          | locks           | NULL        |       137181199687296 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              60 |            149 |
+| GLOBAL        | NULL               | NULL            | NULL        |       137181255564544 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              64 |             28 |
+| TABLE         | lock_test          | locks           | NULL        |       137181255484208 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              64 |             28 |
+| GLOBAL        | NULL               | NULL            | NULL        |       137181390564800 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              65 |             15 |
+| TABLE         | lock_test          | locks           | NULL        |       137181391303504 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              65 |             15 |
+| GLOBAL        | NULL               | NULL            | NULL        |       137182114793136 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              67 |             15 |
+| TABLE         | lock_test          | locks           | NULL        |       137182114790704 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              67 |             15 |
+| GLOBAL        | NULL               | NULL            | NULL        |       137181930188976 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:5548   |              68 |             42 |
+| BACKUP LOCK   | NULL               | NULL            | NULL        |       137181930884144 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5560   |              68 |             42 |
+| SCHEMA        | lock_test          | NULL            | NULL        |       137181930127536 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5535   |              68 |             42 |
+| TABLE         | lock_test          | locks           | NULL        |       137181930642128 | SHARED_UPGRADABLE   | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              68 |             42 |
+| BACKUP TABLES | NULL               | NULL            | NULL        |       137181930372704 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | lock.cc:1260       |              68 |             42 |
+| TABLESPACE    | NULL               | lock_test/locks | NULL        |       137181930334832 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | lock.cc:813        |              68 |             42 |
+| TABLE         | lock_test          | #sql-279d_20    | NULL        |       137181930334304 | EXCLUSIVE           | STATEMENT     | GRANTED     | sql_table.cc:17580 |              68 |             42 |
+| TABLE         | lock_test          | locks           | NULL        |       137181930747440 | EXCLUSIVE           | TRANSACTION   | PENDING     | mdl.cc:3776        |              68 |             43 |
+| TABLE         | performance_schema | metadata_locks  | NULL        |       137180992735296 | SHARED_READ         | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |             162 |             47 |
++---------------+--------------------+-----------------+-------------+-----------------------+---------------------+---------------+-------------+--------------------+-----------------+----------------+
+16 rows in set (0.001 sec)
 
-| TABLE         | performance_schema | metadata_locks  | NULL        |       137180987078352 | SHARED_READ         | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              88 |              2 |
-| TABLE         | lock_test          | locks           | NULL        |       137181199687296 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              60 |            134 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181255481248 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              64 |             13 |
-| TABLE         | lock_test          | locks           | NULL        |       137181255484752 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              64 |             13 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181389711728 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              65 |             12 |
-| TABLE         | lock_test          | locks           | NULL        |       137181391220992 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              65 |             12 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137182115157040 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:3080   |              67 |             12 |
-| TABLE         | lock_test          | locks           | NULL        |       137182115158608 | SHARED_WRITE        | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              67 |             12 |
-| GLOBAL        | NULL               | NULL            | NULL        |       137181930334304 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | sql_base.cc:5548   |              68 |             40 |
-| BACKUP LOCK   | NULL               | NULL            | NULL        |       137181930269360 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5560   |              68 |             40 |
-| SCHEMA        | lock_test          | NULL            | NULL        |       137181930334832 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | sql_base.cc:5535   |              68 |             40 |
-| TABLE         | lock_test          | locks           | NULL        |       137181930309072 | SHARED_UPGRADABLE   | TRANSACTION   | GRANTED     | sql_parse.cc:6427  |              68 |             40 |
-| BACKUP TABLES | NULL               | NULL            | NULL        |       137181930701760 | INTENTION_EXCLUSIVE | STATEMENT     | GRANTED     | lock.cc:1260       |              68 |             40 |
-| TABLESPACE    | NULL               | lock_test/locks | NULL        |       137181930125744 | INTENTION_EXCLUSIVE | TRANSACTION   | GRANTED     | lock.cc:813        |              68 |             40 |
-| TABLE         | lock_test          | #sql-279d_20    | NULL        |       137181930746544 | EXCLUSIVE           | STATEMENT     | GRANTED     | sql_table.cc:17580 |              68 |             40 |
-| TABLE         | lock_test          | locks           | NULL        |       137181930289920 | EXCLUSIVE           | TRANSACTION   | PENDING     | mdl.cc:3776        |              68 |             41 |
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| thread_id | pid  | db        | psql  | pstate                          | info                                           | ptime | lock_type                                                                                                                                 |
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+|        60 |   24 | lock_test | Sleep | NULL                            | NULL                                           |  4389 | SHARED_WRITE                                                                                                                              |
+|        64 |   28 | lock_test | Query | updating                        | update locks set i = 4 where i = 1             |  4383 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        65 |   29 | lock_test | Query | update                          | insert into locks values (2)                   |  4381 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        67 |   31 | lock_test | Query | update                          | insert into locks values (4)                   |  4379 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        68 |   32 | lock_test | Query | Waiting for table metadata lock | alter table locks add column (text varchar(1)) |  4365 | INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,SHARED_UPGRADABLE,INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,EXCLUSIVE,EXCLUSIVE |
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+5 rows in set, 2 warnings (0.001 sec)
+
+ERROR: No query specified
+
++--------+-----------+-----+----+----+
+| TRX_ID | TRX_STATE | MID | TL | rl |
++--------+-----------+-----+----+----+
+|   2263 | LOCK WAIT |  31 |  1 |  1 |
+|   2262 | LOCK WAIT |  29 |  1 |  1 |
+|   2261 | LOCK WAIT |  28 |  1 |  1 |
+|   2259 | RUNNING   |  24 |  1 |  5 |
++--------+-----------+-----+----+----+
+4 rows in set (0.001 sec)
+
++--------+---------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+------------------------+-------------+------------------------+
+| ENGINE | ENGINE_LOCK_ID                        | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE              | LOCK_STATUS | LOCK_DATA              |
++--------+---------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+------------------------+-------------+------------------------+
+| INNODB | 137182144632680:1067:137182060812672  |                  2263 |        67 |       16 | lock_test     | locks       | NULL           | NULL              | NULL       |       137182060812672 | TABLE     | IX                     | GRANTED     | NULL                   |
+| INNODB | 137182144632680:5:4:4:137182060809760 |                  2263 |        67 |       16 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060809760 | RECORD    | X,GAP,INSERT_INTENTION | WAITING     | 100                    |
+| INNODB | 137182144631832:1067:137182060806688  |                  2262 |        65 |       16 | lock_test     | locks       | NULL           | NULL              | NULL       |       137182060806688 | TABLE     | IX                     | GRANTED     | NULL                   |
+| INNODB | 137182144631832:5:4:3:137182060803776 |                  2262 |        65 |       16 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060803776 | RECORD    | X,GAP,INSERT_INTENTION | WAITING     | 3                      |
+| INNODB | 137182144630984:1067:137182060800704  |                  2261 |        64 |       29 | lock_test     | locks       | NULL           | NULL              | NULL       |       137182060800704 | TABLE     | IX                     | GRANTED     | NULL                   |
+| INNODB | 137182144630984:5:4:2:137182060797792 |                  2261 |        64 |       29 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060797792 | RECORD    | X,REC_NOT_GAP          | WAITING     | 1                      |
+| INNODB | 137182144630136:1067:137182060794608  |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | NULL       |       137182060794608 | TABLE     | IX                     | GRANTED     | NULL                   |
+| INNODB | 137182144630136:5:4:1:137182060791616 |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060791616 | RECORD    | X                      | GRANTED     | supremum pseudo-record |
+| INNODB | 137182144630136:5:4:2:137182060791616 |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060791616 | RECORD    | X                      | GRANTED     | 1                      |
+| INNODB | 137182144630136:5:4:3:137182060791616 |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060791616 | RECORD    | X                      | GRANTED     | 3                      |
+| INNODB | 137182144630136:5:4:4:137182060791616 |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060791616 | RECORD    | X                      | GRANTED     | 100                    |
+| INNODB | 137182144630136:5:4:5:137182060791616 |                  2259 |        60 |      149 | lock_test     | locks       | NULL           | NULL              | PRIMARY    |       137182060791616 | RECORD    | X                      | GRANTED     | 101                    |
++--------+---------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+------------------------+-------------+------------------------+
+12 rows in set (0.000 sec)
+
++---------+----------+------+------+------+------+
+| RTransI | RThreadI | REI  | BTI  | BTI  | BEI  |
++---------+----------+------+------+------+------+
+|    2263 |       67 |   16 | 2259 |   60 |  149 |
+|    2262 |       65 |   16 | 2259 |   60 |  149 |
+|    2261 |       64 |   29 | 2259 |   60 |  149 |
++---------+----------+------+------+------+------+
+3 rows in set (0.000 sec)
+
++------------+------+-------+----------+-----------+------+------------------------------------+
+| thread_id1 | p1   | info1 | blocks   | thred_id2 | p2   | info2                              |
++------------+------+-------+----------+-----------+------+------------------------------------+
+|         60 |   24 | NULL  |  blocks  |        67 |   31 | insert into locks values (4)       |
+|         60 |   24 | NULL  |  blocks  |        65 |   29 | insert into locks values (2)       |
+|         60 |   24 | NULL  |  blocks  |        64 |   28 | update locks set i = 4 where i = 1 |
++------------+------+-------+----------+-----------+------+------------------------------------+
+3 rows in set (0.000 sec)
+
+Database changed
+Query OK, 0 rows affected (0.001 sec)
+
+Query OK, 4 rows affected (0.001 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
++------------+------+-------+----------+------------+------+------------------------------------+
+| thread_id1 | p1   | info1 | blocks   | thread_id2 | p2   | info2                              |
++------------+------+-------+----------+------------+------+------------------------------------+
+|         60 |   24 | NULL  |  blocks  |         67 |   31 | insert into locks values (4)       |
+|         60 |   24 | NULL  |  blocks  |         65 |   29 | insert into locks values (2)       |
+|         60 |   24 | NULL  |  blocks  |         64 |   28 | update locks set i = 4 where i = 1 |
+|       NULL | NULL | NULL  |  blocks  |       NULL |   24 | NULL                               |
++------------+------+-------+----------+------------+------+------------------------------------+
+4 rows in set (0.001 sec)
+
++----------------+-----------+------+------------------------------------------------+
+| missing locks  | thread_id | pid  | info                                           |
++----------------+-----------+------+------------------------------------------------+
+| missing locks  |        68 |   32 | alter table locks add column (text varchar(1)) |
++----------------+-----------+------+------------------------------------------------+
+1 row in set, 1 warning (0.001 sec)
+
+
 
 ```

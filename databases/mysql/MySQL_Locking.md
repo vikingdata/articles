@@ -12,6 +12,8 @@ MySQL Locking
 _**by Mark Nielsen
 Copyright October 2024**_
 
+This is for MySQL 8. MySQL 5.7 has different tables and columns. Did not check 8.1 or 8.4, but expect changes. 
+
 1. [Links](#links)
 2. [Queries](#queries)
 3. [Setup](#setup)

@@ -19,6 +19,7 @@ Copyright October 2024**_
 <a name=links></a>Links
 -----
 * https://severalnines.com/blog/how-fix-lock-wait-timeout-exceeded-error-mysql/
+* https://www.alibabacloud.com/help/en/kb-articles/latest/how-do-i-view-the-lock-information-of-a-mysql-database
 
 * * *
 <a name=methods></a>Methods
@@ -44,27 +45,104 @@ group by db, name;
 
 ```
 
+* Open tables
+```
+show open tables where in_use > 0;
+```
+
 *  Select metalocks
 ```
 SELECT * FROM performance_schema.metadata_locks;
 ```
 
-*
+* Try to see the order of locks
 ```
 
-select t.thread_id, t.processlist_id
-
+select  t.thread_id as thread_id
+  , t.processlist_id as pid
+  , t.PROCESSLIST_DB as db
+  , t.PROCESSLIST_COMMAND as psql
+  , t.PROCESSLIST_STATE as pstate
+  , t.PROCESSLIST_INFO as info
+  , t.PROCESSLIST_TIME as ptime
+  , group_concat(ml.lock_type) as lock_type
 from performance_schema.metadata_locks ml
   join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
   join performance_schema.processlist p on (p.id = t.processlist_id) 
 
+where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
+group by thread_id, pid, db, psql, pstate, info, time;
+;
 
-  -> WHERE OBJECT_TYPE='USER LEVEL LOCK'
+* Use the INFORMATION_SCHEMA.INNODB_TRX table.
+```
+SELECT TRX_ID
+  , TRX_STATE
+  ,  trx_mysql_thread_iD AS MID
+  ,  trx_tables_locked TL
+  , trx_rows_locked as rl
+FROM INFORMATION_SCHEMA.INNODB_TRX;
+
+
+-> WHERE OBJECT_TYPE='USER LEVEL LOCK'
     -> AND OBJECT_NAME='foobarbaz';
  
 mysql> SELECT PROCESSLIST_ID FROM performance_schema.threads
     -> WHERE THREAD_ID=35;
 
+* Use the data_locks table
+```
+select * from performance_schema.data_locks;
+```
+
+* Use the data_lock_waits table. 
+select REQUESTING_ENGINE_TRANSACTION_ID as RTransI
+  , REQUESTING_THREAD_ID as RThreadI
+  , REQUESTING_EVENT_ID REI
+  , BLOCKING_ENGINE_TRANSACTION_ID BTI
+  , BLOCKING_THREAD_ID BTI
+  , BLOCKING_EVENT_ID BEI
+from performance_schema.data_lock_waits;
+```
+
+* Combine them together to tell what blocks what, except the alter command. Notice the blocking query is Null because
+it is a "select for update", which means the command is done. If it was an update command or something else the query
+might show up. 
+```
+select  dlw.BLOCKING_THREAD_ID as thread_id1
+  , t1.PROCESSLIST_ID as p1
+  , t1.PROCESSLIST_INFO as info1
+  , ' blocks ' 
+  , dlw.REQUESTING_THREAD_ID as thred_id2
+  , t2.PROCESSLIST_ID as p2
+  , t2.PROCESSLIST_INFO as info2
+
+from performance_schema.data_lock_waits dlw
+  join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
+  join performance_schema.threads t2 on (t2.thread_id = dlw.REQUESTING_THREAD_ID)
+;
+```
+
+* Use performance_schema.threads joined to performance_schema.data_lock_waits
+```
+use lock_test;
+drop temporary table if exists temp_locks;
+create temporary table temp_locks select distinct  THREAD_ID from performance_schema.data_locks;
+
+select  dlw.BLOCKING_THREAD_ID as thread_id1
+  , t1.PROCESSLIST_ID as p1
+  , t1.PROCESSLIST_INFO as info1
+  , ' blocks '
+  , dlw.REQUESTING_THREAD_ID as thread_id2
+  , t2.PROCESSLIST_ID as p2
+  , t2.PROCESSLIST_INFO as info2
+
+from temp_locks tl
+  join performance_schema.threads t2 on (t2.thread_id = tl.thread_id)
+  left join performance_schema.data_lock_waits dlw on (dlw.REQUESTING_THREAD_ID = tl.thread_id)
+  left join performance_schema.threads t1 on (t1.thread_id = dlw.BLOCKING_THREAD_ID)
+
+;
 
 ```
 

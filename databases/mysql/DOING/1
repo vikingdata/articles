@@ -1,5 +1,0 @@
-db	name	locks
-lock_test	locks	READ EXTERNAL,WRITE EXTERNAL
-Database	Table	In_use	Name_locked
-lock_test	locks	4	0
-MySQL [(none)]> tee q

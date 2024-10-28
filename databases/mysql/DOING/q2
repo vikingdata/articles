@@ -1,0 +1,18 @@
+select  t.thread_id as thread_id
+  , t.processlist_id as pid
+  , t.PROCESSLIST_DB as db
+  , t.PROCESSLIST_COMMAND as psql
+  , t.PROCESSLIST_STATE as pstate
+  , t.PROCESSLIST_INFO as info
+  , t.PROCESSLIST_TIME as ptime
+  , ' blocked by thread '
+  , dlw.BLOCKING_THREAD_ID as blocking_thread_id
+  , group_concat(ml.lock_type) as lock_type
+from performance_schema.metadata_locks ml
+  join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
+  join performance_schema.processlist p on (p.id = t.processlist_id)
+  left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
+
+where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
+group by thread_id, pid, db, psql, pstate, info, time, ' blocked by thread ', dlw.BLOCKING_THREAD_ID
+;

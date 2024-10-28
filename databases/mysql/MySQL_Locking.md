@@ -128,6 +128,26 @@ from INFORMATION_SCHEMA.INNODB_TRX trx
 order by ptime desc;
 
 
+select  t.thread_id as thread_id
+  , t.processlist_id as pid
+  , t.PROCESSLIST_DB as db
+  , t.PROCESSLIST_COMMAND as psql
+  , t.PROCESSLIST_STATE as pstate
+  , t.PROCESSLIST_INFO as info
+  , t.PROCESSLIST_TIME as ptime
+  , ' blocked by thread '
+  , dlw.BLOCKING_THREAD_ID as blocking_thread_id
+  , group_concat(ml.lock_type) as lock_type
+from performance_schema.metadata_locks ml
+  join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
+  join performance_schema.processlist p on (p.id = t.processlist_id)
+  left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
+  
+where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
+group by thread_id, pid, db, psql, pstate, info, time, ' blocked by thread ', dlw.BLOCKING_THREAD_ID 
+;
+
+
 ```
 
 * * *
@@ -190,7 +210,7 @@ alter table locks add column (text varchar(1));
 <a name=ouptut></a>Output
 -----
 
-* The output of the lock queries. Notice at the 3rd to last table has "info1" with no query and the 2nd to last table has "info" with no query. That's because the "select for update" query finished. The thread is still blocking though "nothing" is being executed. Normally, you should see a query. 
+* The output of the lock queries. Notice at the 4th to last table has "info1" with no query and the 3rd to last table has "info" with no query. That's because the "select for update" query finished. The thread is still blocking though "nothing" is being executed. Normally, you should see a query. 
 
 ```
 MySQL [lock_test]> source l
@@ -296,6 +316,38 @@ MySQL [lock_test]> source l
 | holding locks |        67 |   31 | insert into locks values (4)       |   136 |
 +---------------+-----------+------+------------------------------------+-------+
 4 rows in set (0.001 sec)
+
+MySQL [lock_test]> source q2
+--------------
+select  t.thread_id as thread_id
+  , t.processlist_id as pid
+  , t.PROCESSLIST_DB as db
+  , t.PROCESSLIST_COMMAND as psql
+  , t.PROCESSLIST_STATE as pstate
+  , t.PROCESSLIST_INFO as info
+  , t.PROCESSLIST_TIME as ptime
+  , ' blocked by thread '
+  , dlw.BLOCKING_THREAD_ID as blocking_thread_id
+  , group_concat(ml.lock_type) as lock_type
+from performance_schema.metadata_locks ml
+  join performance_schema.threads t on (t.thread_id = ml.owner_thread_id)
+  join performance_schema.processlist p on (p.id = t.processlist_id)
+  left join performance_schema.data_lock_waits  dlw on (dlw.REQUESTING_THREAD_ID = t.thread_id)
+
+where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
+group by thread_id, pid, db, psql, pstate, info, time, ' blocked by thread ', dlw.BLOCKING_THREAD_ID
+--------------
+
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+---------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| thread_id | pid  | db        | psql  | pstate                          | info                                           | ptime | blocked by thread   | blocking_thread_id | lock_type                                                                                                                                 |
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+---------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+|        60 |   24 | lock_test | Sleep | NULL                            | NULL                                           |  1504 |  blocked by thread  |               NULL | SHARED_WRITE                                                                                                                              |
+|        64 |   28 | lock_test | Query | updating                        | update locks set i = 4 where i = 1             |  1501 |  blocked by thread  |                 60 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        65 |   29 | lock_test | Query | update                          | insert into locks values (2)                   |  1490 |  blocked by thread  |                 60 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        67 |   31 | lock_test | Query | update                          | insert into locks values (4)                   |  1488 |  blocked by thread  |                 60 | INTENTION_EXCLUSIVE,SHARED_WRITE                                                                                                          |
+|        68 |   32 | lock_test | Query | Waiting for table metadata lock | alter table locks add column (text varchar(1)) |  1485 |  blocked by thread  |               NULL | INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,SHARED_UPGRADABLE,INTENTION_EXCLUSIVE,INTENTION_EXCLUSIVE,EXCLUSIVE,EXCLUSIVE |
++-----------+------+-----------+-------+---------------------------------+------------------------------------------------+-------+---------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+5 rows in set, 2 warnings (0.001 sec)
 
 
 

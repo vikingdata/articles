@@ -80,7 +80,8 @@ FROM INFORMATION_SCHEMA.INNODB_TRX;
 select * from performance_schema.data_locks;
 ```
 
-* Use the data_lock_waits table. 
+* Use the data_lock_waits table.
+```
 select REQUESTING_ENGINE_TRANSACTION_ID as RTransI
   , REQUESTING_THREAD_ID as RThreadI
   , REQUESTING_EVENT_ID REI

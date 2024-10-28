@@ -72,13 +72,8 @@ SELECT TRX_ID
   ,  trx_tables_locked TL
   , trx_rows_locked as rl
 FROM INFORMATION_SCHEMA.INNODB_TRX;
+```
 
-
--> WHERE OBJECT_TYPE='USER LEVEL LOCK'
-    -> AND OBJECT_NAME='foobarbaz';
- 
-mysql> SELECT PROCESSLIST_ID FROM performance_schema.threads
-    -> WHERE THREAD_ID=35;
 
 * Use the data_locks table
 ```

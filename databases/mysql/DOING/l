@@ -19,3 +19,13 @@ from performance_schema.metadata_locks ml
 where ml.lock_type in ('INTENTION_EXCLUSIVE', 'SHARED_WRITE', 'SHARED_UPGRADABLE', 'EXCLUSIVE')
 group by thread_id, pid, db, psql, pstate, info, time;
 ;
+
+SELECT TRX_ID
+  , TRX_STATE
+  ,  trx_mysql_thread_iD AS MID
+  ,  trx_tables_locked TL
+  , trx_rows_locked as rl
+FROM INFORMATION_SCHEMA.INNODB_TRX;
+
+
+select * from performance_schema.data_locks;

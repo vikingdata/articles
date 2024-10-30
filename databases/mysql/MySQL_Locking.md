@@ -22,6 +22,9 @@ Wanted to make a good example of locks in MySQL. I wanted to demonstrate GAP loc
 2. [Queries](#queries)
 3. [Setup](#setup)
 4. [Output](#output)
+5. [Show InnoDB status](#idb)
+
+
 * * *
 <a name=links></a>Links
 -----
@@ -446,21 +449,22 @@ group by thread_id, pid, db, psql, pstate, info, time, ' blocked by thread ', dl
 * * *
 <a name=idb></a>Show InnoDB status
 -----
+Even the show engine innodb status does have the alter lock. 
 
 ```
-
 mysql> show engine innodb status;
+
 | Type   | Name | Status
 
 | InnoDB |      | 
 =====================================
-2024-10-30 14:16:46 137182132024896 INNODB MONITOR OUTPUT
+2024-10-30 14:22:23 137182169790016 INNODB MONITOR OUTPUT
 =====================================
-Per second averages calculated from the last 24 seconds
+Per second averages calculated from the last 15 seconds
 -----------------
 BACKGROUND THREAD
 -----------------
-srv_master_thread loops: 132 srv_active, 0 srv_shutdown, 209985 srv_idle
+srv_master_thread loops: 132 srv_active, 0 srv_shutdown, 210322 srv_idle
 srv_master_thread log flush and writes: 0
 ----------
 SEMAPHORES
@@ -478,6 +482,8 @@ Trx id counter 2379
 Purge done for trx's n:o < 2376 undo n:o < 0 state: running but idle
 History list length 0
 LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 418657121345032, not started
+0 lock struct(s), heap size 1128, 0 row lock(s)
 ---TRANSACTION 418657121344184, not started
 mysql tables in use 1, locked 1
 0 lock struct(s), heap size 1128, 0 row lock(s)
@@ -487,12 +493,12 @@ mysql tables in use 1, locked 1
 0 lock struct(s), heap size 1128, 0 row lock(s)
 ---TRANSACTION 418657121339096, not started
 0 lock struct(s), heap size 1128, 0 row lock(s)
----TRANSACTION 2378, ACTIVE 64 sec inserting
+---TRANSACTION 2378, ACTIVE 401 sec inserting
 mysql tables in use 1, locked 1
 LOCK WAIT 2 lock struct(s), heap size 1128, 1 row lock(s)
 MySQL thread id 168, OS thread handle 137182133081664, query id 1832 localhost root update
 insert into locks values (2)
-------- TRX HAS BEEN WAITING 64 SEC FOR THIS LOCK TO BE GRANTED:
+------- TRX HAS BEEN WAITING 401 SEC FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 5 page no 4 n bits 80 index PRIMARY of table `lock_test`.`locks` trx id 2378 lock_mode X locks gap before rec insert intention waiting
 Record lock, heap no 3 PHYSICAL RECORD: n_fields 4; compact format; info bits 0
  0: len 4; hex 80000003; asc     ;;
@@ -501,12 +507,12 @@ Record lock, heap no 3 PHYSICAL RECORD: n_fields 4; compact format; info bits 0
  3: SQL DEFAULT;
 
 ------------------
----TRANSACTION 2377, ACTIVE 67 sec starting index read
+---TRANSACTION 2377, ACTIVE 404 sec starting index read
 mysql tables in use 1, locked 1
 LOCK WAIT 2 lock struct(s), heap size 1128, 1 row lock(s)
 MySQL thread id 166, OS thread handle 137182060738112, query id 1831 localhost root updating
 update locks set i = 4 where i = 1
-------- TRX HAS BEEN WAITING 67 SEC FOR THIS LOCK TO BE GRANTED:
+------- TRX HAS BEEN WAITING 404 SEC FOR THIS LOCK TO BE GRANTED:
 RECORD LOCKS space id 5 page no 4 n bits 80 index PRIMARY of table `lock_test`.`locks` trx id 2377 lock_mode X locks rec but not gap waiting
 Record lock, heap no 8 PHYSICAL RECORD: n_fields 4; compact format; info bits 64
  0: len 4; hex 80000001; asc     ;;
@@ -515,7 +521,7 @@ Record lock, heap no 8 PHYSICAL RECORD: n_fields 4; compact format; info bits 64
  3: len 30; hex 2f02600048ffd08000000200000000094602000000f805a904ca31000000; asc / ` H           F         1   ; (total 4294967291 bytes);
 
 ------------------
----TRANSACTION 2376, ACTIVE 69 sec
+---TRANSACTION 2376, ACTIVE 406 sec
 2 lock struct(s), heap size 1128, 5 row lock(s)
 MySQL thread id 167, OS thread handle 137182188664384, query id 1830 localhost root
 --------
@@ -551,7 +557,7 @@ Hash table size 34679, node heap has 2 buffer(s)
 Hash table size 34679, node heap has 2 buffer(s)
 Hash table size 34679, node heap has 1 buffer(s)
 Hash table size 34679, node heap has 1 buffer(s)
-0.00 hash searches/s, 0.00 non-hash searches/s
+0.73 hash searches/s, 22.87 non-hash searches/s
 ---
 LOG
 ---
@@ -599,12 +605,12 @@ ROW OPERATIONS
 Process ID=10141, Main thread ID=137181521774144 , state=sleeping
 Number of rows inserted 461, updated 16, deleted 23, read 516
 0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
-Number of system rows inserted 119, updated 365, deleted 58, read 15534
-0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+Number of system rows inserted 119, updated 365, deleted 58, read 15666
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 8.80 reads/s
 ----------------------------
 END OF INNODB MONITOR OUTPUT
 ============================
-
 1 row in set (0.00 sec)
 
-
+mysql> notee
+```

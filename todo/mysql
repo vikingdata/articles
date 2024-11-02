@@ -117,4 +117,9 @@ Finish
 	       EC2
 	       RDS
 	       Aurora
-	       
+
+
+incorrect views
+memory -- threads, instruments, and show innodb status -- resident
+  compare free -h and top to innodo status
+  why does redident get bigger?

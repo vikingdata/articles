@@ -30,7 +30,7 @@ Wanted to make a good example of locks in MySQL. I wanted to demonstrate GAP loc
 -----
 * https://severalnines.com/blog/how-fix-lock-wait-timeout-exceeded-error-mysql/
 * https://www.alibabacloud.com/help/en/kb-articles/latest/how-do-i-view-the-lock-information-of-a-mysql-database
-
+* https://www.percona.com/blog/understanding-mysql-memory-usage-with-performance-schema/
 
 
 * * *
@@ -614,3 +614,7 @@ END OF INNODB MONITOR OUTPUT
 
 mysql> notee
 ```
+
+* * *
+<a name=i></a>Sys schema and memory use
+-----

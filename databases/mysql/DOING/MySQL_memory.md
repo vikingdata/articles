@@ -43,6 +43,8 @@ there is a bug.
 ### MySQL Queries
 
 ```
+
+  -- Maximum amount of memory in theory. 
 SELECT ( 
 -- Uncomment if you have query cache
 --  @@key_buffer_size
@@ -194,6 +196,8 @@ mysql> select event_name,current_alloc from sys.memory_global_by_current_bytes l
 +-----------------------------------------------------------------------------+---------------+
 10 rows in set (0.00 sec)
 
+ --- Get sum of memory used in 2 different ways. 
+
 mysql>
 mysql> select format_bytes(sum(current_alloc)) from sys.x$memory_global_by_current_bytes;
 +----------------------------------+
@@ -212,6 +216,8 @@ mysql> select * from memory_global_total;
 | 472.52 MiB      |
 +-----------------+
 1 row in set (0.00 sec)
+
+ -- This is grouped by event_name, which may be helpful. 
 
 mysql> SELECT SUBSTRING_INDEX(event_name,'/',2) AS code_area,
     ->        sys.format_bytes(SUM(current_alloc)) AS current_alloc
@@ -256,7 +262,7 @@ echo $top_mem
 
 # output : 556388 kb
 
-  # Calculate non swapmemory used from ps and free. including swap
+  # Calculate non swap memory used from ps and free. 
 
 nonswap=`free -m | egrep "Mem:" | sed -e 's/  */ /g' | cut -d ' ' -f2`
 per=`ps -eo pmem,command | grep mysqld | grep -v grep |  head -n 1 |cut -d ' ' -f2`
@@ -289,7 +295,9 @@ done | grep mysqld | awk '{print "Resident memory: " $1 " " $2 " kb " int($2/102
 # Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
 
 It seems MySQL and Linux is a little off, but with large systems it is probably closer to the same.
- 
+
+I guess if swap is heavily used, use the summary table by event_name to see what is eating up the memory. 
+
 ### Show innodb Status
 output of memory sections
 ```

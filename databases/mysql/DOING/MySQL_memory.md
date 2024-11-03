@@ -31,6 +31,8 @@ but there are some specific MySQL queries and configurations.
 * https://severalnines.com/blog/what-check-if-mysql-memory-utilisation-high/
 * https://my.f5.com/manage/s/article/K40027012
 * https://confluence.atlassian.com/bamkb/how-to-review-swap-space-usage-on-a-linux-server-865042927.html
+* https://lefred.be/content/mysql-and-memory-a-love-story-part-1/
+* https://lefred.be/content/mysql-and-memory-a-love-story-part-2/
 
 * * *
 <a name=queries></a>Queries
@@ -202,9 +204,42 @@ mysql> select format_bytes(sum(current_alloc)) from sys.x$memory_global_by_curre
 1 row in set (0.00 sec)
 
 mysql>
+
+mysql> select * from memory_global_total;
++-----------------+
+| total_allocated |
++-----------------+
+| 472.52 MiB      |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUBSTRING_INDEX(event_name,'/',2) AS code_area,
+    ->        sys.format_bytes(SUM(current_alloc)) AS current_alloc
+    -> FROM sys.x$memory_global_by_current_bytes
+    -> GROUP BY SUBSTRING_INDEX(event_name,'/',2)
+    -> ORDER BY SUM(current_alloc) DESC;
++---------------------------+---------------+
+| code_area                 | current_alloc |
++---------------------------+---------------+
+| memory/performance_schema | 235.78 MiB    |
+| memory/innodb             | 195.51 MiB    |
+| memory/sql                | 30.46 MiB     |
+| memory/mysys              | 9.03 MiB      |
+| memory/temptable          | 1.00 MiB      |
+| memory/mysqld_openssl     | 838.15 KiB    |
+| memory/mysqlx             | 3.26 KiB      |
+| memory/myisam             |  728 bytes    |
+| memory/component_sys_vars |  648 bytes    |
+| memory/csv                |  120 bytes    |
+| memory/blackhole          |  120 bytes    |
+| memory/vio                |   80 bytes    |
++---------------------------+---------------+
+12 rows in set, 1 warning (0.00 sec)
+
+
 ```
 
-See hot it compared to ps and top
+See how it compares to ps, top, and proc.
 ```
   ## From /proc
 for file in /proc/*/status ; do
@@ -251,9 +286,9 @@ done | grep mysqld | awk '{print "Resident memory: " $1 " " $2 " kb " int($2/102
     * ps + free   219 MiB
     * proc        224 MiB
 
-# Let's take 224 Mib + 331 Mib = 575 Mib.
+# Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
 
-It seems MySQL and Linux is a little off, but with large systems it is probably the same. 
+It seems MySQL and Linux is a little off, but with large systems it is probably closer to the same.
  
 ### Show innodb Status
 output of memory sections

@@ -18,9 +18,7 @@ but there are some specific MySQL queries and configurations.
 
 
 1. [Links](#links)
-2. [Queries](#queries)
-3. [Setup](#setup)
-4. [Output](#output)
+2. [stuff](#stuff)
 
 * * *
 <a name=links></a>Links
@@ -35,7 +33,7 @@ but there are some specific MySQL queries and configurations.
 * https://lefred.be/content/mysql-and-memory-a-love-story-part-2/
 
 * * *
-<a name=queries></a>Queries
+<a name=stuff></a>Stuff
 -----
 Maximum about of memory used. Note: This doesn't include memory leaks. I have found this equation not to be true if
 there is a bug. 
@@ -220,10 +218,10 @@ mysql> select * from memory_global_total;
  -- This is grouped by event_name, which may be helpful. 
 
 mysql> SELECT SUBSTRING_INDEX(event_name,'/',2) AS code_area,
-    ->        sys.format_bytes(SUM(current_alloc)) AS current_alloc
-    -> FROM sys.x$memory_global_by_current_bytes
-    -> GROUP BY SUBSTRING_INDEX(event_name,'/',2)
-    -> ORDER BY SUM(current_alloc) DESC;
+            sys.format_bytes(SUM(current_alloc)) AS current_alloc
+     FROM sys.x$memory_global_by_current_bytes
+     GROUP BY SUBSTRING_INDEX(event_name,'/',2)
+     ORDER BY SUM(current_alloc) DESC;
 +---------------------------+---------------+
 | code_area                 | current_alloc |
 +---------------------------+---------------+

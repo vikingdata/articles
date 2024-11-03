@@ -139,7 +139,7 @@ Use top to show swap. Different versions of top have different ways to do it.
     * Add SWAP
     * Order by SWAP
     * Make it the first column
-    * Press "E", not "e" to cycle through kilobytes, megabytes, gigabytes, etc
+    * Press "E", not "e" to cycle through kilobytes, megabytes, gigbaytes, etc
 * Press <shift> w to save the format.
 * Execute
 ```
@@ -151,7 +151,7 @@ top -b -n 1 | egrep "^[a-za-Z\%]|mysqld|SWAP" /tmp/top_swap.log
 
 ```
 
-The output of top should look like this. I switched it to gigabytes. 
+The output of top should look like this. I swtiched it to gigabytes. 
 ```
 top - 18:15:10 up 4 days, 23:01,  2 users,  load average: 0.00, 0.00, 0.00
 Tasks: 193 total,   1 running, 191 sleeping,   1 stopped,   0 zombie
@@ -167,9 +167,9 @@ GiB Swap:      2.6 total,      1.9 free,      0.8 used.      2.9 avail Mem
 * https://dev.mysql.com/doc/refman/8.4/en/performance-schema-setup-instruments-table.html
 
 You can setup instruments to monitor mysql memory, but I am interested in memory right not.
-I use graphing or other monitoring to view memory and swap usage. 
+I use graphana or other monitoring to view memory and swap usage. 
 
-* Check which instruments are enabled.
+* Check which instruements are enabled.
 ```
   -- if an instrument is not enabled, set it to enabled. 
 SELECT * FROM performance_schema.setup_instruments WHERE NAME LIKE '%memory%';
@@ -296,7 +296,7 @@ It seems MySQL and Linux is a little off, but with large systems it is probably 
 
 I guess if swap is heavily used, use the summary table by event_name to see what is eating up the memory. 
 
-### Show InnoDB Status
+### Show innodb Status
 output of memory sections
 ```
 ----------------------

@@ -137,7 +137,7 @@ Use top to show swap. Different versions of top have different ways to do it.
     * Add SWAP
     * Order by SWAP
     * Make it the first column
-    * Press "E" to cycle through kilobytes, megabytes, gigbaytes, etc
+    * Press "E", not "e" to cycle through kilobytes, megabytes, gigbaytes, etc
 * Press <shift> w to save the format.
 * Execute
 ```
@@ -167,7 +167,94 @@ GiB Swap:      2.6 total,      1.9 free,      0.8 used.      2.9 avail Mem
 You can setup instruments to monitor mysql memory, but I am interested in memory right not.
 I use graphana or other monitoring to view memory and swap usage. 
 
+* Check which instruements are enabled.
+```
+  -- if an instrument is not enabled, set it to enabled. 
+SELECT * FROM performance_schema.setup_instruments WHERE NAME LIKE '%memory%';
+```
 
+* See the memory by event, and the summary for current values. 
+```
+mysql> select event_name,current_alloc from sys.memory_global_by_current_bytes limit 10;
++-----------------------------------------------------------------------------+---------------+
+| event_name                                                                  | current_alloc |
++-----------------------------------------------------------------------------+---------------+
+| memory/innodb/buf_buf_pool                                                  | 130.88 MiB    |
+| memory/performance_schema/events_statements_summary_by_digest               | 40.28 MiB     |
+| memory/innodb/ut0link_buf                                                   | 24.00 MiB     |
+| memory/innodb/log_buffer_memory                                             | 16.00 MiB     |
+| memory/performance_schema/events_statements_history_long                    | 14.42 MiB     |
+| memory/sql/TABLE                                                            | 13.80 MiB     |
+| memory/performance_schema/events_errors_summary_by_thread_by_error          | 13.24 MiB     |
+| memory/performance_schema/events_statements_summary_by_thread_by_event_name | 11.97 MiB     |
+| memory/performance_schema/events_statements_summary_by_digest.digest_text   | 9.77 MiB      |
+| memory/performance_schema/events_statements_history_long.sql_text           | 9.77 MiB      |
++-----------------------------------------------------------------------------+---------------+
+10 rows in set (0.00 sec)
+
+mysql>
+mysql> select format_bytes(sum(current_alloc)) from sys.x$memory_global_by_current_bytes;
++----------------------------------+
+| format_bytes(sum(current_alloc)) |
++----------------------------------+
+| 468.69 MiB                       |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
+```
+
+See hot it compared to ps and top
+```
+  ## From /proc
+for file in /proc/*/status ; do
+  awk '/VmSwap|Name/{printf $2 " " $3}END{ print ""}' $file;
+done | grep mysqld | awk '{print "SWap Usage: " $1 " " $2 " kb " int($2/1024) " mb " int($2/(1014*1024)) " gb"}';
+
+#  SWap Usage: mysqld 331520 kb 323 mb 0 gb
+
+  ## from top
+#  SWAP  %CPU     PID USER      PR  NI    VIRT    RES    SHR S  %MEM     TIME+ COMMAND
+# 331520   0.7   10141 mysql     20   0 1371204 224868  18304 S   5.6  78:11.02 mysqld
+let top_mem=331520+224868
+echo $top_mem
+
+# output : 556388 kb
+
+  # Calculate non swapmemory used from ps and free. including swap
+
+nonswap=`free -m | egrep "Mem:" | sed -e 's/  */ /g' | cut -d ' ' -f2`
+per=`ps -eo pmem,command | grep mysqld | grep -v grep |  head -n 1 |cut -d ' ' -f2`
+echo "non-swap memory used by mysql $nonswap*$per/100 = `echo "$nonswap*$per/100" | bc`"
+
+# output
+# non-swap memory used by mysql 3916*5.6/100 = 219
+
+  ## From /proc, non-swap memory
+for file in /proc/*/status ; do
+  awk '/VmRSS|Name/{printf $2 " " $3}END{ print ""}' $file;
+done | grep mysqld | awk '{print "Resident memory: " $1 " " $2 " kb " int($2/1024) " mb " int($2/(1014*1024)) " gb"}';
+
+# output : Resident memory: mysqld 224868 kb 219 mb 0 gb
+
+```
+* Summary swap
+  * top   331 MiB
+  * proc  331 MiB
+
+* Summary total memory
+    * MySQL 468 MiB
+    * top   556 MiB
+
+* Summary non-swap memory
+    * top         224 MiB
+    * ps + free   219 MiB
+    * proc        224 MiB
+
+# Let's take 224 Mib + 331 Mib = 575 Mib.
+
+It seems MySQL and Linux is a little off, but with large systems it is probably the same. 
+ 
 ### Show innodb Status
 output of memory sections
 ```

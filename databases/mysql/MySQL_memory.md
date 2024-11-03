@@ -290,7 +290,7 @@ done | grep mysqld | awk '{print "Resident memory: " $1 " " $2 " kb " int($2/102
     * ps + free   219 MiB
     * proc        224 MiB
 
-# Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
+*  Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
 
 It seems MySQL and Linux is a little off, but with large systems it is probably closer to the same.
 

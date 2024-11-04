@@ -16,6 +16,9 @@ This is for MySQL 8. MySQL 5.7 has different tables and columns. Did not check 8
 I find no document about how to handle memory satisfactory. This is mostly Linux and can be used for any application
 but there are some specific MySQL queries and configurations. 
 
+I recommend all of it, but really, upgrade to 8.0, see what the mysql instruments in MySQL Memory Monitoring says, and
+compare it to the other MySQL and Linux commands. The issue is, how is MySQL using memory and swap. What is taking
+up MySQL memory. 
 
 1. [Links](#links)
 3. [Mysql](#mysql)
@@ -99,10 +102,11 @@ from performance_schema.threads
 ;
 
 ```
+* * *
+<a name=linux></a>Linux
+-----
 
-### Linux Commands
 
-These queries and techniques are to get information about the system and mysql.
 
 #### Free -- see how much swap is being used. 
 Get the total memory and swap usage.

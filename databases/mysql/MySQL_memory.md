@@ -21,10 +21,10 @@ compare it to the other MySQL and Linux commands. The issue is, how is MySQL usi
 up MySQL memory. 
 
 1. [Links](#links)
-3. [Mysql](#mysql)
-4. [linux](#linux)
-5. [MySQL Memory Monitoring](#memory)
-6. [Show Innodb Status](#si)
+2. [Mysql](#mysql)
+3. [linux](#linux)
+4. [MySQL Memory Monitoring](#memory)
+5. [Show Innodb Status](#si)
 
 * * *
 <a name=links></a>Links
@@ -196,7 +196,7 @@ GiB Swap:      2.6 total,      1.9 free,      0.8 used.      2.9 avail Mem
 * https://dev.mysql.com/doc/refman/8.4/en/monitor-mysql-memory-use.html
 * https://dev.mysql.com/doc/refman/8.4/en/performance-schema-setup-instruments-table.html
 
-You can setup instruments to monitor mysql memory, but I am interested in memory right not.
+You can setup instruments to monitor mysql memory, but I am interested in memory right now.
 I use graphing or other monitoring to view memory and swap usage. 
 
 * Check which instruments are enabled.
@@ -331,7 +331,7 @@ I guess if swap is heavily used, use the summary table by event_name to see what
 -----
 
 
-output of memory sections of "show engine innodb status".
+output of memory section of "show engine innodb status".
 ```
 ----------------------
 BUFFER POOL AND MEMORY

@@ -100,14 +100,13 @@ from performance_schema.threads
 
 ```
 
-```
 ### Linux Commands
 
 These queries and techniques are to get information about the system and mysql.
 
 #### Free -- see how much swap is being used. 
+Get the total memory and swap usage.
 ```
-  # Get the total memory and swap usage. 
 free -h
 ```
 

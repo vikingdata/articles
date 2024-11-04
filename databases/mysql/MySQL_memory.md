@@ -143,7 +143,7 @@ done | grep mysqld | awk '{print "SWap Usage: " $1 " " $2 " kb " int($2/1024) " 
 
 ```
 
-#### vmstat -- see the acitivty on swap
+#### vmstat -- see the activity on swap
 ```
   # See swap activity
 vmstat 1 5
@@ -327,11 +327,11 @@ It seems MySQL and Linux is a little off, but with large systems it is probably 
 I guess if swap is heavily used, use the summary table by event_name to see what is eating up the memory. 
 
 * * *
-<a name=is></a>Show innodb status
+<a name=si></a>Show innodb status
 -----
 
 
-output of memory sections of "show enging innodb status".
+output of memory sections of "show engine innodb status".
 ```
 ----------------------
 BUFFER POOL AND MEMORY

@@ -29,22 +29,26 @@ The goal is to make this usable under a VPN in Windows.
 	* 25 gig hard drive
 	* user: mark, password: mark
 	* 1 cpu
-	* Ubuntu 24.10 image
+	* Ubuntu 20.04 image
 	* Name : Ubuntu-Base
 * In Virtual Box
     * With Linux running. select  "Devices" and then "Insert Guest Additions cd Image"
 * Start Linux
     * open a shell or terminal
-    * sudo to root with : sudo bash
-    * execute : apt-get install bzip2 gcc make
+    * sudo to root with :
+       * sudo bash
+       * or: su -l root
+    * execute : apt-get -y install bzip2 gcc make curl
     * df -h | grep media
     * The directory should look something like : /media/mark/VBox_GAs_7.1.2
     * Execute : /media/mark/VBox_GAs_7.1.2/VBoxLinuxAdditions.run
 * First things in  VirtualBox
     * Start Ubuntu-Base
     * Change setting:
-        * Network should be NAT the default. With multiple installations where you want them to see each other Bridged
-	Updater is better but I have not figured out how to get network settings to work when Windows is logged in
+        * Network should be NAT the default.
+	With multiple installations where you want them to see each
+	other Bridged Adapter is better but I have not figured out
+	how to get network settings to work when Windows is logged in
 	through VPN. 
 	* Under Devices
 	    * Shared Folders :
@@ -52,19 +56,24 @@ The goal is to make this usable under a VPN in Windows.
 	       * On Linux mount it as : /shared
 	    * Shared Clipboard : Bidirectional
 	    * Drag and Drop : Bidirectional
+* Restart the linux installation in VirtualBox.
+    * Relogin
+    * Open up a shell or terminal
+    * su -l root
+    * NOTE: You should be able to copy and paste command, drag and drop,
+    and used the shared directory. 
 * First things in Ubuntu.
     * Login with your username and password you used for install.
     * Start a terminal or shell
-    * Execute "sudo bash" and it will ask for a password. Use the same password.
-    * Execute: apt-get install ssh emacs net-tools
+    * Execute "sudo bash" and it will ask for a password. Use the same password. If sudo doesn't work try: su -l root
     * Execute commands as below
 ```
   # Login as root, supply password
 su -l root
 
   # Install some packages. 
-apt-get -y  install emacs net-tools ssh screen tmux nmap 
-apt-get install bind9-dnsutils
+apt-get -y install emacs net-tools ssh screen tmux nmap 
+apt-get -y install bind9-dnsutils net-tools ssh
 
   # Make it so we can sudo, or become root without a password. 
   # Change your username if if isn't 'mark'. 
@@ -80,6 +89,14 @@ exit
 sudo bash
   ## Now you should be root. 
 
+```
+
+In VirtualBox screen change:
+  * Devices -> Network -> Network Settings
+      * Adapter 1 -> Attched to -> Bridged Adapter.
+  * if the next command doesn't work, you might have to restart Linux. 
+  * Then get the ip address.
+```
   ## Get the ip address
 ifconfig | grep inet | grep 192 | sed -e 's/  */ /g' | cut -f3 -d ' '
   # Output should be something like 192.168.0.54
@@ -100,4 +117,3 @@ ssh 192.168.0.54 -l mark
         * Select the destination: c:\shared\UbuntuBase.ova
 	* Select : Strip all network adapter MAC addresses
     * You can use this image to create clones. 
- 

@@ -26,7 +26,9 @@ Original Copyright November 2024**_
 -----
 
 In Linux
-echo ```
+
+```
+echo "
 create user reload@localhost identified by 'reload';
 grant  all privileges on *.*     to   reload@localhost;
 revoke all privileges on mysql.* from reload@localhost;
@@ -61,9 +63,11 @@ insert into table_innodb1 values (@s);
 
 analyze table table_innodb1;
 analyze table table_innodb2;
-``` > setup.sql
+" > setup.sql
+```
 
 In linux
+```
 ```
 echo "
 [mysql]
@@ -71,6 +75,7 @@ user=reload
 password=reload
 
 " > ~/.my.cnf_reload
+```
 
 ```
 
@@ -78,6 +83,7 @@ password=reload
 <a name=free></a>Select tables with a certain amount of  Free Space
 -----
 
+```
 echo "
 select table_schema as db, table_name as tbl, engine, data_free, DATA_LENGTH, table_rows
 from information_schema.tables
@@ -87,12 +93,13 @@ where table_type = 'BASE TABLE' and table_schema not in
   and data_free > 1024*1024
   order by data_free desc;
 " > select_innodb_tables_free.sql
-
+```
 
 * * *
 <a name=all></a>Select all innodb tables
 -----
 
+```
 echo "
 select table_schema as db, table_name as tbl, engine, data_free 
 from information_schema.tables
@@ -100,6 +107,7 @@ where table_type = 'BASE TABLE' and table_schema not in
   ('mysql', 'performance_schema', 'information_schema', 'sys')
   and engine = 'InnoDB' order by data_free desc;
 " > select_innodb_tables.sql
+```
 
 * * *
 <a name=free></a>Calculate free space

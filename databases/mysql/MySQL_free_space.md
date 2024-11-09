@@ -169,6 +169,7 @@ awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list2.txt > reload
 echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload1.sql
 echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload2.sql
 
+clear
 mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
 sleep 1
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
@@ -178,7 +179,7 @@ echo "data_free should empty in innodb_table1 and innodb_table2"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 
 
-
+clear
 mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
 sleep 1
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 

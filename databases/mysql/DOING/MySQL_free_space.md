@@ -14,7 +14,13 @@ Original Copyright November 2024**_
 
 
 1. [Links](#links)
-
+2. [Setup MySQL password and tables](#setup)
+3. [Select tables with a certain amount of Free Space](#free)
+4. [Select all innodb tables](#all)
+5. [Calculate free space](#calc)
+6. [Get status of innodb tables free space](#status)
+7. [Clear Free space from tables with one-file-per-table](#clear)
+8. [Monitor](#monitor)
 * * *
 <a name=links></a>Links
 -----
@@ -117,7 +123,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 ```
 
 * * *
-<a name=free></a>Calculate free space
+<a name=calc></a>Calculate free space
 -----
 
 In MySQL
@@ -188,4 +194,21 @@ mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"
 * * *
 <a name=monitor></a>Monitor
 -----
+
+When you do this to prod tables
+   * Strt screen
+   * In one window, monitor with the linux commands below
+   * In another window reload our tables.
+   
+```
+DB_DIR="/var/lib/mysql"
+
+while sleep 10; do
+  clear;
+  mysql --defaults-file=~/.my.cnf_root -e "show processlist"| grep -vi sleep | grep -vi "system user" | grep -v "show processlist";
+  echo "";
+  df -h  $DB_DIR
+done
+
+```
 

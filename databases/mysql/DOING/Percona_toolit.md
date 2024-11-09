@@ -34,11 +34,39 @@ These are the most tool I use from Percona Toolkit.
 pt-online-schema-change as very little locks and can be ran on live system. If it locks, there is a 60 secoond timeout
 byt default.
 
+
 * * *
-<a name=online></a>pt-online-schema-change
+<a name=online></a>pt-query-digest
 -----
-pt-online-schema-change as very little locks and can be ran on live system. If it locks, there is a 60 secoond timeout
-byt default.
+
+* Convert to normal mysql
+
+* Other query programs with mysql
+* From dad
+
+
+
+* * *
+<a name=backup></a>Percona XtraBackup
+-----
+* Normal
+* Compressed
+* Restore
+* Remote from source
+* remote from destnation
+* NFS
+
+* * *
+<a name=sync></a>Checksum and Sync
+-----
+* Normal
+* Certain slaves
+* Certain
+* Certain tables
+
+* * *
+<a name=grants></a>Show grants
+-----
 
 
 

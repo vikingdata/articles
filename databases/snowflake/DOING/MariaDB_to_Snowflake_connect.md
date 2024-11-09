@@ -72,3 +72,72 @@ mysql_secure_installation
 <a name=dbt></a>DBT MariaDB
 -----
 * https://docs.getdbt.com/docs/core/connect-data-platform/mysql-setup
+
+### Create account
+
+First, setup the account. We will use root as the mariadb username and password.
+Since we are using VirtualBox, outside connections can't connect to MariaDB, and
+root can only login locally. Still, use a different complicated password for root.
+
+Login as root first : mysql -u root -proot
+* Change your password for root and the account we will use for DBT. 
+```
+drop user if exists dbt@localhost;
+create user if not exists dbt@localhost identified by 'dbt';
+grant all privileges on dbt.* to dbt@localhost;
+grant select on data.* to dbt@localhost;
+
+create database if not exists dbt;
+create database if not exists data;
+
+show grants for dbt@localhost;
+show databases like 'd%';
+
+use data
+create table account (account_id int not null auto_increment, name varchar(64), primary key (account_id));
+create table sales (account_id int, amount int, index (account_id, amount));
+
+truncate account;
+truncate sales;
+insert into account (name) values ('mark'),('john');
+insert into sales values  (1,1),(1,5),(1,10),(2,3),(2,20),(2,40),(2,50);
+
+```
+
+### Install DBT
+
+Follow just the installation part of
+* https://github.com/vikingdata/articles/blob/main/databases/etl_elt/dbt/simple_dbt_postgresql_snowflake.md
+* https://docs.getdbt.com/docs/core/installation-overview
+
+### Setup DBT
+
+
+```
+echo "
+default:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      server: localhost
+      port: 3306
+      schema: data
+      username: dbt
+      password: dbt
+      ssl_disabled: True
+" > profiles/profiles.yml
+
+wget https://github.com/dbt-labs/dbt-starter-project/archive/refs/heads/main.zip
+unzip main.zip
+
+mkdir -p dbt-mariabdb_snowflake
+mv dbt-starter-project-main dbt-mariadb_snowflake
+
+cd dbt-mariabd_snowflake
+mkdir logs
+mkdir dbt_packages
+mkdir profiles
+
+
+```

@@ -75,3 +75,7 @@ roles -- mysql, cockroachdb, postgresql, snoflake
 
 snowflake -- data masking and encryption
 
+snowflake -- monitoring, efficient queries, optimizing
+  rep
+  odbc
+  mariadb + dbt + odbc to snowflake

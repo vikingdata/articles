@@ -120,6 +120,21 @@ Finish
 
 
 incorrect views
-memory -- threads, instruments, and show innodb status -- resident
+DONE memory -- threads, instruments, and show innodb status -- resident
   compare free -h and top to innodo status
   why does redident get bigger?
+DONE locks
+percona tools
+   diget
+   checksum + sync
+   backup -- incluiong remote backup and restore. 
+   others
+
+ansible -- mysql install, clusterset, gakera cluster
+
+rundecl , openstack,
+
+
+graphana
+	promethesus + mysqld_exporter
+	telegraph

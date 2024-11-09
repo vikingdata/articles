@@ -16,15 +16,11 @@ This is for MySQL 8. MySQL 5.7 has different tables and columns. Did not check 8
 I find no document about how to handle memory satisfactory. This is mostly Linux and can be used for any application
 but there are some specific MySQL queries and configurations. 
 
-I recommend all of it, but really, upgrade to 8.0, see what the mysql instruments in MySQL Memory Monitoring says, and
-compare it to the other MySQL and Linux commands. The issue is, how is MySQL using memory and swap. What is taking
-up MySQL memory. 
 
 1. [Links](#links)
-3. [Mysql](#mysql)
-4. [linux](#linux)
-5. [MySQL Memory Monitoring](#memory)
-6. [Show Innodb Status](#si)
+2. [Queries](#queries)
+3. [Setup](#setup)
+4. [Output](#output)
 
 * * *
 <a name=links></a>Links
@@ -39,7 +35,7 @@ up MySQL memory.
 * https://lefred.be/content/mysql-and-memory-a-love-story-part-2/
 
 * * *
-<a name=mySQL></a>MySQL
+<a name=queries></a>Queries
 -----
 Maximum about of memory used. Note: This doesn't include memory leaks. I have found this equation not to be true if
 there is a bug. 
@@ -48,7 +44,6 @@ there is a bug.
 
 ```
 
-#### MySQL maximum memory
   -- Maximum amount of memory in theory. 
 SELECT ( 
 -- Uncomment if you have query cache
@@ -76,10 +71,8 @@ select processlist_id as id,
 from performance_schema.threads
 where processlist_id is not null
   and processlist_info is not null limit 1;
-```
 
-#### MySQL memory by threads. 8.0 or higher
-```
+
   -- sum memory by all threads MySQL 8 and higher only (maybe 5.7 also)
   -- https://dev.mysql.com/doc/refman/8.4/en/performance-schema-threads-table.html
   -- total memory is current amount of memory used.
@@ -101,22 +94,17 @@ select
 from performance_schema.threads
 ;
 
+
+
 ```
-* * *
-<a name=linux></a>Linux
------
+### Linux Commands
 
+These queries and techniques are to get information about the system and mysql.
 
-
-#### Free -- see how much swap is being used. 
-Get the total memory and swap usage.
 ```
+  # Get the total memory and swap usage. 
 free -h
-```
 
-#### 'ps' -- see how much memory is used by mysql, no swap
-
-```
   # get ps output of mysqld
 ps auxw |egrep -i "mysqld|^USER" | grep -v grep
 
@@ -124,11 +112,7 @@ ps -e -o pid,user,rss,size,share,vsize,pmem,args | egrep -i "pid user|mysqld" | 
  #output should be like
  #    PID USER       RSS  SIZE -    VSZ %MEM COMMAND
  #  10141 mysql    220644 894020 - 1371204  5.5 /usr/sbin/mysqld
-````
 
-#### Loop through every process to see how much swap is used. Find mysqld
-
-```
   # Loop through every process to see what takes up most swap
 for file in /proc/*/status ; do
   awk '/VmSwap|Name/{printf $2 " " $3}END{ print ""}' $file;
@@ -141,20 +125,12 @@ done | grep mysqld | awk '{print "SWap Usage: " $1 " " $2 " kb " int($2/1024) " 
 
 # output should look like: SWap Usage: mysqld 334848 kb 327 mb 0 gb
 
-```
-
-#### vmstat -- see the acitivty on swap
-```
   # See swap activity
 vmstat 1 5
-```
-#### proc/meminfo -- maybe you can get some useful info out of it. 
 
-```
-#### /proc/meminfo
 cat /proc/meminfo
-```
 
+```
 ### TOP
 
 Use top to show swap. Different versions of top have different ways to do it.
@@ -165,7 +141,7 @@ Use top to show swap. Different versions of top have different ways to do it.
     * Add SWAP
     * Order by SWAP
     * Make it the first column
-    * Press "E", not "e" to cycle through kilobytes, megabytes, gigabytes, etc
+    * Press "E", not "e" to cycle through kilobytes, megabytes, gigbaytes, etc
 * Press <shift> w to save the format.
 * Execute
 ```
@@ -177,7 +153,7 @@ top -b -n 1 | egrep "^[a-za-Z\%]|mysqld|SWAP" /tmp/top_swap.log
 
 ```
 
-The output of top should look like this. I switched it to gigabytes. 
+The output of top should look like this. I swtiched it to gigabytes. 
 ```
 top - 18:15:10 up 4 days, 23:01,  2 users,  load average: 0.00, 0.00, 0.00
 Tasks: 193 total,   1 running, 191 sleeping,   1 stopped,   0 zombie
@@ -188,18 +164,14 @@ GiB Swap:      2.6 total,      1.9 free,      0.8 used.      2.9 avail Mem
   0.3g   0.0   10141 mysql     20   0    1.3g   0.2g   0.0g S   5.5  76:33.04 mysqld
 ```
 
-* * *
-<a name=memory></a>MySQL memory monitoring
------
-
- Memory monitoring -- I believe 5.7 or 8.0 and later. 
+### Memory monitoring -- I believe 5.7 or 8.0 and later. 
 * https://dev.mysql.com/doc/refman/8.4/en/monitor-mysql-memory-use.html
 * https://dev.mysql.com/doc/refman/8.4/en/performance-schema-setup-instruments-table.html
 
 You can setup instruments to monitor mysql memory, but I am interested in memory right not.
-I use graphing or other monitoring to view memory and swap usage. 
+I use graphana or other monitoring to view memory and swap usage. 
 
-* Check which instruments are enabled.
+* Check which instruements are enabled.
 ```
   -- if an instrument is not enabled, set it to enabled. 
 SELECT * FROM performance_schema.setup_instruments WHERE NAME LIKE '%memory%';
@@ -248,10 +220,10 @@ mysql> select * from memory_global_total;
  -- This is grouped by event_name, which may be helpful. 
 
 mysql> SELECT SUBSTRING_INDEX(event_name,'/',2) AS code_area,
-            sys.format_bytes(SUM(current_alloc)) AS current_alloc
-     FROM sys.x$memory_global_by_current_bytes
-     GROUP BY SUBSTRING_INDEX(event_name,'/',2)
-     ORDER BY SUM(current_alloc) DESC;
+    ->        sys.format_bytes(SUM(current_alloc)) AS current_alloc
+    -> FROM sys.x$memory_global_by_current_bytes
+    -> GROUP BY SUBSTRING_INDEX(event_name,'/',2)
+    -> ORDER BY SUM(current_alloc) DESC;
 +---------------------------+---------------+
 | code_area                 | current_alloc |
 +---------------------------+---------------+
@@ -320,18 +292,14 @@ done | grep mysqld | awk '{print "Resident memory: " $1 " " $2 " kb " int($2/102
     * ps + free   219 MiB
     * proc        224 MiB
 
-*  Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
+# Let's take 224 Mib + 331 Mib = 575 Mib which is close to top.
 
 It seems MySQL and Linux is a little off, but with large systems it is probably closer to the same.
 
 I guess if swap is heavily used, use the summary table by event_name to see what is eating up the memory. 
 
-* * *
-<a name=si></a>Show innodb status
------
-
-
-output of memory sections of "show enging innodb status".
+### Show innodb Status
+output of memory sections
 ```
 ----------------------
 BUFFER POOL AND MEMORY

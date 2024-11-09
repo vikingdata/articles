@@ -1,10 +1,10 @@
 ---
-title : Easy Loading CSV with SnowflakeUsing Python
+title : Easy Loading CSV with Snowflake Using Python
 author : Mark Nielsen
-copyright : copyright Sept, 2023
+copyright : copyright Jan, 2022
 ---
 
-Easy Loading CSV with SnowflakeUsing Python
+Easy Loading CSV with Snowflake Using Python
 ==============================
 
 _**by Mark Nielsen

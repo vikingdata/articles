@@ -139,7 +139,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 ```
 
 * * *
-<a name=status</a>Get status of innodb tables free space
+<a name=status></a>Get status of innodb tables free space
 -----
 
 ```

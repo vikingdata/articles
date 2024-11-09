@@ -68,14 +68,12 @@ analyze table table_innodb2;
 
 In linux
 ```
-```
 echo "
 [mysql]
 user=reload
 password=reload
 
 " > ~/.my.cnf_reload
-```
 
 ```
 

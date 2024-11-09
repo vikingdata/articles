@@ -59,7 +59,7 @@ insert into table_myisam1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s),
 delete from table_innodb1;
 insert into table_innodb1 values (@s), (@s), (@s);
 delete from table_innodb2;
-insert into table_innodb1 values (@s);
+insert into table_innodb2 values (@s);
 
 analyze table table_innodb1;
 analyze table table_innodb2;
@@ -99,7 +99,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 
 ```
 echo "
-select table_schema as db, table_name as tbl, engine, data_free 
+select table_schema as db, table_name as tbl, engine, data_free, DATA_LENGTH, table_rows 
 from information_schema.tables
 where table_type = 'BASE TABLE' and table_schema not in
   ('mysql', 'performance_schema', 'information_schema', 'sys')

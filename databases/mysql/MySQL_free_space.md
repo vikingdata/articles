@@ -13,7 +13,8 @@ _**by Mark Nielsen
 Original Copyright November 2024**_
 
 If MySQL has one-file-per-table enabled, this is a simple way to reclaim diskspace.
-It makes a temporary lock, so its good to monitor the process. 
+It makes a temporary lock, so its good to monitor the process. Sometimes table statistics don't get updated right away,
+so the calculations may not reflect was is really in the tables.
 
 1. [Links](#links)
 2. [Setup MySQL password and tables](#setup)

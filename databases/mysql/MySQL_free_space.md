@@ -181,10 +181,10 @@ mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"
 
 clear
 mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
-sleep 1
+sleep 2
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 mysql --defaults-file=~/.my.cnf_reload -e "source reload2.sql" reload_test > /dev/null
-sleep 1
+sleep 2
 echo "data_free should empty in innodb_table1"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"  
 

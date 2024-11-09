@@ -12,6 +12,8 @@ MySQL Free Space
 _**by Mark Nielsen
 Original Copyright November 2024**_
 
+If MySQL has one-file-per-table enabled, this is a simple way to reclaim diskspace.
+It makes a temporary lock, so its good to monitor the process. 
 
 1. [Links](#links)
 2. [Setup MySQL password and tables](#setup)
@@ -158,33 +160,37 @@ mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql"
 * * *
 <a name=clear></a>Clear Free space from tables with one-file-per-table
 -----
- In MySQL
+ In MySQL -- NOTE : sometimes the table statistics don't update fast enough and data_free is not updated. 
 
 ```
+mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
+sleep 2
 mysql --defaults-file=~/.my.cnf_reload -N -e "source select_innodb_tables.sql" > table_list1.txt
 mysql --defaults-file=~/.my.cnf_reload -N -e "source select_innodb_tables_free.sql" > table_list2.txt
 
-awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list1.txt > reload1.sql
-awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list2.txt > reload2.sql
+echo "set lock_wait_timeout = 20;" > reload1.sql
+echo "set lock_wait_timeout = 20;" > reload2.sql
+awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list1.txt >> reload1.sql
+awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list2.txt >> reload2.sql
 echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload1.sql
 echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload2.sql
 
 clear
 mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
-sleep 2
+sleep 3
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 mysql --defaults-file=~/.my.cnf_reload -e "source reload1.sql" reload_test > /dev/null
-sleep 2
+sleep 3
 echo "data_free should empty in innodb_table1 and innodb_table2"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 
 
 clear
 mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
-sleep 2
+sleep 3
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 mysql --defaults-file=~/.my.cnf_reload -e "source reload2.sql" reload_test > /dev/null
-sleep 2
+sleep 3
 echo "data_free should empty in innodb_table1"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"  
 
@@ -207,11 +213,10 @@ data_free should empty in innodb_table1 and innodb_table2
 | reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
 +-------------+---------------+--------+-----------+-------------+------------+
 
-
 +-------------+---------------+--------+-----------+-------------+------------+
 | db          | tbl           | ENGINE | DATA_FREE | DATA_LENGTH | TABLE_ROWS |
 +-------------+---------------+--------+-----------+-------------+------------+
-| reload_test | table_innodb1 | InnoDB |  51380224 |    55607296 |          3 |
+| reload_test | table_innodb1 | InnoDB |  51380224 |     4210688 |          3 |
 | reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
 +-------------+---------------+--------+-----------+-------------+------------+
 data_free should empty in innodb_table1
@@ -221,6 +226,7 @@ data_free should empty in innodb_table1
 | reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
 | reload_test | table_innodb1 | InnoDB |         0 |     3670016 |          3 |
 +-------------+---------------+--------+-----------+-------------+------------+
+
 
 
 

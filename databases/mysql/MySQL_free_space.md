@@ -12,7 +12,7 @@ MySQL Free Space
 _**by Mark Nielsen
 Original Copyright November 2024**_
 
-If MySQL has one-file-per-table enabled, this is a simple way to reclaim diskspace.
+If MySQL has innodb_file_per_table enabled, this is a simple way to reclaim diskspace.
 It makes a temporary lock, so its good to monitor the process. Sometimes table statistics don't get updated right away,
 so the calculations may not reflect was is really in the tables.
 
@@ -22,7 +22,7 @@ so the calculations may not reflect was is really in the tables.
 4. [Select all innodb tables](#all)
 5. [Calculate free space](#calc)
 6. [Get status of innodb tables free space](#status)
-7. [Clear Free space from tables with one-file-per-table](#clear)
+7. [Clear Free space from tables with innodb_file_per_table](#clear)
 8. [Monitor](#monitor)
 * * *
 <a name=links></a>Links
@@ -159,7 +159,7 @@ mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql"
 
 
 * * *
-<a name=clear></a>Clear Free space from tables with one-file-per-table
+<a name=clear></a>Clear Free space from tables with innodb_file_per_table
 -----
  In MySQL -- NOTE : sometimes the table statistics don't update fast enough and data_free is not updated. If your results
  don't look similar, run it again. 

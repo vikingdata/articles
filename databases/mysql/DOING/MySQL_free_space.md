@@ -29,6 +29,7 @@ In Linux
 
 ```
 echo "
+drop user if exists reload@localhost;
 create user reload@localhost identified by 'reload';
 grant  all privileges on *.*     to   reload@localhost;
 revoke all privileges on mysql.* from reload@localhost;

@@ -188,6 +188,40 @@ sleep 1
 echo "data_free should empty in innodb_table1"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"  
 
+```
+
+Output
+```
+
++-------------+---------------+--------+-----------+-------------+------------+
+| db          | tbl           | ENGINE | DATA_FREE | DATA_LENGTH | TABLE_ROWS |
++-------------+---------------+--------+-----------+-------------+------------+
+| reload_test | table_innodb1 | InnoDB |  51380224 |    55607296 |          3 |
+| reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
++-------------+---------------+--------+-----------+-------------+------------+
+data_free should empty in innodb_table1 and innodb_table2
++-------------+---------------+--------+-----------+-------------+------------+
+| db          | tbl           | ENGINE | DATA_FREE | DATA_LENGTH | TABLE_ROWS |
++-------------+---------------+--------+-----------+-------------+------------+
+| reload_test | table_innodb1 | InnoDB |  51380224 |    55607296 |          3 |
+| reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
++-------------+---------------+--------+-----------+-------------+------------+
+
+
++-------------+---------------+--------+-----------+-------------+------------+
+| db          | tbl           | ENGINE | DATA_FREE | DATA_LENGTH | TABLE_ROWS |
++-------------+---------------+--------+-----------+-------------+------------+
+| reload_test | table_innodb1 | InnoDB |         0 |    55607296 |          3 |
+| reload_test | table_innodb2 | InnoDB |         0 |     4734976 |          1 |
++-------------+---------------+--------+-----------+-------------+------------+
+data_free should empty in innodb_table1
++-------------+---------------+--------+-----------+-------------+------------+
+| db          | tbl           | ENGINE | DATA_FREE | DATA_LENGTH | TABLE_ROWS |
++-------------+---------------+--------+-----------+-------------+------------+
+| reload_test | table_innodb2 | InnoDB |   1048576 |     2113536 |          1 |
+| reload_test | table_innodb1 | InnoDB |         0 |     3670016 |          3 |
++-------------+---------------+--------+-----------+-------------+------------+
+
 
 ```
 

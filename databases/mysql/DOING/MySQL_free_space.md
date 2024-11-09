@@ -54,7 +54,7 @@ insert into table_innodb1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s),
 insert into table_innodb1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s);
 insert into table_innodb1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s);
 insert into table_innodb1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s);
-insert into table_innodb2 values (@s), (@s);
+insert into table_innodb2 values (@s), (@s), (@s);
 insert into table_myisam1 values (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s), (@s);
 
 delete from table_innodb1;
@@ -135,7 +135,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 -----
 
 ```
-mysql --defaults-file=~/.my.cnf_reload -e "source setup.sql"
+mysql -uroot -proot -e "source setup.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql"
 ```
@@ -158,7 +158,7 @@ mysql --defaults-file=~/.my.cnf_reload -e "source reload1.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 
 
-mysql --defaults-file=~/.my.cnf_reload -e "source setup.sql"
+mysql -uroot -proot -e "source setup.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 mysql --defaults-file=~/.my.cnf_reload -e "source reload2.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"  

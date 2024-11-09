@@ -32,7 +32,7 @@ echo "
 drop user if exists reload@localhost;
 create user reload@localhost identified by 'reload';
 grant  all privileges on *.*     to   reload@localhost;
-revoke all privileges on mysql.* from reload@localhost;
+revoke if exists all privileges on mysql.* from reload@localhost;
 grant select on mysql.* to reload@localhost;
 
 

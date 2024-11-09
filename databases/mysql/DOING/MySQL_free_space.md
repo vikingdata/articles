@@ -67,7 +67,7 @@ analyze table table_innodb2;
 " > setup.sql
 ```
 
-In linux
+In linux -- NOTE: change your root password if different. 
 ```
 echo "
 [mysql]
@@ -75,6 +75,14 @@ user=reload
 password=reload
 
 " > ~/.my.cnf_reload
+
+echo "
+[mysql]
+user=root
+password=root
+
+" > ~/.my.cnf_root
+
 
 ```
 
@@ -135,7 +143,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 -----
 
 ```
-mysql -uroot -proot -e "source setup.sql"
+mysql --defaults-file=~/.my.cnf_root   -e "source setup.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql"
 ```
@@ -147,20 +155,30 @@ mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql"
  In MySQL
 
 ```
-mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" > table_list1.txt
-mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables_free.sql" > table_list2.txt
+mysql --defaults-file=~/.my.cnf_reload -N -e "source select_innodb_tables.sql" > table_list1.txt
+mysql --defaults-file=~/.my.cnf_reload -N -e "source select_innodb_tables_free.sql" > table_list2.txt
 
-awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list1.txt >> reload1.sql
-awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list2.txt >> reload2.sql
+awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list1.txt > reload1.sql
+awk '{print "alter table "$1 "." $2 " engine=innodb;"}' table_list2.txt > reload2.sql
+echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload1.sql
+echo "analyze table table_innodb1; analyze table table_innodb2;" >> reload2.sql
 
+mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
+sleep 1
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
-mysql --defaults-file=~/.my.cnf_reload -e "source reload1.sql" 
+mysql --defaults-file=~/.my.cnf_reload -e "source reload1.sql" reload_test > /dev/null
+sleep 1
+echo "data_free should empty in innodb_table1 and innodb_table2"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
 
 
-mysql -uroot -proot -e "source setup.sql"
+
+mysql --defaults-file=~/.my.cnf_root -e "source setup.sql" > /dev/null
+sleep 1
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql" 
-mysql --defaults-file=~/.my.cnf_reload -e "source reload2.sql"
+mysql --defaults-file=~/.my.cnf_reload -e "source reload2.sql" reload_test > /dev/null
+sleep 1
+echo "data_free should empty in innodb_table1"
 mysql --defaults-file=~/.my.cnf_reload -e "source select_innodb_tables.sql"  
 
 

@@ -111,6 +111,21 @@ where table_type = 'BASE TABLE' and table_schema not in
 " > select_innodb_tables_free.sql
 ```
 
+Output
+```
+more select_innodb_tables_free.sql
+
+select table_schema as db, table_name as tbl, engine, data_free, DATA_LENGTH, table_rows
+from information_schema.tables
+where table_type = 'BASE TABLE' and table_schema not in
+    ('mysql', 'performance_schema', 'information_schema', 'sys')
+  and engine = 'InnoDB'
+  and data_free > 1024*1024
+  order by data_free desc;
+
+
+```
+
 * * *
 <a name=all></a>Select all innodb tables
 -----
@@ -125,6 +140,21 @@ where table_type = 'BASE TABLE' and table_schema not in
 " > select_innodb_tables.sql
 ```
 
+Output
+```
+ more select_innodb_tables.sql
+
+select table_schema as db, table_name as tbl, engine, data_free, DATA_LENGTH, table_rows
+from information_schema.tables
+where table_type = 'BASE TABLE' and table_schema not in
+  ('mysql', 'performance_schema', 'information_schema', 'sys')
+  and engine = 'InnoDB' order by data_free desc;
+
+
+
+```
+
+
 * * *
 <a name=calc></a>Calculate free space
 -----
@@ -132,7 +162,7 @@ where table_type = 'BASE TABLE' and table_schema not in
 In MySQL
 
 ```
-select sum(data_free) as free_space_above_1_k
+select sum(data_free) as free_space_above_1_meg
 from information_schema.tables
 where table_type = 'BASE TABLE' and table_schema not in
   ('mysql', 'performance_schema', 'information_schema', 'sys')

@@ -54,19 +54,19 @@ drop test_tables.table tbl2;
 
 echo "
 use test_views;
-select 'This select from a view will work';
+ -- This select from a view will work;
 select * from view1 limit 1;
 
-select 'This select will fail';
+-- This select will fail
 select * from view2 limit 1;
 
-select 'This show create view from view1 will work';
+ -- This show create view from view1 will work
 show create view view1;
 
-select 'This show create view from view2 will fail';
-show reate view view2;
+ -- This show create view from view2 will fail;
+show create view view2;
 
-select 'This select from information_schema will work for all';
+ -- This select from information_schema will work for all
 
 select TABLE_SCHEMA as db, TABLE_NAME as tbl, VIEW_DEFINITION, DEFINER, SECURITY_TYPE
 from information_schema.views

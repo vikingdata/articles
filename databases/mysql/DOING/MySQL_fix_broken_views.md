@@ -49,7 +49,7 @@ create view view3 as select * from test_tables.tbl3;
 
 
 echo "
-drop test_tables.table tbl2;
+drop table if exists test_tables.tbl2;
 " > drop_tbl2.sql
 
 echo "
@@ -104,3 +104,44 @@ source drop_tbl2.sql
 
 ```
 
+Output
+```
+--------------
+select * from view1 limit 1
+--------------
+
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
+--------------
+select * from view2 limit 1
+--------------
+
+ERROR 1356 (HY000): View 'test_views.view2' references invalid table(s) or column(s) or function(s) or definer
+/invoker of view lack rights to use them
+--------------
+show create view view1
+--------------
+
++-------+-----------------------------------------------------------------------------------------------------
+--------------------------------------------------------+----------------------+----------------------+
+| View  | Create View
+                                                        | character_set_client | collation_connection |
++-------+-----------------------------------------------------------------------------------------------------
+--------------------------------------------------------+----------------------+----------------------+
+| view1 | CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view1` AS select `t
+est_tables`.`tbl1`.`i` AS `i` from `test_tables`.`tbl1` | utf8mb4              | utf8mb4_0900_ai_ci   |
++-------+-----------------------------------------------------------------------------------------------------
+--------------------------------------------------------+----------------------+----------------------+
+1 row in set (0.00 sec)
+
+--------------
+show create view view2
+--------------
+
+
+```

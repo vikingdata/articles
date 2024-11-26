@@ -1,7 +1,7 @@
 
 title : Linux Dev environment on Windows Part 1
 author : Mark Nielsen
-copyright : October 2024
+copyright : November 2024
 ---
 
 
@@ -9,7 +9,7 @@ Linux Dev environment on Windows Part 1
 ==============================
 
 _**by Mark Nielsen
-Original Copyright October 2024**_
+Original Copyright November 2024**_
 
 Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.

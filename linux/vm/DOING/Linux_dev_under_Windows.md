@@ -228,16 +228,16 @@ with port forward but the host will.
 
 * Setup port forwarding in Virtual Box to Linux installation.
 * Devices -> Network -> Network Settings
-        * Adapter 1 -> Attched to -> NAT
-            * Click on Advanced and then port forwarding
-	    * Enter
-	        * Name : Rule1
-                * Protocol : TCP 
-                * Host Ip: 0.0.0.0
-                * Host Port : 2001
-                * Guest IP : 10.0.2.15
-                    * This should be the same ip address for all virtual boxes. 
-		* Guest Port : 22
+    * Adapter 1 -> Attched to -> NAT
+        * Click on Advanced and then port forwarding
+	* Enter
+	    * Name : Rule1
+            * Protocol : TCP 
+            * Host Ip: 0.0.0.0
+            * Host Port : 2001
+            * Guest IP : 10.0.2.15
+                * This should be the same ip address for all virtual boxes. 
+            * Guest Port : 22
 
 * Test ssh connection to Host which should forward to the Linux Installation
     * Test locally:

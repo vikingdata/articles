@@ -289,6 +289,6 @@ Now import the image
     * Mac Address Policy : "Generate new"
     * click Finish
 
-* Start the instance as start with port 2001 with the port forward and
+* Start the instance as start with port 2001 with port forward and
 firewall
     * Described in [Change back to NAT](#nat2).

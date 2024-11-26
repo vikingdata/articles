@@ -159,7 +159,6 @@ sudo bash
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings
     * Adapter 1 -> Attched to -> Host Only Adapter .
-* Install whatever else you want for your base install.
 * In a shell in the virtual host
 ```
  ## Get the ip address
@@ -201,10 +200,46 @@ ssh 192.168.56.104 -l root "echo 'login as root with ssh is okay'"
 <a name=nat2></a>Change back to NAT. 
 -----
 
-* Change back to NAT
-* Setup port forward
-* Test ssh login to root without password but with authorized hosts. 
+In VirtualBox screen change:
+* Devices -> Network -> Network Settings
+    * Adapter 1 -> Attched to -> NAT
 
+* First, if we want several virtual boxes to comunicate to each other,
+you must use the external ip address of the host server. You can use
+the loopback, but then the virtual hosts will not be able to see each other
+with port forward but the host will. 
+
+* Setup firewall
+    * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+    * In Windows, type in firewall in he search field and select "Firewall Netowrk and Protection.
+    * Click on Inbound rules, and select New.
+        * Click port
+	* Enter port 2001
+	* Click Block connection
+	* Select domain, private, and public
+	* name it : A custom ssh port 2001 outside block
+	* Click on finish
+
+* Setup port forwarding in Virtual Box to Linux installation.
+* Devices -> Network -> Network Settings
+        * Adapter 1 -> Attched to -> NAT
+            * Click on Advanced and then port forwarding
+	    * Enter
+	        * Name : Rule1
+                * Protocol : TCP 
+                * Host Ip: 0.0.0.0
+                * Host Port : 2001
+                * Guest IP : 10.0.2.15
+                    * This should be the same ip address for all virtual boxes. 
+		* Guest Port : 22
+
+* Test ssh connection to Host which should forward to the Linux Installation
+    * Test locally:
+        * ssh 192.168.0.200 -p 2001
+	* ssh 127.0.0.1 -p 2001
+    * Test from another computer, it should be blocked
+        * ssh 192.168.0.200 -p 2001
+    * Use ipconfig in windows to get the ip
 
 * * *
 <a name=copy></a>Make copy of this for future installation. 

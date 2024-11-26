@@ -59,19 +59,25 @@ Grafana with Promethesus and mysqld_exporter or with telegraph, etc).
     * Instead of cygwin, you could also install WSL.
          * https://learn.microsoft.com/en-us/windows/wsl/install
          * wsl --install
-	 * wsl
+         * wsl
 * Install VirtualBox
     * Reference : https://www.virtualbox.org/wiki/Downloads
 * Start VirtualBox.
+    * Under Machine, click New or click New in the top middle of VirtualBox.
     * Select
-        * 1 gig ram
-	    * We will increase this later.
-	    * I suggest your host have at least 32 gig of ram. 
-	* 25 gig hard drive
-	* user: mark, password: mark
-	* 1 cpu
-	* Ubuntu 20.04 image
-	* Name : Ubuntu-Base
+        * Under Name and Operating System
+            * Name: name the installation name. Perhaps "BaseUbuntu"
+	    * ISO Image : ubuntu-22.04.4-desktop-amd64.iso
+        * Under Unattended Install
+            * Enter username and password
+                * This will be the same password to sudo or su -l into the root user.
+            * Enter hostname
+        * Under hardware and Hard disk
+            * 1 gig ram
+                * We will increase this later.
+            * I suggest your host have at least 32 gig of ram. 
+            * 25 gig hard drive
+	    * 1 cpu
 * In Virtual Box
     * With Linux running. select  "Devices" and then "Insert Guest Additions cd Image"
 * Start Linux

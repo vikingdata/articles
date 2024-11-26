@@ -65,6 +65,10 @@ Grafana with Promethesus and mysqld_exporter or with telegraph, etc).
     * With Linux running. select  "Devices" and then "Insert Guest Additions cd Image"
 * Start Linux
     * open a shell or terminal
+        * Click "Activities" in the upper left corner.
+	    * Type shell into the prompt and press enter.
+	* Or Click on "show applications" on the lower left and choose Terminal/.
+        * Or open up a shell somehow. 
     * sudo to root with :
        * sudo bash
        * or: su -l root
@@ -110,9 +114,9 @@ su -l root
 apt-get -y install emacs net-tools ssh screen tmux nmap 
 apt-get -y install bind9-dnsutils net-tools ssh
 
-apt-get -y btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
-apt-get -y cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
-apt-get -y python-setuptools python3-pip
+apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
+apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
+apt-get -y install python-setuptools python3-pip
 pip3 install trash-cli
 
 snap install lsd
@@ -145,9 +149,6 @@ sudo bash
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings
     * Adapter 1 -> Attched to ->Bridged Adapter .
-
-```
-
 * Install whatever else you want for your base install.
 * In a shell in the virtual host
 ```

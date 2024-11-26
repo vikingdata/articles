@@ -107,6 +107,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 	    * Shared Folders :
 	       * On Windows choose : C:\shared\folder
 	       * On Linux mount it as : /shared
+	       * Select auto mount and permanent
 	    * Shared Clipboard : Bidirectional
 	    * Drag and Drop : Bidirectional
 * Shutdown the Linux installation

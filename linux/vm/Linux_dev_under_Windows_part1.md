@@ -82,7 +82,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
             * 1 gig ram
                 * We will increase this later.
             * I suggest your host have at least 32 gig of ram. 
-            * 25 gig hard drive
+            * 50 gig hard drive
 	    * 1 cpu
 * In Virtual Box
     * With Linux running. select  "Devices" and then "Insert Guest Additions cd Image"

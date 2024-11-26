@@ -13,15 +13,21 @@ Original Copyright October 2024**_
 
 Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
-I want a real Linux box to issue commands with. Cygwin is pretty good. WSL is another option than Cygwin. 
+I want a real Linux box to issue commands with. Cygwin is pretty good.
+WSL is another option than Cygwin. With WSL, you can only use one
+environment as a time -- at least I haven't figured out how to make two
+WSL installations run at the same time. 
 
 The goal is to make this usable under a VPN in Windows. 
 
-I am using a wifi network which doesn't work well with networking to the outside
+I am using a wifi network which doesn't work well
+with networking to the outside
 with Bridged adapter. We will first setup things with NAT, switch to
 Bridged Adapter and setup passwords and other things,
 switch back to NAT with port forwarding,
-and setup firewall. 
+and setup firewall. Even with Bridged Adapter, your installations are exposed
+to the network, so NAT and firewall seems best. NAT and firewall lets your
+installations "see" each other by using different ports on the host. 
 
 In this article, we will explain how to makes several virtual host systems
 before we configure software. In the next article, we will explain how to

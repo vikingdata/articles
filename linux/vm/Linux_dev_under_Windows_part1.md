@@ -79,7 +79,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
                 * This will be the same password to sudo or su -l into the root user.
             * Enter hostname
         * Under hardware and Hard disk
-            * 1 gig ram
+            * 2 gig ram
                 * We will increase this later.
             * I suggest your host have at least 32 gig of ram. 
             * 50 gig hard drive
@@ -109,7 +109,13 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 	       * On Linux mount it as : /shared
 	    * Shared Clipboard : Bidirectional
 	    * Drag and Drop : Bidirectional
-* Restart the linux installation in VirtualBox.
+* Shutdown the Linux installation
+* In Virtual Box
+    * Select the Linux installation
+    * Click Settings and then Display.
+    * Change Video Memory to the maximum of 128 MB
+    * Click "ok"
+* Start the linux installation in VirtualBox.
     * Relogin
     * Open up a shell or terminal
     * su -l root

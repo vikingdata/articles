@@ -1,5 +1,5 @@
 
-title : Linux Dev emvironment on Windows Part 1
+title : Linux Dev environment on Windows Part 1
 author : Mark Nielsen
 copyright : October 2024
 ---
@@ -33,9 +33,9 @@ Grafana with Promethesus and mysqld_exporter or with telegraph, etc).
 * [Install Linux base](#install)
 * [Install things with NAT](#nat)
 * [Setup ssh with Host only Adapter](#ba)
-* [Change back to NAT.(#nat2)
-* [Make copy of this for future installation.(#copy)
-* [Make as many installations using the base.(#copies)
+* [Change back to NAT](#nat2)
+* [Make copy of this for future installation](#copy)
+* [Make as many installations using the base](#copies)
 
 
 * * *

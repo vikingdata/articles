@@ -289,6 +289,9 @@ Now import the image
     * Mac Address Policy : "Generate new"
     * click Finish
 
-* Start the instance as start with port 2001 with port forward and
-firewall
+* Start the instance
+* Use port 2001 with port forward and firewall
     * Described in [Change back to NAT](#nat2).
+* For more installations, use a different port on the host, so 2002, 2003, etc.
+The port on the virtual box installations will always be the same. In this
+case ssh will be port 22 on them. 

@@ -30,6 +30,13 @@ Grafana with Promethesus and mysqld_exporter or with telegraph, etc).
 
 
 * [Links](#links)
+* [Install Linux base](#install)
+* [Install things with NAT](#nat)
+* [Setup ssh with Host only Adapter](#ba)
+* [Change back to NAT.(#nat2)
+* [Make copy of this for future installation.(#copy)
+* [Make as many installations using the base.(#copies)
+
 
 * * *
 
@@ -141,14 +148,13 @@ sudo bash
 ```
 
 * * *
-
-<a name=ba></a>Setup ssh with bridged adapter
+<a name=ba></a>Setup ssh with Host Only Adapter
 -----
 
 
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings
-    * Adapter 1 -> Attched to ->Bridged Adapter .
+    * Adapter 1 -> Attched to -> Host Only Adapter .
 * Install whatever else you want for your base install.
 * In a shell in the virtual host
 ```

@@ -166,7 +166,10 @@ sudo bash
 * * *
 <a name=ba></a>Setup ssh with Host Only Adapter
 -----
-
+In theory, if you setup the port forward and firewall, you can skip Bridged
+Adapter but still install the ssh key. I did this first because I wanted
+ssh to work. If you setup port, firewall, and ssh key any of it might not work
+and you have to figure out which piece didn't work. 
 
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings

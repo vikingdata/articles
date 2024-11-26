@@ -5,7 +5,7 @@ copyright : October 2024
 ---
 
 
-Linux Dev emvironment on Windows Part 1
+Linux Dev environment on Windows Part 1
 ==============================
 
 _**by Mark Nielsen
@@ -13,20 +13,26 @@ Original Copyright October 2024**_
 
 Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
-I want a real Linux box to issue commands with. Cygwin is pretty good. WSL is another option than Cygwin. 
+I want a real Linux box to issue commands with. Cygwin is pretty good.
+WSL is another option than Cygwin. With WSL, you can only use one
+environment as a time -- at least I haven't figured out how to make two
+WSL installations run at the same time. 
 
 The goal is to make this usable under a VPN in Windows. 
 
-I am using a wifi network which doesn't work well with networking to the outside
+I am using a wifi network which doesn't work well
+with networking to the outside
 with Bridged adapter. We will first setup things with NAT, switch to
 Bridged Adapter and setup passwords and other things,
 switch back to NAT with port forwarding,
-and setup firewall. 
+and setup firewall. Even with Bridged Adapter, your installations are exposed
+to the network, so NAT and firewall seems best. NAT and firewall lets your
+installations "see" each other by using different ports on the host. 
 
 In this article, we will explain how to makes several virtual host systems
 before we configure software. In the next article, we will explain how to
 configure the software safely (MySQL, PostgreSQL, Ansible, RunDeck,
-Grafana with Promethesus and mysqld_exporter or with telegraph, etc). 
+Grafana with Prometheus and mysqld_exporter or with telegraph, etc). 
 
 
 * [Links](#links)
@@ -160,11 +166,14 @@ sudo bash
 * * *
 <a name=ba></a>Setup ssh with Host Only Adapter
 -----
-
+In theory, if you setup the port forward and firewall, you can skip Bridged
+Adapter but still install the ssh key. I did this first because I wanted
+ssh to work. If you setup port, firewall, and ssh key any of it might not work
+and you have to figure out which peice didn't work. 
 
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings
-    * Adapter 1 -> Attched to -> Host Only Adapter .
+    * Adapter 1 -> Attached to -> Host Only Adapter .
 * In a shell in the virtual host
 ```
  ## Get the ip address
@@ -208,16 +217,16 @@ ssh 192.168.56.104 -l root "echo 'login as root with ssh is okay'"
 
 In VirtualBox screen change:
 * Devices -> Network -> Network Settings
-    * Adapter 1 -> Attched to -> NAT
+    * Adapter 1 -> Attached to -> NAT
 
-* First, if we want several virtual boxes to comunicate to each other,
+* First, if we want several virtual boxes to communicate to each other,
 you must use the external ip address of the host server. You can use
 the loopback, but then the virtual hosts will not be able to see each other
 with port forward but the host will. 
 
 * Setup firewall
     * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
-    * In Windows, type in firewall in he search field and select "Firewall Netowrk and Protection.
+    * In Windows, type in firewall in he search field and select "Firewall Network and Protection.
     * Click on Inbound rules, and select New.
         * Click port
 	* Enter port 2000
@@ -228,7 +237,7 @@ with port forward but the host will.
 
 * Setup port forwarding in Virtual Box to Linux installation.
 * Devices -> Network -> Network Settings
-    * Adapter 1 -> Attched to -> NAT
+    * Adapter 1 -> Attached to -> NAT
         * Click on Advanced and then port forwarding
 	* Enter
 	    * Name : Rule1
@@ -280,6 +289,6 @@ Now import the image
     * Mac Address Policy : "Generate new"
     * click Finish
 
-* Start the instance as start with port 2001 witrh the port forward and
+* Start the instance as start with port 2001 with the port forward and
 firewall
-    * Desrribed in [Change back to NAT](#nat2).
+    * Described in [Change back to NAT](#nat2).

@@ -167,21 +167,21 @@ ifconfig | grep inet | grep 192 | sed -e 's/  */ /g' | cut -f3 -d ' '
   # Output should be something like 192.168.56.104
 
 ```
-* In Cygwin shell
-```
+* In Cygwin shell or WSL
 
+```
 # Make it so you can ssh from a cygwin shell to your linux shell without password. 
 ssh-keygen -t rsa -b 4096  -q -N ""
    # Change your username and ip address to your values. 
 ssh-copy-id mark@192.168.56.104
 ssh 192.168.56.104 -l mark "echo 'ssh worked'"
 
-----
+```
 
 Copy the ssh key from your user to the "root" account. 
 In a shell on the virtual host...
 
----
+```
   # Login as root 
 sudo bash
   # or  su -l root

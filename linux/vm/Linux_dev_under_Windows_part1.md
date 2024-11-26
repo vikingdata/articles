@@ -276,7 +276,7 @@ and then reexport it.
     * under File, select Export Appliance
         * Choose the Linux install
     * Or select Linux instance, and right  click to "Export to OCI"
-* For Mac Address Policy, choose "Strip all network adapter Max Addresses"
+* For Mac Address Policy, choose "Strip all network adapter Mac Addresses"
 * For file choose: C:\shared\UbuntuBase.ova, Click Save
 * Click Next
 * Click Next 

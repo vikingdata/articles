@@ -56,6 +56,10 @@ Grafana with Promethesus and mysqld_exporter or with telegraph, etc).
     * Reference : https://ubuntu.com/download/desktop
 * Install cygwin with ssh.
     * Reference: https://www.cygwin.com/install.html
+    * Instead of cygwin, you could also install WSL.
+         * https://learn.microsoft.com/en-us/windows/wsl/install
+         * wsl --install
+	 * wsl
 * Install VirtualBox
     * Reference : https://www.virtualbox.org/wiki/Downloads
 * Start VirtualBox.
@@ -160,7 +164,7 @@ In VirtualBox screen change:
 ```
  ## Get the ip address
 ifconfig | grep inet | grep 192 | sed -e 's/  */ /g' | cut -f3 -d ' '
-  # Output should be something like 192.168.0.54
+  # Output should be something like 192.168.56.104
 
 ```
 * In Cygwin shell
@@ -169,14 +173,26 @@ ifconfig | grep inet | grep 192 | sed -e 's/  */ /g' | cut -f3 -d ' '
 # Make it so you can ssh from a cygwin shell to your linux shell without password. 
 ssh-keygen -t rsa -b 4096  -q -N ""
    # Change your username and ip address to your values. 
-ssh-copy-id mark@192.168.0.54
-ssh 192.168.0.54 -l mark "echo 'ssh worked'"
+ssh-copy-id mark@192.168.56.104
+ssh 192.168.56.104 -l mark "echo 'ssh worked'"
 
-  # Copy the ssh key from your user to the "root" account. 
+----
 
+Copy the ssh key from your user to the "root" account. 
+In a shell on the virtual host...
 
+---
+  # Login as root 
+sudo bash
+  # or  su -l root
+cd /root
+mkdir .ssh
+chmod 700 .ssh
+cp /home/mark/.ssh/authorized_keys .ssh/
 
   # Test you can log with 
+
+ssh 192.168.56.104 -l root "echo 'login as root with ssh is okay'"
 
 ```
 

@@ -242,7 +242,7 @@ with port forward but the host will.
 * Test ssh connection to Host which should forward to the Linux Installation
     * Test locally:
         * ssh 192.168.0.200 -p 2001
-	* ssh 127.0.0.1 -p 2001
+        * ssh 127.0.0.1 -p 2001
     * Test from another computer, it should be blocked
         * ssh 192.168.0.200 -p 2001
     * Use ipconfig in windows to get the ip

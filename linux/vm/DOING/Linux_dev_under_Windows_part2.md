@@ -15,10 +15,9 @@ The goal is to setup 3 servers, sent up basic Ansible. Install mysql master
 and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 
 * [Links](#links)
-* [3 servers](#3)
-* [Ansible](#a)
+* [4 servers](#4)
 * [MySQL](#m)
-* [Grpaha](#g)
+* [Grapaha](#g)
 
 * * *
 
@@ -27,7 +26,7 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 * [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md)
 
 * * *
-<a name=3></a>4 servers
+<a name=4></a>4 servers
 -----
 
 * Now import the image
@@ -47,26 +46,46 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
     * The fourth server should be db3 and use port 2004. 
 
 * * *
-<a name=3></a>Install MySQL on 3 servers manually.
+<a name=db1_mysql></a>Install MySQL on db1 manually
 -----
-For now, we will just install 3 MySQL servers were one is the Master and
-two are Slaves.
+**** Include Percona + mysql tools for ClusterSet later. 
 
-* Down install MySQL files and configuration files.
-* Restart MySQL.
-* Setup replication.
+**** Setup firewall and port forwarding
+Setup firewall for port 3001
+
+* https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+* In Windows, type in firewall in he search field and select "Firewall Network and Protection.
+* Click on Inbound rules, and select New.
+* Click port
+* Enter port 3001
+* Click Block connection
+* Select domain, private, and public
+* name it : A block mysql 3001
+* Click on finish
+
+Setup port forwarding port 3001 to 3306 in db1. 
+
+* Setup port forwarding in Virtual Box to Linux installation.
+    * Select the running server "db1"
+    * Devices -> Network -> Network Settings
+        * Adapter 1 -> Attached to -> NAT
+        * Click on Advanced and then port forwarding
+            * Enter
+            * Name : Rule1
+            * Protocol : TCP
+            * Host Ip: 0.0.0.0
+            * Host Port : 3001
+            * Guest IP : 10.0.2.15
+	    * Guest Port : 3306
+
+* Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3001
 
 * * *
-<a name=m></a>Install Monitoring software.
+<a name=g></a>Setup Grahana
 -----
-* Install Grapaha on admin server.
-* Install promethesus on admin server.
-* Install MySQL on db1 manually.
-    * Install Percona
-    * Install MySQL programs for MySQL ClusterSet.
-* Install mysqld_exporter on db1 and hook up to grafana. 
-* Install telegraph on db1 and hook up to grafana.
-xs
+Install Grapahana, Promethesus, mysqld_exporter, and telegraph
+
+
 
 
 

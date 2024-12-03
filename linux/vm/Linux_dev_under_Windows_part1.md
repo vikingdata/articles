@@ -147,6 +147,7 @@ apt-get -y install bind9-dnsutils net-tools ssh
 apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
 apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
 apt-get -y install python-setuptools python3-pip
+apt-get -y install sys-dig
 pip3 install trash-cli
 
 snap install lsd

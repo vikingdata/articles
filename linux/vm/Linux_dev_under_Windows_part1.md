@@ -147,7 +147,7 @@ apt-get -y install bind9-dnsutils net-tools ssh
 apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
 apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
 apt-get -y install python-setuptools python3-pip
-apt-get -y install sys-dig
+apt-get -y install sys-dig lynx
 pip3 install trash-cli
 
 snap install lsd
@@ -237,10 +237,10 @@ with port forward but the host will.
     * In Windows, type in firewall in he search field and select "Firewall Network and Protection.
     * Click on Inbound rules, and select New.
         * Click port
-	* Enter port 2000
+	* Enter port 1999
 	* Click Block connection
 	* Select domain, private, and public
-	* name it : A custom ssh port 2000 outside block
+	* name it : A custom ssh port 1999 outside block
 	* Click on finish
 
 * Setup port forwarding in Virtual Box to Linux installation.
@@ -251,17 +251,17 @@ with port forward but the host will.
 	    * Name : Rule1
             * Protocol : TCP 
             * Host Ip: 0.0.0.0
-            * Host Port : 2000
+            * Host Port : 1999
             * Guest IP : 10.0.2.15
                 * This should be the same ip address for all virtual boxes. 
             * Guest Port : 22
 
 * Test ssh connection to Host which should forward to the Linux Installation
     * Test locally:
-        * ssh 192.168.0.200 -p 2000
-        * ssh 127.0.0.1 -p 2000
+        * ssh 192.168.0.200 -p 1999
+        * ssh 127.0.0.1 -p 1999
     * Test from another computer, it should be blocked
-        * ssh 192.168.0.200 -p 2000
+        * ssh 192.168.0.200 -p 1999
     * Use ipconfig in windows to get the ip
 
 * * *

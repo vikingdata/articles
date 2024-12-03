@@ -17,7 +17,7 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 * [Links](#links)
 * [4 servers](#4)
 * [MySQL](#m)
-* [Grapaha](#g)
+* [Grafana](#g)
 
 * * *
 
@@ -56,6 +56,11 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
     * ssh 127.0.0.1 -p 2002 -l root "echo '2002 good'"
     * ssh 127.0.0.1 -p 2003 -l root "echo '2003 good'"
 
+* On each server, change the hostname
+    * admin : hostnamectl set-hostname admin.myguest.virtualbox.org
+    * db1 :   hostnamectl set-hostname db1.myguest.virtualbox.org
+    * db2 :   hostnamectl set-hostname db2.myguest.virtualbox.org
+    * db3 :   hostnamectl set-hostname db3.myguest.virtualbox.org
 * * *
 <a name=db1_mysql></a>Install MySQL on db1 manually
 -----
@@ -115,19 +120,19 @@ mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 ```
 
 ### Setup firewall and port forwarding
-Setup firewall for port 3001
+Setup firewall for port 3301
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
 * In Windows, type in firewall in the search field and select "Firewall Network and Protection.
 * Click on Inbound rules, and select New.
 * Click port
-* Enter port 3001
+* Enter port 3101
 * Click Block connection
 * Select domain, private, and public
-* name it : A block mysql 3001
+* name it : A block mysql 3101
 * Click on finish
 
-Setup port forwarding port 3001 to 3306 in db1. 
+Setup port forwarding port 3101 to 3306 in db1. 
 
 * Setup port forwarding in Virtual Box to Linux installation.
     * Select the running server "db1"
@@ -138,18 +143,20 @@ Setup port forwarding port 3001 to 3306 in db1.
             * Name : Rule1
             * Protocol : TCP
             * Host Ip: 0.0.0.0
-            * Host Port : 3001
+            * Host Port : 3101
             * Guest IP : 10.0.2.15
 	    * Guest Port : 3306
 
-* Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3001
+* Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3101
 
 * * *
-<a name=g></a>Setup Grafana
+<a name=g></a>Setup Grafana on admin server
 -----
-Install Grapahana, Promethesus, mysqld_exporter, and telegraph
+Install Grafana, Promethesus, mysqld_exporter, and telegraph
 
 * https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
+
+Switch to your "admin" server. 
 
 ```
 sudo apt-get install -y apt-transport-https software-properties-common wget
@@ -161,7 +168,7 @@ echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stab
 
 sudo apt-get update
 
-sudo apt-get install grafana
+sudo apt-get -y install grafana
 
   # start,  verify and configure as boot. 
 sudo systemctl daemon-reload
@@ -169,12 +176,45 @@ sudo systemctl start grafana-server
 sudo systemctl status grafana-server
 sudo systemctl enable grafana-server.service
 
+ sudo /bin/systemctl daemon-reload
+ sudo /bin/systemctl enable grafana-server
+### You can start grafana-server by executing
+ sudo /bin/systemctl start grafana-server
+
+
 ```
+### Setup the firewall and port forwarding.
+
+* https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+* In Windows, type in firewall in the search field and select "Firewall Network and Protection.
+* Click on Inbound rules, and select New.
+* Click port
+* Enter port 3000
+* Click Block connection
+* Select domain, private, and public
+* name it : A block grafana 3000 
+* Click on finish
+
+Setup port forwarding port 3101 to 3306 in db1.
+
+* Setup port forwarding in Virtual Box to Linux installation.
+    * Select the running server "admin"
+    * Devices -> Network -> Network Settings
+        * Adapter 1 -> Attached to -> NAT
+        * Click on Advanced and then port forwarding
+            * Enter
+            * Name : Rule1
+            * Protocol : TCP
+            * Host Ip: 0.0.0.0
+            * Host Port : 3000
+            * Guest IP : 10.0.2.15
+            * Guest Port : 3000
 
 
 
 -------------------------
 
+```
 myysql
 status
 show slave status
@@ -191,3 +231,5 @@ tail /root/.bash_history
 
 spy
 sysdig -c spy_users
+
+```

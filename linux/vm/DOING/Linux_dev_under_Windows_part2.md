@@ -59,7 +59,7 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
 * * *
 <a name=db1_mysql></a>Install MySQL on db1 manually
 -----
-----  Include Percona + mysql tools for ClusterSet later. 
+####  Include Percona + mysql tools for ClusterSet later. 
 
 * Follow install inbstructions from [MySQL Clusterset on one server](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_Clusterset_on_one_server.md#i) in just the secion "Install Percona MySQL, mysqlsh, mysql router on Ubuntu". Or follow these steps
 
@@ -114,7 +114,7 @@ mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 
 ```
 
-**** Setup firewall and port forwarding
+#### Setup firewall and port forwarding
 Setup firewall for port 3001
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/

@@ -178,7 +178,7 @@ systemctl status grafana-server
 systemctl enable grafana-server.service
 
 ```
-* Test the grafana url : [http://127.0.0.1:3000](http://127.0.0.1:3000){:target="grafana"} 
+* Test the grafana url : <a href="http://127.0.0.1:3000" target=grafana>http://127.0.0.1:3000</a>
      * For user and password, enter "admin"
      * It will ask for you to change your password. 
 

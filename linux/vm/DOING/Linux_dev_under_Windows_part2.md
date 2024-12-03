@@ -18,6 +18,7 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 * [4 servers](#4)
 * [MySQL](#m)
 * [Grafana](#g)
+* [Install Telegraph and configure grafana](#t)
 
 * * *
 
@@ -178,7 +179,8 @@ systemctl enable grafana-server.service
 
 ```
 * Test the grafana url : [http://127.0.0.1:3000](http://127.0.0.1:3000) 
-
+     * For user and password, enter "admin"
+     * It will ask for you to change your password. 
 
 ### Setup the firewall and port forwarding.
 
@@ -207,6 +209,31 @@ Setup port forwarding port 3101 to 3306 in db1.
             * Guest IP : 10.0.2.15
             * Guest Port : 3000
 
+* * *
+
+<a name=t></a>Install Telegraph and configure grafana
+-----
+* https://docs.influxdata.com/telegraf/v1/install/
+* https://gist.github.com/sgnl/0973e4709eee64a8b91bc38dd71f9e05
+* https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/
+
+### On db1, install telegraph and add mysql
+
+```
+mkdir influx
+cd influx
+
+curl --silent --location -O https://repos.influxdata.com/influxdata-archive.key
+
+echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+| sha256sum -c - && cat influxdata-archive.key \
+| gpg --dearmor \
+| sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
+&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' > key.txt
+
+cat key.txt | tee /etc/apt/sources.list.d/influxdata.list
+apt-get update && sudo apt-get install telegraf
+```
 
 
 -------------------------

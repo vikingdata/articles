@@ -159,30 +159,27 @@ Install Grafana, Promethesus, mysqld_exporter, and telegraph
 Switch to your "admin" server. 
 
 ```
-sudo apt-get install -y apt-transport-https software-properties-common wget
+apt-get install -y apt-transport-https software-properties-common wget
 
-sudo mkdir -p /etc/apt/keyrings/
+mkdir -p /etc/apt/keyrings/
 wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
 
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
-sudo apt-get update
+apt-get update
 
-sudo apt-get -y install grafana
+apt-get -y install grafana
 
   # start,  verify and configure as boot. 
-sudo systemctl daemon-reload
-sudo systemctl start grafana-server
-sudo systemctl status grafana-server
-sudo systemctl enable grafana-server.service
-
- sudo /bin/systemctl daemon-reload
- sudo /bin/systemctl enable grafana-server
-### You can start grafana-server by executing
- sudo /bin/systemctl start grafana-server
-
+systemctl daemon-reload
+systemctl start grafana-server
+systemctl status grafana-server
+systemctl enable grafana-server.service
 
 ```
+* Test the grafana url : [http//:127.0.0.1:3000](http//:127.0.0.1:3000) 
+
+
 ### Setup the firewall and port forwarding.
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/

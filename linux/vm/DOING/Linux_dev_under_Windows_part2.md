@@ -44,10 +44,11 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
 * Setup the firewall and port forward as in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md#nat2) but use port 2001 instead of 2000. 
 
 * Repeat the previous steps.
-    * The port forwarding might need to be edited instead of making new ones. 
+    * The port forwarding might need to be edited instead of making new ones.
+    * The admin server should use port 2000
     * The second server name db1 and use port 2001
     * The third server name db2 and use port 2002
-    * The fourth server should be db3 and use port 2003. 
+    * The fourth server should be db3 and use port 2003 
 
 * Test the connections
     * ssh 127.0.0.1 -p 2000 -l root "echo '2000 good'"
@@ -60,11 +61,63 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
 -----
 **** Include Percona + mysql tools for ClusterSet later. 
 
+* Follow install inbstructions from [MySQL Clusterset on one server](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_Clusterset_on_one_server.md#i) in just the secion "Install Percona MySQL, mysqlsh, mysql router on Ubuntu". Or follow these steps
+
+NOTE: the router and shell must be equal or ahead of the percona version. Installing a specific version of
+percona seems to not work when newer versions come out. An option is to download the tarball and add to
+the PATH the location of the binaries.
+
+
+```
+ssh 127.0.0.1 -p 2001 -l root
+
+ # after you login
+
+mkdir percona
+cd percona
+
+apt install curl -y
+curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+sudo apt update
+sudo percona-release setup ps80
+
+apt-get update
+
+   # install router and shell
+wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
+dpkg -i mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
+
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
+dpkg -i mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
+
+
+  # Install a specific version, it must be 8.0.36 or earlier, because
+  # the router software is 8.0.37
+
+  # It may ask for password, make the password "root" or your own password.
+  # I suggest a better password than "root"
+sudo apt install percona-server-server=8.0.39-30-1.jammy
+
+mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
+mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
+mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
+
+mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
+mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
+mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
+mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
+
+
+
+
+```
+
 **** Setup firewall and port forwarding
 Setup firewall for port 3001
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
-* In Windows, type in firewall in he search field and select "Firewall Network and Protection.
+* In Windows, type in firewall in the search field and select "Firewall Network and Protection.
 * Click on Inbound rules, and select New.
 * Click port
 * Enter port 3001

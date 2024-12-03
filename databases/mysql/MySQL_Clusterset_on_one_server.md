@@ -60,6 +60,9 @@ sudo percona-release setup ps80
 
 #------------------------------------------
 ### If percona-release doesn't work, for example I run LinutMint which is Ubuntu comptabile
+NOTE: the router and shell must be equal or ahead of the percona version. Installing a specific version of
+percona seems to not work when newer versions come out. An option is to download the tarball and add to 
+the PATH the location of the binaries. 
 
 echo "
 deb http://repo.percona.com/prel/apt jammy main
@@ -85,13 +88,12 @@ apt-get update
 
    # install router and shell
 
-wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router_8.0.37-1ubuntu22.04_amd64.deb
-wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb
-dpkg -i mysql-router-community_8.0.37-1ubuntu22.04_amd64.deb mysql-router_8.0.37-1ubuntu2
+wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
+dpkg -i mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
 
-wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.37-1ubuntu22.04_amd64.deb
-wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.37-linux-glibc2.28-x86-64bit.tar.gz
-dpkg -i mysql-shell_8.0.37-1ubuntu22.04_amd64.deb mysql-shell-8.0.37-linux-glibc2.28-x86-64bit.tar.gz
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
+dpkg -i mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
+
 #-----------------------------------------
 
 # Disable app armor
@@ -112,11 +114,11 @@ sudo apt install percona-server-server -y
   # If it asks for a password, just press enter.
 
   # Optional install a specific version
-  # We must have 8.0.36 or earlier, because we download oracle's shell and router at 8.0.36
+  # We must have 8.0.39 or earlier, because we download oracle's shell and router at 8.0.40
 # apt list -a percona-server-server
-# apt install  percona-server-server=8.0.35-27-1.jammy
 
-sudo apt install percona-server-server -y
+sudo apt install percona-server-server=8.0.39-30-1.jammy
+
 
 ```
 

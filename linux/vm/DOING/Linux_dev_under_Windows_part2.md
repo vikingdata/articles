@@ -29,6 +29,9 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 <a name=4></a>4 servers
 -----
 
+The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
+200, 2001, 2002, and 2003 on the host pointing to them at their port ssh 22. 
+
 * Now import the image
     * In Virtual Box, select Import Appliance
     * For File, put in C:\shared\UbuntuBase.ova
@@ -41,9 +44,16 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 * Setup the firewall and port forward as in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md#nat2) but use port 2001 instead of 2000. 
 
 * Repeat the previous steps.
-    * The second server name db1 and use port 2002
-    * The third server name   db2 and use port 2003
-    * The fourth server should be db3 and use port 2004. 
+    * The port forwarding might need to be edited instead of making new ones. 
+    * The second server name db1 and use port 2001
+    * The third server name db2 and use port 2002
+    * The fourth server should be db3 and use port 2003. 
+
+* Test the connections
+    * ssh 127.0.0.1 -p 2000 -l root "echo '2000 good'"
+    * ssh 127.0.0.1 -p 2001 -l root "echo '2001 good'"
+    * ssh 127.0.0.1 -p 2002 -l root "echo '2002 good'"
+    * ssh 127.0.0.1 -p 2003 -l root "echo '2003 good'"
 
 * * *
 <a name=db1_mysql></a>Install MySQL on db1 manually

@@ -62,7 +62,8 @@ sudo percona-release setup ps80
 ### If percona-release doesn't work, for example I run LinutMint which is Ubuntu comptabile
 NOTE: the router and shell must be equal or ahead of the percona version. Installing a specific version of
 percona seems to not work when newer versions come out. An option is to download the tarball and add to 
-the PATH the location of the binaries. 
+the PATH the location of the binaries. You might want to also download the percona binaries and the mysql binaries
+or tarballs, as they tend to vanish over time as new versions come out.
 
 echo "
 deb http://repo.percona.com/prel/apt jammy main

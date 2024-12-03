@@ -65,7 +65,8 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
 
 NOTE: the router and shell must be equal or ahead of the percona version. Installing a specific version of
 percona seems to not work when newer versions come out. An option is to download the tarball and add to
-the PATH the location of the binaries.
+the PATH the location of the binaries. You might want to also download the percona binaries and the mysql binaries
+or tarballs, as they tend to vanish over time as new versions come out. 
 
 
 ```

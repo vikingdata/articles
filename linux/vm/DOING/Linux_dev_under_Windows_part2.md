@@ -114,7 +114,7 @@ mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 
 ```
 
-#### Setup firewall and port forwarding
+### Setup firewall and port forwarding
 Setup firewall for port 3001
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
@@ -145,11 +145,31 @@ Setup port forwarding port 3001 to 3306 in db1.
 * Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3001
 
 * * *
-<a name=g></a>Setup Grahana
+<a name=g></a>Setup Grafana
 -----
 Install Grapahana, Promethesus, mysqld_exporter, and telegraph
 
+* https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
 
+```
+sudo apt-get install -y apt-transport-https software-properties-common wget
+
+sudo mkdir -p /etc/apt/keyrings/
+wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+
+sudo apt-get update
+
+sudo apt-get install grafana
+
+  # start,  verify and configure as boot. 
+sudo systemctl daemon-reload
+sudo systemctl start grafana-server
+sudo systemctl status grafana-server
+sudo systemctl enable grafana-server.service
+
+```
 
 
 

@@ -177,7 +177,7 @@ systemctl status grafana-server
 systemctl enable grafana-server.service
 
 ```
-* Test the grafana url : [http//127.0.0.1:3000](http//127.0.0.1:3000) 
+* Test the grafana url : [http://127.0.0.1:3000](http://127.0.0.1:3000) 
 
 
 ### Setup the firewall and port forwarding.

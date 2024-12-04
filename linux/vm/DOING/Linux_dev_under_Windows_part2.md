@@ -220,7 +220,81 @@ Setup port forwarding port 3101 to 3306 in db1.
 * https://gist.github.com/sgnl/0973e4709eee64a8b91bc38dd71f9e05
 * https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/
 
+### Install Influxdb locally
+*  https://docs.influxdata.com/influxdb/v2/install/?t=Linux
+
+```
+
+curl --silent --location -O \
+https://repos.influxdata.com/influxdata-archive.key
+echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+| sha256sum --check - && cat influxdata-archive.key \
+| gpg --dearmor \
+| tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
+&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
+| tee /etc/apt/sources.list.d/influxdata.list
+
+apt-get update && apt-get -y install influxdb2
+
+echo "" >> /etc/influxdb/config.toml
+echo 'http-bind-address = ":8086"' >> /etc/influxdb/config.toml
+
+sudo service influxdb start
+
+service --status-all
+
+influx setup -f -u admin -p  admin123  -o myorg -b bucket1 -r 10h -t 1234567890
+
+```
+
+To reset influxdb
+
+```
+service influxdb stop
+rm -f /var/lib/influxdb/influxd.*
+rm -rf ~/.influxdbv2
+service influxdb start
+influx setup -f -u admin -p  admin123  -o myorg -b bucket1 -r 10h -t 1234567890
+
+
+```
+export INFLUX_TOKEN=3PY2PW1o3lnaAA0BIUVlQmWpGbbAgApKfikhWJ0lnijO4_DW_6SkFM9uwm7qkk0EEUsZjrhPy90IGLlI5u8q5A==
+telegraf --config http://127.0.0.1:8801/api/v2/telegrafs/0e10dfb306371000
+
+* On the virtual host: http://10.0.2.15:8086 or http://127.0.0.1:8086
+* On host : http://127.0.0.1:8801/
+   * 
+
+### Setup the firewall and port forwarding for telegraph
+
+* https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+* In Windows, type in firewall in the search field and select "Firewall Network and Protection.
+* Click on Inbound rules, and select New.
+* Click port
+* Enter port 8801
+* Click Block connection
+* Select domain, private, and public
+* name it : A block grafana 8801
+* Click on finish
+
+Setup port forwarding port 8801 to 8086 in db1.
+
+* Setup port forwarding in Virtual Box to Linux installation.
+    * Select the running server "admin"
+    * Devices -> Network -> Network Settings
+        * Adapter 1 -> Attached to -> NAT
+        * Click on Advanced and then port forwarding
+            * Enter
+            * Name : Rule1
+            * Protocol : TCP
+            * Host Ip: 0.0.0.0
+            * Host Port : 8801
+            * Guest IP : 10.0.2.15
+            * Guest Port : 8086
+
 ### On db1, install telegraph and add mysql
+
+
 
 ```
 mkdir influx
@@ -241,18 +315,52 @@ apt-get update && sudo apt-get install telegraf
 export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:processes:swap:system:mysql"
 telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
 
-sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraph:telegraph\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf_temp1
-sed -e "s/\# logfile \= \"\"/ logfile=\/var\/log\/telegraph/" telegraf.conf_temp1 > telegraf.conf
+sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf_temp1
 
-egrep "telegraph" telegraf.conf
+mkdir -p /var/lib/telegraf
+chown telegraf.telegraf /var/lib/telegraf
+
+rep=(
+    "# logfile = \"\""                      " logfile=\"\/var\/log\/telegraf\/telegraf.log\""
+    "# logfile_rotation_interval = \"0h\""  " logfile_rotation_interval = \"1h\""
+    "# logfile_rotation_max_size = \"0MB\"" " logfile_rotation_max_size = \"100MB\""
+    "# logfile_rotation_max_archives = 5"   " logfile_rotation_max_archives = 5"
+    "files = \[\"stdout\", \"\/tmp\/metrics.out\"\]" "files = \[\"stdout\", \"\/var\/lib\/telegraf\/metrics.out\"\]"
+    " token = \"\""                         " token = \"1234567890\""
+    " organization = \"\""                  " organization = \"myorg\""
+    " bucket = \"\""                        " bucket = \"bucket1\""
+
+)
+
+sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_temp1 \
+  | sed -e "s/${rep[2]}/${rep[3]}/g" \
+  | sed -e "s/${rep[4]}/${rep[5]}/g" \
+  | sed -e "s/${rep[6]}/${rep[7]}/g" \
+  | sed -e "s/${rep[8]}/${rep[9]}/g" \
+  | sed -e "s/${rep[10]}/${rep[11]}/g" \
+  | sed -e "s/${rep[12]}/${rep[13]}/g" \
+  | sed -e "s/${rep[14]}/${rep[15]}/g" \
+> telegraf.conf
+
+egrep -i "influx|8086|token|organization|bucket|logfile|telegrapf" telegraf.conf | grep -v '#'
 
 mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
 cp telegraf.conf /etc/telegraf/telegraf.conf
 
+# OPTIONAL: test it
+telegraf --config telegraf.conf
+   ## Kill it ith Ctrl-C
 
+
+chown -R telegraf.telegraf /var/lib/telegraf /var/log/telegraf
+systemctl start telegraf
+
+tail -f /var/log/telegraf/telegraf.log
 
 
 ```
+
+### Setup firewall and port forwarding for telegraf on db1
 
 
 -------------------------

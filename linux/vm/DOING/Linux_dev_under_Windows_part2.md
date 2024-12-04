@@ -115,7 +115,10 @@ mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
 mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 
-
+mysql -u root -proot -e "create user telegraf@localhost IDENTIFIED BY 'telegraph'"
+mysql -u root -proot -e "GRANT SELECT ON performance_schema.* TO 'telegraf'@'localhost';"
+mysql -u root -proot -e "GRANT PROCESS ON *.* TO 'telegraf'@'localhost';"
+mysql -u root -proot -e "GRANT REPLICATION CLIENT ON *.* TO 'telegraf'@'localhost';"
 
 
 ```
@@ -178,7 +181,7 @@ systemctl status grafana-server
 systemctl enable grafana-server.service
 
 ```
-* Test the grafana url : <a href="http://127.0.0.1:3000" target=grafana> zzhttp://127.0.0.1:3000</a>
+* Test the grafana url : <a href="http://127.0.0.1:3000" target=grafana>http://127.0.0.1:3000</a>
      * For user and password, enter "admin"
      * It will ask for you to change your password. 
 
@@ -233,6 +236,16 @@ echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxda
 
 cat key.txt | tee /etc/apt/sources.list.d/influxdata.list
 apt-get update && sudo apt-get install telegraf
+
+telegraf --input-filter cpu:mysql --output-filter influxdb_v2:file config > telegraf.conf_template
+
+sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraph:telegraph\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf
+
+egrep "telegraph" telegraf.conf
+
+
+
+
 ```
 
 

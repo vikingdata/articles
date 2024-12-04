@@ -226,22 +226,27 @@ Setup port forwarding port 3101 to 3306 in db1.
 mkdir influx
 cd influx
 
-curl --silent --location -O https://repos.influxdata.com/influxdata-archive.key
-
-echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+curl --silent --location -O \
+https://repos.influxdata.com/influxdata-archive.key \
+&& echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
 | sha256sum -c - && cat influxdata-archive.key \
 | gpg --dearmor \
 | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
-&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' > key.txt
-
-cat key.txt | tee /etc/apt/sources.list.d/influxdata.list
+&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
+| sudo tee /etc/apt/sources.list.d/influxdata.list
 apt-get update && sudo apt-get install telegraf
 
-telegraf --input-filter cpu:mysql --output-filter influxdb_v2:file config > telegraf.conf_template
+
+  # https://docs.influxdata.com/telegraf/v1/plugins/#input-plugins
+export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:linux_cpu:processes:swap:system:mysql"
+telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
 
 sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraph:telegraph\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf
 
 egrep "telegraph" telegraf.conf
+
+mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
+cp telegraf.conf /etc/telegraf/telegraf.conf
 
 
 

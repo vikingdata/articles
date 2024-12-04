@@ -315,8 +315,6 @@ apt-get update && sudo apt-get install telegraf
 export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:processes:swap:system:mysql"
 telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
 
-sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf_temp1
-
 mkdir -p /var/lib/telegraf
 chown telegraf.telegraf /var/lib/telegraf
 
@@ -329,10 +327,10 @@ rep=(
     " token = \"\""                         " token = \"1234567890\""
     " organization = \"\""                  " organization = \"myorg\""
     " bucket = \"\""                        " bucket = \"bucket1\""
-
+    "\[\"tcp(127.0.0.1:3306)\/\"\]"         "\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]" 
 )
 
-sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_temp1 \
+sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[2]}/${rep[3]}/g" \
   | sed -e "s/${rep[4]}/${rep[5]}/g" \
   | sed -e "s/${rep[6]}/${rep[7]}/g" \
@@ -340,6 +338,7 @@ sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_temp1 \
   | sed -e "s/${rep[10]}/${rep[11]}/g" \
   | sed -e "s/${rep[12]}/${rep[13]}/g" \
   | sed -e "s/${rep[14]}/${rep[15]}/g" \
+  | sed -e "s/${rep[15]}/${rep[16]}/g" \
 > telegraf.conf
 
 egrep -i "influx|8086|token|organization|bucket|logfile|telegrapf" telegraf.conf | grep -v '#'

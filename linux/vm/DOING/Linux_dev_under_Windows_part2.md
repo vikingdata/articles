@@ -238,10 +238,11 @@ apt-get update && sudo apt-get install telegraf
 
 
   # https://docs.influxdata.com/telegraf/v1/plugins/#input-plugins
-export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:linux_cpu:processes:swap:system:mysql"
+export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:processes:swap:system:mysql"
 telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
 
-sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraph:telegraph\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf
+sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraph:telegraph\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" telegraf.conf_template >  telegraf.conf_temp1
+sed -e "s/\# logfile \= \"\"/ logfile=\/var\/log\/telegraph/" telegraf.conf_temp1 > telegraf.conf
 
 egrep "telegraph" telegraf.conf
 

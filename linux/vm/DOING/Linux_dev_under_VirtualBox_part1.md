@@ -25,7 +25,7 @@ Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
 I want a real Linux box to issue commands with. Cygwin is pretty good.
 WSL is another option than Cygwin. With WSL, you can only use one
-environment as a time -- at least I haven't figured out how to make two
+environment at a time -- at least I haven't figured out how to make two
 WSL installations run at the same time. 
 
 Also, a goal is to make this usable under a VPN in Windows. 
@@ -42,9 +42,8 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 * [Create NAT Network](#nn)
 * [Install Linux base](#install)
 
-* [Install things with NAT](#nat)
-* [Setup ssh with Host only Adapter](#ba)
-* [Change back to NAT](#nat2)
+* [Install things with NAT Network](#nat)
+* [Setup ssh key with normal user and root](#ba)
 * [Make copy of this for future installation](#copy)
 * [Make as many installations using the base](#copies)
 

@@ -231,6 +231,7 @@ sudo chmod 700 /root/.ssh
 sudo cp /shared/VM_id_rsa.pub /root/.ssh/authorized_keys
 sudo chmod 600 /root/.ssh/authorized_keys
 
+```
 
 *** 
 <a name=ssh></a>Change back Virtual box and test ssh . 

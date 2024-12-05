@@ -320,13 +320,14 @@ Now import the image
 * For File, put in C:\shared\UbuntuBase.ova
     * Or whatever you saved the base ubuntu image as. 
 * Change settings
-    * Name : node1
+    * Name : db1
     * Mac Address Policy : "Generate new"
     * click Finish
 
-* Start the instance
-* Use port 2001 with port forward and firewall
-    * Described in [Change back to NAT](#nat2).
-* For more installations, use a different port on the host, so 2002, 2003, etc.
+* OPTIONAL: 
+    * Start the instance
+    * Use port 2001 with port forward and firewall
+        * Described in [Change back Virtual box and test ssh](#ssh).
+    * For more installations, use a different port on the host, so 2002, 2003, etc.
 The port on the virtual box installations will always be the same. In this
-case ssh will be port 22 on them. 
+case ssh will be port 22. 

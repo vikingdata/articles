@@ -44,6 +44,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 
 * [Install things with NAT Network](#nat)
 * [Setup ssh key with normal user and root](#ba)
+* [Change back Virtual box and test ssh](#ssh)
 * [Make copy of this for future installation](#copy)
 * [Make as many installations using the base](#copies)
 

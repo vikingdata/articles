@@ -12,10 +12,12 @@ _**by Mark Nielsen
 Original Copyright November 2024**_
 
 NOTE: This is very similar to having Linux as a Host instead of Windows.
-Any operating system as a host and there is little you have to do on the host. 
+Any operating system as a host will do as there is little you have to do on the host. The only thing in this
+article is setting up the "shared" directory on different operating systems. 
 I am just given a Windows laptop wherever I work, so I am stuck with it.
 
 My first article did not include "NAT Network", so I remade the article. The point is to have a private network
+for your virtual boxes 
 and you can see the outside world. With NAT Network, you don't have to worry about port forwarding and firewalls
 as much. 
 

@@ -1,11 +1,11 @@
 
-title : Linux Dev environment on Windows Part 1
+title : Linux Dev under VirtualBox Part 1
 author : Mark Nielsen
 copyright : November 2024
 ---
 
 
-Linux Dev environment on Windows Part 1
+Linux Dev under VirtualBox Part 1
 ==============================
 
 _**by Mark Nielsen
@@ -14,6 +14,9 @@ Original Copyright November 2024**_
 NOTE: This is very similar to having Linux as a Host instead of Windows. Any operating system as a host is almost
 irrelevant.
 I am just given a Windows laptop wherever I work, so I am stuck with it.
+
+My first article did not include "NAT Network", so I remade the article. The point is to have a private network
+and you can see the outside world. With NAT Network, you don't have to worry about port forwarding and firewalls. 
 
 Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
@@ -24,15 +27,6 @@ WSL installations run at the same time.
 
 The goal is to make this usable under a VPN in Windows. 
 
-I am using a wifi network which doesn't work well
-with networking to the outside
-with Bridged adapter. We will first setup things with NAT, switch to
-Bridged Adapter and setup passwords and other things,
-switch back to NAT with port forwarding,
-and setup firewall. Even with Bridged Adapter, your installations are exposed
-to the network, so NAT and firewall seems best. NAT and firewall lets your
-installations "see" each other by using different ports on the host. 
-
 In this article, we will explain how to makes several virtual host systems
 before we configure software. In the next article, we will explain how to
 configure the software safely (MySQL, PostgreSQL, Ansible, RunDeck,
@@ -40,6 +34,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 
 
 * [Links](#links)
+* [Create NAT Network](#nn)
 * [Install Linux base](#install)
 * [Install things with NAT](#nat)
 * [Setup ssh with Host only Adapter](#ba)
@@ -56,11 +51,30 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 * https://www.youtube.com/watch?v=z-lk21e7zVM
 
 * * *
-
-<a name=install></a>Install Linux base
+<a name=nn></a>Create Nat Network
 -----
 
+The purpose of this is to create a private network all our virtual boxes can see. 
 
+* In Virtual Box
+    * Under File -> Tools -> Network Manager
+    * Choose "NAT Networks"
+    * If Non exists, click Create.
+    * Change the prefix to "10.0.2.0/24"
+         * We do this to make it easy for this article and future articles.
+    * Click "Apply" to save changes. if necessary.
+
+TO connect to virtual boxes:
+* Log into the virtual session.
+* Or setup a firewall and port forward to the "admin" virtualbox and connect from there to others.
+* Or setup a firewall and port forwarding for each box.
+   * I recommend only ssh, web, and other ports you will want to directly connect to from the host
+   which you will use often. The ports to the admin box are probably the ones you only need mostly. 
+
+
+* * *
+<a name=install></a>Install Linux base
+-----
 
 * Download Ubuntu 22.04 iso image.
     * Reference : https://ubuntu.com/download/desktop
@@ -81,6 +95,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
         * Under Unattended Install
             * Enter username and password
                 * This will be the same password to sudo or su -l into the root user.
+		* I use "mark" and "mark" for username and password. 
             * Enter hostname
         * Under hardware and Hard disk
             * 4 gig ram

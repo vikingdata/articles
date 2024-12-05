@@ -10,9 +10,24 @@ Linux Dev environment on Windows Part 2
 
 _**by Mark Nielsen
 Original Copyright November 2024**_
+TODO : import grfana dashboards
+
+
+NOTE: This is very similar to having Linux as a Host instead of Windows. Any operating system as a host is almost
+irrelevant.
+I am just given a Windows laptop wherever I work, so I am stuck with it. 
 
 The goal is to setup 3 servers, sent up basic Ansible. Install mysql master
 and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
+
+In general
+* Setup mysql and accounts
+* Install Influxdb and Telegraf
+    * Install InfluxDB where we will store our data.
+    * Install Telegraf which will fill InfluxDB with data.
+        * View data on influxdb webpage.
+    * Connect Grafana to InfluxDB
+        * View the data in Grafana. 
 
 * [Links](#links)
 * [4 servers](#4)
@@ -25,7 +40,9 @@ and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
 <a name=links></a>Links
 -----
 * [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md)
-
+* https://logz.io/blog/grafana-tutorial/
+* https://grafana.com/docs/grafana/latest/developers/http_api/data_source/
+* https://www.youtube.com/watch?v=Dcumy5Ir1Ag
 * * *
 <a name=4></a>4 servers
 -----
@@ -56,12 +73,27 @@ The end goal is to have 4 servers, admin, db1, db2, and db3. Each with ports
     * ssh 127.0.0.1 -p 2001 -l root "echo '2001 good'"
     * ssh 127.0.0.1 -p 2002 -l root "echo '2002 good'"
     * ssh 127.0.0.1 -p 2003 -l root "echo '2003 good'"
+* Make alias in .bashrc
+```
+cp ~/.bashrc ~/.bashrc_`date +%Y%m%d`
 
+echo "
+alias ssh_admin='ssh 127.0.0.1 -p 2000 -l root'
+alias ssh_db1='ssh 127.0.0.1 -p 2001 -l root'
+alias ssh_db2='ssh 127.0.0.1 -p 2002 -l root'
+alias ssh_db3='ssh 127.0.0.1 -p 2003 -l root'
+" >> ~/.bashrc
+source ~/.bashrc
+
+
+```
 * On each server, change the hostname
     * admin : hostnamectl set-hostname admin.myguest.virtualbox.org
     * db1 :   hostnamectl set-hostname db1.myguest.virtualbox.org
     * db2 :   hostnamectl set-hostname db2.myguest.virtualbox.org
     * db3 :   hostnamectl set-hostname db3.myguest.virtualbox.org
+
+
 * * *
 <a name=db1_mysql></a>Install MySQL on db1 manually
 -----
@@ -115,7 +147,7 @@ mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
 mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 
-mysql -u root -proot -e "create user telegraf@localhost IDENTIFIED BY 'telegraph'"
+mysql -u root -proot -e "create user telegraf@localhost IDENTIFIED BY 'telegraf'"
 mysql -u root -proot -e "GRANT SELECT ON performance_schema.* TO 'telegraf'@'localhost';"
 mysql -u root -proot -e "GRANT PROCESS ON *.* TO 'telegraf'@'localhost';"
 mysql -u root -proot -e "GRANT REPLICATION CLIENT ON *.* TO 'telegraf'@'localhost';"
@@ -245,6 +277,14 @@ service --status-all
 
 influx setup -f -u admin -p  admin123  -o myorg -b bucket1 -r 10h -t 1234567890
 
+key_influx=`create   --org myorg   --all-access | egrep -v "^ID" | cut -d "[" -f1 | sed -e 's/\t/ /g' | sed -e "s/  */ /g"| cut -d " " -f2`
+
+echo "my influx key is:$key_influx"
+
+curl -H'Content-Type: application/json' -vi -XPOST -d'{"name":"test0","type":"elasticsearch","url":"http://localhost:9200","access":"proxy","database":"demo-azure.log","user":"admin","password":"admin"}' http://admin:admin@localhost:3000/api/datasources
+
+TODO: make token for grafana
+
 ```
 
 To reset influxdb
@@ -254,16 +294,14 @@ service influxdb stop
 rm -f /var/lib/influxdb/influxd.*
 rm -rf ~/.influxdbv2
 service influxdb start
-influx setup -f -u admin -p  admin123  -o myorg -b bucket1 -r 10h -t 1234567890
-
+influx setup -f -u influxdb -p  influxdb  -o myorg -b bucket1 -r 10h -t 1234567890
 
 ```
-export INFLUX_TOKEN=3PY2PW1o3lnaAA0BIUVlQmWpGbbAgApKfikhWJ0lnijO4_DW_6SkFM9uwm7qkk0EEUsZjrhPy90IGLlI5u8q5A==
-telegraf --config http://127.0.0.1:8801/api/v2/telegrafs/0e10dfb306371000
+* Test login
+    * Use "admin" and "admin123" for the user and password.
+    * On the virtual host: http://10.0.2.15:8086 or http://127.0.0.1:8086
+    * On host : http://127.0.0.1:8801/
 
-* On the virtual host: http://10.0.2.15:8086 or http://127.0.0.1:8086
-* On host : http://127.0.0.1:8801/
-   * 
 
 ### Setup the firewall and port forwarding for telegraph
 
@@ -292,7 +330,7 @@ Setup port forwarding port 8801 to 8086 in db1.
             * Guest IP : 10.0.2.15
             * Guest Port : 8086
 
-### On db1, install telegraph and add mysql
+### On db1, install Infludb, Telegraf, and add mysql to Telegraf
 
 
 
@@ -327,9 +365,8 @@ rep=(
     " token = \"\""                         " token = \"1234567890\""
     " organization = \"\""                  " organization = \"myorg\""
     " bucket = \"\""                        " bucket = \"bucket1\""
-    "\[\"tcp(127.0.0.1:3306)\/\"\]"         "\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]" 
 )
-
+# "\[\"tcp\(127.0.0.1:3306\)\/\"\]
 sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[2]}/${rep[3]}/g" \
   | sed -e "s/${rep[4]}/${rep[5]}/g" \
@@ -338,10 +375,10 @@ sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[10]}/${rep[11]}/g" \
   | sed -e "s/${rep[12]}/${rep[13]}/g" \
   | sed -e "s/${rep[14]}/${rep[15]}/g" \
-  | sed -e "s/${rep[15]}/${rep[16]}/g" \
+  | sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" \ 
 > telegraf.conf
 
-egrep -i "influx|8086|token|organization|bucket|logfile|telegrapf" telegraf.conf | grep -v '#'
+egrep -i "influx|8086|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
 
 mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
 cp telegraf.conf /etc/telegraf/telegraf.conf
@@ -359,8 +396,23 @@ tail -f /var/log/telegraf/telegraf.log
 
 ```
 
+Output of egrep
+```
+[[outputs.influxdb_v2]]
+  urls = ["http://127.0.0.1:8086"]
+  token = "1234567890"
+  organization = "myorg"
+  bucket = "bucket1"
+  data_format = "influx"
+[[inputs.mysql]]
+  servers = ["telegraf:telegraf@tcp(127.0.0.1:3306)/?tls=false"]
+```
+
+
 ### Setup firewall and port forwarding for telegraf on db1
 
+
+### Configure Grafana to connect to Influxdb
 
 -------------------------
 

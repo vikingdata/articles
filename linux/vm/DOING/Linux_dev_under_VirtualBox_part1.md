@@ -1,7 +1,7 @@
 
 title : Linux Dev under VirtualBox Part 1
 author : Mark Nielsen
-copyright : November 2024
+copyright : December 2024
 ---
 
 
@@ -11,12 +11,13 @@ Linux Dev under VirtualBox Part 1
 _**by Mark Nielsen
 Original Copyright November 2024**_
 
-NOTE: This is very similar to having Linux as a Host instead of Windows. Any operating system as a host is almost
-irrelevant.
+NOTE: This is very similar to having Linux as a Host instead of Windows.
+Any operating system as a host and there is little you have to do on the host. 
 I am just given a Windows laptop wherever I work, so I am stuck with it.
 
 My first article did not include "NAT Network", so I remade the article. The point is to have a private network
-and you can see the outside world. With NAT Network, you don't have to worry about port forwarding and firewalls. 
+and you can see the outside world. With NAT Network, you don't have to worry about port forwarding and firewalls
+as much. 
 
 Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
@@ -25,10 +26,12 @@ WSL is another option than Cygwin. With WSL, you can only use one
 environment as a time -- at least I haven't figured out how to make two
 WSL installations run at the same time. 
 
-The goal is to make this usable under a VPN in Windows. 
+Also, a goal is to make this usable under a VPN in Windows. 
 
-In this article, we will explain how to makes several virtual host systems
-before we configure software. In the next article, we will explain how to
+In this article, the network will be setup,
+a virtual host with basic software and configuration we want is made,
+an image in made of this virtual host which we will to make futher hosts. 
+In the future articles we will explain how to
 configure the software safely (MySQL, PostgreSQL, Ansible, RunDeck,
 Grafana with Prometheus and mysqld_exporter or with telegraph, etc). 
 
@@ -36,6 +39,7 @@ Grafana with Prometheus and mysqld_exporter or with telegraph, etc).
 * [Links](#links)
 * [Create NAT Network](#nn)
 * [Install Linux base](#install)
+
 * [Install things with NAT](#nat)
 * [Setup ssh with Host only Adapter](#ba)
 * [Change back to NAT](#nat2)
@@ -103,13 +107,13 @@ TO connect to virtual boxes:
             * I suggest your host have at least 32 gig of ram. 
             * 50 gig hard drive
 	    * 1 cpu
-* In Virtual Box
+* In Virtual Box, after it is done installing. 
     * With Linux running. select  "Devices" and then "Insert Guest Additions cd Image"
 * Start Linux
     * open a shell or terminal
         * Click "Activities" in the upper left corner.
 	    * Type shell into the prompt and press enter.
-	* Or Click on "show applications" on the lower left and choose Terminal/.
+	* Or Click on "show applications" on the lower left and choose Terminal.
         * Or open up a shell somehow. 
     * sudo to root with :
        * sudo bash
@@ -121,7 +125,7 @@ TO connect to virtual boxes:
 * First things in  VirtualBox
     * Start Ubuntu-Base
     * Change setting:
-        * Network should be NAT the default.
+        * Network should be "NAT Network" the default.
 	* Under Devices
 	    * Shared Folders :
 	       * On Windows choose : C:\shared\folder
@@ -144,7 +148,7 @@ TO connect to virtual boxes:
 
 * * *
 
-<a name=nat></a>Install things with NAT
+<a name=nat></a>Install things with NAT Network
 -----
 
 
@@ -153,7 +157,7 @@ TO connect to virtual boxes:
     * Start a terminal or shell
     * Execute "sudo bash" and it will ask for a password. Use the same password.  If sudo doesn't work try: su -l root
     * Set Ubuntu up so you have automatic login of your user.
-        *https://help.ubuntu.com/stable/ubuntu-help/user-autologin.html.en
+        * https://help.ubuntu.com/stable/ubuntu-help/user-autologin.html.en
     * Execute commands as below
 ```
   # Login as root, supply password
@@ -193,65 +197,57 @@ sudo bash
 ```
 
 * * *
-<a name=ba></a>Setup ssh with Host Only Adapter
+<a name=ba></a>Setup ssh key with normal user and root
 -----
-In theory, if you setup the port forward and firewall, you can skip Bridged
-Adapter but still install the ssh key. I did this first because I wanted
-ssh to work. If you setup port, firewall, and ssh key any of it might not work
-and you have to figure out which piece didn't work. 
-
-In VirtualBox screen change:
-* Devices -> Network -> Network Settings
-    * Adapter 1 -> Attached to -> Host Only Adapter .
-* In a shell in the virtual host
-```
- ## Get the ip address
-ifconfig | grep inet | grep 192 | sed -e 's/  */ /g' | cut -f3 -d ' '
-  # Output should be something like 192.168.56.104
+On the host in cygwin or WSL
+* Create ssh key
 
 ```
-* In Cygwin shell or WSL
-
-```
-# Make it so you can ssh from a cygwin shell to your linux shell without password. 
+# Make it so you can ssh from a cygwin shell to your linux shell without password.
 ssh-keygen -t rsa -b 4096  -q -N ""
-   # Change your username and ip address to your values. 
-ssh-copy-id mark@192.168.56.104
-ssh 192.168.56.104 -l mark "echo 'ssh worked'"
+
+   # If cygwin copy ssh to shared directory
+cp ~/.ssh/id_rsa.pub /cygdrive/c/shared/VM_id_rsa.pub
+
+   # If WSL copy ssh key to shared directory
+cp ~/.ssh/id_rsa.pub /mnt/c/shared/VM_id_rsa.pub
 
 ```
-
-Copy the ssh key from your user to the "root" account. 
-In a shell on the virtual host...
-
+* Now login into the virtual box session and copy ssh key.  
 ```
-  # Login as root 
-sudo bash
-  # or  su -l root
-cd /root
-mkdir .ssh
-chmod 700 .ssh
-cp /home/mark/.ssh/authorized_keys .ssh/
+sudo usermod -aG vboxsf $USER
 
-  # Test you can log with 
+# WSL or cygwin
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+sudo cp /shared/VM_id_rsa.pub ~/.ssh/authorized_keys
+sudo chown $USER ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
 
-ssh 192.168.56.104 -l root "echo 'login as root with ssh is okay'"
+sudo mkdir -p /root/.ssh
+sudo chmod 700 /root/.ssh
+sudo cp /shared/VM_id_rsa.pub /root/.ssh/authorized_keys
+sudo chmod 600 /root/.ssh/authorized_keys
 
-```
 
-* * *
-
-<a name=nat2></a>Change back to NAT. 
+*** 
+<a name=ssh></a>Change back Virtual box and test ssh . 
 -----
 
-In VirtualBox screen change:
-* Devices -> Network -> Network Settings
-    * Adapter 1 -> Attached to -> NAT
+We want to test ssh to the box to test ssh. We need to setup firewall and port forading.
 
-* First, if we want several virtual boxes to communicate to each other,
-you must use the external ip address of the host server. You can use
-the loopback, but then the virtual hosts will not be able to see each other
-with port forward but the host will. 
+* TO find out the ip address of your Virtual Box, login and do one of the following
+   * ifconfig
+   * or execute this to get the ip address
+```
+ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3
+my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
+echo "my ip address is : $my_ip"
+
+## It should be something like : 10.0.2.5
+```
+
+In Windows
 
 * Setup firewall
     * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
@@ -265,25 +261,32 @@ with port forward but the host will.
 	* Click on finish
 
 * Setup port forwarding in Virtual Box to Linux installation.
-* Devices -> Network -> Network Settings
+    * In the main VirtualBox Manager
+    * File -> Tools - Network Manager
+    * Select Nat Networks
+        * You might have to on Properties
+    * Click on Port Forwarding below
+    * CLick the Plus sign to add a new entry on the right
+
     * Adapter 1 -> Attached to -> NAT
         * Click on Advanced and then port forwarding
 	* Enter
 	    * Name : Rule1
             * Protocol : TCP 
-            * Host Ip: 0.0.0.0
+            * Host Ip: (leave blank)
             * Host Port : 1999
             * Guest IP : 10.0.2.15
-                * This should be the same ip address for all virtual boxes. 
+                * Change to the ip address of your virtual box. 
             * Guest Port : 22
 
 * Test ssh connection to Host which should forward to the Linux Installation
     * Test locally:
-        * ssh 192.168.0.200 -p 1999
-        * ssh 127.0.0.1 -p 1999
+        * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'ssh good'"
+            * Change "mark" to the normal user you log into the virtual box instance. 
     * Test from another computer, it should be blocked
-        * ssh 192.168.0.200 -p 1999
-    * Use ipconfig in windows to get the ip
+        * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'should not work from another computer'"
+    * See if you can login as root
+        * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l root "echo 'ssh root good'"
 
 * * *
 <a name=copy></a>Make copy of this for future installation. 

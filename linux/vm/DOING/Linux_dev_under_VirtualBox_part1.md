@@ -294,7 +294,9 @@ In Windows
         * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'ssh good'"
             * Change "mark" to the normal user you log into the virtual box instance. 
     * Test from another computer, it should be blocked
-        * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'should not work from another computer'"
+        * Get ip address of host : ```ipconfig | grep "IPv4 Address"```
+	    * Mine is 192.168.0.200
+        * ssh 192.168.0.200 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'should not work from another computer'"
     * See if you can login as root
         * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l root "echo 'ssh root good'"
 
@@ -340,9 +342,15 @@ OPTIONAL:
 * Start the instance
 * Use port 2000 with port forward and firewall
     * Described in [Change back Virtual box and test ssh](#ssh).
-* For more installations, use a different port on the host, so 2002, 2003, etc.
-The port on the virtual box installations will always be the same. In this
-case ssh will be port 22.
+        * Make the firewall with port 2000
+	* In Virtual Box Manager, the port forward
+            * Name : Rule2
+            * Protocol : TCP
+            * Host Ip: 127.0.0.1
+            * Host Port : 2000
+            * Guest IP : 10.0.2.6
+                * Change to the ip address of your virtual box.
+            * Guest Port : 22
 * Use the ip address of the server:
     * ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
     * which should be something like : 10.0.2.6

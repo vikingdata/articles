@@ -30,14 +30,19 @@ WSL installations run at the same time.
 
 Also, a goal is to make this usable under a VPN in Windows. 
 
-In this article, the network will be setup,
-a virtual host with basic software and configuration we want is made,
-an image in made of this virtual host which we will to make futher hosts. 
+In this article, a private network will be setup,
+a virtual host is made with the basic software and configuration we want for future installations,
+and an image in made of the base virtual host to make virtual hosts in the future. 
 In the future articles we will explain how to
 configure the software safely (MySQL, PostgreSQL, Ansible, RunDeck,
-Grafana with Prometheus and mysqld_exporter or with telegraph, etc). 
+Grafana with Prometheus and mysqld_exporter or with Telegraph and Influx, etc). 
 
-
+* Environment
+    * Ubuntu 22.4
+    * Virtual Box 7.0
+    * WSL Ubuntu 22.4 or Cygwin 3.4.9
+    * Windows 11 Home
+    
 * [Links](#links)
 * [Create NAT Network](#nn)
 * [Install Linux base](#install)
@@ -70,7 +75,7 @@ The purpose of this is to create a private network all our virtual boxes can see
          * We do this to make it easy for this article and future articles.
     * Click "Apply" to save changes. if necessary.
 
-TO connect to virtual boxes:
+To connect to virtual boxes:
 * Log into the virtual session.
 * Or setup a firewall and port forward to the "admin" virtualbox and connect from there to others.
 * Or setup a firewall and port forwarding for each box.
@@ -239,7 +244,9 @@ sudo chmod 600 /root/.ssh/authorized_keys
 
 We want to test ssh to the box to test ssh. We need to setup firewall and port forading.
 
-* TO find out the ip address of your Virtual Box, login and do one of the following
+In your virtual box instance. 
+
+* To find out the ip address of your Virtual Box, login and do one of the following
    * ifconfig
    * or execute this to get the ip address
 ```
@@ -263,11 +270,11 @@ In Windows
 	* name it : A custom ssh port 1999 outside block
 	* Click on finish
 
-* Setup port forwarding in Virtual Box to Linux installation.
+* Setup port forwarding in Virtual Box Manager to the Linux installation.
     * In the main VirtualBox Manager
     * File -> Tools - Network Manager
     * Select Nat Networks
-        * You might have to on Properties
+        * You might have to click on Properties
     * Click on Port Forwarding below
     * CLick the Plus sign to add a new entry on the right
 
@@ -290,6 +297,11 @@ In Windows
         * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l mark "echo 'should not work from another computer'"
     * See if you can login as root
         * ssh 127.0.0.1 -p 1999 -o "StrictHostKeyChecking no" -l root "echo 'ssh root good'"
+
+* After you login as root execute:
+```
+hostnamectl set-hostname ubuntubase.myguest.virtualbox.org
+```
 
 * * *
 <a name=copy></a>Make copy of this for future installation. 
@@ -320,14 +332,36 @@ Now import the image
 * For File, put in C:\shared\UbuntuBase.ova
     * Or whatever you saved the base ubuntu image as. 
 * Change settings
-    * Name : db1
+    * Name : admin
     * Mac Address Policy : "Generate new"
     * click Finish
 
-* OPTIONAL: 
-    * Start the instance
-    * Use port 2001 with port forward and firewall
-        * Described in [Change back Virtual box and test ssh](#ssh).
-    * For more installations, use a different port on the host, so 2002, 2003, etc.
+OPTIONAL: 
+* Start the instance
+* Use port 2000 with port forward and firewall
+    * Described in [Change back Virtual box and test ssh(#ssh).
+* For more installations, use a different port on the host, so 2002, 2003, etc.
 The port on the virtual box installations will always be the same. In this
-case ssh will be port 22. 
+case ssh will be port 22.
+* Use the ip address of the server:
+    * ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
+    * which should be something like : 10.0.2.6
+* Log into the instanace and execute:
+```
+sudo bash
+
+hostnamectl set-hostname admin.myguest.virtualbox.org
+
+my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
+echo "alias ssh_admin='ssh -l $my_ip'" > /cygdrive/c/shared/aliases
+echo "my ip is: $my_ip"
+```
+Output somthing like : my ip is: 10.0.2.6 
+
+* In Windows, in cygwin or WSL
+```
+ssh-copy-id -o "StrictHostKeyChecking no" -p 2000 -i ~/.ssh/id_rsa.pub root@127.0.0.1
+ssh -p 2000 root@127.0.0.1 "echo 'ssh firewall 200 ok'"
+
+
+```

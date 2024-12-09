@@ -311,7 +311,7 @@ rep=(
     " token = \"\""                         " token = \"1234567890\""
     " organization = \"\""                  " organization = \"myorg\""
     " bucket = \"\""                        " bucket = \"bucket1\""
-    "# metric_version = 1"                  "2 metric_version = 2" 
+    "# metric_version = 1"                  " metric_version = 2" 
 )
 # "\[\"tcp\(127.0.0.1:3306\)\/\"\]
 sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
@@ -325,7 +325,7 @@ sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[16]}/${rep[17]}/g" \
 > telegraf.conf
 
-egrep -i "promethesus|metric_version|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
+egrep -i "prometheus|metric_version|listen|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
 
 mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
 cp telegraf.conf /etc/telegraf/telegraf.conf
@@ -345,14 +345,17 @@ tail -f /var/log/telegraf/telegraf.log
 
 Output of egrep
 ```
-[[outputs.influxdb_v2]]
-  urls = ["http://127.0.0.1:8086"]
-  token = "1234567890"
-  organization = "myorg"
-  bucket = "bucket1"
-  data_format = "influx"
+   logfile="/var/log/telegraf/telegraf.log"
+   logfile_rotation_interval = "1h"
+   logfile_rotation_max_size = "100MB"
+   logfile_rotation_max_archives = 5
+[[outputs.prometheus_client]]
+  listen = ":9273"
+  2 metric_version = 2
 [[inputs.mysql]]
-  servers = ["telegraf:telegraf@tcp(127.0.0.1:3306)/?tls=false"]
+  servers = ["tcp(127.0.0.1:3306)/"]
+  metric_version = 2
+
 ```
 
 

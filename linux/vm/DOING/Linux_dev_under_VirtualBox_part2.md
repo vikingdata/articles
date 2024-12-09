@@ -218,9 +218,11 @@ mysql -u root -proot -e "GRANT REPLICATION CLIENT ON *.* TO 'telegraf'@'localhos
 
 cd
 mkdir -p mysql
+cd mysql
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/DOING/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
-
-
+ sed -e 's/__NO__/1/g' Dev_basic_my_cnf.md > /etc/mysql/conf.d/Dev_basic_my_cnf.md
+ 
+service mysql restart
 
 ```
 

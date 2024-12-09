@@ -362,8 +362,40 @@ Output of egrep
 
 
 * * *
-<a name=p></a>Install Promethesus
+<a name=p></a>Install Promethesus on admin server
 -----
+* https://prometheus.io/docs/prometheus/latest/installation/
+* https://github.com/prometheus-community/ansible
+* https://www.cherryservers.com/blog/install-prometheus-ubuntu
+* https://ibrahims.medium.com/how-to-install-prometheus-and-grafana-on-ubuntu-22-04-lts-configure-grafana-dashboard-5d11e3cb3cfd
+
+Ibstall promethesus on admin server. Unfortuantely, you have to download binaries or source source, compile
+and install it. We will download binaries, which for production you  should not do. 
+```
+sudo bash
+
+
+useradd --shell /bin/false prometheus
+
+mkdir -p  /etc/prometheus
+mkdir -p /var/lib/prometheus
+sudo chown prometheus:prometheus /var/lib/prometheus
+
+cd
+mkdir prometheus
+cd prometheus
+wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/prometheus-3.0.1.linux-amd64.tar.gz
+tar -xvf prometheus-2.46.0.linux-amd64.tar.gz
+cd prometheus-2.46.0.linux-amd64
+
+mv -f console* /etc/prometheus
+mv -f prometheus.yml /etc/prometheus
+chown -R prometheus:prometheus /etc/prometheus
+
+
+
+
+```
 
 
 * * *

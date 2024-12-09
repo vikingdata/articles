@@ -255,6 +255,89 @@ Setup port forwarding port 3101 to 3306 in db1.
 * * *
 <a name=t></a>Install Telegraph and configure for promethesus
 -----
+
+* https://prometheus.io/
+* https://www.influxdata.com/integration/prometheus-input/
+* https://gist.github.com/sgnl/0973e4709eee64a8b91bc38dd71f9e05
+* https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/
+
+
+```
+mkdir telegraf
+cd telegraf
+
+curl --silent --location -O \
+https://repos.influxdata.com/influxdata-archive.key \
+&& echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+| sha256sum -c - && cat influxdata-archive.key \
+| gpg --dearmor \
+| sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
+&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
+| sudo tee /etc/apt/sources.list.d/influxdata.list
+apt-get update && sudo apt-get install telegraf
+
+
+  # https://docs.influxdata.com/telegraf/v1/plugins/#input-plugins
+export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:processes:swap:system:mysql"
+telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
+
+mkdir -p /var/lib/telegraf
+chown telegraf.telegraf /var/lib/telegraf
+
+rep=(
+    "# logfile = \"\""                      " logfile=\"\/var\/log\/telegraf\/telegraf.log\""
+    "# logfile_rotation_interval = \"0h\""  " logfile_rotation_interval = \"1h\""
+    "# logfile_rotation_max_size = \"0MB\"" " logfile_rotation_max_size = \"100MB\""
+    "# logfile_rotation_max_archives = 5"   " logfile_rotation_max_archives = 5"
+    "files = \[\"stdout\", \"\/tmp\/metrics.out\"\]" "files = \[\"stdout\", \"\/var\/lib\/telegraf\/metrics.out\"\]"
+    " token = \"\""                         " token = \"1234567890\""
+    " organization = \"\""                  " organization = \"myorg\""
+    " bucket = \"\""                        " bucket = \"bucket1\""
+)
+# "\[\"tcp\(127.0.0.1:3306\)\/\"\]
+sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
+  | sed -e "s/${rep[2]}/${rep[3]}/g" \
+  | sed -e "s/${rep[4]}/${rep[5]}/g" \
+  | sed -e "s/${rep[6]}/${rep[7]}/g" \
+  | sed -e "s/${rep[8]}/${rep[9]}/g" \
+  | sed -e "s/${rep[10]}/${rep[11]}/g" \
+  | sed -e "s/${rep[12]}/${rep[13]}/g" \
+  | sed -e "s/${rep[14]}/${rep[15]}/g" \
+> telegraf.conf
+
+egrep -i "promethesus|8086|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
+
+mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
+cp telegraf.conf /etc/telegraf/telegraf.conf
+
+# OPTIONAL: test it
+telegraf --config telegraf.conf
+   ## Kill it ith Ctrl-C
+
+
+chown -R telegraf.telegraf /var/lib/telegraf /var/log/telegraf
+systemctl start telegraf
+
+tail -f /var/log/telegraf/telegraf.log
+
+
+```
+
+Output of egrep
+```
+[[outputs.influxdb_v2]]
+  urls = ["http://127.0.0.1:8086"]
+  token = "1234567890"
+  organization = "myorg"
+  bucket = "bucket1"
+  data_format = "influx"
+[[inputs.mysql]]
+  servers = ["telegraf:telegraf@tcp(127.0.0.1:3306)/?tls=false"]
+```
+
+
+
+
 * * *
 <a name=p></a>Install Promethesus
 -----

@@ -181,7 +181,7 @@ cd percona
 
 apt install curl -y
 curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
-sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+sudo apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
 sudo apt update
 sudo percona-release setup ps80
 
@@ -200,7 +200,7 @@ dpkg -i mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
 
   # It may ask for password, make the password "root" or your own password.
   # I suggest a better password than "root"
-sudo apt install percona-server-server=8.0.39-30-1.jammy
+sudo apt -y install percona-server-server=8.0.39-30-1.jammy
 
 mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
 mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
@@ -208,7 +208,7 @@ mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'lib
 
 mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
 mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
-mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
+mysql -u root -proot -e "create user grafana@'%' IDENTIFIED BY 'grafana'"
 mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
 
 mysql -u root -proot -e "create user telegraf@localhost IDENTIFIED BY 'telegraf'"
@@ -231,6 +231,8 @@ Setup firewall for port 3301
 * Select domain, private, and public
 * name it : A block mysql 3101
 * Click on finish
+* Do the same thing for port 2101
+   * Label it : A block ssh 2101
 
 Setup port forwarding port 3101 to 3306 in db1. 
 
@@ -240,12 +242,20 @@ Setup port forwarding port 3101 to 3306 in db1.
         * Adapter 1 -> Attached to -> NAT
         * Click on Advanced and then port forwarding
             * Enter
-            * Name : Rule1
+            * Name : Rule3
             * Protocol : TCP
-            * Host Ip: 0.0.0.0
+            * Host Ip: 127.0.0.1
             * Host Port : 3101
             * Guest IP : 10.0.2.15
 	    * Guest Port : 3306
+    * Do the same thing for ssh.
+            * Name : Rule3
+            * Protocol : TCP
+            * Host Ip: 127.0.0.1
+            * Host Port : 2101
+            * Guest IP : 10.0.2.15
+            * Guest Port : 22
+
 
 * Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3101
 
@@ -253,18 +263,23 @@ Setup port forwarding port 3101 to 3306 in db1.
 * [Install Promethesus](#t)
 
 * * *
-<a name=t></a>Install Telegraph and configure for promethesus
+<a name=t></a>Install Telegraph and configure for promethesus on db1
 -----
 * https://docs.influxdata.com/telegraf/v1/install/
 * https://github.com/influxdata/telegraf/tree/master/plugins/outputs/prometheus_client
-
+* https://docs.influxdata.com/telegraf/v1/plugins/
+    * Plugin ID: outputs.prometheus_client
 * https://prometheus.io/
 * https://www.influxdata.com/integration/prometheus-input/
 * https://gist.github.com/sgnl/0973e4709eee64a8b91bc38dd71f9e05
 * https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/
 
+Connect to db1
+* ssh to admin server
+* ssh to db1
 
 ```
+cd
 mkdir telegraf
 cd telegraf
 
@@ -281,7 +296,8 @@ apt-get update && sudo apt-get install telegraf
 
   # https://docs.influxdata.com/telegraf/v1/plugins/#input-plugins
 export plugins="cpu:mem:disk:diskio:kernel:kernel_vmstat:processes:swap:system:mysql"
-telegraf --input-filter $plugins --output-filter influxdb_v2:file config > telegraf.conf_template
+telegraf --input-filter $plugins --output-filter prometheus_client:file config > telegraf.conf_template
+# outputs.prometheus_client
 
 mkdir -p /var/lib/telegraf
 chown telegraf.telegraf /var/lib/telegraf
@@ -295,6 +311,7 @@ rep=(
     " token = \"\""                         " token = \"1234567890\""
     " organization = \"\""                  " organization = \"myorg\""
     " bucket = \"\""                        " bucket = \"bucket1\""
+    "# metric_version = 1"                  "2 metric_version = 2" 
 )
 # "\[\"tcp\(127.0.0.1:3306\)\/\"\]
 sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
@@ -305,9 +322,10 @@ sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[10]}/${rep[11]}/g" \
   | sed -e "s/${rep[12]}/${rep[13]}/g" \
   | sed -e "s/${rep[14]}/${rep[15]}/g" \
+  | sed -e "s/${rep[16]}/${rep[17]}/g" \
 > telegraf.conf
 
-egrep -i "promethesus|8086|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
+egrep -i "promethesus|metric_version|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
 
 mv /etc/telegraf/telegraf.conf /etc/telegraf/telegraf.conf_orig
 cp telegraf.conf /etc/telegraf/telegraf.conf

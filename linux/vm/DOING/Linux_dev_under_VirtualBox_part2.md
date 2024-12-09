@@ -140,6 +140,7 @@ alias ssh_db3='ssh 127.0.0.1 -p 2303 -l root'
 " >> ~/.bashrc
 source ~/.bashrc
 
+```
 * In Windows, in cygwin or WSL. This should be unecessary. The base image should already have this.
 ```
 for port in  2101 2102 2013; do

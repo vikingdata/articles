@@ -216,6 +216,11 @@ mysql -u root -proot -e "GRANT SELECT ON performance_schema.* TO 'telegraf'@'loc
 mysql -u root -proot -e "GRANT PROCESS ON *.* TO 'telegraf'@'localhost';"
 mysql -u root -proot -e "GRANT REPLICATION CLIENT ON *.* TO 'telegraf'@'localhost';"
 
+cd
+mkdir -p mysql
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/DOING/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
+
+
 
 ```
 

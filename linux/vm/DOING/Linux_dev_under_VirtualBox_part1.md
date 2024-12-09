@@ -343,7 +343,7 @@ OPTIONAL:
 * Use port 2000 with port forward and firewall
     * Described in [Change back Virtual box and test ssh](#ssh).
         * Make the firewall with port 2001
-	* In Virtual Box Manager, the port forward
+        * In Virtual Box Manager, the port forward
             * Name : Rule2
             * Protocol : TCP
             * Host Ip: 127.0.0.1

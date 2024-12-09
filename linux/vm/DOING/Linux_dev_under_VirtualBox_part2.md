@@ -255,6 +255,8 @@ Setup port forwarding port 3101 to 3306 in db1.
 * * *
 <a name=t></a>Install Telegraph and configure for promethesus
 -----
+* https://docs.influxdata.com/telegraf/v1/install/
+* https://github.com/influxdata/telegraf/tree/master/plugins/outputs/prometheus_client
 
 * https://prometheus.io/
 * https://www.influxdata.com/integration/prometheus-input/

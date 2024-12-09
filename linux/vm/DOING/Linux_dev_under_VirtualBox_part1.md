@@ -342,34 +342,38 @@ OPTIONAL:
 * Start the instance
 * Use port 2000 with port forward and firewall
     * Described in [Change back Virtual box and test ssh](#ssh).
-        * Make the firewall with port 2000
+        * Make the firewall with port 2001
 	* In Virtual Box Manager, the port forward
             * Name : Rule2
             * Protocol : TCP
             * Host Ip: 127.0.0.1
-            * Host Port : 2000
+            * Host Port : 2001
             * Guest IP : 10.0.2.6
                 * Change to the ip address of your virtual box.
             * Guest Port : 22
 * Use the ip address of the server:
     * ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
     * which should be something like : 10.0.2.6
+
 * Log into the instanace and execute:
 ```
 sudo bash
 
-hostnamectl set-hostname admin.myguest.virtualbox.org
+hostnamectl set-hostname admin1.myguest.virtualbox.org
 
 my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
-echo "alias ssh_admin='ssh -l $my_ip'" > /cygdrive/c/shared/aliases
+echo "alias ssh_admin1='ssh -l $my_ip'" > /cygdrive/c/shared/aliases
+echo "admin1='$my_ip'" >> /shared/server_ips
 echo "my ip is: $my_ip"
 ```
 Output somthing like : my ip is: 10.0.2.6 
 
 * In Windows, in cygwin or WSL
 ```
-ssh-copy-id -o "StrictHostKeyChecking no" -p 2000 -i ~/.ssh/id_rsa.pub root@127.0.0.1
-ssh -p 2000 root@127.0.0.1 "echo 'ssh firewall 200 ok'"
+ssh-copy-id -o "StrictHostKeyChecking no" -p 2001 -i ~/.ssh/id_rsa.pub root@127.0.0.1
+ssh -p 2001 root@127.0.0.1 "echo 'ssh firewall 2001 ok'"
 
+echo "transferring private and public keys to 2001"
+rsync -av  -e 'ssh -p 2001' ~/.ssh/id_rsa.pub  ~/.ssh/id_rsa root@127.0.0.1:/root/.ssh
 
 ```

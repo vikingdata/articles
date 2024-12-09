@@ -26,6 +26,15 @@ Monitoring Environment
     * Promethesus gathers data from multiple servers.
        * It can monitor, report, display itself.
     * Grafana will connect to promethesus for monitor, report, and display.
+* PMM setup on admin2 in another article
+    * PMM gathers data for cpu, mysql, etc from multiple servers. 
+        *  It can also monitor, report, and display.
+    * Grafana connects to PMM to get data to monitor, report, and display.
+* Basic setup on admin3 in another article
+    * Telegraph makes stats locally
+    * Influx gathers data to database locally (or could be remote)
+    * Grafana connects to each Influx on each server to get data. 
+        * Verify this -- grfana doesn't store locally. 
 
 So why use Grafana? It has a good interface for dashboards.
 
@@ -38,123 +47,81 @@ In general the goals are
     * Grafana will gather data from Promethesus for monitoring. 
 
 * [Links](#links)
-* [3 db servers](#3)
+* [6 servers](#4)
 * [MySQL](#m)
 * [Install Telegraph and configure for promethesus](#t)
-* [Install Promethesus](#t)
 * [Grafana + promethesus](#g)
 
 * * *
 
 <a name=links></a>Links
 -----
-TODO verify links and redo links
 * [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md)
 * https://logz.io/blog/grafana-tutorial/
 * https://grafana.com/docs/grafana/latest/developers/http_api/data_source/
 * https://www.youtube.com/watch?v=Dcumy5Ir1Ag
 * * *
-<a name=3></a>3 db servers
+<a name=4></a>6 servers
 -----
 
-The end goal is to have 3 servers db1, db2, and db3. Each with ports
- 2101, 2102, and 2103 on the host pointing to them at their port ssh 22. In addition, each
+The end goal is to have 6 servers, admin1. admin2, admin3, db1, db2, and db3. Each with ports
+200, 2001, 2002, 2101, 2102, and 2103 on the host pointing to them at their port ssh 22. In addition, each
 admin server can ssh to the other servers. 
 
-* Now import the image as described in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md#copies)
+* Now import the image
     * In Virtual Box, select Import Appliance
     * For File, put in C:\shared\UbuntuBase.ova
         * Or whatever you saved the base ubuntu image as.
     * Change settings
-    * Name : admin2
+    * Name : admin
     * Mac Address Policy : "Generate new"
     * click Finish
     * Start the instance
-* Setup the firewall and port forward as in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md#nat2) 
-* To find out the ip address of each server, on each server:
-```
-ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3
-my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
-echo "my ip address is : $my_ip"
-```
+* Setup the firewall and port forward as in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_Windows_part1.md#nat2) but use port 2001 instead of 2000. 
 
-* Setup the firewall and port forward 
-    * Described in [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux
-_dev_under_Windows_part1.md#ssh) but use a different port for the firewall which should match the host port in
-port forwarding.
-        * Example for db1:
-            * Make the firewall block with port 2002
-            * In Virtual Box Manager, the port forward
-                * Name : Rule3
-                * Protocol : TCP
-                * Host Ip: 127.0.0.1
-                * Host Port : 2101
-                * Guest IP : 10.0.2.7
-                    * Change to the ip address of your virtual box.
-                * Guest Port : 22
+* Repeat the previous steps.
+    * The port forwarding might need to be edited instead of making new ones.
+    * The admin server should use port 2000
+    * The second server name db1 and use port 2001
+    * The third server name db2 and use port 2002
+    * The fourth server should be db3 and use port 2003 
 
-
-    * Repeat the previous steps.
-        * The port forwarding might need to be edited instead of making new ones.
-        * db1 server should use port 2101  on host
-        * db2 server should use port 2102  on host
-        * db3 server should use port 2103  on host
-
-* On each server, change the hostname
-    * db1 :   hostnamectl set-hostname db1.myguest.virtualbox.org
-    * db2 :   hostnamectl set-hostname db2.myguest.virtualbox.org
-    * db3 :   hostnamectl set-hostname db3.myguest.virtualbox.org
-
-* on each server, save the alias
-```
-sudo bash
-
-
-echo "Change the alias name depending which servers you are on!"
-
-export alias_name="ssh_"`hostname`
-echo " my hostname", `hostname`, " and my alias is $alias_name"
-my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
-echo "alias $alias_name='ssh -l $my_ip'" >> /shared/aliases
-echo "$alias_name='$my_ip'" >> /shared/server_ips
-echo ""; echo ""; echo "";
-
-echo " my hostname", `hostname`, " and my alias is $alias_name"
-echo "my ip is: $my_ip"
-
-```
-
-* Test the connections -- NOTE, the port forwarding must be done already. 
-    * ssh 127.0.0.1 -p 2101 -l root "echo '2101 good'"
-    * ssh 127.0.0.1 -p 2102 -l root "echo '2202 good'"
-    * ssh 127.0.0.1 -p 2103 -l root "echo '2303 good'"
-
-* Make alias in .bashrc in Cygwin or WSL
+* Test the connections
+    * ssh 127.0.0.1 -p 2000 -l root "echo '2000 good'"
+    * ssh 127.0.0.1 -p 2001 -l root "echo '2001 good'"
+    * ssh 127.0.0.1 -p 2002 -l root "echo '2002 good'"
+    * ssh 127.0.0.1 -p 2003 -l root "echo '2003 good'"
+* Make alias in .bashrc
 ```
 cp ~/.bashrc ~/.bashrc_`date +%Y%m%d`
 
 echo "
-alias ssh_db1='ssh 127.0.0.1 -p 2101 -l root'
-alias ssh_db2='ssh 127.0.0.1 -p 2202 -l root'
-alias ssh_db3='ssh 127.0.0.1 -p 2303 -l root'
+alias ssh_admin='ssh 127.0.0.1 -p 2000 -l root'
+alias ssh_db1='ssh 127.0.0.1 -p 2001 -l root'
+alias ssh_db2='ssh 127.0.0.1 -p 2002 -l root'
+alias ssh_db3='ssh 127.0.0.1 -p 2003 -l root'
 " >> ~/.bashrc
 source ~/.bashrc
 
-* In Windows, in cygwin or WSL. This should be unecessary. The base image should already have this.
-```
-for port in  2101 2102 2013; do
-  ssh-copy-id -o "StrictHostKeyChecking no" -p $port -i ~/.ssh/id_rsa.pub root@127.0.0.1
-  ssh -p $port root@127.0.0.1 "echo 'ssh firewall $port ok'"
-done
-
-#for port in 2102 2103; do
-#  echo "transferring private and public keys to $port"
-#  rsync -av  ~/.ssh/id_rsa.pub  ~/.ssh/id_rsa root@127.0.0.1:$port/.ssh
-#done
-
-
 
 ```
+* On each server, change the hostname
+    * admin1 : hostnamectl set-hostname admin1.myguest.virtualbox.org
+    * admin2 : hostnamectl set-hostname admin2.myguest.virtualbox.org
+    * admin2 : hostnamectl set-hostname admin3.myguest.virtualbox.org
+    * db1 :   hostnamectl set-hostname db1.myguest.virtualbox.org
+    * db2 :   hostnamectl set-hostname db2.myguest.virtualbox.org
+    * db3 :   hostnamectl set-hostname db3.myguest.virtualbox.org
+
+* * *
+<a name=sshrsa></a>Copy private rsa key to admin servers
+-----
+Goal, let the admin server ssh to other servers for ansible and other reasons.
+
+Copy rds key
+
+Test ssh logins
+
 
 
 * * *
@@ -247,17 +214,6 @@ Setup port forwarding port 3101 to 3306 in db1.
 	    * Guest Port : 3306
 
 * Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3101
-
-* [Install Telegraph and configure for promethesus](#t)
-* [Install Promethesus](#t)
-
-* * *
-<a name=t></a>Install Telegraph and configure for promethesus
------
-* * *
-<a name=p></a>Install Promethesus
------
-
 
 * * *
 <a name=g></a>Setup Grafana on admin server

@@ -1,0 +1,14 @@
+Install grafana + promethesus + telegraf
+Install grafana + PMM
+Install grafana + telegraf + influx
+
+Install New Relic on dbs servers
+
+Install Postgresql in replication and add to monitoring
+Install MongoDB sharded twice on the 3 servers and add to monitoring
+Install snowflake :: Can you add it to new relic?
+
+Setup replication from mysql to snowflake
+Install DBT and run process on snowflake.
+
+Run DBT and Mysql and upload result to snowflake. Process by week. It should delete rows and then upload.

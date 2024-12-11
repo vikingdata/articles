@@ -267,7 +267,7 @@ In Windows
 	* Enter port 1999
 	* Click Block connection
 	* Select domain, private, and public
-	* name it : A custom ssh port 1999 outside block
+	* name it : A block ssh port 1999 outside block
 	* Click on finish
 
 * Setup port forwarding in Virtual Box Manager to the Linux installation.
@@ -342,12 +342,12 @@ OPTIONAL:
 * Start the instance
 * Use port 2000 with port forward and firewall
     * Described in [Change back Virtual box and test ssh](#ssh).
-        * Make the firewall with port 2001
+        * Make the firewall with port 2000
         * In Virtual Box Manager, the port forward
             * Name : Rule2
             * Protocol : TCP
             * Host Ip: 127.0.0.1
-            * Host Port : 2001
+            * Host Port : 2000
             * Guest IP : 10.0.2.6
                 * Change to the ip address of your virtual box.
             * Guest Port : 22
@@ -370,10 +370,10 @@ Output somthing like : my ip is: 10.0.2.6
 
 * In Windows, in cygwin or WSL
 ```
-ssh-copy-id -o "StrictHostKeyChecking no" -p 2001 -i ~/.ssh/id_rsa.pub root@127.0.0.1
-ssh -p 2001 root@127.0.0.1 "echo 'ssh firewall 2001 ok'"
+ssh-copy-id -o "StrictHostKeyChecking no" -p 2000 -i ~/.ssh/id_rsa.pub root@127.0.0.1
+ssh -p 2000 root@127.0.0.1 "echo 'ssh firewall 2000 ok'"
 
-echo "transferring private and public keys to 2001"
-rsync -av  -e 'ssh -p 2001' ~/.ssh/id_rsa.pub  ~/.ssh/id_rsa root@127.0.0.1:/root/.ssh
+echo "transferring private and public keys to 2000"
+rsync -av  -e 'ssh -p 2000' ~/.ssh/id_rsa.pub  ~/.ssh/id_rsa root@127.0.0.1:/root/.ssh
 
 ```

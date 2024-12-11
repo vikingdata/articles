@@ -144,6 +144,8 @@ TODO: other checks : count events, triggers, stored procedures, no of DATABASES,
 <a name=p></a>Percona xtrabackup
 -----
 
+* https://docs.percona.com/percona-xtrabackup/8.0/take-streaming-backup.html#use-streaming
+
 ### Percona Backup <a name=pbackup></a>
 
 * https://docs.percona.com/percona-xtrabackup/2.4/howtos/recipes_ibkx_local.html

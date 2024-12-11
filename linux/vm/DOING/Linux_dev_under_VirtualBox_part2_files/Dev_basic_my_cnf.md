@@ -31,7 +31,6 @@ transaction_isolation=READ-COMMITTED
 innodb_undo_log_truncate=on
 innodb_max_undo_log_size=1g
 innodb_file_per_table=on
-innodb_buffer_pool_size=10M
 innodb_log_buffer_size=1m
 
 innodb_buffer_pool_instances=1

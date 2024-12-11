@@ -221,9 +221,30 @@ mkdir -p mysql
 cd mysql
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/DOING/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
  sed -e 's/__NO__/1/g' Dev_basic_my_cnf.md > /etc/mysql/conf.d/Dev_basic_my_cnf.md
- 
-service mysql restart
 
+# I am not sure why, but changes to buffer pool is not read of configuration files
+# other than my.cnf. You need to define buffer pool in the main file
+# and then it will override it with the one in conf.d -- weird. 
+
+echo "
+[mysqld]
+innodb_buffer_pool_size=5242881
+" >> /etc/mysql/my.cnf
+
+service mysql restart
+mysql -u root -proot -e "SELECT * FROM performance_schema.global_variables where VARIABLE_NAME in ('server_id', 'innodb_buffer_pool_size')" 
+```
+
+Output of mysql query
+```
++-------------------------+----------------+
+| VARIABLE_NAME           | VARIABLE_VALUE |
++-------------------------+----------------+
+| innodb_buffer_pool_size | 5242880        |
+| master_info_repository  | TABLE          |
+| server_id               | 1              |
++-------------------------+----------------+
+3 rows in set (0.53 sec)
 ```
 
 ### Setup firewall and port forwarding
@@ -265,6 +286,7 @@ Setup port forwarding port 3101 to 3306 in db1.
 
 
 * Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3101
+     * ssh test : ssh root@127.0.0.1 -p 2101 "echo 'ssh 2101 worked'"
 
 * [Install Telegraph and configure for promethesus](#t)
 * [Install Promethesus](#t)
@@ -282,12 +304,11 @@ Setup port forwarding port 3101 to 3306 in db1.
 * https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/
 
 Connect to db1
-* ssh to admin server
-* ssh to db1
+* ssh to db1 : execute "ssh_db1" or "ssh root@127.0.0.1 -p 2101"
 
 ```
 cd
-mkdir telegraf
+mkdir -p telegraf
 cd telegraf
 
 curl --silent --location -O \
@@ -318,7 +339,9 @@ rep=(
     " token = \"\""                         " token = \"1234567890\""
     " organization = \"\""                  " organization = \"myorg\""
     " bucket = \"\""                        " bucket = \"bucket1\""
-    "# metric_version = 1"                  " metric_version = 2" 
+    "# metric_version = 1"                  " metric_version = 2"
+    "interval = \"10s"\"                    "interval = \"60s\""
+    "logfile_rotation_max_size = \"100MB\""    logfile_rotation_max_size = \"10MB\""
 )
 # "\[\"tcp\(127.0.0.1:3306\)\/\"\]
 sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
@@ -330,6 +353,9 @@ sed -e "s/${rep[0]}/${rep[1]}/g" telegraf.conf_template \
   | sed -e "s/${rep[12]}/${rep[13]}/g" \
   | sed -e "s/${rep[14]}/${rep[15]}/g" \
   | sed -e "s/${rep[16]}/${rep[17]}/g" \
+  | sed -e "s/${rep[18]}/${rep[19]}/g" \
+  | sed -e "s/${rep[20]}/${rep[21]}/g" \
+  | sed -e "s/\[\"tcp(127.0.0.1:3306)\/\"\]/\[\"telegraf:telegraf\@tcp(127.0.0.1:3306)\/?tls=false\"\]/" \ 
 > telegraf.conf
 
 egrep -i "prometheus|metric_version|listen|token|organization|bucket|logfile|telegrapf|mysql|3306" telegraf.conf | grep -v '#'
@@ -340,14 +366,10 @@ cp telegraf.conf /etc/telegraf/telegraf.conf
 # OPTIONAL: test it
 telegraf --config telegraf.conf
    ## Kill it ith Ctrl-C
-
-
 chown -R telegraf.telegraf /var/lib/telegraf /var/log/telegraf
 systemctl start telegraf
 
 tail -f /var/log/telegraf/telegraf.log
-
-
 ```
 
 Output of egrep
@@ -365,9 +387,6 @@ Output of egrep
 
 ```
 
-
-
-
 * * *
 <a name=p></a>Install Promethesus on admin server
 -----
@@ -375,6 +394,8 @@ Output of egrep
 * https://github.com/prometheus-community/ansible
 * https://www.cherryservers.com/blog/install-prometheus-ubuntu
 * https://ibrahims.medium.com/how-to-install-prometheus-and-grafana-on-ubuntu-22-04-lts-configure-grafana-dashboard-5d11e3cb3cfd
+* https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+* https://medium.com/@parikshitaksande/a-step-by-step-guideto-setup-prometheus-server-for-monitoring-b444a2978ba9
 
 Ibstall promethesus on admin server. Unfortuantely, you have to download binaries or source source, compile
 and install it. We will download binaries, which for production you  should not do. 
@@ -391,19 +412,106 @@ sudo chown prometheus:prometheus /var/lib/prometheus
 cd
 mkdir prometheus
 cd prometheus
-wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/prometheus-3.0.1.linux-amd64.tar.gz
-tar -xvf prometheus-2.46.0.linux-amd64.tar.gz
-cd prometheus-2.46.0.linux-amd64
+
+wget https://github.com/prometheus/prometheus/releases/download/v2.53.3/prometheus-2.53.3.linux-amd64.tar.gz
+tar -zxvf prometheus-2.53.3.linux-amd64.tar.gz
+cd prometheus-2.53.3.linux-amd64/
 
 mv -f console* /etc/prometheus
 mv -f prometheus.yml /etc/prometheus
 chown -R prometheus:prometheus /etc/prometheus
 
+mkdir -p  /etc/prometheus/scrape
 
+echo "
+scrape_config_files:
+  - /etc/prometheus/scrape/*.yml
+"  
+
+echo "
+scrape_configs:
+- job_name: telegraf
+  static_configs:
+  - targets:
+    - "10.0.2.7:9273"
+"
 
 
 ```
 
+#### In Windows
+
+* Setup firewall
+    * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+    * In Windows, type in firewall in he search field and select "Firewall Network and Protection.
+    * Click on Inbound rules, and select New.
+        * Click port
+        * Enter port 9009
+        * Click Block connection
+        * Select domain, private, and public
+        * name it : A block promethesus 9090
+        * Click on finish
+
+
+#### Setup port forwarding port 9090 to 9090 in admin.
+
+* Setup port forwarding in Virtual Box to Linux installation.
+    * Select the running server "admin"
+    * Devices -> Network -> Network Settings
+        * Adapter 1 -> Attached to -> NAT
+        * Click on Advanced and then port forwarding
+            * Enter
+            * Name : Rule5
+            * Protocol : TCP
+            * Host Ip: 127.0.0.1
+            * Host Port : 9090
+            * Guest IP : 10.0.2.6
+            * Guest Port : 9090
+
+### Start prometheus
+```
+sudo touch /etc/systemd/system/prometheus.service
+echo "[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+​
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+​
+[Install]
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service
+
+sudo systemctl daemon-reload
+sudo systemctl start prometheus
+sudo systemctl enable prometheus
+sudo systemctl status prometheus
+
+```
+# log_level debug
+
+global
+
+query_log_file: /prometheus/query.log
+
+
+/etc/logrotate.d/prometheus
+/prometheus/query.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    postrotate
+        killall -HUP prometheus
+    endscript
+}
 
 * * *
 <a name=g></a>Setup Grafana on admin server

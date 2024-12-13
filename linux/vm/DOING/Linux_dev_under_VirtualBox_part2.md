@@ -396,18 +396,18 @@ Output of egrep
 * https://ibrahims.medium.com/how-to-install-prometheus-and-grafana-on-ubuntu-22-04-lts-configure-grafana-dashboard-5d11e3cb3cfd
 * https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 * https://medium.com/@parikshitaksande/a-step-by-step-guideto-setup-prometheus-server-for-monitoring-b444a2978ba9
+* https://prometheus.io/docs/tutorials/getting_started/
 
 Ibstall promethesus on admin server. Unfortuantely, you have to download binaries or source source, compile
 and install it. We will download binaries, which for production you  should not do. 
 ```
 sudo bash
 
-
 useradd --shell /bin/false prometheus
 
 mkdir -p  /etc/prometheus
 mkdir -p /var/lib/prometheus
-sudo chown prometheus:prometheus /var/lib/prometheus
+sudo chown prometheus:prometheus /var/lib/prometheus 
 
 cd
 mkdir prometheus
@@ -418,23 +418,34 @@ tar -zxvf prometheus-2.53.3.linux-amd64.tar.gz
 cd prometheus-2.53.3.linux-amd64/
 
 mv -f console* /etc/prometheus
-mv -f prometheus.yml /etc/prometheus
+cp -f prometheus.yml /etc/prometheus
+cp -f prometheus.yml /etc/prometheus/prometheus.yml_orig
 chown -R prometheus:prometheus /etc/prometheus
 
+mv prometheus /usr/local/bin
+mv promtool /usr/local/bin
+chown prometheus:prometheus /usr/local/bin/prometheus
+chown prometheus:prometheus /usr/local/bin/promtool
+
 mkdir -p  /etc/prometheus/scrape
+chown  prometheus:prometheus /etc/prometheus/scrape
 
 echo "
 scrape_config_files:
   - /etc/prometheus/scrape/*.yml
-"  
 
-echo "
+# Storage related settings that are runtime reloadable.
+storage:
+  - tsdb: 
+    - path:
+      - /var/lib/prometheus/
+
 scrape_configs:
 - job_name: telegraf
   static_configs:
   - targets:
     - "10.0.2.7:9273"
-"
+" 
 
 
 ```

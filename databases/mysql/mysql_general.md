@@ -512,7 +512,7 @@ it starts as mysql user.
 * First comment out log-error. On some systems, you cannot
 get the output to go to console if this is defined. 
 ```
-   # Find out if log-error is int he configuration
+   # Find out if log-error is in the configuration
 grep -iR log-error /etc/my.cnf /etc/mysql 2>/dev/null
    # If so, edit the config and comment it out. 
 
@@ -556,16 +556,25 @@ mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
 
 ```
 * Specify to start default file and user. Make sure you commented out
-log-error in the config file.
+log-error in the config file. You want the error to go to the screen and
+not a log file. There are several debug reasons for this (like you can't
+write to the log file). Change to the location of wherever the main my.cnf
+is located. 
 
 ```
 mysqld -u mysql --defaults-file=/etc/my.cnf
   # Or
 mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
 
+  # or as sudo
+sudo -u mysql mysqld --defaults-file=/etc/mysql/my.cnf
+  # or
+sudo -u mysql mysqld --defaults-file=/etc/my.cnf 
+
+
 ```
 
-IF things look good
+IF things look good, and the output is to the screen
 * Kill mysql
 * Uncomment log-error in confile file
 * Start mysql normally

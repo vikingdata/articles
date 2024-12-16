@@ -30,6 +30,7 @@ This article will grow over time.
 * [Join versus subquery](#join)
 * [Fix root permissions](#root)
 * [Fix account from 5.7 to 8.0 replication](#accountrep)
+* [Start mysql manually](#startmanually)
 * * *
 <a name=tailgzip></a>Tail a gzipped file
 -----
@@ -500,3 +501,73 @@ show slave status\G
  -- verify you are 0 seconds behind and slave_io_running and slave_running are YEs
 
 ```
+
+* * *
+<a name=startmanually></a>Start mysql manually
+-----
+
+The key is to specify the my.cnf and any other variables, like make sure
+it starts as mysql user.
+
+* First comment out log-error. On some systems, you cannot
+get the output to go to console if this is defined. 
+```
+   # Find out if log-error is int he configuration
+grep -iR log-error /etc/my.cnf /etc/mysql 2>/dev/null
+   # If so, edit the config and comment it out. 
+
+```
+
+* Then stop mysqld
+
+```
+sudo bash
+
+  ## kill mysql
+
+  # Ubuntu
+service mysql stop
+
+  # or gracefully stop
+#  kill mysqlrouter
+#  kill mysqld
+# sleep 20
+  # hard kill
+# kill -9 mysqlrouter
+# kill -9 mysqld
+* sleep 5
+
+```
+
+* Find out where your default config files are located. 
+
+```
+mysqld --help --verbose | grep ^/etc/my.cnf -B 1
+mysqld --help --verbose | egrep "^socket|^pid"
+mysqld  --print-defaults
+```
+
+* If its percona, they like to destroy and create directories for pid and
+socket files.
+```
+mkdir -p /var/run/mysqld/
+chown -R mysql.mysql /var/run/mysqld
+mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
+
+```
+* Specify to start default file and user. Make sure you commented out
+log-error in the config file.
+
+```
+mysqld -u mysql --defaults-file=/etc/my.cnf
+  # Or
+mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
+
+```
+
+IF things look good
+* Kill mysql
+* Uncomment log-error in confile file
+* Start mysql normally
+* Look at log file
+

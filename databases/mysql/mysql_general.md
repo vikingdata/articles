@@ -336,7 +336,7 @@ and scripts that are database related (like backup scripts).
 * Test code : Note any locking changes to schema. 
 
 * * *
-<a name=spike></a CPU spikes changes
+<a name=spike></a> CPU spikes changes
 -----
 * Are there any locks?
 

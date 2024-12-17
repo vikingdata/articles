@@ -31,6 +31,10 @@ This article will grow over time.
 * [Fix root permissions](#root)
 * [Fix account from 5.7 to 8.0 replication](#accountrep)
 * [Start mysql manually](#startmanually)
+* [ Percona : Where did query come from?](#audit)
+
+
+
 * * *
 <a name=tailgzip></a>Tail a gzipped file
 -----
@@ -555,16 +559,17 @@ chown -R mysql.mysql /var/run/mysqld
 mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
 
 ```
-* Specify to start default file and user. Make sure you commented out
+* Specify to start default file and user -- in that order.
+Make sure you commented out
 log-error in the config file. You want the error to go to the screen and
 not a log file. There are several debug reasons for this (like you can't
 write to the log file). Change to the location of wherever the main my.cnf
 is located. 
 
 ```
-mysqld -u mysql --defaults-file=/etc/my.cnf
+mysqld --defaults-file=/etc/my.cnf -u mysql
   # Or
-mysqld -u mysql --defaults-file=/etc/mysql/my.cnf
+mysqld --defaults-file=/etc/mysql/my.cnf -u mysql
 
   # or as sudo
 sudo -u mysql mysqld --defaults-file=/etc/mysql/my.cnf
@@ -573,10 +578,128 @@ sudo -u mysql mysqld --defaults-file=/etc/my.cnf
 
 
 ```
-
 IF things look good, and the output is to the screen
 * Kill mysql
 * Uncomment log-error in confile file
 * Start mysql normally
 * Look at log file
 
+
+* I have learned this error message when starting mysqld normally doesn't
+help much in debugging. That's why you want errors to the screen. I purposely
+put an error in the configuration and it didn't help much. 
+
+Output: 
+```
+See "systemctl status mysql.service" and "journalctl -xeu mysql.service" for details.
+
+```
+
+* * *
+<a name=audit></a>Where did query come from? Percona
+-----
+* https://docs.percona.com/percona-server/8.0/audit-log-plugin.html
+
+This is similar for MySQL Enterprise. With Percona it is free.
+
+
+* Turn on Audit Log.
+    * Record open and closes. The audit log records the thread id of connections.
+* Use mysqlbinlog to extra queries from binlogs. The extraction
+records the server id which is which master committed the data and
+from which thread id executed the query on the master.
+* Thus
+    * Find the query from the binlog and get the thread id and server id.
+    * The MySQL Master that has the server id will have the open and close
+    of the thread id in its auti log.
+        * If you are not on the current MySQL server that executed the original
+	query, go to that MySQL server to search the log. 
+    * Search through the audit log -- of the MySQL master that executed
+    the query -- to find thread id to get the information
+    of which server connected to mysql.
+
+* Install Percona MySQL
+* Install audit log
+```
+mysql> INSTALL PLUGIN audit_log SONAME 'audit_log.so';
+```
+* Edit my.cnf
+In /etc/my.cnf
+```
+audit_log_buffer_size=10Mb
+audit_log_format = NEW
+audit_log_policy = LOGINS
+audit_log_rotate_on_size = 2GB
+audit_log_rotations = 5
+audit_log_strategy = PERFORMANCE
+audit_log_file = /var/log/mysql/audit.log
+
+```
+
+* restart mysql
+```
+service mysql restart
+sleep 5
+ls -al /var/log/mysql/audit.log
+
+
+```
+
+Test query, binlog, and audit log
+* In MySQL
+```
+flush logs;
+show master status;
+
+# Output
+#| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
+#| binlog.000055 |      157 |              |                  |                   |
+
+mysql> show variables like '%log_bin_basename%';
+
+# Output
+# | Variable_name    | Value                 |
+# | log_bin_basename | /var/lib/mysql/binlog |
+
+
+mysql> create database mark_test;
+```
+
+* Do mysqlbinlog and search for query
+```
+mysqlbinlog --base64-output=DECODE-ROWS --verbose /var/lib/mysql/binlog.000055 > /tmp/55.sql
+
+grep -B 10 "create database mark_test" /tmp/55.sql
+
+# Output
+# root@db1:~# grep -B 15 "create database mark_test" /tmp/55.sql | grep -v "SET"
+# at 234
+# 241217 14:37:09 server id 1  end_log_pos 357 CRC32 0x99e699ac  Query   thread_id=16    exec_time=0     error_code=0 Xid = 61
+# /*!\C utf8mb4 *//*!*/;
+# create database mark_test
+
+
+```
+
+* The thread id is 16, look through audit log. Connection id is the same as thread id in the binlog.
+```
+grep -B 4 -A 9 '<CONNECTION_ID>16</CONNECTION_ID>'  /var/log/mysql/audit.log
+
+# Output
+# <AUDIT_RECORD>
+#  <NAME>Connect</NAME>
+#  <RECORD>16_2024-12-17T19:33:02</RECORD>
+#  <TIMESTAMP>2024-12-17T19:34:19Z</TIMESTAMP>
+#  <CONNECTION_ID>16</CONNECTION_ID>
+#  <STATUS>0</STATUS>
+#  <USER>root</USER>
+#  <PRIV_USER>root</PRIV_USER>
+#  <OS_LOGIN></OS_LOGIN>
+#  <PROXY_USER></PROXY_USER>
+#  <HOST>localhost</HOST>
+#  <IP></IP>
+#  <DB></DB>
+#</AUDIT_RECORD>
+
+```
+* So the host is "localhost", ip is nothing, user is root, and time is '2024-12-17T19:34:19Z'.

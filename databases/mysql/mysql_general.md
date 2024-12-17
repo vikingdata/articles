@@ -669,10 +669,9 @@ mysql> create database mark_test;
 ```
 mysqlbinlog --base64-output=DECODE-ROWS --verbose /var/lib/mysql/binlog.000055 > /tmp/55.sql
 
-grep -B 10 "create database mark_test" /tmp/55.sql
+grep -B 15 "create database mark_test" /tmp/55.sql | grep -v "SET"
 
 # Output
-# root@db1:~# grep -B 15 "create database mark_test" /tmp/55.sql | grep -v "SET"
 # at 234
 # 241217 14:37:09 server id 1  end_log_pos 357 CRC32 0x99e699ac  Query   thread_id=16    exec_time=0     error_code=0 Xid = 61
 # /*!\C utf8mb4 *//*!*/;

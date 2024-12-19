@@ -581,7 +581,7 @@ sudo -u mysql mysqld --defaults-file=/etc/my.cnf
 ```
 IF things look good, and the output is to the screen
 * Kill mysql
-* Uncomment log-error in config file
+* Uncomment log-error in confile file
 * Start mysql normally
 * Look at log file
 
@@ -612,7 +612,7 @@ from which thread id executed the query on the master.
 * Thus
     * Find the query from the binlog and get the thread id and server id.
     * The MySQL Master that has the server id will have the open and close
-    of the thread id in its audit log.
+    of the thread id in its auti log.
         * If you are not on the current MySQL server that executed the original
 	query, go to that MySQL server to search the log. 
     * Search through the audit log -- of the MySQL master that executed
@@ -716,7 +716,7 @@ grep -B 4 -A 9 '<CONNECTION_ID>16</CONNECTION_ID>'  /var/log/mysql/audit.log
     * Do select queries return the same rows they examine?
     * Do writes uses indexes? -- insert, update, delete.
     * DO selects use the right index?
-* Do tables have unnecessary indexes?
+* Do tables have unecessary indexes?
 * DO tables have lots of data rarely accessed? Separating unused data from used data can help the performance
 of tables with just used data. 
 
@@ -782,10 +782,10 @@ Other variables
 Tools to monitor performance
 * solar winds
 * new relic
-* AWS cloudwatch and insights
+* AWS cloudhwatch and insights
 * https://www.mysql.com/products/workbench/performance/
 * Percona PMM
-* Grafana, Prometheus, and other tools.
+* Grafana, Promethesus, and other tools.
 * PT-tools
   * https://docs.percona.com/percona-toolkit/pt-diskstats.html
   * https://docs.percona.com/percona-toolkit/pt-variable-advisor.html

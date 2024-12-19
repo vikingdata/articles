@@ -158,7 +158,7 @@ mysql> select * from test_roles.test1;
 +------+
 |    1 |
 +------+
-2 rows in set (0.00 sec)
+1 rows in set (0.00 sec)
 
 mysql>
 mysql> SET ROLE role_insert@localhost;
@@ -311,7 +311,7 @@ mysql> select * from test_roles.test1;
 |    3 |
 |    4 |
 +------+
-5 rows in set (0.00 sec)
+4 rows in set (0.00 sec)
 
 mysql> insert into test_roles.test1 values (5);
 Query OK, 1 row affected (0.04 sec)
@@ -347,7 +347,7 @@ mysql> select * from test_roles.test1;
 |    4 |
 |    5 |
 +------+
-6 rows in set (0.01 sec)
+5 rows in set (0.01 sec)
 
 mysql> insert into test_roles.test1 values (6);
 ERROR 1142 (42000): INSERT command denied to user 'test_user'@'localhost' for table 'test1'

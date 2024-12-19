@@ -17,7 +17,6 @@ Understand roles better.
 1. [Links](#links)
 2. [Make roles and facts](#make)
 3. [Test with and without roles](#test)
-4. [Test commands](#test_commands)
 
 * * *
 <a name=links></a>Links
@@ -123,7 +122,7 @@ mysql> select * from test_roles.test1;
 ERROR 1142 (42000): SELECT command denied to user 'test_user'@'localhost' for table 'test1'
 ```
 
- # Grant role to test_user as root
+* Grant role to test_user as root
 ```
   # As user root in window 1
 grant role_read@localhost to test_user@localhost;
@@ -291,7 +290,7 @@ mysql> insert into test_roles.test1 values (5);
 ERROR 1142 (42000): INSERT command denied to user 'test_user'@'localhost' for table 'test1'
 
 ```
-* Grant mandatory roles for test_user
+* Grant mandatory roles for test_user in window 1 as root
 ```
 SET PERSIST mandatory_roles = 'role_read@localhost, role_insert@localhost';
 

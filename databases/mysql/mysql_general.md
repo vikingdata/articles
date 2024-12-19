@@ -32,6 +32,7 @@ This article will grow over time.
 * [Fix account from 5.7 to 8.0 replication](#accountrep)
 * [Start mysql manually](#startmanually)
 * [ Percona : Where did query come from?](#audit)
+* [Speed up mysql temporarily](#speed)
 
 
 
@@ -771,4 +772,15 @@ Other variables
         * Puts undo into memory, which should make things faster, but could be
     dangerous if memory fills up.
 
-TODO: Make or link ro programs to analyze performance. Percona. 
+
+Tools to monitor perfmance
+* solar winds
+* new relic
+* AWS cloudhwatch and insights
+* https://www.mysql.com/products/workbench/performance/
+* Percona PMM
+* Grafana, Promethesus, and other tools.
+* PT-tools
+  * https://docs.percona.com/percona-toolkit/pt-diskstats.html
+  * https://docs.percona.com/percona-toolkit/pt-variable-advisor.html
+

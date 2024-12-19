@@ -25,6 +25,7 @@ Explain Extended
    * https://dev.mysql.com/doc/refman/8.4/en/explain-extended.html
 Explain analyze
    * https://dev.mysql.com/doc/refman/8.4/en/explain.html#explain-analyze
+* https://engineering.wework.com/top-3-mysql-query-profiling-tools-41cb24db32bf
 
 * * *
 <a name=setup></a>Setup

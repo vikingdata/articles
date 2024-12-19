@@ -6,6 +6,10 @@
 * <a name=other></a>other
 -----
 
+* https://dev.mysql.com/doc/refman/8.4/en/server-system-variable-reference.html
+* https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html
+* https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html
+* TODO: replication and other variable links. 
 * * *
 <a name=et></a>et
 -----
@@ -15,12 +19,13 @@
 
 * characterstics of role : can be dropped, is locked, granted to users
 
-# to reset GTID replication on slave if someone added data
+* to reset GTID replication on slave if someone added data
    1. reset naster On slave
    2. SET GLOBAL gtid_purged to the purged values of slave.
    3. SET GLOBAL gtid_executed to values execued in the thread.
    4. Make sure the master still has the data.
 https://www.percona.com/blog/how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
+   5. Test by entering bad command in slave and then reset.
 
 * With more memeory then data and no binlog, what improvements an you do? innodb_flush_log_at_trx_commit=2
     * innodb_doublewrite=0

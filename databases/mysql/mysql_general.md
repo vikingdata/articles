@@ -702,3 +702,73 @@ grep -B 4 -A 9 '<CONNECTION_ID>16</CONNECTION_ID>'  /var/log/mysql/audit.log
 
 ```
 * So the host is "localhost", ip is nothing, user is root, and time is '2024-12-17T19:34:19Z'.
+
+* * *
+<a name=speed></a>Speed up mysql temporarily
+-----
+Related links
+* https://releem.com/docs/mysql-performance-tuning/sort_buffer_size
+* https://dba.stackexchange.com/questions/18975/how-to-improve-mysql-server-performance/18994#18994
+
+Related subjects
+* Explain queries :
+    * Do select queries return the same rows they examine?
+    * Do writes uses indexes? -- insert, update, delete.
+    * DO selects use the right index?
+* Do tables have unecessary indexes?
+* DO tables have lots of data rarely accessed? Separating unused data from used data can help the performance
+of tables with just used data. 
+
+
+* sync_binlog = 0
+    * If you are using binlog
+* innodb_doublewrite=0
+    * https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html#sysvar_innodb_doublewrite
+* innodb_flush_log_at_trx_commit=0 or 2. If it is already 2, then 0.
+    * https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html#sysvar_innodb_flush_log_at_trx_commit
+*  innodb_undo_directory=/dev/shm
+    * Puts undo into memory, which should make things faster, but could be
+    dangerous if memory fills up.
+* Buffers -- remember, any buffer increases affects memory used PER THREAD. 
+    * Sort buffer
+        * Monitor global_status 'Sort_merge_passes' over time. If it grows
+	too fast, increase sort_buffer_size. It means it writes data to disk
+	for sorts. Ideally you want it in memory. 
+	https://hackmysql.com/mysql-select-and-sort/
+	* https://docs.digitalocean.com/products/databases/mysql/concepts/sort-buffer-size/
+	* https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html#statvar_Sort_merge_passes
+    * insert buffer
+    * join buffer -- increase if you have a lot of joins. 
+    * read_rnd_buffer_size
+Other variables
+    * tmp_table_size, max_heap_table_size, and 8.0
+    * table_open_cache
+        * show global variables like 'table_open_cache';
+        * show global status like 'opened_tables';
+        * or look at Table_open_cache_hits and Table_open_cache_misses.
+        * Basically, if you are opening tables too fast, you are not using the cache.
+    * table_open_cache_instances : 16 is normally fine
+
+* Innodb
+    * Innodb_buffer_pool_size
+        * Increase not beyond 80% if you innodb buffer pool ratio drops below 99%.
+	* https://github.com/vikingdata/articles/blob/main/databases/mysql/info_queries.md#ibpr
+    * innodb_buffer_pool_instances = 8
+        * By having more, when a change occurs, only the locks for the one
+	instance it is in happens.
+	* Increasing this may help. 
+    * Innodb_read_io_threads and Innodb_write_io_threads
+       * Monitor global status : Innodb_buffer_pool_read_requests and Innodb_buffer_pool_write_requests
+       * If there is high activity over a period of time, you may want to increase them beyond 4. 
+    * innodb_log_file_size -- should be 4G or larger. 
+    * innodb_file_per_table -- doesn't make things faster directly.
+    But reclaims diskspace if you drop a table or rebuild a table.
+    * innodb_doublewrite=0
+        * https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html#sysvar_innodb_doublewrite
+    * innodb_flush_log_at_trx_commit=0 or 2. If it is already 2, then 0.
+        * https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html#sysvar_innodb_flush_log_at_trx_commit
+    *  innodb_undo_directory=/dev/shm
+        * Puts undo into memory, which should make things faster, but could be
+    dangerous if memory fills up.
+
+TODO: Make or link ro programs to analyze performance. Percona. 

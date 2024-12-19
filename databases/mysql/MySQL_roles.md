@@ -38,8 +38,8 @@ Understand roles better.
 * Roles can be:
     * Made and assigned and can affect connected users.
         * Users must set the role.
-	* The default roles should be reassigned for the user. 
-    * Changing grants on roles affects connected users. 
+        * The default roles should be reassigned for the user. 
+    * Changing grants on roles affects connected users with those roles. 
     * Adding mandatory roles affects all users and they do not need to be set as defaults.
     They automatically are granted and to connected accounts. 
 

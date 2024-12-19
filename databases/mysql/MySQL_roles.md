@@ -333,6 +333,7 @@ Test as test_user in window 2
 select * from test_roles.test1;
 insert into test_roles.test1 values (6);
 
+```
 
 Output
 ```
@@ -352,4 +353,3 @@ mysql> insert into test_roles.test1 values (6);
 ERROR 1142 (42000): INSERT command denied to user 'test_user'@'localhost' for table 'test1'
 ```
 
-```

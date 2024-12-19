@@ -17,7 +17,6 @@ Understand roles better.
 1. [Links](#links)
 2. [Make roles and facts](#make)
 3. [Test with and without roles](#test)
-4. [Test commands](#test_commands)
 
 * * *
 <a name=links></a>Links
@@ -35,15 +34,16 @@ Understand roles better.
 * Roles are stored in the grants table and do not have their own table. 
 * Roles cannot be:
     * Renamed
-    * password proected. You can't log in as roles so no use for password. 
+    * password protected. You can't log in as roles so no use for password. 
 * Roles can be:
-    * Made and assinged and can affect connected users.
+    * Made and assigned and can affect connected users.
         * Users must set the role.
-	* The defaut roles should be reassinged for the user. 
-    * Changing grants on roles affects connected users. 
-    * Adding manadatory roles affects all users and they do not need to be set as defaults.
+        * The default roles should be reassigned for the user. 
+    * Changing grants on roles affects connected users with those roles. 
+    * Adding mandatory roles affects all users and they do not need to be set as defaults.
     They automatically are granted and to connected accounts. 
-
+    * Anything modifying roles affects connected users immediately. The exception are roles created and
+      assigned but not set by default or manadatory. Those roles have to be set the account. 
 
 * Advantages
     * If every user in a group uses a role for permission, you change the role and you affect all of them instead
@@ -78,9 +78,10 @@ create user  test_user@localhost identified by 'bad_password';
 * * *
 <a name=test></a>Test with and without roles
 -----
-### Assign role, drop roles, make role, does new role work?
+### Assign role, drop roles, make role
 
-* Create login file for root abd test_user
+* Create login file for root and test_user. Unless specified to do so DO NOT log out of a session
+unless told to. 
 ```
 echo "
 [client]
@@ -94,14 +95,16 @@ user=test_user
 password=bad_password
 " > ~/.my.cnf_test_user
 
+
 mysql --defaults-file=~/.my.cnf_root      -N -e "select 'root okay'"
 mysql --defaults-file=~/.my.cnf_test_user -N -e "select 'test_user okay'"
 
 
 ```
 
-### Test query, assign role, test query again. Does connection need to be remade?
-* Login as root in window 1 and test_user in window 2
+### Test query, assign role, test query again.
+
+* Login as root in window 1 and test_user in window 2. DO NOT log out of a session unless told to do so. 
 ```
     # In Window or terminal 1
 mysql --defaults-file=~/.my.cnf_root
@@ -122,7 +125,7 @@ mysql> select * from test_roles.test1;
 ERROR 1142 (42000): SELECT command denied to user 'test_user'@'localhost' for table 'test1'
 ```
 
- # Grant role to test_user as root
+* Grant role to test_user as root
 ```
   # As user root in window 1
 grant role_read@localhost to test_user@localhost;
@@ -205,7 +208,7 @@ mysql> insert into test_roles.test1 values (3);
 Query OK, 1 row affected (0.02 sec)
 ```
 
-* Set both roles as default for test_user in window 1 or 2. Log out and back in and test.
+* Set both roles as default for test_user in window 1 or 2. 
 ```
 set default role role_select@localhost, role_insert@localhost;
 
@@ -215,11 +218,6 @@ Output
 ```
 mysql> set default role role_read@localhost, role_insert@localhost to test_user@localhost;
 Query OK, 0 rows affected (0.02 sec)
-```
-
-Logout and log bback in as test user
-```
-mysql --defaults-file=~/.my.cnf_test_user
 ```
 
 Execute as test_user again and show grants for user
@@ -290,7 +288,7 @@ mysql> insert into test_roles.test1 values (5);
 ERROR 1142 (42000): INSERT command denied to user 'test_user'@'localhost' for table 'test1'
 
 ```
-* Grant mandatory roles for test_user
+* Grant mandatory roles for test_user in window 1 as root
 ```
 SET PERSIST mandatory_roles = 'role_read@localhost, role_insert@localhost';
 
@@ -317,5 +315,41 @@ mysql> select * from test_roles.test1;
 
 mysql> insert into test_roles.test1 values (5);
 Query OK, 1 row affected (0.04 sec)
+
+```
+* Drop a role
+
+In window 1 as root
+```
+grant role_read@localhost   to test_user@localhost;
+grant role_insert@localhost to test_user@localhost;
+drop role role_insert@localhost;
+
+
+```
+
+Test as test_user in window 2
+```
+select * from test_roles.test1;
+insert into test_roles.test1 values (6);
+
+
+Output
+```
+mysql> select * from test_roles.test1;
++------+
+| i    |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
++------+
+6 rows in set (0.01 sec)
+
+mysql> insert into test_roles.test1 values (6);
+ERROR 1142 (42000): INSERT command denied to user 'test_user'@'localhost' for table 'test1'
+```
 
 ```

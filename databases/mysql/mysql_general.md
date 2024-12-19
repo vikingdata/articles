@@ -710,6 +710,7 @@ grep -B 4 -A 9 '<CONNECTION_ID>16</CONNECTION_ID>'  /var/log/mysql/audit.log
 ### Related links
 * https://releem.com/docs/mysql-performance-tuning/sort_buffer_size
 * https://dba.stackexchange.com/questions/18975/how-to-improve-mysql-server-performance/18994#18994
+* https://severalnines.com/blog/mysql-performance-cheat-sheet/
 
 ### Related subjects
 * Explain queries :
@@ -719,6 +720,10 @@ grep -B 4 -A 9 '<CONNECTION_ID>16</CONNECTION_ID>'  /var/log/mysql/audit.log
 * Do tables have unnecessary indexes?
 * DO tables have lots of data rarely accessed? Separating unused data from used data can help the performance
 of tables with just used data. 
+* Are you running slow log reports and have slow logs turned on?
+* Are you using the right isolation level? Read Comitted is generally faster than Read Repeatable.
+* Can you use Replication by Row Based or SQL based? SQL in generally is slower, but there can be exceptions. For
+small row changes, SQL is generally slower. 
 
 ### Quick Speeds ups
 
@@ -748,7 +753,11 @@ of tables with just used data.
     * join buffer -- increase if you have a lot of joins. 
     * read_rnd_buffer_size
 Other variables
-    * tmp_table_size, max_heap_table_size, and 8.0
+    * tmp_table_size, max_heap_table_size or tmp_table_size and temptable_max_ram
+        * Look at , Created_tmp_disk_tables, Created_tmp_files, and Created_tmp_tables
+	* If the ratio between Created_tmp_disk_tables and Created_tmp_tables is high, tmp tables
+	are being written to disk. Increase memory for tmp tables. 
+
     * table_open_cache
         * show global variables like 'table_open_cache';
         * show global status like 'opened_tables';
@@ -777,9 +786,9 @@ Other variables
     *  innodb_undo_directory=/dev/shm
         * Puts undo into memory, which should make things faster, but could be
     dangerous if memory fills up.
+    * innodb_flush_method=O_DIRECT - avoid double IO buffering
 
-
-Tools to monitor performance
+### Tools to monitor performance
 * solar winds
 * new relic
 * AWS cloudwatch and insights

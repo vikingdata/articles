@@ -78,7 +78,7 @@ create user  test_user@localhost identified by 'bad_password';
 * * *
 <a name=test></a>Test with and without roles
 -----
-### Assign role, drop roles, make role, does new role work?
+### Assign role, drop roles, make role
 
 * Create login file for root and test_user
 ```
@@ -100,7 +100,8 @@ mysql --defaults-file=~/.my.cnf_test_user -N -e "select 'test_user okay'"
 
 ```
 
-### Test query, assign role, test query again. Does connection need to be remade?
+### Test query, assign role, test query again.
+
 * Login as root in window 1 and test_user in window 2
 ```
     # In Window or terminal 1

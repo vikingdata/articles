@@ -40,7 +40,21 @@ Steps:
         * Click on the Home button
         * Click on "Start a post"
         * Put in content and link to article. 
-        
-                
-                
+
+* * *
+<a name=mySQL></a>MySQL
+-----
+
+Or using git to sve documents, and use notepad++
+
+* Install natepad++ https://notepad-plus-plus.org/downloads/v8.7.4/
+* Using md plugin https://notepad-plus-plus.org/downloads/v8.7.4/
+    * Download ddl and put in c"\Program Files\Notepad++\plugins/
+    * Go to "plugins", then "plugins admin"
+        * Search for MarkdownViewer++, click on it, then install it.
+    * Open up a markdwown file.
+    * You should see an icon on the far right bar called "Toggle Markdown  Panel". Click on it while you
+    have a Markdown file open. You can adjust the size of the viewer. 
+* Open your git markdown file in notepad, then it looks good in the Markdown Panel in Notepad, upload it to
+git. 
                 

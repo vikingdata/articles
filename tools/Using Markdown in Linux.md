@@ -42,7 +42,7 @@ Steps:
         * Put in content and link to article. 
 
 * * *
-<a name=mySQL></a>MySQL
+<a name=notepad></a>Notepad++
 -----
 
 Or using git to sve documents, and use notepad++

@@ -181,9 +181,9 @@ cd percona
 
 apt install curl -y
 curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
-sudo apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
-sudo apt update
-sudo percona-release setup ps80
+apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+apt update
+percona-release setup ps80
 
 apt-get update
 

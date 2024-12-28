@@ -1,4 +1,3 @@
-
 title : Free Services for Mark
 author : Mark Nielsen
 copyright : August 2024
@@ -40,11 +39,14 @@ Most free accounts have limitations. GCP and AWS have many more free always serv
 -----
 
 * [AWS](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=tier%23always-free&awsf.Free%20Tier%20Categories=*all)
-   * Limits by usage  
-       * database : redshift, Dynamo, SimpleDB
-       * Monitoring -- cloudwatch, GLue, Key management
+   * Limits by usage == TODO update this list  
+       * database : Dynamo, SimpleDB
+       * Monitoring -- GLue, Key management
        * Programming -- lambda
        * Infrastructure -- CLoudFront, Route
+   * ALmost free
+          * S3 -- first 12 months free, if less than 10 GB of diskspace, very cheap
+	  
 
    * No longer
       * EC2 -- now if you make a 3 year contract, you pay per month for your ip address. GCP per month at the lowest costs is about $4 per month.
@@ -119,6 +121,5 @@ You can sign up with the same email every 30 days. It means, you can make it alw
 
 https://signup.snowflake.com/
 
-I recommend using the $2 option per month and limiting the amount of data and traffic after the free month. 
+I recommend using the $2 option per month and limiting the amount of data and traffic after the free month
 
-https://www.snowflake.com/en/data-cloud/pricing-options/

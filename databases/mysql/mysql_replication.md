@@ -41,6 +41,7 @@ Index
    * [Reset GTID replication to beginning](#resetgtid)
    * [Reset normal replication to beginning](#resetnormal)
 8. [Analyze relay logs](#relay)
+9. [Fix GTID on slave from insert](#fixgtid)
 
 * * *
 <a name=links></a>Links

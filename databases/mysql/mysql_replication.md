@@ -20,6 +20,8 @@ where the SQL commands are issued in order.
 * For both normal and GTID replication, you can set the replication to a point in the binlogs of the
 master. GTID replication has other options to fix replication. 
 
+We also assume replication is already running. 
+
 Index
 
 0. [Links](#links)
@@ -58,6 +60,7 @@ Index
    * https://percona.community/blog/2021/11/08/the-errant-gtid-pt1/
    * https://www.percona.com/sites/default/files/presentations/mysql_56_GTID_in_a_nutshell.pdf
 
+
 * * *
 <a name=setup></a>Setup GTID
 -----
@@ -71,7 +74,7 @@ enforce-gtid-consistency=ON
 log-slave-updates=ON
 ```
 * On both servers : service mysql restart
-* <a href=#reset>Reset</a> the servers described below. 
+* <a href=#resetgtid>Reset</a> the servers described below. 
 
 
 
@@ -538,3 +541,92 @@ mysql> select * from t3 where t = 1;
 ```
 
 The table has a primary key and its value "1" is already there, which confirms the issue. 
+
+
+* * *
+<a name=fixgtid></a>Fix GTID on slave from insert.
+-----
+
+* On slave
+```
+create database slave_error;
+
+```
+
+* On master
+```
+mysql> show variables where variable_name in ('gtid_executed', 'gtid_purged', 'server_uuid');
++---------------+------------------------------------------+
+| Variable_name | Value                                    |
++---------------+------------------------------------------+
+| gtid_executed | 0cfba193-b65d-11ef-849d-080027534b8f:1-7 |
+| gtid_purged   | 0cfba193-b65d-11ef-849d-080027534b8f:1-3 |
+| server_uuid   | 0cfba193-b65d-11ef-849d-080027534b8f     |
++---------------+------------------------------------------+
+3 rows in set (0.01 sec)
+
+
+```
+
+* on slave
+
+```
+mysql> show variables where variable_name in ('gtid_executed', 'gtid_purged', 'server_uuid');
++---------------+----------------------------------------------------------------------------------+
+| Variable_name | Value                                                                            |
++---------------+----------------------------------------------------------------------------------+
+| gtid_executed | 0cfba193-b65d-11ef-849d-080027534b8f:1-6,
+f6402e70-c54e-11ef-a3e0-08002701753e:1 |
+| gtid_purged   | 0cfba193-b65d-11ef-849d-080027534b8f:1-3                                         |
+| server_uuid   | f6402e70-c54e-11ef-a3e0-08002701753e                                             |
++---------------+----------------------------------------------------------------------------------+
+3 rows in set (0.00 sec)
+
+```
+
+* Situation :
+    * Slave has been stopped, data fixed, and needs to be reset to the last point replicated. 
+    * Master has commands executed not replicated to slave.
+    * Slave needs to have its owb gtid "f6402e70-c54e-11ef-a3e0-08002701753e" removed.
+
+* On slave -- change the purged to that of the master. Change GTID_NEXT to the next number NOT EXECUTED by
+the slave. In this case, the slave executed up to 4, so the next is 7. 
+```
+RESET MASTER;
+SET GLOBAL gtid_purged='0cfba193-b65d-11ef-849d-080027534b8f:1-3';
+SET GTID_NEXT='0cfba193-b65d-11ef-849d-080027534b8f:7';
+start slave;
+   -- Remember to change gitd_next to automatic. 
+SET GTID_NEXT='AUTOMATIC';
+
+
+```
+
+MySQL show commmand
+```
+mysql> show variables where variable_name in ('gtid_executed', 'gtid_purged', 'server_uuid');
++---------------+------------------------------------------+
+| Variable_name | Value                                    |
++---------------+------------------------------------------+
+| gtid_executed | 0cfba193-b65d-11ef-849d-080027534b8f:1-7 |
+| gtid_purged   | 0cfba193-b65d-11ef-849d-080027534b8f:1-3 |
+| server_uuid   | f6402e70-c54e-11ef-a3e0-08002701753e     |
++---------------+------------------------------------------+
+3 rows in set (0.01 sec)
+
+
+```
+
+In Linux on slave.
+
+```
+root@ubutubase:~/mysql# mysql -u root -proot -e "show slave status\G" | egrep -i "running|master_host|GTID" 2>/dev/null
+
+                  Master_Host: 10.0.2.7
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+      Slave_SQL_Running_State: Replica has read all relay log; waiting for more updates
+           Retrieved_Gtid_Set: 0cfba193-b65d-11ef-849d-080027534b8f:3-7
+            Executed_Gtid_Set: 0cfba193-b65d-11ef-849d-080027534b8f:1-7
+
+```

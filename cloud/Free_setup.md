@@ -14,15 +14,20 @@ Original Copyright August 2024**_
 
 This is a way to get free setup material by first getting basic basic server from AWS or GCP.
 
-1. AWS + GCP setup non-free
-2. GCP Free
-3. AWS Free 
-4. Snowflake
-5. Mongodb
-6. Cockroach
-7. New relic
-8. Grafana local
-
+* CLoud
+    * AWS + GCP setup non-free
+    * GCP Free
+    * AWS Free
+* Database + storage
+    * Snowflake
+    * Mongodb
+    * Cockroach
+    
+* Monitoring
+    * New relic
+    * Grafana local
+    * [Datadog](https://www.datadoghq.com/pricing/)
+    
 * * *
 <a name=g></a>AWS + GCP setup non-free
 -----
@@ -42,7 +47,11 @@ Database
     * firestore
 Programming
     * secret manager
-		    
+Server
+    * Google Compute --- limited resources
+        * e2-micro VM instance
+	* (verify), 2 cpu, 1 gig mem, 30 gig diskspace
+        * https://www.youtube.com/watch?v=8QGpHQ2SyG8
 
 * * *
 <a name=a></a>AWS Free
@@ -54,7 +63,9 @@ Programming
 Database + Storage
   * Dynamo
   * SimpleDB
-  * S3 -- used by databases and storage. It is very very cheap. x
+  * S3 -- used by databases and storage. It is very very cheap.
+  * Redshift -- not free, but free when idle
+
 Monitoring
    * Promethesus
    * CLoudtrail

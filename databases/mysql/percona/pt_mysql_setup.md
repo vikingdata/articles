@@ -36,12 +36,50 @@ reinitialize.
     * Name the servers db1, db2, and db3. Or name them whatever and change the hostnames in the scripts below.
 * Sample my.cnf template for each server.
     * [Sample my.cnf file](files/my.cnf_template1)
-        * Change server-id for each server. 
+        * Change server-id for each server.
+* on all 3 servers, make a login file
+```
+echo "
+[client]
+username=root
+password=root
+" > ~/my.cnf
+```
 * Use the scripts to set replication accounts are to setup replication once you can connect as root
 remotely to each server to the MySQL service (not Linux by ssh). 
-    * [Download mysql rep account commands](files/rep_accounts.sql)
-    * [Setup replication](files/setup_mms_rep.bash)
-        * Change the hostnames and ip addresses at the top of the script. 
+    * [Download mysql rep account commands](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/percona/files/rep_accounts.sql)
+    * [Setup replication](https://github.com/vikingdata/articles/blob/main/databases/mysql/percona/files/setup_mms_rep.bash)
+        * Change the hostnames and ip addresses at the top of the script.
+```
+
+echo "Change the ip addresses of the 3 servers.
+setenv DB1=''
+setenv DB2=''
+setenv DB3=''
+"
+
+setenv DB1=''
+setenv DB2=''
+setenv DB3=''
+
+echo "
+[client]
+username=root
+password=root
+" > ~/my.cnf
+
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/percona/files/rep_accounts.sql
+wget https://github.com/vikingdata/articles/blob/main/databases/mysql/percona/files/setup_mms_rep.bash
+
+mysql -e "rep_accounts.sql"
+mysql -h $DB1 -e "rep_accounts.sql"
+mysql -h $DB2 -e "rep_accounts.sql"
+mysql -h $DB3 -e "rep_accounts.sql"
+
+bash setup_mms_rep.bash
+
+```
+
 * * *
 <a name=data></a> Setup schema and other data
 -----
@@ -57,8 +95,28 @@ unzip mysqlsampledatabase.zip
 mysql -u root -proot -e "source mysqlsampledatabase.sql"
 mysql -u root -proot -e "show tables" classicmodels
 
-wget FILE
-mysql -u root -proot -e "source FILE.sql"
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/percona/files/sample_database.sql
+mysql -u root -proot -e "source sample_database.sql"
+
+
+```
+
+* * *
+<a name=checks></a> Checks
+-----
+
+
+```
+rm -f check_databases.sql check_tables.sql
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/percona/files/check_databases.sql
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/percona/files/check_tables.sql
+
+echo "change size in sql files to limit the size of databases or tables."
+
+echo "run these commands to check
+mysql -e 'source check_databases.sql' > databases.list
+mysql -e 'source check_tables.sql' > tables.list
+"
 
 
 ```

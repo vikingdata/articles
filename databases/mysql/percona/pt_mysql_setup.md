@@ -53,14 +53,14 @@ remotely to each server to the MySQL service (not Linux by ssh).
 ```
 
 echo "Change the ip addresses of the 3 servers.
-setenv DB1=''
-setenv DB2=''
-setenv DB3=''
+export DB1='10.0.2.7'
+export DB2='10.0.2.8'
+export DB3='10.0.2.8'
 "
 
-setenv DB1=''
-setenv DB2=''
-setenv DB3=''
+export DB1='10.0.2.7'
+export DB2='10.0.2.8'
+export DB3='10.0.2.8'
 
 echo "
 [client]

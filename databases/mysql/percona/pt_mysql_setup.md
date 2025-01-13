@@ -51,16 +51,20 @@ remotely to each server to the MySQL service (not Linux by ssh).
     * [Setup replication](https://github.com/vikingdata/articles/blob/main/databases/mysql/percona/files/setup_mms_rep.bash)
         * Change the hostnames and ip addresses at the top of the script.
 ```
+cd
+mkdir -p  mysql_data_setup
+cd mysql_data_setup
+rm -f rep_accounts.sql setup_mms_rep.bash
 
 echo "Change the ip addresses of the 3 servers.
 export DB1='10.0.2.7'
 export DB2='10.0.2.8'
-export DB3='10.0.2.8'
+export DB3='10.0.2.9'
 "
 
 export DB1='10.0.2.7'
 export DB2='10.0.2.8'
-export DB3='10.0.2.8'
+export DB3='10.0.2.9'
 
 echo "
 [client]
@@ -85,9 +89,10 @@ bash setup_mms_rep.bash
 -----
 * Log into server "db1"
 ```
-mkdir mysql_data_setup
+cd
+mkdir -p  mysql_data_setup
 cd mysql_data_setup
-
+rm -f mysqlsampledatabase.sql mysqlsampledatabase.zip
 
 wget https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
 unzip mysqlsampledatabase.zip

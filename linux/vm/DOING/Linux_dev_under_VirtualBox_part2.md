@@ -49,7 +49,7 @@ Sections
 * [MongoDB](#mongodb)
 * [TiDB](#t)
 * [Yugabyte](#y)
-* [Couchbase](#c)
+* [CockroachDB](#c)
 
 * * *
 
@@ -201,77 +201,26 @@ percona seems to not work when newer versions come out. An option is to download
 the PATH the location of the binaries. You might want to also download the percona binaries and the mysql binaries
 or tarballs, as they tend to vanish over time as new versions come out. 
 
+* Download install file
+    * [basic_percona_mysql_8_install.bash](Linux_dev_under_VirtualBox_part2_files/basic_percona_mysql_8_install.bash)
+
+* Install file
+```
+  # Execute per server
+for i in 1 2 3 4 5 6; do
+
+  ssh  127.0.0.1 -p 210$i -l root "mkdir -p /database/install_scripts"
+
+    # Copy over file
+  scp_copy="scp basic_percona_mysql_8_install.bash root@127.0.0.1:/database/install_scripts/ -p 210$i "
+
+    # Execute File
+  ssh 127.0.0.1 -p 210$i -l root ""
+done
 
 ```
-ssh 127.0.0.1 -p 2001 -l root
 
- # after you login
-
-mkdir percona
-cd percona
-
-apt install curl -y
-curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
-apt -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
-apt update
-percona-release setup ps80
-
-apt-get update
-
-   # install router and shell
-wget https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
-dpkg -i mysql-router-community_8.0.40-1ubuntu22.04_amd64.deb
-
-wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
-dpkg -i mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
-
-
-  # Install a specific version, it must be 8.0.36 or earlier, because
-  # the router software is 8.0.37
-
-  # It may ask for password, make the password "root" or your own password.
-  # I suggest a better password than "root"
-sudo apt -y install percona-server-server=8.0.39-30-1.jammy
-
-mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
-mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
-mysql -u root -proot -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
-
-mysql -u root -proot -e "create user grafana@localhost IDENTIFIED BY 'grafana'"
-mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
-mysql -u root -proot -e "create user grafana@'%' IDENTIFIED BY 'grafana'"
-mysql -u root -proot -e "grant select, REPLICATION SLAVE on *.* to grafana@'%';"
-
-mysql -u root -proot -e "create user telegraf@localhost IDENTIFIED BY 'telegraf'"
-mysql -u root -proot -e "GRANT SELECT ON performance_schema.* TO 'telegraf'@'localhost';"
-mysql -u root -proot -e "GRANT PROCESS ON *.* TO 'telegraf'@'localhost';"
-mysql -u root -proot -e "GRANT REPLICATION CLIENT ON *.* TO 'telegraf'@'localhost';"
-
-mysql -u root -proot -e "create user root@'%' IDENTIFIED BY 'root'"
-mysql -u root -proot -e "GRANT all privileges on *.* to  'root'@'%';"
-
-
-
-cd
-mkdir -p mysql
-cd mysql
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/DOING/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
- sed -e 's/__NO__/1/g' Dev_basic_my_cnf.md > /etc/mysql/conf.d/Dev_basic_my_cnf.md
-
-# I am not sure why, but changes to buffer pool is not read of configuration files
-# other than my.cnf. You need to define buffer pool in the main file
-# and then it will override it with the one in conf.d -- weird. 
-
-echo "
-[mysqld]
-innodb_buffer_pool_size=5242881
-" >> /etc/mysql/my.cnf
-
-service mysql restart
-mysql -u root -proot -e "SELECT * FROM performance_schema.global_variables where VARIABLE_NAME in ('server_id', 'innodb_buffer_pool_size')" 
-```
-
-Output of mysql query
+* Check Output of mysql query during install
 ```
 +-------------------------+----------------+
 | VARIABLE_NAME           | VARIABLE_VALUE |
@@ -282,6 +231,9 @@ Output of mysql query
 +-------------------------+----------------+
 3 rows in set (0.53 sec)
 ```
+
+TODO
+   * Turn off mysql starting, create start script
 
 ### Setup firewall and port forwarding for db1
 Setup firewall for port 3301
@@ -320,8 +272,115 @@ Setup port forwarding port 3101 to 3306 in db1.
             * Guest IP : 10.0.2.15
             * Guest Port : 22
 
+TODO: Block on firewall
 
 * Test connection on host: mysql -u root -proot -h 127.0.0.1 -e "select 'good'" -P 3101
      * ssh test : ssh root@127.0.0.1 -p 2101 "echo 'ssh 2101 worked'"
 
-### Setup firewall and port forwarding for other database servers. 
+### Setup firewall and port forwarding for other database servers.
+
+* Port on Windows : 3102, 3103, 3104 for MySQL
+* Port in Linux : All 3306 for mysql
+* Port on Windows : 2102, 2103, 2104 for ssh
+* Port in Linux : All 3306 for ssh 
+* Remmeber to also block the firewall for ports 3102, 3103, 3104, 2012, 2013, and 2104 on Windows. 
+
+### Setup replication for Master-Master and each Master has a slave.
+
+
+
+* * *
+<a name=mongo></a>Install MySQL on all 6 servers manually
+-----
+
+
+* * *
+<a name=t></a>TiDB :Hybrid Transactional and Analytical Processing (HTAP) workloads 
+
+-----
+Links
+* https://docs.pingcap.com/tidb/stable/overview
+* https://docs.pingcap.com/tidb/stable/mysql-compatibility
+* https://docs.pingcap.com/tidb/stable/quick-start-with-tidb#deploy-a-local-test-cluster
+
+Things to note:
+* TiDB does OLTP and OLAP
+* TiDB is very MySQL compatible.
+    * There is a replication tool that supports full migration and incremental migration from MySQL or
+     MariaDB.
+    * Take note of incompatiblities on https://docs.pingcap.com/tidb/stable/mysql-compatibility. 
+* We will install the cluster all on one server "db1". In  a future article we will distribute the servers
+over 6 servers as a non-root user. For the beginning, this is for test purposes only so let make it easy.  
+* You may want to increase the memory of server "db1" since it will have a lot of components on it.
+I increased it to 4 GB but 2 GB may be enough with swap. 
+
+Install
+* Follow the steps on https://docs.pingcap.com/tidb/stable/quick-start-with-tidb
+* Log into db1: ssh root@127.0.0.1 -p 2101
+* Follow the steps:
+```
+wget  https://tiup-mirrors.pingcap.com/install.sh 
+bash install.sh
+
+source /root/.bashrc
+  # or
+# export PATH=/root/.tiup/bin:$PATH
+
+  ## OPTIONAL
+  ## Add more swap if needed
+  ## first see if swap exists, diskspace
+export SWAPFILE='/database/swapfile1'
+mkdir -p /database
+
+# swapoff -a
+dd if=/dev/zero of=$SWAPFILE bs=1024 count=4048576
+mkswap $SWAPFILE
+chmod 600 $SWAPFILE
+swapon -a $SWAPFILE
+swapon -s
+free -h
+
+echo "$SWAPFILE    none    swap    sw    0    0" >> /etc/fstab
+
+  #  window 1
+
+  # Start the playground and make data persist.
+  # We will be replicating mysql to this later, so we want the data to persist.
+
+  tiup playground --tag persist
+```
+### Log files
+Look at: https://www.pingcap.com/article/understanding-tidbs-cluster-architecture-and-core-components/
+
+
+* General error log : TiKV Storage Layer: Distributed Key-Value Store
+    * grep -i error  ./.tiup/data/persist/tikv-0/tikv.log
+* Slow log -- From TiDB component. 
+    * more ./.tiup/data/persist/tidb-0/tidb-slow.log
+* TiFlash log -- for Column database which is used for Analyics. 
+    * ./.tiup/data/persist/tiflash-0/tiflash.log
+* Placement Driver (PD): Global Metadata Management log
+    * ./.tiup/data/persist/pd-0/pd.log
+* log 
+
+
+### Setup grfana and promethesus port on Windows
+
+### Test TiDB
+
+* In another window
+```
+  # Execute this command, it will installation software
+tiup client
+
+### Replicatr data from MySQL 
+
+```
+
+* * *
+<a name=y></a>Yugabyte
+-----
+
+* * *
+<a name=c></a>CockroachDB
+-----

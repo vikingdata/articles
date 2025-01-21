@@ -79,3 +79,17 @@ DONE lvm -- with vg
   extend lvm
   resize
   do lsblk abd df after each command
+
+Linux
+  put in mutiple find commands, find recursive list of files ordered by newest
+
+copying binary files into mysql
+    * MyISAM
+        * cp TBALE.MY* /var/lib/mysql/DB/ # This copies the twp miysam files
+        * import the sdi from backup ; IMPORT TABLE FROM  '/tmp/mysql-files/TABLE.sdi'
+    * Innodb
+        * export tables and cfg file is created(contains meta data).
+        * Copy over ibd and cfg to destination
+        * unlock table on source.
+        * use DB; ALTER TABLE TABLE1 IMPORT TABLESPACE;
+    * Investiagre how to do other engines, especially CSV files. 

@@ -138,3 +138,26 @@ rundecl , openstack,
 graphana
 	promethesus + mysqld_exporter
 	telegraph
+
+Add difference between lock wait timeout and deadlock, lock wait timeout happens immediately, and times out oe deadlocks
+after lock wait timeout is exceeded.
+Add shared and exclusixe lock to locks article adn explain how locks work. 
+Add in explain analyze problem explanation. 
+DONE Check if I made a document combining show processlist, and in performance meta_locks and threads to explain locks. 51. 
+
+Add intention_exclusive, and other things to lock article. IS and IX are for innodb, I and X are for table locks
+LOCK_TYPE: The lock type from the metadata lock subsystem. The value is one of INTENTION_EXCLUSIVE, SHARED, SHARED_HIGH_PRIO, SHARED_READ, SHARED_WRITE, SHARED_UPGRADABLE, SHARED_NO_WRITE, SHARED_NO_READ_WRITE, or EXCLUSIVE
+Explain : I and X are row level. IS and IX are table with row specific. IS and IX have to happen first before S and X are granted.
+https://dev.mysql.com/blog-archive/innodb-data-locking-part-2-locks/
+https://dev.mysql.com/blog-archive/innodb-data-locking-part-1-introduction/
+
+Make MySQL sercurity doc, and in AWS : SSL, authenticaion, authoriszation, roles, network (firewall),
+https://aws.amazon.com/blogs/database/security-best-practices-for-amazon-rds-for-mysql-and-mariadb-instances/
+  IAM authentication, ebcrytion on disk
+Explain difference in VERIFY_CA and VERIFY_IDENTITY
+
+Make proxy article : grant account@local to ''@'%';
+
+OTHER
+sysbnech for OS and MySQL. Also good for testing prod systems.
+what the data dictionary holds

@@ -47,8 +47,6 @@ Sections
 * [3 db servers](#3)
 * [MySQL](#m)
 * Free services ( or nearly free)
-   * Password
-       * Bluefish on local server and Google Drive
    * Databases
       * CockroachDB
       * TIDB
@@ -297,109 +295,156 @@ TODO: Block on firewall
 
 ### Setup replication for Master-Master and each Master has a slave.
 
+
+
 * * *
-<a name=d></a>Free Services
+<a name=mongo></a>Install MySQL on all 6 servers manually
 -----
 
-### Butercup and Google Drive
 
-The Purpose is to make your own encrypted passwords that you can keep on Google Drive or other
-cloud file service. Google Drive is free up to a certain amount of space. 
+* * *
+<a name=t></a>TiDB :Hybrid Transactional and Analytical Processing (HTAP) workloads 
 
-* Install Google Drive App
-    * Create a directory
-        * ex: c:\google_drive
-	* Add this directory to Google Drive
-* Install Buttercup: https://buttercup.pw/
-    * Create the directory c:\google_drive\buttercup
-    * Make a new file at c:\google_drive\buttercup\main.bcup
-    * Save your ssh passwords and mysql passwords.
+-----
+Links
+* https://docs.pingcap.com/tidb/stable/overview
+* https://docs.pingcap.com/tidb/stable/mysql-compatibility
+* https://docs.pingcap.com/tidb/stable/quick-start-with-tidb#deploy-a-local-test-cluster
+* https://tikv.org/docs/6.1/deploy/operate/maintain/
 
-Steps:
-* If you need console or ssh access, login into server "db1".
-* For web access, use your host computer.
+Things to note:
+* TiDB does OLTP and OLAP
+* TiDB is very MySQL compatible.
+    * There is a replication tool that supports full migration and incremental migration from MySQL or
+     MariaDB.
+    * Take note of incompatiblities on https://docs.pingcap.com/tidb/stable/mysql-compatibility. 
+* We will install the cluster all on one server "db1". In  a future article we will distribute the servers
+over 6 servers as a non-root user. For the beginning, this is for test purposes only so let make it easy.  
+* You may want to increase the memory of server "db1" since it will have a lot of components on it.
+I increased it to 4 GB but 2 GB may be enough with swap. 
 
-### Cockroachdb
-Note: taken from website January 2025
-* Free for use up to 10 GiB of storage and 50M RUs per organization per month.
-* $0.20 per 1 Million request units consumed, $0.50 per GiB stored per month
-
-Setup account
-* goto https://www.cockroachlabs.com/pricing/
-    * Follow instructions
-        * If you created the account, login at https://cockroachlabs.cloud/clusters
-    * Setup cluster name
-       * Change unlimited to 10 gig and 10 million RU
-       * Create cluster
-       * Save and generate password
-           * Log into server "db1" and save it.
-               *  Save your password in buttercup. 
-       * Save cert by following commands.
-           * I suggest you save the contents of the cert file in Buttercup.
-       * Copy connection string
-           * Select Python and PSYcopg2
-	   * Save cert as a not in buttercup.
-	   * You could also save the export  connection option.
-       * If not done yet, select your cluster and click on "Connect" button un the upper right corner.
-           * Save the connection information in buttercup.
-* After this you should have this and save it in Buttercup. 
-    * The cert file
-    * Username and password
-    * Connection string with url. 
-
-* After you set everthign up, follow the instructions on how to connect from your server by clicking on the
-button "Connect" in the upper right corner.
-* For this login into server "admin" server.
-* Execute the curl command to get the cert.
-* Execute the connection environment variable.
+Install
+* Follow the steps on https://docs.pingcap.com/tidb/stable/quick-start-with-tidb
+* Log into db1: ssh root@127.0.0.1 -p 2101
+* Follow the steps:
 ```
-  # Change this to the connection string Cockroach displays. 
-export DATABASE_URL="postgresql://<USER>:<PASSWORD>@URL_PREFIX.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
+wget  https://tiup-mirrors.pingcap.com/install.sh 
+bash install.sh
 
-  # Save your connection to Linux bash login.
+source /root/.bashrc
+  # or
+# export PATH=/root/.tiup/bin:$PATH
 
-echo "export DATABASE_URL='$DATABASE_URL'" >> ~/.bashrc
+  ## OPTIONAL
+  ## Add more swap if needed
+  ## first see if swap exists, diskspace
+export SWAPFILE='/database/swapfile1'
+mkdir -p /database
 
-source ~/.bashrc
+# swapoff -a
+dd if=/dev/zero of=$SWAPFILE bs=1024 count=4048576
+mkswap $SWAPFILE
+chmod 600 $SWAPFILE
+swapon -a $SWAPFILE
+swapon -s
+free -h
 
-  # You should see your database url
-echo $DATABASE_URL
+echo "$SWAPFILE    none    swap    sw    0    0" >> /etc/fstab
 
+  #  window 1
+
+  # Start the playground and make data persist.
+  # We will be replicating mysql to this later, so we want the data to persist.
+
+  tiup playground --tag persist
 ```
+### Log files
+Look at: https://www.pingcap.com/article/understanding-tidbs-cluster-architecture-and-core-components/
 
-* Install cockroachdb client for Linux
-    * Follow the intructions at: https://uptimedba.github.io/cockroach-vb-single/cockroach-vb-single/cockroach-vb-single_db_install.html
-    * Install ccloud at https://www.cockroachlabs.com/docs/cockroachcloud/ccloud-get-started?filters=linux
-        * ex: curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.6.12.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
 
-* Test the connection with cockroachdb client and ccloud
-```
-cockroach sql --url $DATABASE_URL
+* General error log : TiKV Storage Layer: Distributed Key-Value Store
+    * grep -i error  ./.tiup/data/persist/tikv-0/tikv.log
+* Slow log -- From TiDB component. 
+    * more ./.tiup/data/persist/tidb-0/tidb-slow.log
+* TiFlash log -- for Column database which is used for Analyics. 
+    * ./.tiup/data/persist/tiflash-0/tiflash.log
+* Placement Driver (PD): Global Metadata Management log
+    * ./.tiup/data/persist/pd-0/pd.log
+* log 
 
-ccloud cluster sql <NAME OF CLUSTER> -u <USER> -p <ENTER-SQL-USER-PASSWORD>
+
+### Debug why TIflash didn't start
 
 ```
+  ## This installs the software.
+  ## In case, you are using a different version, change the version
+  ## in the command below.
+
+tiup ctl:v8.5.1 pd store -u http://127.0.0.1:2379
+
+  ## This will also install software
+tiup ctl:nightly pd -u http://127.0.0.1:2379 store
+
+echo 'config placement-rules show' | tiup ctl:nightly pd -u http://127.0.0.1:2379
+ echo 'config show replication' | tiup ctl:nightly pd -u http://127.0.0.1:2379
+
+
+alias pd_ctl="./.tiup/components/ctl/v8.5.1/pd-ctl"
+echo 'config placement-rules show' | pd_ctl -u http://127.0.0.1:2379
+
+tiup ctl:nightly pd -u http://127.0.0.1:2379 store
+ 
+echo 'config show replication' | pd_ctl -u http://127.0.0.1:2379
 
 ```
-adduser admin
 
 
+### Test TiDB
+
+* In another window
+```
+
+8.5.1
+  # Execute this command, it will installation software
+tiup client
+  # Inside client type in '\q' to quit. 
+
+```
+* Connect with mysql program (which should already be installed)
+```
+mysql --host 127.0.0.1 --port 4000 -u root -e "status"
+mysql --host 127.0.0.1 --port 4000 -u root -e "show databases"
+
+```
+### Test hybrid engines
+```
+   # Install data generation tool
+tiup install bench
+
+  # Install sample data
+tiup bench tpch --sf=1 prepare
+
+mysql --host 127.0.0.1 --port 4000 -u root  -e "SELECT
+  CONCAT(table_schema,'.',table_name) AS 'Table Name',
+  table_rows AS 'Number of Rows',
+  FORMAT_BYTES(data_length) AS 'Data Size',
+  FORMAT_BYTES(index_length) AS 'Index Size',
+  FORMAT_BYTES(data_length+index_length) AS'Total'
+FROM
+  information_schema.TABLES
+WHERE
+  table_schema='test';"
 
 ```
 
+### Replicate data from MySQL 
 
 ```
-$env:DATABASE_URL = "postgresql://mark:<ENTER-SQL-USER-PASSWORD>@menprojects-7383.j77.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
 ```
-* Instead make a 
+* * *
+<a name=y></a>Yugabyte
+-----
 
-   * Databases
-      * CockroachDB
-      * TIDB
-      * Yugabyte
-      * MongoDB
-      * Snowflake
-      * BigQuery
-      * PubSub
-      * Dynamo
-      * SimplDB
+* * *
+<a name=c></a>CockroachDB
+-----

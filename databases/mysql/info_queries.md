@@ -25,8 +25,8 @@ TODO: simple performance_schema queries, information_schema queries
 7. [Unused indexes](#unused)
 8. [List stored procedures, functions, triggers](#list1)
 9. [find keyword in field, table, database](#find1)
-910. [count tables](#count)
-
+10. [count tables](#count)
+11.  Tempoary diskspace
 * * *
 
 <a name=files></a>files
@@ -394,5 +394,155 @@ SELECT count(1), table_schema
      and table_schema like '%pattern%'
     group by table_schema;
  ;
+
+```
+
+
+* * *
+<a name=temp></a>Tempoary Diskspace
+-----
+
+links
+* https://docs.percona.com/percona-server/5.7/diagnostics/misc_info_schema_tables.html#information_schematemporary_tables
+* https://dev.mysql.com/doc/refman/8.4/en/innodb-information-schema-temp-table-info.html
+* https://dev.mysql.com/doc/refman/8.4/en/information-schema-innodb-temp-table-info-table.html
+* https://dev.mysql.com/doc/refman/8.4/en/information-schema-innodb-session-temp-tablespaces-table.html
+* https://mariadb.com/kb/en/information-schema-temp_tables_info-table/#:~:text=The%20Information%20Schema%20TEMP_TABLES_INFO%20table,data%20is%20stored%20in%20memory.
+* https://docs.percona.com/percona-server/8.4/misc-info-schema-tables.html#information_schemaglobal_temporary_tables
+* https://www.percona.com/blog/session-temporary-tablespaces-and-disk-space-usage/
+
+### Info
+```
+mysql> show tables like '%temp%';
++---------------------------------------+
+| Tables_in_information_schema (%TEMP%) |
++---------------------------------------+
+| GLOBAL_TEMPORARY_TABLES               |
+| INNODB_SESSION_TEMP_TABLESPACES       |
+| INNODB_TEMP_TABLE_INFO                |
+| TEMPORARY_TABLES                      |
++---------------------------------------+
+4 rows in set (0.02 sec)
+
+```
+* Temp tables -- info from webpages
+    * GLOBAL_TEMPORARY_TABLES               "The INFORMATION_SCHEMA.GLOBAL_TEMPORARY_TABLES table in MySQL stores information about temporary tables that are active for all connections. "
+    * INNODB_SESSION_TEMP_TABLESPACES       "The INNODB_SESSION_TEMP_TABLESPACES table provides metadata about session temporary tablespaces used for internal and user-created temporary tables."
+    * INNODB_TEMP_TABLE_INFO       "The INNODB_TEMP_TABLE_INFO table provides information about user-created InnoDB temporary tables that are active in an InnoDB instance. It does not provide information about internal InnoDB temporary tables used by the optimizer. The INNODB_TEMP_TABLE_INFO table is created when first queried, exists only in memory, and is not persisted to disk."         
+    * TEMPORARY_TABLES                 "This table holds information on the temporary tables existing for the running connection."
+        * But I believe it is ONLY for tables written to disk. 
+
+
+#### Get Info
+```
+ show global variables where variable_name in ('tmp_table_size', 'temptable_max_ram', 'internal_tmp_mem_storage_engine');
++---------------------------------+------------+
+| Variable_name                   | Value      |
++---------------------------------+------------+
+| internal_tmp_mem_storage_engine | TempTable  |
+| temptable_max_ram               | 1073741824 |
+| tmp_table_size                  | 16777216   |
++---------------------------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from performance_schema.global_variables where variable_name in ('tmp_table_size', 'temptable_max_ram', 'internal_tmp_mem_storage_engine');
++---------------------------------+----------------+
+| VARIABLE_NAME                   | VARIABLE_VALUE |
++---------------------------------+----------------+
+| internal_tmp_mem_storage_engine | TempTable      |
+| temptable_max_ram               | 1073741824     |
+| tmp_table_size                  | 16777216       |
++---------------------------------+----------------+
+3 rows in set (0.00 sec)
+
+select @tmp_size:=VARIABLE_VALUE
+  from performance_schema.global_variables
+  where variable_name = 'tmp_table_size';
+
+select @tmptable_size:=VARIABLE_VALUE
+  from performance_schema.global_variables
+  where variable_name = 'temptable_max_ram';
+
+select if(@tmp_size>@tmptable_size, @tmp_size, @tmptable_size);
++---------------------------------------------------------+
+| if(@tmp_size>@tmptable_size, @tmp_size, @tmptable_size) |
++---------------------------------------------------------+
+| 16777216                                                |
++---------------------------------------------------------+
+
+mysql> show global variables like '%tmpdir%';
++---------------------+------------+
+| Variable_name       | Value      |
++---------------------+------------+
+| innodb_tmpdir       |            |
+| replica_load_tmpdir | /tmp/mysql |
+| slave_load_tmpdir   | /tmp/mysql |
+| tmpdir              | /tmp/mysql |
++---------------------+------------+
+
+
+```
+
+* Get directory of temp diskspace
+    * If size of table exceeds size allowed in memory, table goes to disk.
+* Do df -h on directory
+* 'ls' or 'du' directory.
+* select * from information_schema.
+
+
+```
+  # Max size is 16777216 or 16 megs for /tmp/mysql
+
+df -h /tmp/mysql
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3       112G   39G   67G  37% /
+
+
+echo "
+create database if not exists test1;
+drop table if exists not_in_memory;
+drop table if exists in_memory;
+create temporary table not_in_memory (t longtext);
+create temporary table in_memory (t text);
+insert into in_memory values (repeat('a',10000));
+
+-- This should show no files. 
+select * from  information_schema.INNODB_SESSION_TEMP_TABLESPACES    where size>81920;
+
+insert into not_in_memory values (repeat('a',16777216*2)), (repeat('a',16777216*2)), (repeat('a',16777216*2));
+
+-- This should now show one file if TEMPTABLE uses memory mapped files.
+select * from  information_schema.INNODB_SESSION_TEMP_TABLESPACES    where size>81920;
+
+-- This should list both tables
+select * from  information_schema.GLOBAL_TEMPORARY_TABLES \G
+-- Shows the tablespaces for the temporary tables
+select * from  information_schema.INNODB_SESSION_TEMP_TABLESPACES       ;
+
+-- Gives from info on the temporary tables
+select * from  information_schema.INNODB_TEMP_TABLE_INFO                ;
+
+-- Lists both tables
+select * from  information_schema.TEMPORARY_TABLES                      ;
+
+SELECT PATH, format_bytes(SIZE), STATE, PURPOSE
+FROM INFORMATION_SCHEMA.INNODB_SESSION_TEMP_TABLESPACES WHERE id = CONNECTION_ID();
+
+SELECT * FROM INFORMATION_SCHEMA.INNODB_TABLES where name like 'test%';
+
+SELECT * FROM INFORMATION_SCHEMA.temporary_tables\G
+SELECT * FROM INFORMATION_SCHEMA.INNODB_TEMP_TABLE_INFO\G
+
+" > test1.sql
+
+echo "No files should be shown to disk IF TEMPTABLE uses memory mapped files"
+ls -al /tmp/mysql
+
+echo "If TEMPTABLE uses memory mapped files"
+find /var/lib/mysql/#innodb_temp/ -type f -printf '%s %p\n' | sort -nr | head -n 1
+
+echo "Should be 104857600 /var/lib/mysql/#innodb_temp/temp_9.ibt "
+
+
 
 ```

@@ -46,19 +46,19 @@ Sections
 * [Links](#links)
 * [3 db servers](#3)
 * [MySQL](#m)
-* Free services ( or nearly free)
+* Free Databases ( or nearly free) on the internet
    * Password
-       * Bluefish on local server and Google Drive
+       * [Bluefish](#b) on local server and Google Drive
    * Databases
-      * CockroachDB
-      * TIDB
-      * Yugabyte
-      * MongoDB
-      * Snowflake
-      * BigQuery
-      * PubSub
-      * Dynamo
-      * SimplDB 
+      * [CockroachDB](#c)
+      * [TIDB](#t)
+      * [Yugabyte](#y)
+      * [MongoDB](#m)
+      * [Snowflake](#snow)
+      * [BigQuery](#b)
+      * [PubSub](#p)
+      * [Dynamo](#d)
+      * [SimplDB](#s)
 
 
 * * *
@@ -298,10 +298,8 @@ TODO: Block on firewall
 ### Setup replication for Master-Master and each Master has a slave.
 
 * * *
-<a name=d></a>Free Services
+<a name=b></a>Buttercup and Google Drive
 -----
-
-### Butercup and Google Drive
 
 The Purpose is to make your own encrypted passwords that you can keep on Google Drive or other
 cloud file service. Google Drive is free up to a certain amount of space. 
@@ -319,7 +317,10 @@ Next steps:
 * If you need console or ssh access, login into server "admin".
 * For web access, use your host computer.
 
-### Cockroachdb
+* * *
+<a name=c></a>CockroachDB
+-----
+
 Note: taken from website January 2025
 * Free for use up to 10 GiB of storage and 50M RUs per organization per month.
 * $0.20 per 1 Million request units consumed, $0.50 per GiB stored per month

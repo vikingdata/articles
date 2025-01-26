@@ -315,8 +315,8 @@ cloud file service. Google Drive is free up to a certain amount of space.
     * Make a new file at c:\google_drive\buttercup\main.bcup
     * Save your ssh passwords and mysql passwords.
 
-Steps:
-* If you need console or ssh access, login into server "db1".
+Next steps:
+* If you need console or ssh access, login into server "admin".
 * For web access, use your host computer.
 
 ### Cockroachdb
@@ -332,12 +332,11 @@ Setup account
        * Change unlimited to 10 gig and 10 million RU
        * Create cluster
        * Save and generate password
-           * Log into server "db1" and save it.
-               *  Save your password in buttercup. 
+           *  Save your password in buttercup. 
        * Save cert by following commands.
            * I suggest you save the contents of the cert file in Buttercup.
        * Copy connection string
-           * Select Python and PSYcopg2
+           * Select "Parameters ONLY:
 	   * Save cert as a not in buttercup.
 	   * You could also save the export  connection option.
        * If not done yet, select your cluster and click on "Connect" button un the upper right corner.
@@ -353,12 +352,35 @@ button "Connect" in the upper right corner.
 * Execute the curl command to get the cert.
 * Execute the connection environment variable.
 ```
-  # Change this to the connection string Cockroach displays. 
-export DATABASE_URL="postgresql://<USER>:<PASSWORD>@URL_PREFIX.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
+   # Save your variables in .bashrc in Linux
+export C_USER="Your cockroach user"
+export C_PASS="Your cockroach pass"
+export C_HOST="the cockroach host"
+   # probably defaultdb
+export C_DATABASE="Your cockroach database"
+   # probably 26257
+export C_PORT="Your cockroach port"
+   # Name of the cluster you made. 
+export C_CLUSTER="Your cluster name"
+
+  # Create the url needed for some clients
+export DATABASE_URL="postgresql://$USER:$CPASS@$C_HOST:$C_PORT/$C_DATABASE?sslmode=verify-full"
 
   # Save your connection to Linux bash login.
 
-echo "export DATABASE_URL='$DATABASE_URL'" >> ~/.bashrc
+echo "
+export C_USER='$C_USER'
+export C_PASS='$C_PASS'
+export C_HOST='$C_HOST'
+   # probably defaultdb
+export C_DATABASE='C_DATABASE'
+   # probably 26257
+export C_PORT='$C_PORT'
+export C_CLUSTER='$C_CLUSER'
+
+
+export DATABASE_URL='$DATABASE_URL'
+" >> ~/.bashrc
 
 source ~/.bashrc
 
@@ -376,7 +398,7 @@ echo $DATABASE_URL
 ```
 cockroach sql --url $DATABASE_URL
 
-ccloud cluster sql <NAME OF CLUSTER> -u <USER> -p <ENTER-SQL-USER-PASSWORD>
+ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS
 
 ```
 

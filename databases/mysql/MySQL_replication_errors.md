@@ -15,7 +15,7 @@ Copyright January 2025**_
 This document will grow continuously. 
 
 1. [Links](#links)
-2. (Most common errors)[#e]
+2. [Most common errors](#e)
 
 * * *
 <a name=links></a>Links
@@ -31,7 +31,7 @@ This document will grow continuously.
 Questions to ask
 * Are there additional rows above the insert?
 * Are the tables in sync between the master and slave except for what hasn't been replicated?
-* Are you using SQL or Row level or Mixed Replication?
+* Are you using SQL or Row level or Mixed Replication? It probably doesn't matter. 
 * Is this for  Cluster as in ClusterSet or regular replication?
 * Is this normal or GTID replication?
 * Why was there data on the slave already?
@@ -47,6 +47,8 @@ and the read only global variable is not set. Or "root" changed data.
 
 Errors and possible solutions
 * Duplicate key error 1062
+    * Whether row or statement replication with primary keys, the primary key is defined. If the primary key
+    is not defined for a table, replication commands can succeed and may be in error.
     * On a Cluster, if there is a duplicate key error, determine which node has true data and re sync data from
     good node to bad node.
     * For GTID or non-GTID replication
@@ -65,6 +67,7 @@ show global variables like 'binlog_format';
 drop database if exists test1;
 create database test1;
 use test1;
+drop table if exists i;
 create table i (i int, PRIMARY  KEY (i));
 insert into i values (1);
 
@@ -117,6 +120,31 @@ insert into i values (13);
 delete from slave where i = 10;
 start slave;
 show slave status\G
+
+  ## ERROR with tables with no primary keys
+
+  ## On master. 
+drop table if exists i_bad;
+create table i_bad (i int);
+insert into i_bad values (1);
+
+  ## on Slave;
+insert into i_bad values (100);
+
+  ## On Master
+insert into i_bad values (2);
+
+  ## On slave
+  ## Check slave
+show slave status\G
+  ## Select rows
+  ## Slave should be okay and 1,2 and 100 should exist.
+select * from i_bad;
+
+  ## This is bad, because the master does not have row 100. All tables should have primary keys. 
+
+  ## After messing with replication, if there is question of consistency check with pt-checksum
+
 ```
 * Duplicate key errors with GTID replication
     * Determine the row on the master and slave and what data the binlog is doing.

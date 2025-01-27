@@ -347,7 +347,8 @@ Setup account
     * Username and password
     * Connection string with url. 
 
-* After you set everthign up, follow the instructions on how to connect from your server by clicking on the
+* After you set everything up,
+follow the instructions on how to connect from your server by clicking on the
 button "Connect" in the upper right corner.
 * For this login into server "admin" server.
 * Execute the curl command to get the cert.

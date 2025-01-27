@@ -2,6 +2,8 @@
 title: AWS : EC2 vs RDS MySQL vs Aurora
 
 --------
+Being updated on 1-27-2025 (not done yet)
+
 
 * Links
     * [Aurora Cheetsheet](https://tutorialsdojo.com/amazon-aurora/)
@@ -72,7 +74,9 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
   * Aurora Serverless versus Aurora
   * more performance
   * Links on what to maintain in RDS MySQL and Aurora. 
-
+  * Different versions of Aurora and Auroa DSL and serverless.
+  * Update this doc.
+  * Different security layers. 
 
 	
     

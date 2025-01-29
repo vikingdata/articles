@@ -418,6 +418,13 @@ echo $DATABASE_URL
 ```
 
 * Install cockroachdb client for Linux
+   * There are 5 ways to execute code
+        * wen interface
+	* A programming language
+	* cockroach client
+	* ccloud client
+	* psql from postgresql
+	
 * Follow the intructions at: https://uptimedba.github.io/cockroach-vb-single/cockroach-vb-single/cockroach-vb-single_db_install.html
 ```
 mkdir -p ~/software_install/cockroach
@@ -443,6 +450,22 @@ tar -xzvf ccloud_linux-amd64_0.6.12.tar.gz
 cp -iv ccloud /usr/local/bin
 ```
 
+* Install postgresql client (not server)
+```
+cd ~/software_install/cockroach
+
+# Setup postgresql client
+apt-get install -y postgresql-client
+mkdir -p ~/.postgresql/
+
+  # Copy the cert over
+  # If there are two certificates, this file should only have the first one.
+  # NOTE : Only do this step if you did not copy the certificate over yet. 
+cp ~/cockroach_certfile ~/.postgresql/root.crt
+
+
+
+```
 * Test the connection with cockroachdb client and ccloud and postgresql client
 ```
 cockroach sql --url $DATABASE_URL
@@ -471,11 +494,9 @@ ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS
 apt-get install -y postgresql-client
 mkdir -p ~/.postgresql/
 
-  # Copy the cert over
+  # Verify the certificate is installed
   # If there are two certificates, this file should only have the first one. 
-cp ~/cockroach_certfile ~/.postgresql/root.crt
-
-psql  $DATABASE_URL
+ls -al $HOME/.postgresql/root.crt
 
 ```
 * Now test basic commands with each of 3 clients. 
@@ -517,7 +538,7 @@ cockroach sql --url $DATABASE_URL < northwind.sql
 ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS < northwind.sql
 
 
- psql  -P pager=off $DATABASE_URL -f northwind.sql
+psql  -P pager=off $DATABASE_URL -f northwind.sql
 
 
 ```

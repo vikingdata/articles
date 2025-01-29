@@ -49,6 +49,7 @@ Sections
 * Free Databases ( or nearly free) on the internet
    * Password
        * [Bluefish](#b) on local server and Google Drive
+   * [Sample data](#sample) : https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
    * Databases
       * [CockroachDB](#c)
       * [TIDB](#t)
@@ -318,6 +319,27 @@ Next steps:
 * For web access, use your host computer.
 
 * * *
+<a name=sample></a>Sample data
+-----
+We will be using this data for all our initial testing. 
+* https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
+
+```
+  # Log into your admin server as root
+
+cd
+mkdir -p ~/sample_data
+cd ~/sample_data
+wget https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
+unzip mysqlsampledatabase.zip
+ls -al mysqlsampledatabase.sql
+
+wget https://raw.githubusercontent.com/pthom/northwind_psql/refs/heads/master/northwind.sql
+
+
+```
+
+* * *
 <a name=c></a>CockroachDB
 -----
 
@@ -334,8 +356,10 @@ Setup account
        * Create cluster
        * Save and generate password
            *  Save your password in buttercup. 
-       * Save cert by following commands.
+       * Save cert by following commands. I have not figured out how to get the cert if you don't get it now. 
            * I suggest you save the contents of the cert file in Buttercup.
+	   * Get cert file and also save it to buttercup
+	       * ex: curl --create-dirs -o $HOME/.postgresql/root.crt 'https://cockroachlabs.cloud/clusters/f701d3fa-dee0-XXXXXXXXX/cert'
        * Copy connection string
            * Select "Parameters ONLY:
 	   * Save cert as a not in buttercup.
@@ -366,7 +390,7 @@ export C_PORT="Your cockroach port"
 export C_CLUSTER="Your cluster name"
 
   # Create the url needed for some clients
-export DATABASE_URL="postgresql://$USER:$CPASS@$C_HOST:$C_PORT/$C_DATABASE?sslmode=verify-full"
+export DATABASE_URL="postgresql://$C_USER:$CPASS@$C_HOST:$C_PORT/$C_DATABASE?sslmode=verify-full"
 
   # Save your connection to Linux bash login.
 
@@ -382,7 +406,9 @@ export C_CLUSTER='$C_CLUSER'
 
 
 export DATABASE_URL='$DATABASE_URL'
-" >> ~/.bashrc
+" >> ~/.bashrc_cockroach
+
+echo "source ~/.bashrc_cockroach" >> ~/.bashrc  
 
 source ~/.bashrc
 
@@ -392,38 +418,99 @@ echo $DATABASE_URL
 ```
 
 * Install cockroachdb client for Linux
-    * Follow the intructions at: https://uptimedba.github.io/cockroach-vb-single/cockroach-vb-single/cockroach-vb-single_db_install.html
-    * Install ccloud at https://www.cockroachlabs.com/docs/cockroachcloud/ccloud-get-started?filters=linux
-        * ex: curl https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.6.12.tar.gz | tar -xz && cp -i ccloud /usr/local/bin/
+* Follow the intructions at: https://uptimedba.github.io/cockroach-vb-single/cockroach-vb-single/cockroach-vb-single_db_install.html
+```
+mkdir -p ~/software_install/cockroach
+cd ~/software_install/cockroach
+wget https://binaries.cockroachdb.com/cockroach-v24.3.3.linux-amd64.tgz
+tar -zxvf cockroach-v24.3.3.linux-amd64.tgz
+cd cockroach-v24.3.3.linux-amd64
 
-* Test the connection with cockroachdb client and ccloud
+mkdir -p /usr/local/lib/cockroach
+cp -iv lib/* /usr/local/lib/cockroach
+
+cp -iv cockroach /usr/local/bin/
+
+```
+
+* Install ccloud at https://www.cockroachlabs.com/docs/cockroachcloud/ccloud-get-started?filters=linux But This has to be your desktop server. If your desktop server is Windows, do the windows installation. You will not be able to use ccloud on the admin server because it tries to start a browser. 
+```
+mkdir -p ~/software_install/cockroach
+cd ~/software_install/cockroach
+
+wget  https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.6.12.tar.gz
+tar -xzvf ccloud_linux-amd64_0.6.12.tar.gz
+cp -iv ccloud /usr/local/bin
+
+* Test the connection with cockroachdb client and ccloud and postgresql client
 ```
 cockroach sql --url $DATABASE_URL
 
+   # Enter this command
+   # You will need to enter the URL in a browser, copy the the authentication code
+   #   to the prompt that ask you for the authentication code.
+ccloud auth login --no-redirect
+
+  # Test this on your windows server.
+
+  # First, Log into the cloud cockroach on your browser.
+  # Execute ccloud auth login
+  #   Enter the url into your browser
+  #     ex: https://cockroachlabs.cloud/cli?cliNonce=XXXXXXXXXXXXXXXX&cliPort=45629&headless=true&responseType=code
+  #   Copy the code on your webpage.
+  # Enter this into the prompt from ccloud auth login --no-redirect
+  # Now you should be logged in.
+
+  # Then see if you can connect.
+  # This will download cockroach client software. 
 ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS
 
-```
+
+  # Setup postgresql client
+apt-get install -y postgresql-client
+mkdir -p ~/.postgresql/
+
+  # Copy the cert over
+  # If there are two certificates, this file should only have the first one. 
+cp ~/cockroach_certfile ~/.postgresql/root.crt
+
+psql  $DATABASE_URL
 
 ```
-adduser admin
+* Now test basic commands with each of 3 clients. 
+```
 
+cd ~/software_install
+
+echo "SELECT datname FROM pg_database;
+
+create database if not exists test1;
+use test1;
+drop table if exists test_table1;
+create table test_table1 (i int);
+
+SELECT    *
+FROM    information_schema.tables
+WHERE    table_type = 'BASE TABLE'
+AND    table_schema = 'public';
+
+" > basic_sql_commands.sql
+
+cockroach sql --url $DATABASE_URL < basic_sql_commands.sql
+
+ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS < basic_sql_commands.sql
+
+psql -P pager=off  $DATABASE_URL -f basic_sql_commands.sql
 
 
 ```
 
 
+* Now test loading of data with each client. It is MySQL formatted, but its basic SQL. 
 ```
-$env:DATABASE_URL = "postgresql://mark:<ENTER-SQL-USER-PASSWORD>@menprojects-7383.j77.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
-```
-* Instead make a 
+cd ~/sample_data/
 
-   * Databases
-      * CockroachDB
-      * TIDB
-      * Yugabyte
-      * MongoDB
-      * Snowflake
-      * BigQuery
-      * PubSub
-      * Dynamo
-      * SimplDB
+ psql  -P pager=off $DATABASE_URL -f northwind.sql
+
+
+```

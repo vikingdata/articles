@@ -441,6 +441,7 @@ cd ~/software_install/cockroach
 wget  https://binaries.cockroachdb.com/ccloud/ccloud_linux-amd64_0.6.12.tar.gz
 tar -xzvf ccloud_linux-amd64_0.6.12.tar.gz
 cp -iv ccloud /usr/local/bin
+```
 
 * Test the connection with cockroachdb client and ccloud and postgresql client
 ```
@@ -506,9 +507,15 @@ psql -P pager=off  $DATABASE_URL -f basic_sql_commands.sql
 ```
 
 
-* Now test loading of data with each client. It is MySQL formatted, but its basic SQL. 
+* Now test loading of data with each client. It is MySQL formatted, but its basic SQL. Each data
+load will drop the previous data. 
 ```
 cd ~/sample_data/
+
+cockroach sql --url $DATABASE_URL < northwind.sql
+
+ccloud cluster sql $C_CLUSTER -u $C_USER -p $C_PASS < northwind.sql
+
 
  psql  -P pager=off $DATABASE_URL -f northwind.sql
 

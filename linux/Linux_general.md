@@ -1,4 +1,4 @@
---------
+-------
 title: Linux general tips
 
 --------
@@ -26,7 +26,7 @@ title: Linux general tips
 14. [remove binary fromn text file](#removebin)
 15. [Adding swapspace temporarily](#swap)
 16. [Deleted files still used.](#un)
-
+17. [Find newest files first](#find2)
 * * *
 
 <a name=links></a>Links
@@ -269,7 +269,7 @@ echo "cores", `cat /proc/cpuinfo  | egrep -i "cpu core" | cut -d ':' -f2 | paste
 
 ```#!/usr/bash
 
-find_files='find / -size +1G -type f -printf %s_%p\n'
+find_files="find / -size +1G -type f -printf '%s_%p\n'"
 #find_files='find . -size +1M'
 
 for l in `$find_files 2>/dev/null  |sort -nr `; do
@@ -287,6 +287,10 @@ for l in `$find_files 2>/dev/null  |sort -nr `; do
     echo $"$sizeM""M $size $f"
 
 done
+
+   # Or just list out files by size in reverse order
+find .  -type f -printf '%s %p\n'| sort -nr -k 1,1
+
 ````
 
 ### Organize TOP example with SWAP
@@ -615,3 +619,25 @@ root@mysql1:~/install# locate mysql.service
 /var/lib/systemd/deb-systemd-helper-enabled/multi-user.target.wants/mysql.service
 /var/lib/systemd/deb-systemd-helper-masked/mysql.service
 ````
+
+* * *
+<a name=find></a>Find by date or size
+---------------
+
+* https://www.redhat.com/en/blog/linux-find-command
+* https://phoenixnap.com/kb/guide-linux-find-command
+
+
+```
+  # List out files by size on current directory
+find .  -type f -printf '%s %p\n'| sort -nr -k 1,1
+
+  # List out by date on current directory
+find .  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
+
+  # All files on system
+find /  -type f -printf '%s %p\n'| sort -nr -k 1,1
+find /  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
+
+
+```

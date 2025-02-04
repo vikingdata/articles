@@ -635,9 +635,26 @@ find .  -type f -printf '%s %p\n'| sort -nr -k 1,1
   # List out by date on current directory
 find .  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
 
-  # All files on system
+  # All files on system sorted
 find /  -type f -printf '%s %p\n'| sort -nr -k 1,1
 find /  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
+
+  # Find all  duplicates in a file
+sort FILE | uniq -c | sort -r -k1,1 | awk '{$1=$1;print}' | awk '$1 > 1 { print $0 }'
+    # sort because uniq doesn't work unless it sorted
+    # uniq -c leaves a count nummber for duplicates
+    # sort -r -k1,1 reverse sorts by the first field which is the count of duplciates
+    # awk '{$1=$1;print}' removes whitespace
+    # awk '$1 > 1 { print $0 }' finds all duplicated greater than 1, and prints the line
+
+  # Find all duplicate file names
+  # Where the file is located you will have to do another search
+find /etc  -type f -printf '%f\n'| sort | uniq -c | sort -r -k1,1 | awk '{$1=$1;print}' | awk '$1 > 1 { print $0 }'
+  # We detected .bashrc twice, so find it
+find /etc -type f -name '.bashrc'
+  # output
+  # /etc/defaults/etc/skel/.bashrc
+  # /etc/skel/.bashrc
 
 
 ```

@@ -50,7 +50,7 @@ Sections
    * Password
        * [Bluefish](#b) on local server and Google Drive
    * [Sample data](#sample) : https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
-   * Databases
+   * Distributed Databases
       * [CockroachDB](#c)
       * [TIDB](#t)
       * [Yugabyte](#y)

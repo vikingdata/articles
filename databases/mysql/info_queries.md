@@ -109,7 +109,7 @@ where table_schema not in
  ('mysql', 'information_schema', 'performance_schema', 'sys')
 
 GROUP BY table_schema
-order by db_size_in_gig desc
+order by min_reation_time_table desc , db_size_in_gig desc
 limit 10;
 
 
@@ -119,7 +119,7 @@ SELECT table_schema
 FROM information_schema.tables
 where table_schema in ('<DB>')
 GROUP BY table_schema
-order by db_size_in_gig desc
+order by min_reation_time_table desc, db_size_in_gig desc
 limit 10;
 
 

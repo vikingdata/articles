@@ -32,6 +32,8 @@
 * https://aws.amazon.com/blogs/database/scaling-your-amazon-rds-instance-vertically-and-horizontally/#:~:text=You%20can%20vertically%20scale%20up,Amazon%20RDS%20for%20SQL%20Server.
 
 * distributed database https://www.youtube.com/watch?v=Xd0liI_d3MA
-
+    * https://db-engines.com/en/system/TiDB%3BYugabyteDB?utm_source=chatgpt.com
+    * https://db-engines.com/en/system/CockroachDB%3BTiDB%3BYugabyteDB
+    
 * Aurora serverless
      * comparison between 1 and 2 https://dev.to/aws-builders/aurora-serverless-v1-to-serverless-v2-comparison-migration-and-bluegreen-deployment-4aa8#:~:text=Aurora%20serverless%20v1%20vs%20v2&text=It%20also%20offers%20the%20same,ability%20to%20use%20RDS%20proxy.

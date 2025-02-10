@@ -1,4 +1,4 @@
--------
+'-------
 title: Linux general tips
 
 --------
@@ -621,7 +621,7 @@ root@mysql1:~/install# locate mysql.service
 ````
 
 * * *
-<a name=find></a>Find by date or size
+<a name=find2></a>Find by date or size
 ---------------
 
 * https://www.redhat.com/en/blog/linux-find-command

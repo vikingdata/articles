@@ -13,6 +13,7 @@
 for end apps.
 
 * Data Lake -- place to store structured and unstructures data. 
+    
 
 * Adding an Amazon S3 location to your data lake -- you can assign permissions on S3 sections to different users.
 

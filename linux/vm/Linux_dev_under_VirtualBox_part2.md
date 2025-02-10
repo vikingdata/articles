@@ -56,10 +56,12 @@ Sections
       * [Yugabyte](#y)
       * [MongoDB](#m)
       * [Snowflake](#snow)
-      * [BigQuery](#b)
-      * [PubSub](#p)
-      * [Dynamo](#d)
-      * [SimplDB](#s)
+      * GCP
+          * [BigQuery](#b)
+          * [PubSub](#p)
+      * AWS	  
+          * [Dynamo](#d)
+          * [SimplDB](#s)
 
 
 * * *
@@ -542,3 +544,91 @@ psql  -P pager=off $DATABASE_URL -f northwind.sql
 
 
 ```
+
+* * *
+<a name=t></a>TiDB
+-----
+* [TiDB vs Amazon RDS for MySQL](https://www.pingcap.com/tidb-cloud-serverless-vs-amazon-rds/?utm_source=google&utm_medium=cpc&utm_campaign=plg_search_RDScompare_blog_01&utm_term=tidb%20cloud&utm_campaign=plg_search_RDScompare_blog_01&utm_source=adwords&utm_medium=ppc&hsa_acc=7438219570&hsa_cam=21762816921&hsa_grp=165117033501&hsa_ad=715506387577&hsa_src=g&hsa_tgt=kwd-2397205853419&hsa_kw=tidb%20cloud&hsa_mt=p&hsa_net=adwords&hsa_ver=3&gad_source=1&gclid=CjwKCAiA5Ka9BhB5EiwA1ZVtvEm5PTnqG-U0fGM_FhybHiJP418cRTJqkm8QaXIk1e_kkR2ORsJtrRoCdXkQAvD_BwE)
+* [Get started](https://tidbcloud.com/free-trial/)
+
+* After you sign up, you will be given a cluster called Cluster0. Or you can make your own.
+* Click on Cluster0 or the cluster you create.
+* Click on Connect in the upper right hand corner
+* For the various connections with client or programmin languages, the code to execute will be there. For clients you
+have to install the software and for programming languages you will have to make sure the languages are installed
+and then the driver for TiDB is installed with that language (which tends to be a MySQL driver).
+* Select "General" under "Connect With"
+    * We will connect with the mysql client.
+* Create directory to make login for .bashrc
+```
+mkdir ~/make_database_connections/
+cd make_database_connections/
+```
+* Save this content to "make_database_connections/tidb"
+
+```
+#!/bin/bash
+   ## Replace these values with your TiDB cloud account. 
+export tidb_host='ZZZZZZZZ.us-east-1.prod.aws.tidbcloud.com'
+export tidb_port=4000
+export tidb_user='<user>'
+export tidb_pass='<password>'
+export tidb_db='test'
+#export tidb_ca='<path to CA>'
+
+
+echo "
+
+export tidb_host='$tidb_host'
+export tidb_port='$tidb_port'
+export tidb_user='$tidb_user'
+export tidb_pass='$tidb_pass'
+export tidb_db='$tidb_db'
+#export tidb_ca='$tidb_ca'
+
+
+" >> ~/.bashrc_tidb
+
+echo "source ~/.bashrc_tidb" >> ~/.bashrc
+source ~/.bashrc
+```
+
+# Connect to the TiDB database with 
+  
+mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-mode=VERIFY_IDENTITY --ssl-ca=<CA_PATH> -p'<PASSWORD>'
+
+mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-verify-server-cert --ssl-ca=<CA_PATH> -p'<PASSWORD>'
+
+
+
+
+```
+
+
+* * *
+<a name=y></a>Yugabyte
+-----
+
+* * *
+<a name=m></a>MongoDB
+-----
+
+* * *
+<a name=snow></a>Snowflake
+-----
+
+* * *
+<a name=b></a>BigQuery
+-----
+
+* * *
+<a name=p></a>PubSub
+-----
+
+* * *
+<a name=d></a>Dynamo
+-----
+
+* * *
+<a name=s></a>SimpleDB
+-----

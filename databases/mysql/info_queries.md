@@ -18,7 +18,7 @@ TODO: simple performance_schema queries, information_schema queries
 
 1. [table files](#files)
 2. [InnoDB buffer pool ratio](#ibpr)
-3. [Size of database/tables](#size)
+3. [Size of database/tables and created](#size)
 4. [Free spac of tables](#free)
 5. [No index](#noindex)
 6. [Busiest tables](#busy)
@@ -65,7 +65,7 @@ select round( 100.0 - 100.0 * (@ipr/@ibprq), 2) as innodb_buffer_hit_ratio;
 
 * * *
 
-<a name=size></a>Size of database and tables
+<a name=size></a>Size of database and tables and created
 -----
 
 ```sql
@@ -90,8 +90,8 @@ set @meg = 1024*1024;
 select @meg, @gig;
 
 SELECT table_schema, table_name
-        , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_size_in_meg
-        , ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
+        , ROUND(SUM(data_length + index_length) / @meg, 2)  as tbl_size_in_meg
+        , ROUND(SUM(data_length + index_length) / @gig, 2)  as tbl_size_in_gig
 FROM information_schema.tables
 where table_schema not in
  ('mysql', 'information_schema', 'performance_schema', 'sys')
@@ -103,24 +103,82 @@ limit 10;
 
 SELECT table_schema 
 	, ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
-	, MIN(create_time) AS min_reation_time_table
+	, MIN(create_time) AS min_creation_time_table
 FROM information_schema.tables 
 where table_schema not in
  ('mysql', 'information_schema', 'performance_schema', 'sys')
 
 GROUP BY table_schema
-order by min_reation_time_table desc , db_size_in_gig desc
+order by min_creation_time_table desc , db_size_in_gig desc
 limit 10;
 
 
 SELECT table_schema
         , ROUND(SUM(data_length + index_length) / @gig, 2)  as db_size_in_gig
-        , MIN(create_time) AS min_reation_time_table
+        , MIN(create_time) AS creation_time
 FROM information_schema.tables
 where table_schema in ('<DB>')
 GROUP BY table_schema
-order by min_reation_time_table desc, db_size_in_gig desc
+order by creation_time desc, db_size_in_gig desc
 limit 10;
+
+
+```
+
+
+* Also,  databases and tables listed by create date, oldest and newset first. 
+```
+set @gig = 1024*1024*1024;
+set @meg = 1024*1024;
+select @meg, @gig;
+
+-- by first table
+SELECT table_schema
+  , ROUND(SUM(data_length + index_length) / @meg, 2)  as db_meg
+   , MIN(create_time) AS creation_time
+  FROM information_schema.tables
+  where table_schema not in
+       ('mysql', 'information_schema', 'performance_schema', 'sys')
+  GROUP BY table_schema
+  order by creation_time desc
+  limit 10;
+		   
+
+SELECT table_schema
+    , ROUND(SUM(data_length + index_length) / @meg, 2) as db_meg
+    , MIN(create_time) AS creation_time
+  FROM information_schema.tables
+  where table_schema not in
+       ('mysql', 'information_schema', 'performance_schema', 'sys')
+  GROUP BY table_schema
+  order by creation_time
+  limit 10;
+		      
+
+SELECT table_schema, table_name
+        , ROUND(SUM(data_length + index_length) / @meg, 2)  as tbl_meg
+	, MIN(create_time) AS creation_time
+  FROM information_schema.tables
+  where table_schema not in
+	 ('mysql', 'information_schema', 'performance_schema', 'sys')
+  GROUP BY table_schema, table_name
+  order by creation_time desc
+  limit 50;
+
+set @gig = 1024*1024*1024;
+set @meg = 1024*1024;
+select @meg, @gig;
+
+SELECT table_schema, table_name
+        , ROUND(SUM(data_length + index_length) / @meg, 2)  as tbl_meg
+        , MIN(create_time) AS creation_time
+  FROM information_schema.tables
+    where table_schema not in
+            ('mysql', 'information_schema', 'performance_schema', 'sys')
+  GROUP BY table_schema, table_name
+  order by creation_time
+limit 50;
+		   
 
 
 ```

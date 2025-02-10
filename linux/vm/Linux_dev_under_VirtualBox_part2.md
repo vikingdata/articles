@@ -593,9 +593,23 @@ echo "source ~/.bashrc_tidb" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-# Connect to the TiDB database with 
-  
+### Connect to the TiDB database with mysql software
+* Install mysql client software :
+```
+mkdir -p ~/software_install
+cd ~/software_install
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2_files/basic_percona_mysql_8_install.bash
+bash basic_percona_mysql_8_install.bash
+
+sudo systemctl disable mysql
+
+systemctl list-unit-files | grep enabled
+
+    * Disable mysql server at start : sudo systemctl disable mysql
+```
 mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-mode=VERIFY_IDENTITY --ssl-ca=<CA_PATH> -p'<PASSWORD>'
+
+  # or 
 
 mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-verify-server-cert --ssl-ca=<CA_PATH> -p'<PASSWORD>'
 

@@ -607,15 +607,13 @@ sudo service mysql stop
 systemctl list-unit-files | egrep "mysql|VENDOR"
 
 ```
+
 * Commands to connect to tidb
+```
 mysql --comments -u '$tidb_user' -h $tidb_host -P $tibb_port -D '$tidb_db' --ssl-mode=VERIFY_IDENTITY -p'$tidb_pass'
 
   # or mariadb
-
 mysql --comments -u '$tidb_user' -h $tidb_host -P $tidb_port -D '$tidb_db' --ssl-verify-server-cert  -p'$tidb_pass'
-
-
-
 
 ```
 

@@ -1,4 +1,6 @@
 
+# TODO
+# Put versions in for software. 
   # Execute as root
   # 'sudo root' or 'su -l' root first. 
 
@@ -28,7 +30,9 @@ dpkg -i mysql-shell_8.0.40-1ubuntu22.04_amd64.deb
 
   # It may ask for password, make the password "root" or your own password.
   # I suggest a better password than "root"
-sudo apt -y install percona-server-server=8.0.39-30-1.jammy
+# This version may change and cause the script to abort.
+  ### TODO Put check in here is the version installed. 
+sudo apt -y install percona-server-server=8.0.40-31-1.jammy
 
 mysql -u root -proot -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
 mysql -u root -proot -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
@@ -52,7 +56,7 @@ mysql -u root -proot -e "GRANT all privileges on *.* to  'root'@'%';"
 cd
 mkdir -p mysql
 cd mysql
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/DOING/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2_files/Dev_basic_my_cnf.md
  sed -e 's/__NO__/1/g' Dev_basic_my_cnf.md > /etc/mysql/conf.d/Dev_basic_my_cnf.md
 
 # I am not sure why, but changes to buffer pool is not read of configuration files

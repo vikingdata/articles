@@ -602,16 +602,17 @@ wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux
 bash basic_percona_mysql_8_install.bash
 
 sudo systemctl disable mysql
+sudo service mysql stop
 
-systemctl list-unit-files | grep enabled
+systemctl list-unit-files | egrep "mysql|VENDOR"
 
-    * Disable mysql server at start : sudo systemctl disable mysql
 ```
-mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-mode=VERIFY_IDENTITY --ssl-ca=<CA_PATH> -p'<PASSWORD>'
+* Commands to connect to tidb
+mysql --comments -u '$tidb_user' -h $tidb_host -P $tibb_port -D '$tidb_db' --ssl-mode=VERIFY_IDENTITY -p'$tidb_pass'
 
-  # or 
+  # or mariadb
 
-mysql --comments -u 'zzBHdxohpb6Bg9q.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D 'test' --ssl-verify-server-cert --ssl-ca=<CA_PATH> -p'<PASSWORD>'
+mysql --comments -u '$tidb_user' -h $tidb_host -P $tidb_port -D '$tidb_db' --ssl-verify-server-cert  -p'$tidb_pass'
 
 
 

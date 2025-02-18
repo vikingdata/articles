@@ -27,6 +27,7 @@ title: Linux general tips
 15. [Adding swapspace temporarily](#swap)
 16. [Deleted files still used.](#un)
 17. [Find newest files first](#find2)
+18. [Manipulate one line at a time in bash](#line)
 * * *
 
 <a name=links></a>Links
@@ -655,6 +656,77 @@ find /etc -type f -name '.bashrc'
   # output
   # /etc/defaults/etc/skel/.bashrc
   # /etc/skel/.bashrc
+
+
+```
+
+
+* * *
+<a name=line></a>Manipulate one line at a time in bash
+
+---------------
+
+* Make File
+```
+echo "
+
+Line 1
+Line 2 a b c
+Line 3
+e f g
+" > /tmp/line_data.txt
+
+* IFS
+```
+echo "
+
+if [ \"\$1\" = '' ] ; then
+   echo "File not given"
+   exit
+fi
+f=\"\$1\"
+
+if [ ! -f "\$f" ] ; then
+  echo \"File '\$f' does not exist\"
+  exit
+fi
+
+while IFS= read -r line; do
+  w=\`echo \"\$line\" | wc -w\`  
+  echo \"Line has \$w words: \$line\"
+  done < \$f
+
+" > /tmp/word_count.bash
+
+bash /tmp/word_count.bash /tmp/line_data.txt
+
+```
+* Seconds IFS
+```
+
+echo "
+if [ \"\$1\" = '' ] ; then
+   echo "File not given"
+      exit
+fi
+f=\"\$1\"
+
+if [ ! -f "\$f" ] ; then
+  echo \"File '\$f' does not exist\"
+  exit
+fi
+    
+saved_IFS=\$IFS;
+IFS=\"\\n\"
+while read -r line ; do
+  w=\`echo \"\$line\" | wc -w\`
+  echo \"Line has \$w words: \$line\"
+done < \"\$f\"
+      
+IFS=\$saved_IFS
+" > /tmp/word_count2.bash
+
+bash /tmp/word_count2.bash /tmp/line_data.txt
 
 
 ```

@@ -554,6 +554,7 @@ psql  -P pager=off $DATABASE_URL -f northwind.sql
 * After you sign up, you will be given a cluster called Cluster0. Or you can make your own.
 * Click on Cluster0 or the cluster you create.
 * Click on Connect in the upper right hand corner
+* Click "Generate password". Make a password. 
 * For the various connections with client or programmin languages, the code to execute will be there. For clients you
 have to install the software and for programming languages you will have to make sure the languages are installed
 and then the driver for TiDB is installed with that language (which tends to be a MySQL driver).
@@ -591,6 +592,14 @@ export tidb_db='$tidb_db'
 
 echo "source ~/.bashrc_tidb" >> ~/.bashrc
 source ~/.bashrc
+```
+* Manually execute : source ~/.bashrc
+* Edit the script to put in your own database settings. fg
+* Execute script
+```
+cd make_database_connections
+bash tidb
+
 ```
 
 ### Connect to the TiDB database with mysql software

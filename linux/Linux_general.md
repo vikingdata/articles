@@ -675,6 +675,7 @@ Line 2 a b c
 Line 3
 e f g
 " > /tmp/line_data.txt
+```
 
 * IFS
 ```

@@ -1,4 +1,6 @@
 
+
+
 title : Linux Dev environment on Windows Part 1
 author : Mark Nielsen
 copyright : November 2024
@@ -19,7 +21,7 @@ Installing Linux under VirtualBox for Windoze.
 The issue is, cygwin is not 100% compatible with some software, its a pain.
 I want a real Linux box to issue commands with. Cygwin is pretty good.
 WSL is another option than Cygwin. With WSL, you can only use one
-environment as a time -- at least I haven't figured out how to make two
+environment at a time -- at least I haven't figured out how to make two
 WSL installations run at the same time. 
 
 The goal is to make this usable under a VPN in Windows. 

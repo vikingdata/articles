@@ -9,7 +9,8 @@ Being updated on 1-27-2025 (not done yet)
 * [Aurora](#a)
 * [Difference](#d)
 * [Multi AZ](#m)
-
+* [Minial Schema change downtime](#s)
+-------------------------
 
 * Links
     * [Aurora CheatSheet](https://tutorialsdojo.com/amazon-aurora/)
@@ -111,16 +112,16 @@ Being updated on 1-27-2025 (not done yet)
          there is one server in each of the 3 locations with committed data for each transaction.
          The rest of the servers are synchronous (delayed).
          * Scale up to 64 Tib
-	 * Automatic Failover with Standby Instance (Multi AZ). If not its done manually. 
+         * Automatic Failover with Standby Instance (Multi AZ). If not its done manually. 
      * Aurora
          * Cloud native design for syncing data.
-	 * Built in fault tolerance and automatic
-	failover whether Multi AZ or not. Failover is faster than RDS. 
-	 * Better performance and higher limit on diskspace.
-	 * Data is on 3 AZ or availability zones in a region. 
+         * Built in fault tolerance and automatic
+        failover whether Multi AZ or not. Failover is faster than RDS. 
+         * Better performance and higher limit on diskspace.
+         * Data is on 3 AZ or availability zones in a region. 
 * * *
 <a name=s>Minimal Schema change
-------
+-----
 
 Links
 * https://aws.amazon.com/blogs/database/deploy-schema-changes-in-an-amazon-aurora-mysql-database-with-minimal-downtime/

@@ -111,8 +111,12 @@ Tasks to perform
     * It should be free.
         * Turn on alarms.
 	* Turn on insights, perform tasks, turn off insights.
-	* Upload data, turn on Glue or Lamda.
+
+* Turn on sdlow logs, error logs, and make some entries and look at them. 
+* Upload data, turn on Glue or Lamda.
 * Put data into S3.
     * Lamda process should process data into your database.
     * Make a glue script and execute.
-		    
+
+
+TODO multiAZ

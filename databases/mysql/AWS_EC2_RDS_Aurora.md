@@ -4,6 +4,7 @@ title: AWS : EC2 vs RDS MySQL vs Aurora
 --------
 Being updated on 1-27-2025 (not done yet)
 
+* [EC2](#e)
 * [RDS](#r)
 * [Aurora](#a)
 * [Difference](#d)
@@ -11,11 +12,16 @@ Being updated on 1-27-2025 (not done yet)
 
 
 * Links
-    * [Aurora Cheetsheet](https://tutorialsdojo.com/amazon-aurora/)
+    * [Aurora CheatSheet](https://tutorialsdojo.com/amazon-aurora/)
     * [Aurora vs RDS: How to Choose the Right AWS Database Solution](https://www.percona.com/blog/when-should-i-use-amazon-aurora-and-when-should-i-use-rds-mysql/#:~:text=Aurora%20replicates%20data%20to%20six,process%20is%20slower%20than%20Aurora.)
     * [HA databases](https://www.percona.com/blog/the-ultimate-guide-to-database-high-availability/)
     * [AWS RDS MySQL vs. Aurora MySQL](https://houseofbrick.com/blog/aws-rds-mysql-vs-aurora-mysql/)
     * [Aurora vs. RDS: An Engineer’s Guide to Choosing a Database](https://www.lastweekinaws.com/blog/aurora-vs-rds-an-engineers-guide-to-choosing-a-database/#:~:text=You%20use%20a%20database%20engine,RDS%20is%20your%20only%20choice.)
+    * [AWS — Difference between Amazon Aurora and Amazon RDS](https://medium.com/awesome-cloud/aws-difference-between-amazon-aurora-and-amazon-rds-comparison-aws-aurora-vs-aws-rds-databases-60a69dbec41f#:~:text=In%20RDS%2C%20Failover%20to%20read,time%20is%20faster%20on%20Aurora.)
+
+* * *
+<a name=e></a>EC2
+-----
 
 * EC2
     * You install and maintain your own system. It is like a computer in your own data center. You have many operating systems to choose from. 
@@ -103,11 +109,29 @@ Being updated on 1-27-2025 (not done yet)
      * RDS
          * Use normal replication with semi-synchronous to the other 2 AZs. Thus
          there is one server in each of the 3 locations with committed data for each transaction.
-         T he rest of the servers are synchronous (delayed).
-         *Scale up to 64 Tib
-	 * Failover is manual 
+         The rest of the servers are synchronous (delayed).
+         * Scale up to 64 Tib
+	 * Automatic Failover with Standby Instance (Multi AZ). If not its done manually. 
      * Aurora
          * Cloud native design for syncing data.
 	 * Built in fault tolerance and automatic
-	failover.
-	 * Better performance and higher limit on diskspace. 
+	failover whether Multi AZ or not. Failover is faster than RDS. 
+	 * Better performance and higher limit on diskspace.
+	 * Data is on 3 AZ or availability zones in a region. 
+* * *
+<a name=s>Minimal Schema change
+------
+
+Links
+* https://aws.amazon.com/blogs/database/deploy-schema-changes-in-an-amazon-aurora-mysql-database-with-minimal-downtime/
+* https://orangematter.solarwinds.com/2017/01/27/three-things-that-differentiate-amazon-aurora-from-mysql/
+
+Techniques
+
+* Use Online schema change in RDS or Aurora where possible. Instance DDL in Aurora 3.
+    * Aurora Fast DLL seems faster than MySQL online DDL. Aurora's fast dll can be done in transactions. 
+* Use pt-schema change.
+* Use Blue/Green Deployments Aurora in AWS. Basically, it uses regular replication from one environment to another.
+    * Make schema changes backwards compatible with software.
+    * After you make schema changes in the NEW cluster, let the software run for a few days to make sure
+    there are no errors in replication. 

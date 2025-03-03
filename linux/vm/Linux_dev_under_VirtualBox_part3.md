@@ -94,19 +94,60 @@ Goals:
      * Make sure the databse is running.
      * Delete the cluster.
 
+#### Setup bash
+```
+  ### Change user, pass, and host for your server.
+  ## Make sure you are logged into the EC2 server that has
+  ## network access to Aurora Serverless.
+  ## You can change this user "Connected compute resources" for your Aurora Serverless. 
+echo "MUSER='user'
+MPASS='pass'
+MHOST='XXX.YYY.rds.amazonaws.com'
+" > serverless_auth.txt
 
-Tasks to perform
-* Input any data.
-    * Delete data and restore from backup.
-* Add a Reader node.
-    * Switch writer node to a read node.
-* Turn on Backtrack
-    * Insert data and count
-    * wait
-    * Add some more data and do count
-    * Restore data from backtrack
-        * Count should be the same as the original
-    * Turn off backtrack
+source serverless_auth.txt
+
+mysql -u $MUSER -p$MPASS -h $MHOST -e "select now()"
+
+
+```
+
+#### Input any data
+```
+   -- while connected inside as mysql client or other client
+create database if not exists test_db;
+use test_db;
+create table i (i int);
+insert into i values (1),(2),(3),(4),(5);
+
+
+```
+#### Turn on backup and backtrack
+
+
+
+#### Input more data and do count
+
+#### perform backtrack and do count
+
+#### Perform restore from backup and do count
+
+#### Turn off backup and backtrack
+
+### Add reader
+
+
+#### Failover to Reader
+
+#### Make Multi-AZ
+
+### Failover to other AZ
+
+#### Failback to original server
+
+### Get rid of multi-AZ and reader
+
+
 * Look at Cloudwatch.
     * It should be free.
         * Turn on alarms.

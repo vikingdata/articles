@@ -28,6 +28,8 @@ title: Linux general tips
 16. [Deleted files still used.](#un)
 17. [Find newest files first](#find2)
 18. [Manipulate one line at a time in bash](#line)
+19. [awk](#a)
+20. [ssh keys -- scan](#ssh)
 * * *
 
 <a name=links></a>Links
@@ -728,6 +730,42 @@ IFS=\$saved_IFS
 " > /tmp/word_count2.bash
 
 bash /tmp/word_count2.bash /tmp/line_data.txt
+
+
+```
+
+* * *
+<a name=a></a>awk
+---------------
+Links
+* TODO
+
+* print mutiple columns
+```
+echo "1 2 3
+4 5 6" > sample.data
+
+awk {'print $1 ----- $3'} sample.data
+```
+
+* print eveurthing
+```
+
+awk {'print LINE: $0'} sample.data
+```
+
+
+* * *
+<a name=ssh></a>Scan hosts
+---------------
+1. Timeout if you can't connect.
+2. Disable password, only connect with keys
+3. accept host keys
+
+```
+
+ssh -oPasswordAuthentication=no -o ConnectTimeout=10 -o StrictHostKeyChecking=no
+ssh -oPasswordAuthentication=no -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new
 
 
 ```

@@ -30,6 +30,10 @@ title: Linux general tips
 18. [Manipulate one line at a time in bash](#line)
 19. [awk](#a)
 20. [ssh keys -- scan](#ssh)
+21. [sort](#sort)
+
+
+
 * * *
 
 <a name=links></a>Links
@@ -745,13 +749,13 @@ Links
 echo "1 2 3
 4 5 6" > sample.data
 
-awk {'print $1 ----- $3'} sample.data
+awk '{print $1 "-----" $3}' sample.data
 ```
 
 * print eveurthing
 ```
 
-awk {'print LINE: $0'} sample.data
+awk '{print "LINE: "$0}' sample.data
 ```
 
 
@@ -766,6 +770,26 @@ awk {'print LINE: $0'} sample.data
 
 ssh -oPasswordAuthentication=no -o ConnectTimeout=10 -o StrictHostKeyChecking=no
 ssh -oPasswordAuthentication=no -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new
+
+
+```
+
+* * *
+<a name=sort></a>sort
+---------------
+Links
+* TODO
+
+* sort by field : look at examples in this article
+* There are probably other sort examples in this article. 
+* sort by delimiter
+```
+echo "name1,3
+name2,50
+name3,20
+" > sample_name_list
+
+sort -t ',' -k 2 sample_name_list
 
 
 ```

@@ -41,7 +41,22 @@ Goals:
     * Maximum $50 an month if left on all the time.
     * Use for an hour each day. Thus price should ne $50/24 per month, or less than $5.
     * Specify minimum ACU of 0 and max 1. Make sure cluster goes down after 5 minutes of inactivity. 
+    * Backtrack will be very cheap.
+    * Free backups for 7 days.
+    * Free Cloud Watch Insights
+    * Database Insights is cheap. RDS insights is free with 7 days of data. 
+    * Multi-AZ  costs -- TODO Verify this
+        *  No separate standby cost: Unlike traditional RDS instances, you don't pay for a standby instance when not actively in use.    Pay per usage: You only pay for the ACUs used during active database operations. 
+    * General Steps
+        * Make Aurora serverless cluster with Mutli-AZ and backtrack and Extended Insights
+        * Perform actions
+        * Wait a day, and then do backtrack and backup actions
+        * Destory Aurora serverless cluster and remake one without Multi AZ, backtrack, and Database insights. Keep RDS insights. 
+            * OPTIONAL: Keep database insights, its cheap
 
+
+#### Make stuff
+	    
 * OPTIONAL: Create AWS Management Console and open the AWS Cloud9
 
 * Create a EC2 instance with mysql 8.0.41 installed.
@@ -76,7 +91,7 @@ Goals:
     * Database authentication
         * IAM database authentication	    
 
-** TODO : report on whether the pausing SAVE money.
+#### Connect to database
 
 * Connection to database. NOTE: You cannot connect to aurora server less unless you are inside the VPC. 
     * Through Ec2
@@ -87,12 +102,6 @@ Goals:
 	   * Execute : mysql -h <HOST> -u admin -p<PASS>
     * Through RDS Data API
     * Through ssh tunnel through your EC2 instance. This will enable you to connect from anywhere.
-
-* To start over with new severless server
-     * Select database cluster.
-     * Make sure delete protection is off. Check by clicking on "Modify" for the cluster. 
-     * Make sure the databse is running.
-     * Delete the cluster.
 
 #### Setup bash
 ```
@@ -112,7 +121,9 @@ mysql -u $MUSER -p$MPASS -h $MHOST -e "select now()"
 
 ```
 
-#### Input any data
+#### Steps to perform
+
+* Input any data
 ```
    -- while connected inside as mysql client or other client
 create database if not exists test_db;
@@ -122,42 +133,34 @@ insert into i values (1),(2),(3),(4),(5);
 
 
 ```
-#### Turn on backup and backtrack
+* Test backup and backtrack
+    * Input more data and do count
+    *  perform backtrack and do count
+    * Perform restore from backup and do count
 
-
-
-#### Input more data and do count
-
-#### perform backtrack and do count
-
-#### Perform restore from backup and do count
-
-#### Turn off backup and backtrack
-
-### Add reader
-
-
-#### Failover to Reader
-
-#### Make Multi-AZ
-
-### Failover to other AZ
-
-#### Failback to original server
-
-### Get rid of multi-AZ and reader
-
+* Test failovers and add readers
+    * Add reader
+    * Failover to Reader
+    * Failover to other AZ
+    * Failback to original server
 
 * Look at Cloudwatch.
     * It should be free.
         * Turn on alarms.
 	* Turn on insights, perform tasks, turn off insights.
 
-* Turn on sdlow logs, error logs, and make some entries and look at them. 
+    * Turn on sdlow logs, error logs, and make some entries and look at them. 
 * Upload data, turn on Glue or Lamda.
 * Put data into S3.
     * Lamda process should process data into your database.
     * Make a glue script and execute.
+* Turn on RDS proxy and test it
 
+### Remake cluster
 
-TODO multiAZ
+* To start over with new severless server
+     * Select database cluster.
+     * Make sure delete protection is off. Check by clicking on "Modify" for the cluster.
+     * Make sure the databse is running.
+     * Delete the cluster.
+    

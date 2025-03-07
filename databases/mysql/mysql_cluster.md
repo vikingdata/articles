@@ -37,7 +37,7 @@ This article will grow over time.
 <a name=p></a>Percona Galera Cluster
 -----
 
-####  <a name=p></a>Restarting 8.0 Percona Galera Cluster
+####  <a name=pr></a>Restarting 8.0 Percona Galera Cluster
 
 When starting or stopping mysql
     * tail -n 100 -f mysql.err  # tail the error log

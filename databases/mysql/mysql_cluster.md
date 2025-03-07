@@ -40,9 +40,9 @@ This article will grow over time.
 ####  <a name=pr></a>Restarting 8.0 Percona Galera Cluster
 
 When starting or stopping mysql
-    * tail -n 100 -f mysql.err  # tail the error log
-    * In mysql, check the status
-        * mysql > show global status where variable_name in ('wsrep_cluster_status','wsrep_cluster_size', 'wsrep_ready';
+* tail -n 100 -f mysql.err  # tail the error log
+* In mysql, check the status
+    * mysql > show global status where variable_name in ('wsrep_cluster_status','wsrep_cluster_size', 'wsrep_ready';
 
 
 Then do this : 

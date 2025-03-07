@@ -47,8 +47,8 @@ When starting or stopping mysql
 
 Then do this : 
 * stop all nodes
-* Find grastate.dat and set safe to bootstrap to 1
 * On node 1
+    * Find grastate.dat and set safe to bootstrap to 
     * systemctl systemctl start mysql@bootstrap.service
 * On other nodes one at a time.
     * start other nodes one a time.
@@ -58,6 +58,7 @@ Then do this :
     * systemctl systemctl stop mysql@bootstrap.service
     * service mysql restart
 * OPTIONAL : make node 1 primary
+* NOTE: On node 1, in grastate.dat, safe to bootstrap should automatically be set to 1.
 
 * * *
 <a name=c></a>MySQL ClusterSet

@@ -52,11 +52,11 @@ title: Linux general tips
 * [Few Linux Commands](https://www.linkedin.com/posts/tuba-nimrah-13574828a_linux-networking-commands-activity-7230523794300264448-ndJp?utm_source=combined_share_message&utm_medium=member_desktop)
 ---
 * * *
-<a name=install></a>Disk Performance
+<a name=disk></a>Disk Performance
 -----
 
 * Manually
-    * dd if=/dev/random of=10gig.bin bs=10G count=1; rm 10gig.bin"
+    * dd if=/dev/zero of=10gig.bin bs=10M count=1024; rm 10gig.bin"
         * On each partition
     * iostat -m 10
         * get data on disk activity every 10 seconds

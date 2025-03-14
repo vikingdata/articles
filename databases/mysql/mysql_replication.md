@@ -638,6 +638,8 @@ root@ubutubase:~/mysql# mysql -u root -proot -e "show slave status\G" | egrep -i
 -----
 * https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
 
+TODO: Verify scripts. Might be syntax error. 
+
 #### Regular or non gtid replication
 
 * OPTIONAL: stop slave io_thread;
@@ -673,9 +675,9 @@ Other way for gtid
 
 #### SCript for non gtid or gtid
 
-* OPTIONAL gtid
+* OPTIONAL if gtid
     * Turn off gtid forced replication
-    * in Mysql > set GLOBAL GTID = 'ON_PERMISSIVE"
+    * in Mysql : set GLOBAL GTID = 'ON_PERMISSIVE"
 * Make skip file
 ```
 echo "
@@ -703,7 +705,7 @@ done
 ' > repeat_skip_non_gtid.sh
 ```
 
-* OPTIONAL gtid
+* OPTIONAL  if gtid
     * Turn on gtid forced replication
     * in Mysql > set GLOBAL GTID = 'ON'
 
@@ -732,7 +734,7 @@ while 2>1; do
     running=`mysql -u root -p$MYSQL_PASSWORD  -e "show slave status\G" 2>/dev/null | grep Slave_SQL_Running: | awk -F: {'print $2'}`
     echo $running
     if [[ $running =~ "No" ]]; then
-           mysql -u root -p$MYSQL_PASSWORD  -e "source move_forward.sql"
+           mysql -u root -p$MYSQL_PASSWORD  -e "source skip_gtid.sql"
     else
         echo "good"
     fi

@@ -686,6 +686,7 @@ start slave;
 
 *  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you connect to a remote server. 
 
+```
 echo "
 
 MYSQL_PASSWORD="passsword"
@@ -700,6 +701,8 @@ while 2>1; do
     fi
 done
 " > repeat_skip_non_gtid.sh
+```
+
 * OPTIONAL gtid
     * Turn on gtid forced replication
     * in Mysql > set GLOBAL GTID = 'ON'

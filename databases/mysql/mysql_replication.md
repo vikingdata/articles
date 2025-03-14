@@ -1,4 +1,4 @@
-\---
+---
 title : MySQL Replication (GTID and normal)
 author : Mark Nielsen
 copyright : August 2024 
@@ -42,6 +42,7 @@ Index
    * [Reset normal replication to beginning](#resetnormal)
 8. [Analyze relay logs](#relay)
 9. [Fix GTID on slave from insert](#fixgtid)
+10. [Skip](#skip)
 
 * * *
 <a name=links></a>Links
@@ -631,3 +632,104 @@ root@ubutubase:~/mysql# mysql -u root -proot -e "show slave status\G" | egrep -i
             Executed_Gtid_Set: 0cfba193-b65d-11ef-849d-080027534b8f:1-7
 
 ```
+
+* * *
+<a name=skip></a>Skip replication.
+-----
+* https://www.percona.com/blog/how-to-skip-replication-errors-in-gtid-based-replication/
+
+#### Regular or non gtid replication
+
+* OPTIONAL: stop slave io_thread;
+    * Should already be stopped. 
+* SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+* START SLAVE;
+* select sleep(1);
+* show slave status\G | grep -i running
+
+
+#### GTId replication
+
+
+Easy easy way in mysql prompt. Repeat process
+
+* stop slave :
+    * Optional, should already be stopped.
+* SET GLOBAL  GTID_MODE=ON_PERMISSIVE;
+* SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+* START SLAVE;
+* show slave status\G | grep -i running
+    * Verify replication is running.
+
+Other way for gtid
+
+* select  @NEXT:=APPLYING_TRANSACTION from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0;
+* SET GTID_NEXT=@NEXT;
+* show variables like 'GTID_NEXT';
+* BEGIN
+* COMMIT
+* SET GTID_NEXT='AUTOMATIC'
+* START REPLICA
+
+#### Non gtid script or gtid
+
+* OPTIONAL gtid
+    * Turn off gtid forced replication
+    * in Mysql > set GLOBAL GTID = 'ON_PERMISSIVE"
+* Make skip file
+```
+echo "
+SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+start slave;
+" > skip.sql
+```
+
+*  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you connect to a remote server. 
+
+echo "
+
+MYSQL_PASSWORD="passsword"
+while 2>1; do
+    running=`mysql -u root -p$MYSQL_PASSWORD  -e "show slave status\G" 2>/dev/null | grep Slave_SQL_Running: | awk -F: {'print $2'}`
+
+    echo $running
+    if [[ $running =~ "No" ]]; then
+           mysql -u root -p$MYSQL_PASSWORD -e "source skip.sql"
+    else
+        echo "good"
+    fi
+done
+" > repeat_skip_non_gtid.sh
+* OPTIONAL gtid
+    * Turn on gtid forced replication
+    * in Mysql > set GLOBAL GTID = 'ON'
+
+#### For GTID
+
+* Make skip file
+```
+echo "
+select  @NEXT:=APPLYING_TRANSACTION from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0;
+
+SET GTID_NEXT=@NEXT;
+show variables like 'GTID_NEXT';
+BEGIN;COMMIT;SET GTID_NEXT='AUTOMATIC';START REPLICA;
+select sleep(1);
+select * from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0\G
+"> skip_gtid.sql
+
+*  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you  connect to a remote server.
+
+echo "
+MYSQL_PASSWORD="passsword"
+
+while 2>1; do
+    running=`mysql -u root -p$MYSQL_PASSWORD  -e "show slave status\G" 2>/dev/null | grep Slave_SQL_Running: | awk -F: {'print $2'}`
+    echo $running
+    if [[ $running =~ "No" ]]; then
+           mysql -u root -p$MYSQL_PASSWORD  -e "source move_forward.sql"
+    else
+        echo "good"
+    fi
+done
+ > repeat_skip_gtid.sh

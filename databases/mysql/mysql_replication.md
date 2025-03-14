@@ -687,7 +687,7 @@ start slave;
 *  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you connect to a remote server. 
 
 ```
-echo "
+echo '
 
 MYSQL_PASSWORD="passsword"
 while 2>1; do
@@ -700,7 +700,7 @@ while 2>1; do
         echo "good"
     fi
 done
-" > repeat_skip_non_gtid.sh
+' > repeat_skip_non_gtid.sh
 ```
 
 * OPTIONAL gtid
@@ -711,7 +711,7 @@ done
 
 * Make skip file
 ```
-echo "
+echo '
 select  @NEXT:=APPLYING_TRANSACTION from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0;
 
 SET GTID_NEXT=@NEXT;
@@ -719,13 +719,13 @@ show variables like 'GTID_NEXT';
 BEGIN;COMMIT;SET GTID_NEXT='AUTOMATIC';START REPLICA;
 select sleep(1);
 select * from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0\G
-"> skip_gtid.sql
+'> skip_gtid.sql
 ```
 
 *  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you  connect to a remote server.
 
 ```
-echo "
+echo '
 MYSQL_PASSWORD="passsword"
 
 while 2>1; do
@@ -737,4 +737,5 @@ while 2>1; do
         echo "good"
     fi
 done
- > repeat_skip_gtid.sh
+' > repeat_skip_gtid.sh
+```

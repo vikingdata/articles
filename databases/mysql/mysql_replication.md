@@ -671,7 +671,7 @@ Other way for gtid
 * SET GTID_NEXT='AUTOMATIC'
 * START REPLICA
 
-#### Non gtid script or gtid
+#### SCript for non gtid or gtid
 
 * OPTIONAL gtid
     * Turn off gtid forced replication
@@ -704,7 +704,7 @@ done
     * Turn on gtid forced replication
     * in Mysql > set GLOBAL GTID = 'ON'
 
-#### For GTID
+#### Script For GTID
 
 * Make skip file
 ```
@@ -717,9 +717,11 @@ BEGIN;COMMIT;SET GTID_NEXT='AUTOMATIC';START REPLICA;
 select sleep(1);
 select * from performance_schema.replication_applier_status_by_worker where LAST_ERROR_NUMBER<>0\G
 "> skip_gtid.sql
+```
 
 *  Make loop file --- change password. You might want to add '-h <HOST>' to the mysql command if you  connect to a remote server.
 
+```
 echo "
 MYSQL_PASSWORD="passsword"
 

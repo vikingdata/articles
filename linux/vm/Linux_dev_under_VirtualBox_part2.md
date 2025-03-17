@@ -678,15 +678,11 @@ sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 ```
 
 * Install cassandra client software : 
-
 ```
-wget https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
-tar xvfz yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
-cd yugabyte-client-2.25.0.0
-./bin/post_install.sh
+TODO 
 ```
 ###### Create connection with 
-YSQLSH
+YSQLSH and YCQLSH
 * Log into web console
     * Click on Connect, Click on View Guide under YugabyteDB Client Shell,
         under Run your remote shell with the following string click on YSQL.
@@ -757,7 +753,7 @@ ysqlsh_service_print
 ysqlsh  host=X.Y.aws.yugabyte.cloud user=admin dbname=yugabyte sslmode=verify-full sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt password='123ZZZZZZZZZZZZabc'
 
 ```
-* Now configure yqlsh
+* Now configure ycqlsh
 
 ```
 echo "abcZZZZ123" > ~/.yugabyte_service_password

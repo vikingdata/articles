@@ -630,6 +630,134 @@ mysql --comments -u '$tidb_user' -h $tidb_host -P $tidb_port -D '$tidb_db' --ssl
 * * *
 <a name=y></a>Yugabyte
 -----
+Links:
+* https://www.yugabyte.com/yugabytedb/
+    * Sign up with email
+    * Go to email and click on "Finish Signup"
+    * After that, login.
+    * Create  a cluster
+         * Make sure to add your ip address to be allowed to connect to it from your desktop or laptop.
+	 * You may want to enter a subnet. For example, if your computer is
+68.1.2.3/32, you want to add the range of 68.1.2.0 to 68.1.2.255, which would be "68.1.2.0/24".
+         * Download the credentials and optionally downlown the username and password.
+	 * Create the cluster.
+	 * Wait for cluster to be created.
+	 * Download crt
+             * Click on "Connect", Click on "view guide" under "YugabyteDB Client Shell" , and then click on "Download CA cert".
+             * Save to : 
+
+* NOTE : Yugabyte only has a free trial for online services. You have to
+download it yourself to use it for free. 
+
+#### Connect to Yugabyte
+##### Option 1 : Log into the web console.
+
+
+##### Option 2 : Connect from laptop or desktop
+
+##### Downlooad software to connect
+* Install postgresql software : ysqlsh
+    * https://docs.yugabyte.com/preview/api/ysqlsh/
+    * https://docs.yugabyte.com/preview/releases/yugabyte-clients/
+```
+## Login as root or sudo to root. 
+wget https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
+tar xvfz yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
+mv yugabyte-client-2.25.0.0 /usr/local
+cd /usr/local
+ln -s yugabyte-client-2.25.0.0 yugabyte-client-service
+cd yugabyte-client-2.25.0.0
+mkdir -p cert
+./bin/post_install.sh
+```
+* Install cassabdra software : ycqlsh
+* Install postgresql client software
+* Install cassandra client software
+
+
+###### Create connection with 
+YSQLSH
+* Log into web console
+    * Click on Connect, Click on View Guide under YugabyteDB Client Shell,
+        under Run your remote shell with the following string click on YSQL.
+	It should look something like
+```
+  ## Change HOST. Change user is different. 
+./ysqlsh "<HOST>.aws.yugabyte.cloud \
+user=admin \
+dbname=yugabyte \
+sslmode=verify-full \
+sslrootcert=<ROOT_CERT_PATH>"
+
+```
+* Add stuff to .bashrc
+```
+  ## Change <HOST>. Change user if different.
+
+cp ~/.bashrc ~/.bashrc_`date +%y%m%d_%H%M%S`
+echo '' > ~/.bashrc_yugabyte_service
+
+echo " export Y_USER='admin'
+export Y_DB='yugabyte'
+export Y_sslmode=verify-full 
+export Y_sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt
+export Y_HOST='<HOST>'
+ # ex: export Y_HOST='X.Y.aws.yugabyte.cloud'
+export Y_HOME_BIN=/usr/local/yugabyte-client-service/bin
+" >> ~/.bashrc_yugabyte_service
+
+echo "PATH=\$Y_HOME_BIN:\$PATH" >> ~/.bashrc_yugabyte_service
+
+export Y_USER='admin'
+export Y_DB='yugabyte'
+export Y_sslmode=verify-full
+export Y_sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt
+export Y_HOST='<HOST>'
+  # ex: export Y_HOST='X.Y.aws.yugabyte.cloud'
+export Y_HOME_BIN=/usr/local/yugabyte-client-service/bin
+
+
+    ## Create the connection string
+    ## Remember to change the password between the single quotes. 
+echo "host=$Y_HOST user=$Y_USER dbname=$Y_DB sslmode=$Y_sslmode sslrootcert=$Y_sslrootcert password='abcdZZZZZZZ123'  " > ~/.yugabyte_service_conn
+chmod 700 ~/.yugabyte_service_conn
+
+echo "alias ysqlsh_service=\"ysqlsh \" \\\`cat ~/.yugabyte_service_conn  \\\` \\\" \"
+" >> ~/.bashrc_yugabyte_service
+
+echo "alias ysqlsh_service_print=\"echo ysqlsh \\\" \\\`cat ~/.yugabyte_service_conn  \\\`   \\\" \"  " >> ~/.bashrc_yugabyte_service
+
+echo "source ~/.bashrc_yugabyte_service" >> ~/.bashrc
+
+source ~/.bashrc
+
+echo "select now()"  |ysqlsh_service
+
+# Output should look something like
+              now
+-------------------------------
+ 2025-03-17 21:17:50.963334+00
+(1 row)
+
+# print out the yugabyte full connection
+
+ysqlsh_service_print
+
+# Output
+ysqlsh  host=X.Y.aws.yugabyte.cloud user=admin dbname=yugabyte sslmode=verify-full sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt password='123ZZZZZZZZZZZZabc'
+
+```
+
+YCQLSH
+
+
+PSQL
+* Install: follow https://www.postgresql.org/download/linux/ubuntu/
+```
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+```
+
 
 * * *
 <a name=m></a>MongoDB

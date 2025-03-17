@@ -655,8 +655,8 @@ download it yourself to use it for free.
 
 ##### Option 2 : Connect from laptop or desktop
 
-##### Downlooad software to connect
-* Install postgresql software : ysqlsh
+##### Download software to connect
+* Install yugabyte postgresql and cassandra software : ysqlsh and ycslsh
     * https://docs.yugabyte.com/preview/api/ysqlsh/
     * https://docs.yugabyte.com/preview/releases/yugabyte-clients/
 ```
@@ -670,11 +670,21 @@ cd yugabyte-client-2.25.0.0
 mkdir -p cert
 ./bin/post_install.sh
 ```
-* Install cassabdra software : ycqlsh
 * Install postgresql client software
-* Install cassandra client software
+    * Install: follow https://www.postgresql.org/download/linux/ubuntu/
+```
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+```
 
+* Install cassandra client software : 
 
+```
+wget https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
+tar xvfz yugabyte-client-2.25.0.0-b489-linux-x86_64.tar.gz
+cd yugabyte-client-2.25.0.0
+./bin/post_install.sh
+```
 ###### Create connection with 
 YSQLSH
 * Log into web console
@@ -747,17 +757,62 @@ ysqlsh_service_print
 ysqlsh  host=X.Y.aws.yugabyte.cloud user=admin dbname=yugabyte sslmode=verify-full sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt password='123ZZZZZZZZZZZZabc'
 
 ```
+* Now configure yqlsh
 
-YCQLSH
+```
+echo "abcZZZZ123" > ~/.yugabyte_service_password
+chmod 700 ~/.yugabyte_service_password
+
+echo " alias ycqlsh_service=\"SSL_CERTFILE=/usr/local/yugabyte-client-service/cert/root.crt \
+  ycqlsh \
+HOST.aws.yugabyte.cloud 9042 \
+-u admin \
+--ssl \
+-p \\\`cat ~/.yugabyte_service_password\\\` \" " > ~/.bashrc_yugabyte_ycqlsh_service
+
+echo "source ~/.bashrc_yugabyte_ycqlsh_service" >> ~/.bashrc
+
+source ~/.bashrc
+
+echo "SELECT dateof(now()) FROM system.local ;" | ycqlsh_service
+
+## output
+ dateof(now())
+---------------------------------
+ 2025-03-17 22:47:37.680000+0000
+
+
+```
 
 
 PSQL
-* Install: follow https://www.postgresql.org/download/linux/ubuntu/
-```
-sudo apt install -y postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
-```
+* Look at : https://www.cybertec-postgresql.com/en/pg_service-conf-the-forgotten-config-file/
 
+* Create Login file
+```
+echo "
+[pgsql_yugbayte_webservice]
+
+host=<HOST>
+  # ex: X.Y.aws.yugabyte.cloud
+port=5433
+dbname=yugabyte
+user=admin
+password=<PASSWORD>
+  # ex: abcZZZZZZZZ123
+sslmode=verify-full
+sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt
+
+" > ~/.pg_service.conf
+chmod 700 ~/.pg_service.conf
+
+export PGSERVICE=pgsql_yugbayte_webservice
+echo "export PGSERVICE=pgsql_yugbayte_webservice" > ~/.bashrc_yugabyte_psql_service
+echo "source ~/.bashrc_yugabyte_psql_service" >> ~/.bashrc
+
+psql -c "select now(), (select  host from yb_servers() ) as ip ;"
+
+```
 
 * * *
 <a name=m></a>MongoDB

@@ -727,16 +727,11 @@ export Y_HOME_BIN=/usr/local/yugabyte-client-service/bin
     ## Remember to change the password between the single quotes. 
 echo "host=$Y_HOST user=$Y_USER dbname=$Y_DB sslmode=$Y_sslmode sslrootcert=$Y_sslrootcert password='abcdZZZZZZZ123'  " > ~/.yugabyte_service_conn
 chmod 700 ~/.yugabyte_service_conn
-
 echo "alias ysqlsh_service=\"ysqlsh \" \\\`cat ~/.yugabyte_service_conn  \\\` \\\" \"
 " >> ~/.bashrc_yugabyte_service
-
 echo "alias ysqlsh_service_print=\"echo ysqlsh \\\" \\\`cat ~/.yugabyte_service_conn  \\\`   \\\" \"  " >> ~/.bashrc_yugabyte_service
-
 echo "source ~/.bashrc_yugabyte_service" >> ~/.bashrc
-
 source ~/.bashrc
-
 echo "select now()"  |ysqlsh_service
 
 # Output should look something like

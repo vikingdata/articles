@@ -216,5 +216,12 @@ d1=# SELECT distinct table_catalog, table_schema FROM information_schema.tables;
 (3 rows)
 ```
 
-"pg_catalog" is a system catalog. It connects all the databases together.
-"information_schema"
+* "pg_catalog" is a system catalog. It connects all the databases together.
+* "information_schema" contains all the tables and information of this database.
+* "public" is where you store the data for the database. 
+* Only "public" is writable. The others are read only (except for internal commands that
+make changes like "create table".
+
+Here is the confusing part. To create a database you use "create schema". But in information_schema.tables
+the database is named "table_catalog". In addition, "table_schema" is used for different schemas in the
+database you are in. It can be confusing when "database" and "schema" are used hapzardly. 

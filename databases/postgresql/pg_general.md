@@ -98,7 +98,10 @@ SELECT current_setting('shared_preload_libraries');
 
 * Show processes
 ```
-
+SELECT datname, user, pid, client_addr,  query_start,  state,
+  NOW() - query_start AS elapsed, EXTRACT(EPOCH FROM (NOW() - query_start)) as time,
+  query
+FROM pg_stat_activity;
 
 ```
 
@@ -224,4 +227,40 @@ make changes like "create table".
 
 Here is the confusing part. To create a database you use "create schema". But in information_schema.tables
 the database is named "table_catalog". In addition, "table_schema" is used for different schemas in the
-database you are in. It can be confusing when "database" and "schema" are used hapzardly. 
+database you are in. It can be confusing when "database" and "schema" are used hapzardly.
+
+Also, if you create a catalog table in "public" that exists in pg_catalog, selects will happen
+on pg_catalog table rather than public. Example:
+```
+\c postgres
+create table pg_stat_activity (i int);
+insert into public.pg_stat_activity values (1);
+
+-- inserts by default will to go pg_catalog and fail. 
+postgres=# insert into pg_stat_activity values (1);
+ERROR:  cannot insert into view "pg_stat_activity"
+DETAIL:  Views that do not select from a single table or view are not automatically updatable.
+HINT:  To enable inserting into the view, provide an INSTEAD OF INSERT trigger or an unconditional ON INSERT DO INSTEAD rule.
+
+
+postgres=# select count(1) from pg_stat_activity;
+ count
+-------
+     7
+(1 row)
+
+postgres=# select count(1) from pg_catalog.pg_stat_activity;
+ count
+-------
+     7
+(1 row)
+
+
+postgres=# select count(1) from public.pg_stat_activity;
+ count
+-------
+     1
+(1 row)
+
+
+```

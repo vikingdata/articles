@@ -708,7 +708,7 @@ export Y_DB='yugabyte'
 export Y_sslmode=verify-full 
 export Y_sslrootcert=/usr/local/yugabyte-client-service/cert/root.crt
 export Y_HOST='<HOST>'
- # ex: export Y_HOST='X.Y.aws.yugabyte.cloud'
+# ex: export Y_HOST='X.Y.aws.yugabyte.cloud'
 export Y_HOME_BIN=/usr/local/yugabyte-client-service/bin
 " >> ~/.bashrc_yugabyte_service
 

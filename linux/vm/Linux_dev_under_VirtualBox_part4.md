@@ -55,6 +55,7 @@ We are installing yugbayte on 6 systems. To test you can
 
 ```
 sudo bash
+cd
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh > install_yugabte.sh
 bash install_yugabte.sh
 

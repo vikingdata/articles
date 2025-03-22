@@ -1,6 +1,6 @@
 
 ### Execute as root
-if [ ! $USER = 'root' ];
+if [ ! $USER = 'root' ]; then
    echo "Not root user, aborting"
 fi
 

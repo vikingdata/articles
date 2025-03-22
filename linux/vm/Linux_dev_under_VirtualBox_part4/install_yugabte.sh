@@ -12,7 +12,7 @@ cd /root/yugabyte_install
 rm -rf /usr/local/yugabyte-2024.2.2.1
 rm -f /usr/local/yugabyte-2024_server
 
-wget https://software.yugabyte.com/releases/2024.2.2.1/yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz -o yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz
+wget https://software.yugabyte.com/releases/2024.2.2.1/yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz -O yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz
 
 tar xvfz yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz
 sudo mv yugabyte-2024.2.2.1 /usr/local

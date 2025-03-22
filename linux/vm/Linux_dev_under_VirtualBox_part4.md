@@ -51,11 +51,14 @@ We are installing yugbayte on 6 systems. To test you can
 * Add ip addresses 127.0.0.2 and 127.0.0.3 and run 3 nodes locally.
 * Download to multiple vms or servers. 
 
-#### Install one node locallt
+#### Install one node locally
 
 ```
 sudo bash
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh > install_yugabte.sh
+bash install_yugabte.sh
 
+```
 #### Install three nodes locally
 
 

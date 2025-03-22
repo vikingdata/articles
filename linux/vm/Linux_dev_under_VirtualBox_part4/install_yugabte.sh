@@ -4,8 +4,10 @@ if [ ! $USER = 'root' ];
    echo "Not root user, aborting"
 fi
 
-mkdir -p /root/software_install
-cd /root/software_install
+rm -rf /root/yugabyte_install
+mkdir -p /root/yugabyte_install
+cd /root/yugabyte_install
+
 
 rm -rf /usr/local/yugabyte-2024.2.2.1
 rm -f /usr/local/yugabyte-2024_serverz

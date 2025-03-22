@@ -1,0 +1,15 @@
+
+sudo bash
+echo "
+  # Change the ip addresses to your hosts
+  # If you are using VirutalBox, it is the ip addresses of the servers
+  # that should be able to see each other in its own network.
+export db1="10.0.2.7"
+export db2="10.0.2.8"
+export db3="10.0.2.9"
+export db4="10.0.2.10"
+export db5="10.0.2.11"
+export db6="10.0.2.12"
+" > /root/server_ips
+source /root/server_ips
+  

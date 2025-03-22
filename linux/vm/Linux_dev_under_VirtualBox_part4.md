@@ -45,80 +45,31 @@ Sections
 * https://www.baeldung.com/yugabytedb
 * https://www.dedicatedcore.com/blog/install-gcc-compiler-ubuntu/
 
-#### Install
-* On each of the 6 systems
-    * Setup variables for ip addresses and install basic software without configuring or
-    starting software. 
+
+We are installing yugbayte on 6 systems. To test you can
+* Download it and run it locally. A one node yugabyte.
+* Add ip addresses 127.0.0.2 and 127.0.0.3 and run 3 nodes locally.
+* Download to multiple vms or servers. 
+
+#### Install one node locallt
+
 ```
 sudo bash
-echo "
-  # Change the ip addresses to your hosts
-  # If you are using VirutalBox, it is the ip addresses of the servers
-  # that should be able to see each other in its own network.
-export db1="10.0.2.7"
-export db2="10.0.2.8"
-export db3="10.0.2.9"
-export db4="10.0.2.10"
-export db5="10.0.2.11"
-export db6="10.0.2.12"
-" > /root/server_ips
+
+#### Install three nodes locally
 
 
-mkdir -p software_install
-cd software_install
-
-wget https://software.yugabyte.com/releases/2024.2.2.1/yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz
-tar xvfz yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz 
-mv yugabyte-2024.2.2.1 /usr/local
-cd /usr/local
-ln -s yugabyte-2024.2.2.1 yugabyte-2024_server
-cd /usr/local/yugabyte-2024_server
-echo "PATH=/usr/local/yugabyte-2024_server/bin:\$PATH" >> ~/.bashrc
-source ~/.bashrc
+#### Install three nodes on vms or servers
 
 
-./bin/post_install.sh
-
-
- ## Configure time --- this is NOT AWS, so no chrony
-
-apt-get -y install ntp 
-
-
- ## Change ulimits
-echo "
-*                -       core            unlimited
-*                -       data            unlimited
-*                -       fsize           unlimited
-*                -       sigpending      119934
-*                -       memlock         64
-*                -       rss             unlimited
-*                -       nofile          1048576
-*                -       msgqueue        819200
-*                -       stack           8192
-*                -       cpu             unlimited
-*                -       nproc           12000
-*                -       locks           unlimited
-" > /etc/security/limits.conf
-
-
-  ## add huge pages
-echo always > /sys/kernel/mm/transparent_hugepage/enable
-cat  /sys/kernel/mm/transparent_hugepage/enable
-
-bash -c 'sysctl vm.swappiness=0 >> /etc/sysctl.conf'
-bash -c 'sysctl vm.max_map_count=262144 >> /etc/sysctl.conf'
-
-mkdir -p /db/yugabyte/disks/d1
-mkdir -p /db/yugabyte/disks/d2
-mkdir -p /db/yugabyte/log
 
 echo "
 --master_addresses $db1:7100,$db2:7100,$db3:7100 
 --rpc_bind_addresses *.*.*.*:7100 
---fs_data_dirs '/db/yugabyte/disks/d1,/db/yugabyte/disks/d2' 
+--fs_data_dirs=/db/yugabyte/disks/d1
 " > /db/yugabyte/tmaster.conf
 
+source /root/server_ips
 cd /usr/local/yugabyte-2024_server/
 ./bin/yb-master --flagfile /db/yugabyte/tmaster.conf  >& /db/yugabyte/log/yb-master.out &
 

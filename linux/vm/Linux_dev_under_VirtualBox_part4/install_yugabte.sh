@@ -4,12 +4,19 @@ if [ ! $USER = 'root' ]; then
    echo "Not root user, aborting"
 fi
 
-killall yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall -q yugabyted yb-master yb-tserver yugabyted-ui postgres
 sleep 2
-killall -9 yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall -q -9 yugabyted yb-master yb-tserver yugabyted-ui postgres
 
 if [ ! -d "/root/yugabyte_install" ]; then
-    # rm -rf /root/yugabyte_install
+    FILENAME="yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz"
+    let size_desired=1024*1024*390
+    file_size=`stat -c %s $FILENAME`
+
+    if [ ! "$file_size" -ge "$size_desired" ]; then
+	echo "$FILE is not $size_desired bytes, removing."
+	rm -rf /root/yugabyte_install
+    fi
     mkdir -p /root/yugabyte_install
 fi    
 

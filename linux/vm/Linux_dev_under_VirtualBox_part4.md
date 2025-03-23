@@ -57,11 +57,14 @@ We are installing yugbayte on 6 systems. To test you can
 ```
 sudo bash
 cd
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh -O  install_yugabte.sh
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
 bash install_yugabte.sh
 
 cd /usr/local/yugabyte-2024_server
 ./bin/yugabyted start --advertise_address=127.0.0.1
+
+ysqlsh -c "select now(), current_user, inet_server_addr()"
 
 ```
 

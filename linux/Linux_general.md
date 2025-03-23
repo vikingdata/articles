@@ -22,7 +22,7 @@ title: Linux general tips
 10. [Monitor Commands](#m)
 11. [List Services](#services)
 12. [cygwin font size](#cygwin)
-13. [ Parse text files](#parse)
+13. [Parse text files](#parse)
 14. [remove binary fromn text file](#removebin)
 15. [Adding swapspace temporarily](#swap)
 16. [Deleted files still used.](#un)
@@ -31,8 +31,8 @@ title: Linux general tips
 19. [awk](#a)
 20. [ssh keys -- scan](#ssh)
 21. [sort](#sort)
-
-
+22. [wget](#wget)
+23. [misc](#misc)
 
 * * *
 
@@ -792,4 +792,28 @@ name3,20
 sort -t ',' -k 2 sample_name_list
 
 
+```
+
+* * *
+<a name=wget></a>wget
+---------------
+* Overwrite previous download : Add "-O" and the name of the output file.
+* If you are not downloading new versions of files, add "--no-cache" to turn
+off caching.
+
+
+
+See if a file is at least a certain size.
+```
+
+   # This tests in bytes.
+   # This is 390 megs
+
+FILENAME="yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz"
+let size_desired=1024*1024*390
+file_size=`stat -c %s $FILENAME`
+
+if [ ! "$file_size" -ge "$size_desired" ]; then
+  echo "$FILE is not $size_desired bytes."
+fi
 ```

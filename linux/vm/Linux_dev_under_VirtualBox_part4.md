@@ -5,11 +5,13 @@ copyright : November 2024
 ---
 
 
-Linux Dev environment on Windows Part 2
+Linux Dev environment on Windows Part 4
 ==============================
 
 _**by Mark Nielsen
 Original Copyright November 2024**_
+
+Goal is to setup database services that are free, free trial, or very very cheap.
 
 Sections
 * [Links](#links)
@@ -122,7 +124,11 @@ mkdir -p /db/yugabyte_local3
     * ./bin/yugabyted start --advertise_address=127.0.0.1 --base_dir=/db/yugabyte_local1
     * ./bin/yugabyted start --advertise_address=127.0.0.2 --base_dir=/db/yugabyte_local2 --join=127.0.0.1
     * ./bin/yugabyted start --advertise_address=127.0.0.3 --base_dir=/db/yugabyte_local3 --join=127.0.0.1
-    
+* Check cluster
+```
+
+
+```
 
 #### Install three nodes on vms or servers
 

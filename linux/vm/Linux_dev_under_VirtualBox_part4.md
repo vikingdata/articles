@@ -184,7 +184,7 @@ echo " {
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
   \"advertise_address\" : \"$db2\",
-  \"join\": \"$db1"
+  \"join\": \"$db1\"
 }" > /db/yugabyte/yugabyte.config
 
 ysqlsh -c "select yb_servers()" -h $db1
@@ -202,7 +202,7 @@ echo " {
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
   \"advertise_address\" : \"$db3\",
-  \"join\": \"$db1"
+  \"join\": \"$db1\"
 }" > /db/yugabyte/yugabyte.config
 	  
 

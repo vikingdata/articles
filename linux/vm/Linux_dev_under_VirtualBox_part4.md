@@ -106,8 +106,8 @@ ysqlsh -c "select now(), current_user, inet_server_addr()"
 #### Install three nodes locally
 * Add additional ip address
     * Add 127.0.0.2 and 127.0.0.3
-        * sudo ifconfig lo0 alias 127.0.0.2
-	* sudo ifconfig lo0 alias 127.0.0.3
+        * sudo ifconfig lo:1 127.0.0.2
+        * sudo ifconfig lo:2 127.0.0.3
 * Install yugabyte
 ```
 sudo bash
@@ -119,18 +119,30 @@ wget $webfile -O  install_yugabte.sh
 
 cd /usr/local/yugabyte-2024_server
 
+rm -r /db/yugabyte_local1
+rm -r /db/yugabyte_local2
+rm -r /db/yugabyte_local3
+
 mkdir -p /db/yugabyte_local1
 mkdir -p /db/yugabyte_local2
 mkdir -p /db/yugabyte_local3
+
+rm -rf /var/oot
+
 ```
 * Start all three nodes
-    * ./bin/yugabyted start --advertise_address=127.0.0.1 --base_dir=/db/yugabyte_local1
-    * ./bin/yugabyted start --advertise_address=127.0.0.2 --base_dir=/db/yugabyte_local2 --join=127.0.0.1
-    * ./bin/yugabyted start --advertise_address=127.0.0.3 --base_dir=/db/yugabyte_local3 --join=127.0.0.1
+    * yugabyted start --advertise_address=127.0.0.1 --base_dir=/db/yugabyte_local1
+    * yugabyted start --advertise_address=127.0.0.2 --base_dir=/db/yugabyte_local2 --join=127.0.0.1
+    * yugabyted start --advertise_address=127.0.0.3 --base_dir=/db/yugabyte_local3 --join=127.0.0.1
 * Check cluster
 ```
+  # This will fail, for some reason need to specify user postgres
+ysqlsh -c "select yb_servers()" -h 127.0.0.1
 
-
+ysqlsh -c "select yb_servers()" -h 127.0.0.2 
+ysqlsh -c "select yb_servers()" -h 127.0.0.2 "sslmode=disable" 
+ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" postgres
+ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" yugabyte
 ```
 
 #### Install three nodes on vms or servers

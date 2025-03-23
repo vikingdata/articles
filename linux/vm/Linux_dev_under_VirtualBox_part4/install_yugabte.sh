@@ -4,9 +4,18 @@ if [ ! $USER = 'root' ]; then
    echo "Not root user, aborting"
 fi
 
-killall -q yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall -q yugabyted
+killall -q yb-master
+killall -q yb-tserver
+killall -q yugabyted-ui
+killall -q postgres
 sleep 2
-killall -q -9 yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall -q -9 yugabyted
+killall -q -9 yb-master
+killall -q -9 yb-tserver
+killall -q -9 yugabyted-ui
+killall -q -9 postgres
+
 
 if [ ! -d "/root/yugabyte_install" ]; then
     FILENAME="yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz"

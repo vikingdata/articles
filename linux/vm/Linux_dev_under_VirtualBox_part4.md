@@ -46,7 +46,8 @@ Sections
 * https://dev.to/yugabyte/yugabytedb-on-oci-free-tier-52cm
 * https://www.baeldung.com/yugabytedb
 * https://www.dedicatedcore.com/blog/install-gcc-compiler-ubuntu/
-
+* https://www.youtube.com/watch?v=PMD5xsDAemE
+* https://www.yugabyte.com/blog/introducing-yugabyted-the-simplest-way-to-get-started-with-yugabytedb/
 
 We are installing yugbayte on 6 systems. To test you can
 * Download it and run it locally. A one node yugabyte.
@@ -105,6 +106,8 @@ ysqlsh -c "select now(), current_user, inet_server_addr()"
 #### Install three nodes locally
 * Add additional ip address
     * Add 127.0.0.2 and 127.0.0.3
+        * sudo ifconfig lo0 alias 127.0.0.2
+	* sudo ifconfig lo0 alias 127.0.0.3
 * Install yugabyte
 ```
 sudo bash
@@ -170,6 +173,9 @@ echo " {
 source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
 
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+
 ```
 * start on db2
 ```
@@ -177,9 +183,14 @@ echo " {
   \"base_dir\":  \"/db/yugabyte/\",
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
-  \"advertise_address\" : \"$db2\"
+  \"advertise_address\" : \"$db2\",
+  \"join\": \"$db1"
 }" > /db/yugabyte/yugabyte.config
-	
+
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+ysqlsh -c "select yb_servers()" -h $db3
+
 source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
 ```
@@ -191,11 +202,16 @@ echo " {
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
   \"advertise_address\" : \"$db3\",
-  \"join"\: \"$db3\"
+  \"join\": \"$db1"
 }" > /db/yugabyte/yugabyte.config
+
 
 source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
+
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+ysqlsh -c "select yb_servers()" -h $db3
 
 ```
 #### Install three nodes on vms or servers

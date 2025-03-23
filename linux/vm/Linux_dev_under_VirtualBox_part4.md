@@ -167,6 +167,7 @@ echo " {
   \"advertise_address\" : \"$db1\"
 }" > /db/yugabyte/yugabyte.config
 
+source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
 
 ```
@@ -179,7 +180,7 @@ echo " {
   \"advertise_address\" : \"$db2\"
 }" > /db/yugabyte/yugabyte.config
 	
-
+source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
 ```
 
@@ -193,6 +194,7 @@ echo " {
   \"join"\: \"$db3\"
 }" > /db/yugabyte/yugabyte.config
 
+source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config
 
 ```

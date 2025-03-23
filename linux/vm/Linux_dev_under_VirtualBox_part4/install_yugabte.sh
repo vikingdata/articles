@@ -17,6 +17,7 @@ if [ ! -d "/root/yugabyte_install" ]; then
 	echo "$FILE is not $size_desired bytes, removing."
 	rm -rf /root/yugabyte_install
     fi
+
     mkdir -p /root/yugabyte_install
 fi    
 

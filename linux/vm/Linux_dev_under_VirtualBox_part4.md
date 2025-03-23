@@ -176,9 +176,9 @@ echo " {
   \"base_dir\":  \"/db/yugabyte/\",
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
-  \"advertise_address\" : \"$db2\",
-  \"join"\: \"$db1\"
+  \"advertise_address\" : \"$db2\"
 }" > /db/yugabyte/yugabyte.config
+	
 
 yugabyted start --config /db/yugabyte/yugabyte.config
 ```
@@ -190,7 +190,7 @@ echo " {
   \"log_dir\":  \"/db/yugabyte/log\",
   \"data_dir\":  \"/db/yugabyte/data\",
   \"advertise_address\" : \"$db3\",
-  \"join"\: \"$db1\"
+  \"join"\: \"$db3\"
 }" > /db/yugabyte/yugabyte.config
 
 yugabyted start --config /db/yugabyte/yugabyte.config

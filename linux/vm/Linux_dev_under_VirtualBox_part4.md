@@ -53,14 +53,51 @@ We are installing yugbayte on 6 systems. To test you can
 
 #### Install one node locally
 
+* install -- connect to one your vms, suggest the admin server. 
 ```
 sudo bash
 cd
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh -o  install_yugabte.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh -O  install_yugabte.sh
 bash install_yugabte.sh
 
+cd /usr/local/yugabyte-2024_server
+./bin/yugabyted start --advertise_address=127.0.0.1
+
 ```
+
+* Output
+```
++---------------------------------------------------------------------------------------------------+
+|                                             yugabyted                                             |
++---------------------------------------------------------------------------------------------------+
+| Status         : Bootstrapping.                                                                   |
+| YSQL Status    : Not Ready                                                                        |
+| YugabyteDB UI  : http://127.0.0.1:15433                                                           |
+| JDBC           : jdbc:postgresql://127.0.0.1:5433/yugabyte?user=yugabyte&password=yugabyte        |
+| YSQL           : bin/ysqlsh   -U yugabyte -d yugabyte                                             |
+| YCQL           : bin/ycqlsh   -u cassandra                                                        |
+| Data Dir       : /root/var/data                                                                   |
+| Log Dir        : /root/var/logs                                                                   |
+| Universe UUID  : d7d7e17a-83a8-4642-88ea-3c225882a2d5                                             |
++---------------------------------------------------------------------------------------------------+
+```
+
+* Connect
+    * TO connect to database, log into the vm via ssh
+        * Connect to the database  as instructed.
+    * TO connect from your Windows or Linux Host
+        * Setup firewall on host and open ports in Virtual Box
+
+* Connect from host server -- TODO. 
+   * Firewall
+   * open ports
+   * Web interface
+   * database connection
+   * Install client on Host server. 
+
+
 #### Install three nodes locally
+
 
 
 #### Install three nodes on vms or servers

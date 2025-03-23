@@ -101,6 +101,30 @@ ysqlsh -c "select now(), current_user, inet_server_addr()"
 
 
 #### Install three nodes locally
+* Add additional ip address
+    * Add 127.0.0.2 and 127.0.0.3
+* Install yugabyte
+```
+sudo bash
+cd
+bash install_yugabte.sh
+
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
+
+cd /usr/local/yugabyte-2024_server
+
+mkdir -p /db/yugabyte_local1
+mkdir -p /db/yugabyte_local2
+mkdir -p /db/yugabyte_local3
+```
+* Start all three nodes
+    * ./bin/yugabyted start --advertise_address=127.0.0.1 --base_dir=/db/yugabyte_local1
+    * ./bin/yugabyted start --advertise_address=127.0.0.2 --base_dir=/db/yugabyte_local2 --join=127.0.0.1
+    * ./bin/yugabyted start --advertise_address=127.0.0.3 --base_dir=/db/yugabyte_local3 --join=127.0.0.1
+    
+
+#### Install three nodes on vms or servers
 
 * For each server db1, db2 and db3 install software but do not start
 ```

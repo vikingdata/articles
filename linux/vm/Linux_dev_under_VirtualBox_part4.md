@@ -150,7 +150,7 @@ export db5="10.0.2.11"
 export db6="10.0.2.12"
 " > /root/server_ips
 source /root/server_ips
-echo "source /root/server_ips" > ~/.bashrc
+echo "source /root/server_ips" >> ~/.bashrc
 
 rm -rf /root/var
 mkdir -p /db/yugabyte/data
@@ -204,7 +204,7 @@ echo " {
   \"advertise_address\" : \"$db3\",
   \"join\": \"$db1"
 }" > /db/yugabyte/yugabyte.config
-
+	  
 
 source ~/.bashrc
 yugabyted start --config /db/yugabyte/yugabyte.config

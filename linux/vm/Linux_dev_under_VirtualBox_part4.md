@@ -118,16 +118,9 @@ export db6="10.0.2.12"
 " > /root/server_ips
 source /root/server_ips
 
+rm -rf /root/var
 mkdir -p /db/yugabyte/data
 mkdir -p /db/yugabyte/log
-
-echo " {
-  'base_dir':  '/db/yugabyte/',
-  'log_dir':  '/db/yugabyte/log',
-  'data_dir':  '/db/yugabyte/data',
-  'advertise_address' : '$db1'
-  
-}" > /db/yugabyte/yugabyte.config
 
 cd
 webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
@@ -137,33 +130,44 @@ bash install_yugabte.sh
 * start on db1
 ```
 echo " {
-  'base_dir':  '/db/yugabyte/',
-  'log_dir':  '/db/yugabyte/log',
-  'data_dir':  '/db/yugabyte/data',
-  'advertise_address' : '$db1'
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db1\"
 }" > /db/yugabyte/yugabyte.config
 
-./bin/yugabyted start --config /db/yugabyte/yugabyte.config
+yugabyted start --config /db/yugabyte/yugabyte.config
 
 ```
 * start on db2
+
+echo " {
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db2\",
+  \"join"\: \"$db1\"
+}" > /db/yugabyte/yugabyte.config
+
+yugabyted start --config /db/yugabyte/yugabyte.config
+
+
 * start on db3
+
+echo " {
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db3\",
+  \"join"\: \"$db1\"
+}" > /db/yugabyte/yugabyte.config
+
+yugabyted start --config /db/yugabyte/yugabyte.config
+
 
 #### Install three nodes on vms or servers
 
-echo "
---master_addresses $db1:7100,$db2:7100,$db3:7100 
---rpc_bind_addresses *.*.*.*:7100 
---fs_data_dirs=/db/yugabyte/disks/d1
-" > /db/yugabyte/tmaster.conf
 
-source /root/server_ips
-cd /usr/local/yugabyte-2024_server/
-./bin/yb-master --flagfile /db/yugabyte/tmaster.conf  >& /db/yugabyte/log/yb-master.out &
-
-./bin/yugabyted start
-
-```
 
 * * *
 <a name=turn></a>Turn off and on services

@@ -141,7 +141,7 @@ yugabyted start --config /db/yugabyte/yugabyte.config
 
 ```
 * start on db2
-
+```
 echo " {
   \"base_dir\":  \"/db/yugabyte/\",
   \"log_dir\":  \"/db/yugabyte/log\",
@@ -151,10 +151,10 @@ echo " {
 }" > /db/yugabyte/yugabyte.config
 
 yugabyted start --config /db/yugabyte/yugabyte.config
-
+```
 
 * start on db3
-
+```
 echo " {
   \"base_dir\":  \"/db/yugabyte/\",
   \"log_dir\":  \"/db/yugabyte/log\",
@@ -165,7 +165,7 @@ echo " {
 
 yugabyted start --config /db/yugabyte/yugabyte.config
 
-
+```
 #### Install three nodes on vms or servers
 
 

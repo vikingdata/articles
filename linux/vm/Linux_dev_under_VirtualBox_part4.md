@@ -57,9 +57,10 @@ We are installing yugbayte on 6 systems. To test you can
 ```
 sudo bash
 cd
+bash install_yugabte.sh
+
 webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
 wget $webfile -O  install_yugabte.sh
-bash install_yugabte.sh
 
 cd /usr/local/yugabyte-2024_server
 ./bin/yugabyted start --advertise_address=127.0.0.1
@@ -101,11 +102,54 @@ ysqlsh -c "select now(), current_user, inet_server_addr()"
 
 #### Install three nodes locally
 
+* For each server db1, db2 and db3 install software but do not start
+```
+sudo bash
+echo "
+  # Change the ip addresses to your hosts
+  # If you are using VirutalBox, it is the ip addresses of the servers
+  # that should be able to see each other in its own network.
+export db1="10.0.2.7"
+export db2="10.0.2.8"
+export db3="10.0.2.9"
+export db4="10.0.2.10"
+export db5="10.0.2.11"
+export db6="10.0.2.12"
+" > /root/server_ips
+source /root/server_ips
 
+mkdir -p /db/yugabyte/data
+mkdir -p /db/yugabyte/log
+
+echo " {
+  'base_dir':  '/db/yugabyte/',
+  'log_dir':  '/db/yugabyte/log',
+  'data_dir':  '/db/yugabyte/data',
+  'advertise_address' : '$db1'
+  
+}" > /db/yugabyte/yugabyte.config
+
+cd
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
+bash install_yugabte.sh
+```
+* start on db1
+```
+echo " {
+  'base_dir':  '/db/yugabyte/',
+  'log_dir':  '/db/yugabyte/log',
+  'data_dir':  '/db/yugabyte/data',
+  'advertise_address' : '$db1'
+}" > /db/yugabyte/yugabyte.config
+
+./bin/yugabyted start --config /db/yugabyte/yugabyte.config
+
+```
+* start on db2
+* start on db3
 
 #### Install three nodes on vms or servers
-
-
 
 echo "
 --master_addresses $db1:7100,$db2:7100,$db3:7100 
@@ -119,39 +163,6 @@ cd /usr/local/yugabyte-2024_server/
 
 ./bin/yugabyted start
 
-```
-My Output
-```
-Starting yugabyted...
-✅ YugabyteDB Started
-✅ UI ready
-✅ Data placement constraint successfully verified
-
-⚠ WARNINGS:
-- ntp/chrony package is missing for clock synchronization. For centos 7, we recommend installing either ntp or chrony package and for centos 8, we recommend installing chrony package.
-- Transparent hugepages disabled. Please enable transparent_hugepages.
-- Cluster started in an insecure mode without authentication and encryption enabled. For non-production use only, not to be used without firewalls blocking the internet traffic.
-
-Please review the following docs and rerun the start command:
-- Quick start for Linux: https://docs.yugabyte.com/preview/quick-start/linux/
-
-+-------------------------------------------------------------------------------------------------------+
-|                                               yugabyted                                               |
-+-------------------------------------------------------------------------------------------------------+
-| Status              : Running.                                                                        |
-| YSQL Status         : Ready                                                                           |
-| Replication Factor  : 1                                                                               |
-| YugabyteDB UI       : http://10.0.2.7:15433                                                           |
-| JDBC                : jdbc:postgresql://10.0.2.7:5433/yugabyte?user=yugabyte&password=yugabyte        |
-| YSQL                : bin/ysqlsh -h 10.0.2.7  -U yugabyte -d yugabyte                                 |
-| YCQL                : bin/ycqlsh 10.0.2.7 9042 -u cassandra                                           |
-| Data Dir            : /root/var/data                                                                  |
-| Log Dir             : /root/var/logs                                                                  |
-| Universe UUID       : f96732bf-1424-4f32-b6ca-14e13cd33957                                            |
-+-------------------------------------------------------------------------------------------------------+
-🚀 YugabyteDB started successfully! To load a sample dataset, try 'yugabyted demo'.
-🎉 Join us on Slack at https://www.yugabyte.com/slack
-👕 Claim your free t-shirt at https://www.yugabyte.com/community-rewards/
 ```
 
 * * *

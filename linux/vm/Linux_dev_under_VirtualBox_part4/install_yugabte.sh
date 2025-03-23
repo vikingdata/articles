@@ -4,14 +4,16 @@ if [ ! $USER = 'root' ]; then
    echo "Not root user, aborting"
 fi
 
-kilall yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall yugabyted yb-master yb-tserver yugabyted-ui postgres
 sleep 2
-kilall -9 yugabyted yb-master yb-tserver yugabyted-ui postgres
+killall -9 yugabyted yb-master yb-tserver yugabyted-ui postgres
 
-rm -rf /root/yugabyte_install
-mkdir -p /root/yugabyte_install
+if [ ! -d "/root/yugabyte_install" ]; then
+    # rm -rf /root/yugabyte_install
+    mkdir -p /root/yugabyte_install
+fi    
+
 cd /root/yugabyte_install
-
 
 rm -rf /usr/local/yugabyte-2024.2.2.1
 rm -f /usr/local/yugabyte-2024_server

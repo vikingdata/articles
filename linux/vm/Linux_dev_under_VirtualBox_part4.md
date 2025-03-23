@@ -214,7 +214,6 @@ ysqlsh -c "select yb_servers()" -h $db2
 ysqlsh -c "select yb_servers()" -h $db3
 
 ```
-#### Install three nodes on vms or servers
 
 
 

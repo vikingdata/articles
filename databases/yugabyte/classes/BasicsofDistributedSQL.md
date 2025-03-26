@@ -1,0 +1,103 @@
+
+
+#### Introduction to Distributed SQL
+##### Demysitfying
+* limit of scale
+   * Non distributed databases have limited scaling usually. They can scale vertically and horizontal scaling is usually limited.
+   * Monotlithic database are a usual risk when the requirements are
+   never going down and scability.
+* Comnplex management
+   * Distributed databases are distributed across many systems making resources
+   more available to prevent slowness or crashes of a monolithic database.
+   * A distributred database must handle how the systems work together,
+   how to input and output data, balance the data, provide replication.
+   * any node and processs requests and all data is comitted in trnsactions.
+* Sharding the databases means splitting data amoung several systems. This
+   can be done by hash sharding or range sharding. Hash sharding is
+   distributing data evenly amoung sevearal servers by the has of one or more
+   columns. Ranging sharding is defining which range of a column falls on
+   which servers. Ranges can be split and moved.
+* Replication occurs in two forms. Local replication and remote replication.
+Local replication requires three nodes to be fault tolerant (in case
+one node fails) which when done remains available and resilient, and
+all available nodes are synchronous (retriving data from any node is the same
+because data is applied to all before being returned as finished). Each data
+in a shard is replicated to other nodes. If one node goes down, the system
+remains up. How many systems that go down depends on how many times have
+replicates. You should have  the data at least replicated to two other nodes.
+Note: Each node can contain multiple shards.
+     * It is helpful if distribued databases automatically handle failures,
+rebalances data from failures or recoveries, which node is the primary
+for a shard, and rebalancing data.
+
+* query Executuion
+    * The node you connect to processs the query and manages conections.
+    * The leader shards in the nodes return the data.
+* Shards can focus on  : Consistency, availability, and Partition tolerance.
+Consistency and Partition Tolerance are focused on.
+    * Locks for write transactions
+    * snapshots for read
+    * Time is very sensistive for all nodes. All nodes must be time synced.
+    Time is determined by Hybrid Logical Clock. Time has a physical and logical
+    component. The physical time component is the physcial clock. The logical
+    time starts at 0 and increasing and helps with orders of transactions.
+    When two servers communicate, they compare HLC. The one with the lower takes on the higher HLC. If a server exceeds its HLC, the logical component
+    is set back to 0 for the node.
+* Additional reading -- quote
+    * What is Distributed SQL?
+    https://blog.yugabyte.com/what-is-distributed-sql/
+    * An Introduction to Distributed SQL: Glossary of Terms
+    https://blog.yugabyte.com/an-introduction-to-distributed-sql-glossary-of-terms/
+    * Distributed SQL vs. NewSQL
+    https://blog.yugabyte.com/distributedsql-vs-newsql/
+    * Reimagining the RDBMS for the Cloud
+    https://blog.yugabyte.com/reimagining-the-rdbms-for-the-cloud/
+    * A for apple, B for ball, C for CAP theorem
+    https://blog.yugabyte.com/a-for-apple-b-for-ball-c-for-cap-theorem/
+
+##### Why distributred SQL
+* Three components: User interface, businesss logic, and relational database.
+    * The user interface and business logic store data. amd can be scaled.
+    * Other distrbuted databases might not be fully SQL enabled.
+    * Distributed databases must be cloud ready, resilient, scale
+    horizontally, and also must work in a geo distributed environment.
+* Continous availability is provided by replication and distirbuted ACID trandactions,
+query processing, and storage.
+
+* When one node fails, the cluster redirects other nodes to take over the
+  leader shards that node had. Queries are still processed.
+* To solve geo distribution for multi region, data can be tagged by region.
+* TO solve a geo distribution with an outage, more than 1 cloud provider is
+  used. 
+* By being adherent to SQL compatibility, you do not need to redo code,
+  retrian programmers.
+* NOTES:
+    * In a partition, you can connect to any node but some nodes don't
+    commuinicate,
+    * No single node holds all the data -- unless each node has all the shards.
+* Links -- quote
+    * Why Distributed SQL Beats Polyglot Persistence for Building Microservices?
+     https://blog.yugabyte.com/why-distributed-sql-beats-polyglot-persistence-for-building-microservices/
+    * 9 Techniques to Build Cloud-Native, Geo-Distributed SQL Apps with Low Latency
+    https://blog.yugabyte.com/9-techniques-to-build-cloud-native-geo-distributed-sql-apps-with-low-latency/
+
+##### Getting started with Yugabyte
+* Kubernete operatore for cloud
+* oyager helps migrate databases.
+* Friday Tech Talks -- change to interface live
+* Distributed SQl Summit -- view past recordings
+
+#### Tasks to do
+* Add a node
+* Remove a node
+* Add another region -- xcluster
+* Resolve connections lost when a node goes down. Connections to that node.
+* Are follower shards used for read queries?
+* What happens to connections to a node that dies?
+* Data for that region is not replicated to other nodes in other regions when
+using tags for geo distribution?
+* Join slack https://yugabyte-db.slack.com/join/shared_invite/zt-xbd652e9-3tN0N7UG0eLpsace4t1d2A#/shared-invite/email
+* Look at cumminity docs, github, etc to answer questions: such as easy way
+ to create local Xcluster.
+
+#### Introduction to Yougabyte.

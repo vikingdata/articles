@@ -1,45 +1,45 @@
 
 
 #### Introduction to Distributed SQL
-##### Demysitfying
+##### Demystifying
 * limit of scale
    * Non distributed databases have limited scaling usually. They can scale vertically and horizontal scaling is usually limited.
-   * Monotlithic database are a usual risk when the requirements are
-   never going down and scability.
-* Comnplex management
+   * Monolithic database are a usual risk when the requirements are
+   never going down and scalability.
+* Complex management
    * Distributed databases are distributed across many systems making resources
    more available to prevent slowness or crashes of a monolithic database.
-   * A distributred database must handle how the systems work together,
+   * A distributed database must handle how the systems work together,
    how to input and output data, balance the data, provide replication.
-   * any node and processs requests and all data is comitted in trnsactions.
-* Sharding the databases means splitting data amoung several systems. This
+   * any node and process requests and all data is committed in transactions.
+* Sharding the databases means splitting data among several systems. This
    can be done by hash sharding or range sharding. Hash sharding is
-   distributing data evenly amoung sevearal servers by the has of one or more
+   distributing data evenly among several servers by the has of one or more
    columns. Ranging sharding is defining which range of a column falls on
    which servers. Ranges can be split and moved.
 * Replication occurs in two forms. Local replication and remote replication.
 Local replication requires three nodes to be fault tolerant (in case
 one node fails) which when done remains available and resilient, and
-all available nodes are synchronous (retriving data from any node is the same
+all available nodes are synchronous (retrieving data from any node is the same
 because data is applied to all before being returned as finished). Each data
 in a shard is replicated to other nodes. If one node goes down, the system
 remains up. How many systems that go down depends on how many times have
 replicates. You should have  the data at least replicated to two other nodes.
 Note: Each node can contain multiple shards.
-     * It is helpful if distribued databases automatically handle failures,
-rebalances data from failures or recoveries, which node is the primary
-for a shard, and rebalancing data.
+     * It is helpful if distributed databases automatically handle failures,
+re balances data from failures or recoveries, which node is the primary
+for a shard, and re balancing data.
 
-* query Executuion
-    * The node you connect to processs the query and manages conections.
+* query Execution
+    * The node you connect to process the query and manages connections.
     * The leader shards in the nodes return the data.
 * Shards can focus on  : Consistency, availability, and Partition tolerance.
 Consistency and Partition Tolerance are focused on.
     * Locks for write transactions
     * snapshots for read
-    * Time is very sensistive for all nodes. All nodes must be time synced.
+    * Time is very sensitive for all nodes. All nodes must be time synced.
     Time is determined by Hybrid Logical Clock. Time has a physical and logical
-    component. The physical time component is the physcial clock. The logical
+    component. The physical time component is the physical clock. The logical
     time starts at 0 and increasing and helps with orders of transactions.
     When two servers communicate, they compare HLC. The one with the lower takes on the higher HLC. If a server exceeds its HLC, the logical component
     is set back to 0 for the node.
@@ -55,13 +55,13 @@ Consistency and Partition Tolerance are focused on.
     * A for apple, B for ball, C for CAP theorem
     https://blog.yugabyte.com/a-for-apple-b-for-ball-c-for-cap-theorem/
 
-##### Why distributred SQL
-* Three components: User interface, businesss logic, and relational database.
-    * The user interface and business logic store data. amd can be scaled.
-    * Other distrbuted databases might not be fully SQL enabled.
+##### Why distributed SQL
+* Three components: User interface, business logic, and relational database.
+    * The user interface and business logic store data. and can be scaled.
+    * Other distributed databases might not be fully SQL enabled.
     * Distributed databases must be cloud ready, resilient, scale
     horizontally, and also must work in a geo distributed environment.
-* Continous availability is provided by replication and distirbuted ACID trandactions,
+* Continuous availability is provided by replication and distributed ACID transactions,
 query processing, and storage.
 
 * When one node fails, the cluster redirects other nodes to take over the
@@ -70,10 +70,10 @@ query processing, and storage.
 * TO solve a geo distribution with an outage, more than 1 cloud provider is
   used. 
 * By being adherent to SQL compatibility, you do not need to redo code,
-  retrian programmers.
+  retrain programmers.
 * NOTES:
     * In a partition, you can connect to any node but some nodes don't
-    commuinicate,
+    communicate,
     * No single node holds all the data -- unless each node has all the shards.
 * Links -- quote
     * Why Distributed SQL Beats Polyglot Persistence for Building Microservices?
@@ -82,10 +82,10 @@ query processing, and storage.
     https://blog.yugabyte.com/9-techniques-to-build-cloud-native-geo-distributed-sql-apps-with-low-latency/
 
 ##### Getting started with Yugabyte
-* Kubernete operatore for cloud
-* oyager helps migrate databases.
+* Kubernete operator for cloud
+* Voyager helps migrate databases.
 * Friday Tech Talks -- change to interface live
-* Distributed SQl Summit -- view past recordings
+* Distributed SQL Summit -- view past recordings
 
 #### Tasks to do
 * Add a node
@@ -97,21 +97,21 @@ query processing, and storage.
 * Data for that region is not replicated to other nodes in other regions when
 using tags for geo distribution?
 * Join slack https://yugabyte-db.slack.com/join/shared_invite/zt-xbd652e9-3tN0N7UG0eLpsace4t1d2A#/shared-invite/email
-* Look at cumminity docs, github, etc to answer questions: such as easy way
+* Look at community docs, github, etc to answer questions: such as easy way
  to create local Xcluster.
 
-#### Introduction to Yougabyte.
+#### Introduction to Yugabyte.
 * Yugabyte manages Sharding, replication, and load balancing (not application
 load balancing)
     * Sharding, hash or range. Has returns data according to the order of the
     hashes. Hashes not good for range, order by, or group by.
     * Replication factor -- must be three at least and need at least many nodes. Needs to be
     an odd number created at database creation time.
-    * RAFT -- uses WALs. RAFT consesus determines the leaders for tablets. Tablet = one shard.
+    * RAFT -- uses WALs. RAFT consensus determines the leaders for tablets. Tablet = one shard.
 
 * Resilience
-    * Replicatio, load balancing, etc.
-    * Uses availabiklity zones -- For example, 3  AZs with 6 nodes. To survive 2 node failure,
+    * Replication, load balancing, etc.
+    * Uses availability zones -- For example, 3  AZs with 6 nodes. To survive 2 node failure,
     need a replication factor of 5. Each AZ has two nodes, and replication of 5 means
     both nodes combined contains all shards.
     * Multiple clouds and multiple regions.
@@ -119,15 +119,120 @@ load balancing)
       * single cloud, multi regions
       * Multi cloud, multi regions
 * Scaling
-    * Goal is to linear scale for each node added. Limits are effectivley network and latency.
+    * Goal is to linear scale for each node added. Limits are effectively network and latency.
+* Geo distributions can use table partitions and table spaces.
+    * Table partitions are smaller parts of a table. Partitions are divided bu a rule.
+    Normally a range on a column. Partitions can be assigned a geo region.
+    * Tablespace: You specify a number of replicas and a block. A block specifies
+       a cloud. region, zone a replication factor. Inside the tablespace you can create tables
+       and other things.
+* Leaders require leader leases to do read queries. 
 
+
+* TODO: explain using table partitioning and tablespace for storing data in specific
+    locations at the row level. Needed to store all user data for a country inside the
+    country.
+    * TODO: explain collocated tables
+    * TODO Explain secondary indexes
 
 ##### Tasks to do
 * Map out shards, tablets, across all nodes.
 * Can you change replication factor? What happens when you add a node?
 * Make a manual node group with replication factor above 3. Make servers manually
-insteading of using /bin/yugabyted start
+instead of using /bin/yugabyted start
 * Is there a difference between tablet and shared? No. A table for example is split into 3 parts. It has 3 leaders and 2 sets of 3 followers. There are 9 shards, 3 sets of the same
 shard. Ideally, each node only has one leader for a table (the table is split into 3 leaders
 or 3 shards.
 * Are reads done on followers?
+* Show which cloud, region, and other parameters are made for local clusters.
+* json stuff
+   * convert to sql an back
+   * use json text and json binary
+   * query txt and binary
+   * use other json functions.
+* Is replication truly synchronous if it just requires a majority of followers?
+
+Links
+* YugabyteDB support for PostgreSQL
+https://docs.yugabyte.com/latest/explore/ysql-language-features/
+* PostgreSQL Compatibility in YugabyteDB 2.0
+https://blog.yugabyte.com/postgresql-compatibility-in-yugabyte-db-2-0
+* Using Stored Procedures in Distributed SQL Databases
+https://blog.yugabyte.com/using-stored-procedures-in-distributed-sql-databases/
+* Comparing Distributed SQL Performance – YugabyteDB vs. Amazon Aurora PostgreSQL vs. CockroachDB
+https://blog.yugabyte.com/comparing-distributed-sql-performance-yugabyte-db-vs-amazon-aurora-postgresql-vs-cockroachdb/
+* Four Data Sharding Strategies We Analyzed in Building a Distributed SQL Database
+https://blog.yugabyte.com/four-data-sharding-strategies-we-analyzed-in-building-a-distributed-sql-database/
+
+
+##### Yugabyte Architecture
+* Two layers : API and document store
+* Yugabyte uses PostgreSQL query layer, but not the storage later. The storage layer
+  is a modified RocksDb engine.
+* The nodes run two services:  YB_master  and YB_Tserver
+* Query API Pluggable Layer: DML, DDL, Data control Language (DCL), and SQL
+   * Ysql -- postgresql -- supports range and hash sharding
+   * ycql -- casssandra -- supports hash sharding
+* Docd DB
+    * Key Value store
+    * Dockey, subdockey, column Vlaue, and hybrid timestamp
+        * dockey is a hash key, and contains primary key and other components
+        * subdockey are columns and data structure of table
+	* MVCC - Multi-Version Concurrency Control to the same key
+	* prymary key consists of partition key and optional clustering key
+* data written
+    * When a majority followers respond
+    * Write the transaction to an in memory table, memtable
+    * When memtable reaches size, it is flushed to disk as a sortted sequence table file known
+      as SST files
+    * When written, SST files are compacted, immutable, and retired data ia removed. 
+
+* query execution
+    * connec to any node
+    * YB-Tserver processed query in a distributed matter. It pushes down the query to
+    nodes. Queries can go to leaders or followers. 
+* Archiecture -- YB_Master and YB_tserver on each node, group of nodes a clsuter.
+   * YB-Master handles all DDL queries. Send version updates to YB_server services.
+   Receives heart beats from YB-tServers and handles failovers. Takes care of leader
+   balancing, load balancing, and data replication. 
+   * YB-tServer handle all connections, hosts tablet peers and data and indexes, process
+     DML statments, sends hearbeat to YB_Master,
+* A read replic structure only has YB-Tserver. Does not participate in consensus.
+  Does affect fault tolerance. Only processes read queries and redirects write queries. 
+* single row
+   * In nmemoryh lock for transacton
+   * Creates write batch
+   * Written to memtable and WAL file -- in even of failure wall files are used to recreate
+   memtable.
+   * Appends batch to its Leader WAL file
+   * Leaders sends WAL file to followers and followes respond.
+* TODO: detailed multi row trnascations   
+* trsnactions :
+   * YCQL -- read commited, repeatable read, serialization
+   * YSQL -- repeatable read, serialization
+* TODO: chart with dirty reads, non-repetable read anomaly, phantom read anonmly, serialition anomaly. Define and explain in each isolation,
+
+#### TODO tasks
+* Understand how SST files and durability happen. When data is committed, how is it durable?
+* When a read query is ran right after a write query, if one follower has not committed data
+will the read query ignore that follower?
+* Make read replica cluster. Is read replica cluster consistent?
+
+* Links
+    * YugabyteDB Query Layer
+https://docs.yugabyte.com/latest/architecture/query-layer/overview/
+    * DocDB Sharding
+https://docs.yugabyte.com/latest/architecture/docdb-sharding/
+    * DocDB Transactions
+https://docs.yugabyte.com/latest/architecture/transactions/
+    * DocDB Replication
+https://docs.yugabyte.com/latest/architecture/docdb-replication/
+    * DocDB Storage
+https://docs.yugabyte.com/latest/architecture/docdb/persistence/
+    * YB-Master service
+https://docs.yugabyte.com/latest/architecture/concepts/yb-master/
+    * YB-TServer service
+https://docs.yugabyte.com/latest/architecture/concepts/yb-tserver/
+
+
+

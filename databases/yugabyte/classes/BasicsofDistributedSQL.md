@@ -120,7 +120,20 @@ load balancing)
       * Multi cloud, multi regions
 * Scaling
     * Goal is to linear scale for each node added. Limits are effectively network and latency.
+* Geo distributions can use table partitions and table spaces.
+    * Table partitions are smaller parts of a table. Partitions are divided bu a rule.
+    Normally a range on a column. Partitions can be assigned a geo region.
+    * Tablespace: You specify a number of replicas and a block. A block specifies
+       a cloud. region, zone a replication factor. Inside the tablespace you can create tables
+       and other things.
+* Leaders require leader leases to do read queries. 
 
+
+* TODO: explain using table partitioning and tablespace for storing data in specific
+    locations at the row level. Needed to store all user data for a country inside the
+    country.
+    * TODO: explain collocated tables
+    * TODO Explain secondary indexes
 
 ##### Tasks to do
 * Map out shards, tablets, across all nodes.
@@ -131,3 +144,95 @@ instead of using /bin/yugabyted start
 shard. Ideally, each node only has one leader for a table (the table is split into 3 leaders
 or 3 shards.
 * Are reads done on followers?
+* Show which cloud, region, and other parameters are made for local clusters.
+* json stuff
+   * convert to sql an back
+   * use json text and json binary
+   * query txt and binary
+   * use other json functions.
+* Is replication truly synchronous if it just requires a majority of followers?
+
+Links
+* YugabyteDB support for PostgreSQL
+https://docs.yugabyte.com/latest/explore/ysql-language-features/
+* PostgreSQL Compatibility in YugabyteDB 2.0
+https://blog.yugabyte.com/postgresql-compatibility-in-yugabyte-db-2-0
+* Using Stored Procedures in Distributed SQL Databases
+https://blog.yugabyte.com/using-stored-procedures-in-distributed-sql-databases/
+* Comparing Distributed SQL Performance – YugabyteDB vs. Amazon Aurora PostgreSQL vs. CockroachDB
+https://blog.yugabyte.com/comparing-distributed-sql-performance-yugabyte-db-vs-amazon-aurora-postgresql-vs-cockroachdb/
+* Four Data Sharding Strategies We Analyzed in Building a Distributed SQL Database
+https://blog.yugabyte.com/four-data-sharding-strategies-we-analyzed-in-building-a-distributed-sql-database/
+
+
+##### Yugabyte Architecture
+* Two layers : API and document store
+* Yugabyte uses PostgreSQL query layer, but not the storage later. The storage layer
+  is a modified RocksDb engine.
+* The nodes run two services:  YB_master  and YB_Tserver
+* Query API Pluggable Layer: DML, DDL, Data control Language (DCL), and SQL
+   * Ysql -- postgresql -- supports range and hash sharding
+   * ycql -- casssandra -- supports hash sharding
+* Docd DB
+    * Key Value store
+    * Dockey, subdockey, column Value, and hybrid timestamp
+        * dockey is a hash key, and contains primary key and other components
+        * subdockey are columns and data structure of table
+	* MVCC - Multi-Version Concurrency Control to the same key
+	* primary key consists of partition key and optional clustering key
+* data written
+    * When a majority followers respond
+    * Write the transaction to an in memory table, memtable
+    * When memtable reaches size, it is flushed to disk as a sorted sequence table file known
+      as SST files
+    * When written, SST files are compacted, immutable, and retired data ia removed. 
+
+* query execution
+    * is to any node
+    * YB-Tserver processed query in a distributed matter. It pushes down the query to
+    nodes. Queries can go to leaders or followers. 
+* Architecture -- YB_Master and YB_tserver on each node, group of nodes a cluster.
+   * YB-Master handles all DDL queries. Send version updates to YB_server services.
+   Receives heart beats from YB-tServers and handles failovers. Takes care of leader
+   balancing, load balancing, and data replication. 
+   * YB-tServer handle all connections, hosts tablet peers and data and indexes, process
+     DML statements, sends heartbeat to YB_Master,
+* A read replica structure only has YB-Tserver. Does not participate in consensus.
+  Does affect fault tolerance. Only processes read queries and redirects write queries. 
+* single row
+   * In memory lock for transaction
+   * Creates write batch
+   * Written to memtable and WAL file -- in even of failure wall files are used to recreate
+   memtable.
+   * Appends batch to its Leader WAL file
+   * Leaders sends WAL file to followers and followers respond.
+* TODO: detailed multi row transactions   
+* transactions :
+   * YCQL -- read committed, repeatable read, serialization
+   * YSQL -- repeatable read, serialization
+* TODO: chart with dirty reads, non-repeatable read anomaly, phantom read anomaly, serialization anomaly. Define and explain in each isolation,
+
+#### TODO tasks
+* Understand how SST files and durability happen. When data is committed, how is it durable?
+* When a read query is ran right after a write query, if one follower has not committed data
+will the read query ignore that follower?
+* Make read replica cluster. Is read replica cluster consistent?
+
+* Links
+    * YugabyteDB Query Layer
+https://docs.yugabyte.com/latest/architecture/query-layer/overview/
+    * DocDB Sharding
+https://docs.yugabyte.com/latest/architecture/docdb-sharding/
+    * DocDB Transactions
+https://docs.yugabyte.com/latest/architecture/transactions/
+    * DocDB Replication
+https://docs.yugabyte.com/latest/architecture/docdb-replication/
+    * DocDB Storage
+https://docs.yugabyte.com/latest/architecture/docdb/persistence/
+    * YB-Master service
+https://docs.yugabyte.com/latest/architecture/concepts/yb-master/
+    * YB-TServer service
+https://docs.yugabyte.com/latest/architecture/concepts/yb-tserver/
+
+
+

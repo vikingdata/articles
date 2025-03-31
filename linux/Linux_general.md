@@ -26,7 +26,7 @@ title: Linux general tips
 14. [remove binary fromn text file](#removebin)
 15. [Adding swapspace temporarily](#swap)
 16. [Deleted files still used.](#un)
-17. [Find newest files first](#find2)
+17. [Find newest or largest files first](#find2)
 18. [Manipulate one line at a time in bash](#line)
 19. [awk](#a)
 20. [ssh keys -- scan](#ssh)
@@ -637,10 +637,10 @@ root@mysql1:~/install# locate mysql.service
 
 ```
   # List out files by size on current directory
-find .  -type f -printf '%s %p\n'| sort -nr -k 1,1
+find .  -type f -printf '%s %p\n'| sort -nr -k 1,1  | head -n 10
 
   # List out by date on current directory
-find .  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
+find .  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1 |  head -n 10
 
   # All files on system sorted
 find /  -type f -printf '%s %p\n'| sort -nr -k 1,1

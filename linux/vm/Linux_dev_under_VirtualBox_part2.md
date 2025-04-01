@@ -184,7 +184,6 @@ curl -s $webpage | bash
 ```
 
 
-```
 * In Windows, in cygwin or WSL. This should be unecessary. The base image should already have this.
 ```
 for port in  2101 2102 2013 2014 2015 2016; do

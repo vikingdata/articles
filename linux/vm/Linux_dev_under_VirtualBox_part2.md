@@ -153,9 +153,6 @@ curl -s $webpage | bash
 
 ```
 
-* After that is done on each server, then execute this on each server
-
-
 * Then execute this on cygwin or WSL
 ```
 webpage="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2/make_aliases_cygin_wsl.sh"
@@ -164,8 +161,10 @@ curl -s $webpage | bash
 ```
 
 
-# Copy the aliases to .bashrc
-* /shared/virtual_host_aliases.sh should look something like
+* Copy the aliases to .bashrc
+
+/shared/virtual_host_aliases.sh should look something like
+
 ```
 alias admin='10.0.2.1'
 alias db1='10.0.2.2'
@@ -176,7 +175,9 @@ alias db5='10.0.2.6'
 alias db6='10.0.2.7'
 
 ```
-* On each system (admin, db1... db6, and any other virtual machine)
+
+On each system (admin, db1... db6, and any other virtual machine)
+
 ```
 webpage="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2/make_aliases_virtual.sh"
 curl -s $webpage | bash

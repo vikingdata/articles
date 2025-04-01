@@ -70,7 +70,7 @@ End goal:
     * For File, put in C:\shared\UbuntuBase.ova
         * Or whatever you saved the base ubuntu image as.
     * Change settings
-    * Name : admin2
+    * Name : db1 (or db2, db3, db4, db5, db6)
     * Mac Address Policy : "Generate new"
     * click Finish
     * Start the instance
@@ -89,11 +89,11 @@ port forwarding.
         * Example for db1:
             * Make the firewall block with port 2002
             * In Virtual Box Manager, the port forward
-                * Name : Rule3
+                * Name : Rule3 (or any name available)
                 * Protocol : TCP
                 * Host Ip: 127.0.0.1
-                * Host Port : 2101
-                * Guest IP : 10.0.2.7
+                * Host Port : 2101 (or available port -- choose 6 sequential ip addresses)
+                * Guest IP : 10.0.2.7 (depends on your ip address for db1, db2, db3, db4, db5 db6)
                     * Change to the ip address of your virtual box.
                 * Guest Port : 22
 
@@ -103,9 +103,9 @@ port forwarding.
         * db1 server should use port 2101  on host
         * db2 server should use port 2102  on host
         * db3 server should use port 2103  on host
-        * db4 server should use port 2103  on host
-        * db5 server should use port 2103  on host
-        * db6 server should use port 2103  on host
+        * db4 server should use port 2104  on host
+        * db5 server should use port 2105  on host
+        * db6 server should use port 2106  on host
 
 
 * On each server, change the hostname
@@ -116,26 +116,7 @@ port forwarding.
     * db5 :   hostnamectl set-hostname db5.myguest.virtualbox.org
     * db6 :   hostnamectl set-hostname db6.myguest.virtualbox.org
 
-* on each server, save the alias
-```
-sudo bash
-
-
-echo "Change the alias name depending which servers you are on!"
-
-export alias_name="ssh_"`hostname`
-echo " my hostname", `hostname`, " and my alias is $alias_name"
-my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
-echo "alias $alias_name='ssh -l $my_ip'" >> /shared/aliases
-echo "$alias_name='$my_ip'" >> /shared/server_ips
-echo ""; echo ""; echo "";
-
-echo " my hostname", `hostname`, " and my alias is $alias_name"
-echo "my ip is: $my_ip"
-
-```
-
-* Test the connections -- NOTE, the port forwarding must be done already. 
+* In WSL or cygwin in Windows : Test the connections -- NOTE, the port forwarding must be done already.
     * ssh 127.0.0.1 -p 2101 -l root "echo '2101 good', `hostname`"
     * ssh 127.0.0.1 -p 2102 -l root "echo '2202 good', `hostname`"
     * ssh 127.0.0.1 -p 2103 -l root "echo '2303 good', `hostname`"
@@ -144,20 +125,51 @@ echo "my ip is: $my_ip"
     * ssh 127.0.0.1 -p 2106 -l root "echo '2306 good', `hostname`"
 
 
+* on each server, we will be modfying the files 
+   * You write your alias to the file:
+       * /shared/virtual_host_aliases.sh
+       * /shared/aliases
+       * /shared/server_ips
+   * This file on windows should be:
+       * C:\shared\virtual_host_aliases.sh
+       * C:\shared\aliases
+       * C:\shared\server_ips
+   * In cygwin in Windows
+       * /cygdrive/c/shared/virtual_host_aliases.sh
+       * /cygdrive/c/shared/aliases
+       * /cygdrive/c/shared/server_ips
+   * WSL in windows
+       * /server_ips/virtual_host_aliases.sh
+       * /server_ips/aliases
+       * /server_ips/server_ips
+
+* On each server,
+
+Execute this
+
+```
+
+```
+
+* After that is done on each server, then execute this on each server
+
+
+* Then execute this on cygwin or WSL
+
+```
 * Make alias in .bashrc in Cygwin or WSL
 ```
-cp ~/.bashrc ~/.bashrc_`date +%Y%m%d`
+# Copy the aliases to .bashrc
+* /shared/virtual_host_aliases.sh should look something like
+```
 
-echo "
-alias ssh_db1='ssh 127.0.0.1 -p 2101 -l root'
-alias ssh_db2='ssh 127.0.0.1 -p 2202 -l root'
-alias ssh_db3='ssh 127.0.0.1 -p 2303 -l root'
-alias ssh_db4='ssh 127.0.0.1 -p 2104 -l root'
-alias ssh_db5='ssh 127.0.0.1 -p 2205 -l root'
-alias ssh_db6='ssh 127.0.0.1 -p 2306 -l root'
+```
+* On each system (admin, db1... db6, and any other virtual machine)
+```
 
-" >> ~/.bashrc
-source ~/.bashrc
+
+```
+
 
 ```
 * In Windows, in cygwin or WSL. This should be unecessary. The base image should already have this.
@@ -166,11 +178,6 @@ for port in  2101 2102 2013 2014 2015 2016; do
   ssh-copy-id -o "StrictHostKeyChecking no" -p $port -i ~/.ssh/id_rsa.pub root@127.0.0.1
   ssh -p $port root@127.0.0.1 "echo 'ssh firewall $port ok'"
 done
-
-#for port in 2102 2103; do
-#  echo "transferring private and public keys to $port"
-#  rsync -av  ~/.ssh/id_rsa.pub  ~/.ssh/id_rsa root@127.0.0.1:$port/.ssh
-#done
 
 
 

@@ -1,4 +1,3 @@
-
 title : Linux Dev under VirtualBox Part 1
 author : Mark Nielsen
 copyright : December 2024
@@ -135,7 +134,7 @@ To connect to virtual boxes:
         * Network should be "NAT Network" the default.
 	* Under Devices
 	    * Shared Folders :
-	       * On Windows choose : C:\shared\folder
+	       * On Windows choose : C:\shared
 	       * On Linux mount it as : /shared
 	       * Select auto mount and permanent
 	    * Shared Clipboard : Bidirectional
@@ -365,6 +364,13 @@ my_ip=`ifconfig |grep "inet 10" | sed -e "s/  */ /g" | cut -d " " -f 3`
 echo "alias ssh_admin1='ssh -l $my_ip'" > /cygdrive/c/shared/aliases
 echo "admin1='$my_ip'" >> /shared/server_ips
 echo "my ip is: $my_ip"
+
+
+  # This erases the file.
+  # If you do this AFTER making the database servers, execute on each server. 
+my_host=`hostname -s`
+echo "alias $my_host='$my_ip'" > /shared/virtual_host_aliases.sh
+
 ```
 Output somthing like : my ip is: 10.0.2.6 
 

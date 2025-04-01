@@ -1,4 +1,3 @@
-
 title : Linux Dev environment on Windows Part 3: Yugabyte Local
 author : Mark Nielsen
 copyright : November 2024
@@ -14,6 +13,9 @@ Original Copyright November 2024**_
 Sections
 * [Links](#links)
 * [Yugabyte Cluster with Xcluster Failover](#y)
+  * One node
+  * 3 nodes
+  * Xcluster failover
 
 * * *
 <a name=y></a>Yugabyte Cluster with Xcluster Failover
@@ -41,7 +43,7 @@ sudo bash
 cd
 bash install_yugabte.sh
 
-webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part3/install_yugabte.sh
 wget $webfile -O  install_yugabte.sh
 
 cd /usr/local/yugabyte-2024_server
@@ -93,7 +95,7 @@ sudo bash
 cd
 bash install_yugabte.sh
 
-webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part3/install_yugabte.sh
 wget $webfile -O  install_yugabte.sh
 
 cd /usr/local/yugabyte-2024_server
@@ -148,7 +150,7 @@ mkdir -p /db/yugabyte/data
 mkdir -p /db/yugabyte/log
 
 cd
-webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part3/install_yugabte.sh
 wget $webfile -O  install_yugabte.sh
 bash install_yugabte.sh
 ```

@@ -148,6 +148,8 @@ port forwarding.
 Execute this
 
 ```
+webpage="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2/make_alias.sh"
+curl -s $webpage | bash
 
 ```
 
@@ -155,19 +157,29 @@ Execute this
 
 
 * Then execute this on cygwin or WSL
+```
+webpage="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2/make_aliases_cygin_wsl.sh"
+curl -s $webpage | bash
 
 ```
-* Make alias in .bashrc in Cygwin or WSL
-```
+
+
 # Copy the aliases to .bashrc
 * /shared/virtual_host_aliases.sh should look something like
 ```
+alias admin='10.0.2.1'
+alias db1='10.0.2.2'
+alias db2='10.0.2.3'
+alias db3='10.0.2.4'
+alias db4='10.0.2.5'
+alias db5='10.0.2.6'
+alias db6='10.0.2.7'
 
 ```
 * On each system (admin, db1... db6, and any other virtual machine)
 ```
-
-
+webpage="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part2/make_aliases_virtual.sh"
+curl -s $webpage | bash
 ```
 
 
@@ -178,8 +190,6 @@ for port in  2101 2102 2013 2014 2015 2016; do
   ssh-copy-id -o "StrictHostKeyChecking no" -p $port -i ~/.ssh/id_rsa.pub root@127.0.0.1
   ssh -p $port root@127.0.0.1 "echo 'ssh firewall $port ok'"
 done
-
-
 
 ```
 

@@ -1,166 +1,207 @@
 
-title : Linux Dev environment on Windows Part 3
+title : Linux Dev environment on Windows Part 3: Yugabyte Local
 author : Mark Nielsen
-copyright : Feb 2025
+copyright : November 2024
 ---
 
 
-Linux Dev environment on Windows Part 3
+Linux Dev environment on Windows Part 4 : Yugabyte Local
 ==============================
 
 _**by Mark Nielsen
-Original Copyright Feb 2025**_
+Original Copyright November 2024**_
 
-The goal is to setup very cheap services on GCP and AWS. Other inexpensive cloud solutions may be added later. 
-
+Sections
 * [Links](#links)
-* GCP
-    * Compute server
-* AWS : For all the services, you make and destroy them when done to reduce costs. 
-    * S3
-    * [AWS Aurora serverless 2](#s)
-    * Glue
-    * Lambda
-    * SQS
-    * Redshift 
-    
+* [Yugabyte Cluster with Xcluster Failover](#y)
 
 * * *
-<a name=links></a>Links
+<a name=y></a>Yugabyte Cluster with Xcluster Failover
 -----
+* Links
+* https://docs.yugabyte.com/preview/deploy/manual-deployment/install-software/
+* https://download.yugabyte.com/local#linux
+* https://www.youtube.com/watch?v=d8JWKgXReTg
+* https://dev.to/yugabyte/yugabytedb-on-oci-free-tier-52cm
+* https://www.baeldung.com/yugabytedb
+* https://www.dedicatedcore.com/blog/install-gcc-compiler-ubuntu/
+* https://www.youtube.com/watch?v=PMD5xsDAemE
+* https://www.yugabyte.com/blog/introducing-yugabyted-the-simplest-way-to-get-started-with-yugabytedb/
 
-* * *
-<a name=s></a>AWS Aurora serverless 2
------
+We are installing yugbayte on 6 systems. To test you can
+* Download it and run it locally. A one node yugabyte.
+* Add ip addresses 127.0.0.2 and 127.0.0.3 and run 3 nodes locally.
+* Download to multiple vms or servers. 
 
-Links
-* https://www.youtube.com/watch?v=ciRbXZqBl7M
+#### Install one node locally
 
-Goals:
-* Make and destory clusters only to test.
-    * Maximum $50 an month if left on all the time.
-    * Use for an hour each day. Thus price should ne $50/24 per month, or less than $5.
-    * Specify minimum ACU of 0 and max 1. Make sure cluster goes down after 5 minutes of inactivity. 
-    * Backtrack will be very cheap.
-    * Free backups for 7 days.
-    * Free Cloud Watch Insights
-    * Database Insights is cheap. RDS insights is free with 7 days of data. 
-    * Multi-AZ  costs -- TODO Verify this
-        *  No separate standby cost: Unlike traditional RDS instances, you don't pay for a standby instance when not actively in use.    Pay per usage: You only pay for the ACUs used during active database operations. 
-    * General Steps
-        * Make Aurora serverless cluster with Mutli-AZ and backtrack and Extended Insights
-        * Perform actions
-        * Wait a day, and then do backtrack and backup actions
-        * Destory Aurora serverless cluster and remake one without Multi AZ, backtrack, and Database insights. Keep RDS insights. 
-            * OPTIONAL: Keep database insights, its cheap
-
-
-#### Make stuff
-	    
-* OPTIONAL: Create AWS Management Console and open the AWS Cloud9
-
-* Create a EC2 instance with mysql 8.0.41 installed.
-    * Make sure it is within the same region as the aurora serverless servers. 
-
-* Create Aurora Serverless 2
-    * Make sure you choose the same region as the EC2 server. 
-    * Clickd on RDS
-    * Click on create new database
-    * Select Aurora mysql or postgresql compatible.
-        * Select engine 3.08.1 or higher
-    * Templates : Choose dev/test
-    * Credentials : Create own password
-        * Select : self managed
-	* Enter in master password
-    * Cluster Storage : No changes
-    * Instance COnfiguration
-       * Choose Serverless 2
-       * Capacity range
-           * Minimum ACU : 0
-           * Maximum ACU : 1
-           * This will enble pause the cluster after 5 minutes
-    * Availability & durability
-        * Don't create an Aurora Replica
-    * Connectivity : CONNECT TO YOUR EC2 INSTANCE
-        * Connect to an EC2 compute resource
-             * Select your EC2 instance you made earlier.
-        * Additional VPC security group
-            * OPTIONAL : Choose the security groups of your EC2 server. Be careful. Especially inbound rules.
-	* RDS Data API: Supposedly its free with serverless. 
-            * Enable the RDS Data API
-    * Database authentication
-        * IAM database authentication	    
-
-#### Connect to database
-
-* Connection to database. NOTE: You cannot connect to aurora server less unless you are inside the VPC. 
-    * Through Ec2
-       * EC2 should already be able to connect.
-           * Make sure mysql client is installed.
-	   * Look up password. TODO: how to do this
-	   * Look up HOST: TODO: how to do this. 
-	   * Execute : mysql -h <HOST> -u admin -p<PASS>
-    * Through RDS Data API
-    * Through ssh tunnel through your EC2 instance. This will enable you to connect from anywhere.
-
-#### Setup bash
+* install -- connect to one your vms, suggest the admin server. 
 ```
-  ### Change user, pass, and host for your server.
-  ## Make sure you are logged into the EC2 server that has
-  ## network access to Aurora Serverless.
-  ## You can change this user "Connected compute resources" for your Aurora Serverless. 
-echo "MUSER='user'
-MPASS='pass'
-MHOST='XXX.YYY.rds.amazonaws.com'
-" > serverless_auth.txt
+sudo bash
+cd
+bash install_yugabte.sh
 
-source serverless_auth.txt
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
 
-mysql -u $MUSER -p$MPASS -h $MHOST -e "select now()"
+cd /usr/local/yugabyte-2024_server
+./bin/yugabyted start --advertise_address=127.0.0.1
 
+ysqlsh -c "select now(), current_user, inet_server_addr()"
 
 ```
 
-#### Steps to perform
-
-* Input any data
+* Output
 ```
-   -- while connected inside as mysql client or other client
-create database if not exists test_db;
-use test_db;
-create table i (i int);
-insert into i values (1),(2),(3),(4),(5);
++---------------------------------------------------------------------------------------------------+
+|                                             yugabyted                                             |
++---------------------------------------------------------------------------------------------------+
+| Status         : Bootstrapping.                                                                   |
+| YSQL Status    : Not Ready                                                                        |
+| YugabyteDB UI  : http://127.0.0.1:15433                                                           |
+| JDBC           : jdbc:postgresql://127.0.0.1:5433/yugabyte?user=yugabyte&password=yugabyte        |
+| YSQL           : bin/ysqlsh   -U yugabyte -d yugabyte                                             |
+| YCQL           : bin/ycqlsh   -u cassandra                                                        |
+| Data Dir       : /root/var/data                                                                   |
+| Log Dir        : /root/var/logs                                                                   |
+| Universe UUID  : d7d7e17a-83a8-4642-88ea-3c225882a2d5                                             |
++---------------------------------------------------------------------------------------------------+
+```
 
+* Connect
+    * TO connect to database, log into the vm via ssh
+        * Connect to the database  as instructed.
+    * TO connect from your Windows or Linux Host
+        * Setup firewall on host and open ports in Virtual Box
+
+* Connect from host server -- TODO. 
+   * Firewall
+   * open ports
+   * Web interface
+   * database connection
+   * Install client on Host server. 
+
+
+#### Install three nodes locally
+* Add additional ip address
+    * Add 127.0.0.2 and 127.0.0.3
+        * sudo ifconfig lo:1 127.0.0.2
+        * sudo ifconfig lo:2 127.0.0.3
+* Install yugabyte
+```
+sudo bash
+cd
+bash install_yugabte.sh
+
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
+
+cd /usr/local/yugabyte-2024_server
+
+rm -r /db/yugabyte_local1
+rm -r /db/yugabyte_local2
+rm -r /db/yugabyte_local3
+
+mkdir -p /db/yugabyte_local1
+mkdir -p /db/yugabyte_local2
+mkdir -p /db/yugabyte_local3
+
+rm -rf /var/oot
 
 ```
-* Test backup and backtrack
-    * Input more data and do count
-    *  perform backtrack and do count
-    * Perform restore from backup and do count
+* Start all three nodes
+    * yugabyted start --advertise_address=127.0.0.1 --base_dir=/db/yugabyte_local1
+    * yugabyted start --advertise_address=127.0.0.2 --base_dir=/db/yugabyte_local2 --join=127.0.0.1
+    * yugabyted start --advertise_address=127.0.0.3 --base_dir=/db/yugabyte_local3 --join=127.0.0.1
+* Check cluster
+```
+  # This will fail, for some reason need to specify user postgres
+ysqlsh -c "select yb_servers()" -h 127.0.0.1
 
-* Test failovers and add readers
-    * Add reader
-    * Failover to Reader
-    * Failover to other AZ
-    * Failback to original server
+ysqlsh -c "select yb_servers()" -h 127.0.0.2 
+ysqlsh -c "select yb_servers()" -h 127.0.0.2 "sslmode=disable" 
+ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" postgres
+ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" yugabyte
+```
 
-* Look at Cloudwatch.
-    * It should be free.
-        * Turn on alarms.
-	* Turn on insights, perform tasks, turn off insights.
+#### Install three nodes on vms or servers
 
-    * Turn on sdlow logs, error logs, and make some entries and look at them. 
-* Upload data, turn on Glue or Lamda.
-* Put data into S3.
-    * Lamda process should process data into your database.
-    * Make a glue script and execute.
-* Turn on RDS proxy and test it
+* For each server db1, db2 and db3 install software but do not start
+```
+sudo bash
+echo "
+  # Change the ip addresses to your hosts
+  # If you are using VirutalBox, it is the ip addresses of the servers
+  # that should be able to see each other in its own network.
+export db1="10.0.2.7"
+export db2="10.0.2.8"
+export db3="10.0.2.9"
+export db4="10.0.2.10"
+export db5="10.0.2.11"
+export db6="10.0.2.12"
+" > /root/server_ips
+source /root/server_ips
+echo "source /root/server_ips" >> ~/.bashrc
 
-### Remake cluster
+rm -rf /root/var
+mkdir -p /db/yugabyte/data
+mkdir -p /db/yugabyte/log
 
-* To start over with new severless server
-     * Select database cluster.
-     * Make sure delete protection is off. Check by clicking on "Modify" for the cluster.
-     * Make sure the databse is running.
-     * Delete the cluster.
-    
+cd
+webfile=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/vm/Linux_dev_under_VirtualBox_part4/install_yugabte.sh
+wget $webfile -O  install_yugabte.sh
+bash install_yugabte.sh
+```
+* start on db1
+```
+echo " {
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db1\"
+}" > /db/yugabyte/yugabyte.config
+
+source ~/.bashrc
+yugabyted start --config /db/yugabyte/yugabyte.config
+
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+
+```
+* start on db2
+```
+echo " {
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db2\",
+  \"join\": \"$db1\"
+}" > /db/yugabyte/yugabyte.config
+
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+ysqlsh -c "select yb_servers()" -h $db3
+
+source ~/.bashrc
+yugabyted start --config /db/yugabyte/yugabyte.config
+```
+
+* start on db3
+```
+echo " {
+  \"base_dir\":  \"/db/yugabyte/\",
+  \"log_dir\":  \"/db/yugabyte/log\",
+  \"data_dir\":  \"/db/yugabyte/data\",
+  \"advertise_address\" : \"$db3\",
+  \"join\": \"$db1\"
+}" > /db/yugabyte/yugabyte.config
+	  
+
+source ~/.bashrc
+yugabyted start --config /db/yugabyte/yugabyte.config
+
+ysqlsh -c "select yb_servers()" -h $db1
+ysqlsh -c "select yb_servers()" -h $db2
+ysqlsh -c "select yb_servers()" -h $db3
+
+```

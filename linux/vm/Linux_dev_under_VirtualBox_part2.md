@@ -17,40 +17,15 @@ NOTE: This is very similar to having Linux as a Host instead of Windows. Any ope
 irrelevant.
 I am just given a Windows laptop wherever I work, so I am stuck with it. 
 
-The goal is to setup 3 servers, sent up basic Ansible. Install mysql master
-and slave, install Grapana with Promehtesus and mysql_exporter and telegraph.
-
-Monitoring Environment
-* Setup we will use on admin1
-    * Telegraf gets multiple data, cpu, memory, mysql, etc.
-    * Promethesus gathers data from multiple servers.
-       * It can monitor, report, display itself.
-    * Grafana will connect to promethesus for monitor, report, and display.
-
-So why use Grafana? It has a good interface for dashboards.
-
-In general the goals are
-* Setup 6 db servers. Your admin server as already been setup. 
-* Setup One MySQL master, 2 Slave, and and accounts
-* Install MongoDB as 2 clusters.
-   * One mongos server -- located on admin box. 
-   * 3 servers of MongoDB and MongoDB config servers in one cluster.
-   * Same in the other cluster.
-   * The config servers will tell mongos where the data is. The data will be
-     split amoun the 2 replica sets. The 2 replica sets is one cluster.
-* Install TiDB as a cluster
-* Instal YugaByte as a cluster
-
-
 Sections
 * [Links](#links)
-* [3 db servers](#3)
+* [6 db servers for all local installations](#6)
 * [MySQL](#m)
 * Free Databases ( or nearly free) on the internet
    * Password
        * [Bluefish](#b) on local server and Google Drive
    * [Sample data](#sample) : https://www.mysqltutorial.org/wp-content/uploads/2023/10/mysqlsampledatabase.zip
-   * Distributed Databases
+   * Online Databases services and Distributed Database services
       * [CockroachDB](#c)
       * [TIDB](#t)
       * [Yugabyte](#y)
@@ -74,7 +49,7 @@ TODO verify links and redo links
 * https://grafana.com/docs/grafana/latest/developers/http_api/data_source/
 * https://www.youtube.com/watch?v=Dcumy5Ir1Ag
 * * *
-<a name=3></a>3 db servers
+<a name=6></a>6 db servers for all local installtions
 -----
 
 First, do [Linux Dev under VirtualBox Part 1](Linux_dev_under_VirtualBox_part1.md)

@@ -18,6 +18,12 @@ title: Yugabyte tips
 * [PostgreSQL Tips ](B/vikingdata/articles/blob/main/databases/postgresql/pg_general.md)
 * Good reads
     * Architecture
+        * Multi node, multi region, multi providers
+            * https://www.yugabyte.com/blog/multi-region-database-deployment-best-practices/
+            * https://www.yugabyte.com/blog/9-techniques-to-build-cloud-native-geo-distributed-sql-apps-with-low-latency/
+            * https://docs.yugabyte.com/preview/deploy/multi-dc/3dc-deployment/
+	    * https://docs.yugabyte.com/preview/explore/going-beyond-sql/tablespaces/ : table to only specific regions
+	    * https://docs.yugabyte.com/preview/explore/ysql-language-features/advanced-features/partitions/ : Partition of a value for a column.
         * Raft
              * https://raft.github.io/
              * https://en.wikipedia.org/wiki/Raft_(algorithm)
@@ -30,7 +36,12 @@ title: Yugabyte tips
     * Time
         *  https://www.yugabyte.com/blog/evolving-clock-sync-for-distributed-databases/
         * https://www.yugabyte.com/blog/tag/hybrid-logical-clock/
-
+    * Replication
+        * https://www.yugabyte.com/blog/data-replication/
+        * https://docs.yugabyte.com/preview/architecture/docdb-replication/replication/
+        * https://docs.yugabyte.com/preview/explore/change-data-capture/
+	* https://docs.yugabyte.com/preview/develop/build-global-apps/
+	
 
 * * *
 <a name=schema></a>Schema

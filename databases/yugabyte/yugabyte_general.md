@@ -16,6 +16,21 @@ title: Yugabyte tips
 <a name=links></a>Links
 -----
 * [PostgreSQL Tips ](B/vikingdata/articles/blob/main/databases/postgresql/pg_general.md)
+* Good reads
+    * Architecture
+        * Raft
+             * https://raft.github.io/
+             * https://en.wikipedia.org/wiki/Raft_(algorithm)
+             * https://www.yugabyte.com/tech/raft-consensus-algorithm/
+             * https://docs.yugabyte.com/preview/architecture/docdb-replication/raft/
+             * https://www.yugabyte.com/blog/how-does-the-raft-consensus-based-replication-protocol-work-in-yugabyte-db/
+             * https://www.yugabyte.com/blog/low-latency-reads-in-geo-distributed-sql-with-raft-leader-leases/
+             * https://docs.yugabyte.com/preview/launch-and-manage/monitor-and-alert/metrics/raft-dst/
+        * [Fundamentals of Distributed Transactions](https://docs.yugabyte.com/preview/architecture/transactions/transactions-overview/)
+    * Time
+        *  https://www.yugabyte.com/blog/evolving-clock-sync-for-distributed-databases/
+        * https://www.yugabyte.com/blog/tag/hybrid-logical-clock/
+
 
 * * *
 <a name=schema></a>Schema

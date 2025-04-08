@@ -14,7 +14,8 @@ Sections
 * [Links](#links)
 * [Yugabyte Cluster with Xcluster Failover](#y)
   * One node
-  * 3 nodes
+  * 3 nodes installed one server
+  * 3 nodes installed on 3 servers.
   * Xcluster failover
 
 * * *
@@ -207,3 +208,18 @@ ysqlsh -c "select yb_servers()" -h $db2
 ysqlsh -c "select yb_servers()" -h $db3
 
 ```
+#### Setup Xcluster failover
+Links
+* https://docs.yugabyte.com/preview/deploy/multi-dc/async-replication/async-transactional-setup-automatic/
+* https://docs.yugabyte.com/preview/develop/build-global-apps/
+    * You must choose single, multi active (bi directional) , or other.
+    * We will use single active.
+* https://docs.yugabyte.com/preview/deploy/multi-dc/async-replication/async-transactional-setup-automatic/
+* https://docs.yugabyte.com/preview/launch-and-manage/monitor-and-alert/xcluster-monitor/
+
+Goal
+1. Setup a failover cluster
+2. Automatic Failover
+3. Test failover by turning off nodes one at a time.
+4. Monitor the xcluster
+5. Manual failover

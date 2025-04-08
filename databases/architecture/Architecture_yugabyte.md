@@ -112,7 +112,17 @@ Yugabyte has asynchronous replication capabilities. Why? Well it is used for ent
 another. If cluster to cluster replication was synchronous, a write query in Cluster 1 would have to wait for the
 same query to finish in Cluster 2 before it can return to the software and say it has been comitted.
 If Cluster 2 is not available or is very slow because of network or local performance problems, this can severly
-hurt the query speed in Cluster 1 (because Cluster 1 has to wait). 
+hurt the query speed in Cluster 1 (because Cluster 1 has to wait).
+
+In addition, you can set it up to write only to one cluster or to both at the same time. 
+
+To help decide how you will use the target cluster, two modes are available:
+* Non-transactional replication: "Writes are allowed on the target universe,
+but reads of recently replicated data can be inconsistent." This means, writes will happen as fast as thy can be applied,
+but the target cluster will always behind the source cluster. This means if you open connections to the source and
+target clusters and run the same query, the target cluster response and data may be a little out of data
+and not the same as the source cluster. In this scenario, you can write to both clusters.
+* Transactional replication: "Consistency of reads is preserved on the target universe, but writes are not allowed."
 
 
 #### Sharding

@@ -168,7 +168,7 @@ a backup cluster.
     * https://www.yugabyte.com/blog/evolving-clock-sync-for-distributed-databases/
     * ee
 * Transactions
-    * 
+    *  
 * Services
     * Y-master
     * y-server

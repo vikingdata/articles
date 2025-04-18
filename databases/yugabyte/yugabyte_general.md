@@ -48,7 +48,13 @@ title: Yugabyte tips
         * https://docs.yugabyte.com/preview/architecture/docdb-replication/replication/
         * https://docs.yugabyte.com/preview/explore/change-data-capture/
 	* https://docs.yugabyte.com/preview/develop/build-global-apps/
-    * Performance and server variables
+	* https://www.yugabyte.com/blog/distributed-database-transactional-consistency-async-standby/
+        * https://docs.yugabyte.com/preview/deploy/multi-dc/async-replication/async-transactional-setup-automatic/
+           * You must choose single, multi active (bi directional) , or other.
+           * We will use single active.
+        * https://docs.yugabyte.com/preview/launch-and-manage/monitor-and-alert/xcluster-monitor/
+
+* Performance and server variables
         * https://docs.yugabyte.com/preview/develop/learn/transactions/transactions-performance-ysql/
 	* https://docs.yugabyte.com/preview/develop/best-practices-ysql/
         * https://docs.yugabyte.com/preview/explore/query-1-performance/
@@ -69,6 +75,11 @@ title: Yugabyte tips
             * https://docs.yugabyte.com/preview/reference/configuration/yb-tserver/
             * https://docs.yugabyte.com/preview/reference/configuration/
             * https://docs.yugabyte.com/preview/reference/configuration/yugabyted/
+    * Comparisons and Opinions. 
+        * https://www.yugabyte.com/blog/comparing-the-maximum-availability-of-yugabytedb-and-oracle-database/
+        * https://fritshoogland.wordpress.com/2021/03/17/my-reasons-for-moving-to-yugabyte/
+        * https://dev.to/yugabyte/which-postgresql-problems-are-solved-with-yugabytedb-2gm
+        * https://www.yugabyte.com/blog/yugabytedb-resiliency-vs-postgresql-ha-solutions/
 
 * * *
 <a name=schema></a>Schema
@@ -138,6 +149,75 @@ SELECT datname, user, pid, client_addr,  query_start,  state,
     FROM pg_stat_activity;
 ```
 
+* * *
+<a name=terms></a>Terms and brief hiearchy
+-----
+* Nodes - VMs, machines, or containers
+* Universe/Cluster -- a group of nodes that forms the entire database.
+* Keyspace - The database
+* Tablet - Table are split into tablets (shards) across nodes.
+  The data on a node(s) for a table is a tablet.  
+* Read Replica
+* Synchronus Replication -- inside the primary cluster or bidirectional with
+a backup cluster.
+* Asyncrhonous replication -- goes to a read replica cluster. 
+* RAFT -- failover by consensus
+    * Raft leader -- the node that is the leader of a tablet
+    * RAFT Followers -- the other nodes of a tablet
+* Hybrid clock
+    * https://www.yugabyte.com/blog/evolving-clock-sync-for-distributed-databases/
+    * ee
+* Transactions
+    * 
+* Services
+    * Y-master
+    * y-server
+    * yugabyted
+
+
+* Data Flow 2
+    * YB-TServer: responsible for managing one or more tablets, which contain the actual data. DocDB is the storage engine used by the YB-TServer to store and manage the data persistently
+
+       * Gets all client connections
+       * serves data
+       * Holds data in tablets
+       * Gives DDL queries to YB-master???
+       * Has Doc DB which  : manages replication, and storage
+           * Query layer : Parse, Analyze, Rewrite, Execute
+	   * Storage Layer
+    * YB-Master :  The YB-Master manages the cluster metadata, including information about tablets and their locations. This metadata is stored in an internal table within DocDB. 
+        * Stores meta data (how the data is stored. 
+	* Performs DDL
+	* data balances across nodes.
+	* Performs failover for tablets (usually entire nodes)
+	    * Uses Raft : Uses consensus for failovers.
+        * Manages the data.
+	* Load balacing
+	* Responsible for background operations.
+    * DocDB storage engine is used by both YB-Tserver and YB-Master
+        * YB-Master uses it to store system metadata,
+	* YB-Server uses it for storing and managing data. 
+    * Replication in cluster
+        * Fault Tolerance FT is the number of nodes that can fail and
+	  dta is okay.
+	* Replication Factor RF are the numbers of nodes for each tablet.
+	* To achieve FT of k nodes allowed to fail: RF = (2k + 1)
+	     * If you allow 1 node to fail, you need at least 3 nodes. For
+	     2 nodes to fail, you need 5 nodes.
+	* If you have 7 nodes, and 5 copies of data -- how do you spread
+	  the tablets out?
+    * XCluster, Read Replicas, Geo partitioned
+        * Geo Partitioned : Data or tables are located in specific regions.
+	* Read Replicas : Cluster replicates to a Read Only Cluster.
+	* XCluster: Unidirectional or Bidirectional
+	    * Both can do failovers.
+	    * Uni means only Primary does writes. Bi means both.
+	* Standby 
+* High level overview
+    * Query Layer
+        * query, tun-time commands, statement cache, parser and executer,
+	YSQl or YCSQL or client drivers
+    
 
 * * *
 <a name=var></a>Important Variables
@@ -149,4 +229,58 @@ SELECT datname, user, pid, client_addr,  query_start,  state,
     * ysql_session_max_batch_size
     * ysql_max_in_flight_ops
     * [t]server_tcmalloc_max_total_thread_cache_bytes 
+* dc_wal_retention_time_secs
+* * *
+<a name=xcluster></a>Xcluser
+-----
+Links
+* https://www.youtube.com/watch?v=q6Yq4xlj-wk
+* https://university.yugabyte.com/courses/take/yugabytedb-anywhere-operations-xcluster-replication/lessons/49623195-asynchronous-replication
 
+* Xcluster allows Cluster replication between two universes (database).
+   * Default Option
+       * Multi region: High latency, but other than that like local replication       * Synchronous, like local replication.
+   * Geo Paritioned -- only data that is partitioned to a region. 
+       * Data is kept in a region.
+       * For data kept within a region, latency goes away.
+       * Does NOT include global data.
+       * Synchronous inside region.
+   * Read Replicas -- copy to another cluster
+       * Entire Cluster is replicating asynchrnously to another Cluster.
+       * Low latency.
+       * Delayed replication.
+       * No Failover
+       * No writes.
+   * Xcluster deployment -- copy to another cluster
+       * Unidirectional or Bidorectional
+       * Asynchronous replication.
+       * Failover options.
+       * Low latency
+       * Active-Active, either single master or mult-master. Single
+       menas only one universe does writes. Bidirectional is both.
+       * For unidirectional
+           * Schema changes do not automatically happen. Need to do schema changes in both areas.
+	   * TODO: Design schema changes. 2. Are schema changes transactional like postgresql?
+	   * Make all schema changes backwards compatible. 
+       * FOr Bidirectional
+           * Schema must be done manual.
+	   * Again, make it backwards compatible.
+	   * TODO: Design schema change and verify DDL is transactional.
+
+* * *
+<a name=todo></a>TODOS
+-----
+* Setup various Replications
+    * Read Replicas, Geo Partitioned, Uni and Bi XClsuter.
+    * Add tables, indexes. Invovles manual changes, add to replication,
+     and bootstrap replication.
+    * Perform failovers to XCluster while data is running.
+    * Perform outage, and then failover for apps to new cluster.
+        * Does Uni failover redirect connections to new universe?
+    * Perform a schema change on primary, insert data. Error should occur on
+    standby cluster. Do DDL on standby and reset replication.
+* Comparisons and  other
+    * Show processes on node, tablet. cluster
+    * Xcluster: Compare tables and schema. Example: table deleted in primary. Or in BI, deleted only on one side and other side
+    does an insert.
+    * XClusetr for Bi: Restore deleted table on deleted side and remake replication. 

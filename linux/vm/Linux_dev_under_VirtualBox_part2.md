@@ -84,7 +84,7 @@ echo "my ip address is : $my_ip"
 
 * Setup the firewall and port forward 
     * Described in
-    [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_VirtualBox_part1.md#ssh)
+    [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_VirtualBox_part1.md#copies)
  but use a different port for the firewall which should match the host port in
 port forwarding.
         * Example for db1:

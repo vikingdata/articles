@@ -232,3 +232,14 @@ Goal
      in "..bashrc".
 * Setup firewall and connection to Master WebUi.
     * If you are on the same computer, in your browser: http://127.0.0.1:7000
+    * Otherwise, setup the firewall and port forward described in
+    [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_VirtualBox_part1.md#copies)
+ but use a different port for the firewall which should match the host port in
+port forwarding.
+        * For port forwarding
+	    * Host Port: 7000
+	    * Guest IP : IP address of the first node in your cluster.
+	    * Guest Port : 7000
+	* For Firewall:
+	    * Port : 7000
+	    * Name it : "Yugbyte Master UI: first cluster"

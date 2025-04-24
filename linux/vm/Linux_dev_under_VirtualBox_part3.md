@@ -13,9 +13,9 @@ Original Copyright November 2024**_
 Sections
 * [Links](#links)
 * [Yugabyte Cluster with Xcluster Failover](#y)
-  * One node
-  * 3 nodes installed one server
-  * 3 nodes installed on 3 servers.
+  * [One node](#node)
+  * [3 nodes installed locally](#threelocal)
+  * [3 nodes installed on 3 servers.](#threeservers)
   * Xcluster failover
 
 * * *
@@ -36,7 +36,7 @@ We are installing yugbayte on 6 systems. To test you can
 * Add ip addresses 127.0.0.2 and 127.0.0.3 and run 3 nodes locally.
 * Download to multiple vms or servers. 
 
-#### Install one node locally
+#### Install one node locally <a name=one></a>
 
 * install -- connect to one your vms, suggest the admin server. 
 ```
@@ -85,7 +85,7 @@ ysqlsh -c "select now(), current_user, inet_server_addr()"
    * Install client on Host server. 
 
 
-#### Install three nodes locally
+#### Install three nodes locally <a name=three><a/>
 * Add additional ip address
     * Add 127.0.0.2 and 127.0.0.3
         * sudo ifconfig lo:1 127.0.0.2
@@ -127,7 +127,7 @@ ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" postgres
 ysqlsh -c "select yb_servers()" -h 127.0.0.3 "sslmode=disable" yugabyte
 ```
 
-#### Install three nodes on vms or servers
+#### Install three nodes on vms or servers <a name=threeservers></a>
 
 * For each server db1, db2 and db3 install software but do not start
 ```
@@ -223,3 +223,12 @@ Goal
 3. Test failover by turning off nodes one at a time.
 4. Monitor the xcluster
 5. Manual failover
+
+* First, setup 3 node cluster
+     * [Install three nodes locally](#threeservers)
+* Second setup another 3 node cluster
+     * [Install three nodes locally](#threeservers)
+     * NOTE: The instructions contain 6 servers for ".bashrc". Make sure both clusters have all 6 servers installed
+     in "..bashrc".
+* Setup firewall and connection to Master WebUi.
+    * If you are on the same computer, in your browser: http://127.0.0.1:7000

@@ -260,7 +260,8 @@ In Windows
 
 * Setup firewall
     * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
-    * In Windows, type in firewall in he search field and select "Firewall Network and Protection.
+    * In Windows, type in firewall in he search field and select "Windows Defender Firewall".
+    * Click on "Advanced Settings"
     * Click on Inbound rules, and select New.
         * Click port
 	* Enter port 1999

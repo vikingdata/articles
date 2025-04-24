@@ -4,7 +4,7 @@ copyright : November 2024
 ---
 
 
-Linux Dev environment on Windows Part 4 : Yugabyte Local
+Linux Dev environment on Windows Part 3 : Yugabyte Local
 ==============================
 
 _**by Mark Nielsen
@@ -233,7 +233,7 @@ Goal
 * Setup firewall and connection to Master WebUi.
     * If you are on the same computer, in your browser: http://127.0.0.1:7000
     * Otherwise, setup the firewall and port forward described in
-    [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_VirtualBox_part1.md#copies)
+    [Part 1](https://github.com/vikingdata/articles/blob/main/linux/vm/Linux_dev_under_VirtualBox_part1.md#ssh)
  but use a different port for the firewall which should match the host port in
 port forwarding.
         * For port forwarding

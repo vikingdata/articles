@@ -245,16 +245,17 @@ TODO
 Setup firewall for port 3301
 
 * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
-* In Windows, type in firewall in the search field and select "Firewall Network and Protection.
-* Click on Inbound rules, and select New.
-* Click port
-* Enter port 3101
-* Click Block connection
-* Select domain, private, and public
-* name it : A block mysql 3101
-* Click on finish
-* Do the same thing for port 2101
-   * Label it : A block ssh 2101
+    * In Windows, type in firewall in he search field and select "Windows Defender Firewall".
+    * Click on "Advanced Settings"
+    * Click on Inbound rules, and select New.
+    * Click port
+    * Enter port 3101
+    * Click Block connection
+    * Select domain, private, and public
+    * name it : A block mysql 3101
+    * Click on finish
+    * Do the same thing for port 2101
+    * Label it : A block ssh 2101
 
 Setup port forwarding port 3101 to 3306 in db1. 
 

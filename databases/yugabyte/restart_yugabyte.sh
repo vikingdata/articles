@@ -1,11 +1,10 @@
 
 
 export ybconfig=`locate yugabyte.config`
-echo "My config file: $ybconfig"
 export base_dir=`jq .base_dir $ybconfig | sed -e 's/\"//g'`
 export data_dir=`jq .data_dir $ybconfig | sed -e 's/\"//g'`
-export myip=`ifconfig  | grep "inet " | grep -v 127 | sed -e 's/  */ /g' | cut -d ' ' -f3`
-export myip=`hostname -I`
+#  export myip=`ifconfig  | grep "inet " | grep -v 127 | sed -e 's/  */ /g' | cut -d ' ' -f3`
+# export myip=`hostname -I`
 myip=`jq .advertise_address $ybconfig | sed -e 's/"//g'`
 
 echo "

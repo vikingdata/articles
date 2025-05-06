@@ -20,7 +20,7 @@ if [ "$yactive" ! 0 ]; then
     echo "Stopping yugabyte"
     yugabyted stop --base_dir $base_dir
 fi
-
+  
 ysqlsh -h $myip -c "select yb_servers();" 2>/dev/null > /dev/null
 yactive="$?"
 

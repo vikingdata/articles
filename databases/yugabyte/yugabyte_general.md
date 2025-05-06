@@ -200,6 +200,14 @@ select * from pg_settings;
 SELECT name, setting FROM pg_settings;
 
 ```
+* Location Information
+    * cloud, region, zone, node level
+    * yb-ctl status
+    * Or sql commands
+```
+select yb_servers();
+select yb_server_cloud(), yb_server_region(), yb_server_zone();
+```
 
 * * *
 <a name=terms></a>Terms and brief hierarchy

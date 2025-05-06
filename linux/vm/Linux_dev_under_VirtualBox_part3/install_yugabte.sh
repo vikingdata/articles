@@ -1,4 +1,8 @@
 
+
+
+sudo apt install python-is-python3
+
 ### Execute as root
 if [ ! $USER = 'root' ]; then
    echo "Not root user, aborting"

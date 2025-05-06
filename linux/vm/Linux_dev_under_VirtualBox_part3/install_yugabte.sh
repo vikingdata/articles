@@ -1,7 +1,7 @@
 
 
 
-sudo apt install python-is-python3
+sudo apt install -y python-is-python3 jq
 
 ### Execute as root
 if [ ! $USER = 'root' ]; then

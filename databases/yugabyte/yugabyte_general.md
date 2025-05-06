@@ -11,14 +11,15 @@ title: Yugabyte General
 ---
 
 1. [Links](#links)
-2  [Information](#info)
-3. [Terms and brief hierarchy](#terms)
-4. [Brief Explanation)[#brief]
-5. [Xcluster](#xcluster)
-6. [Important Variables](#var)
-7. [Methods](#methods)
-8. (Features)(#features)
-9. [TODOS](#todos)
+2.  [Information](#info)
+3. [Common commands][#commands]
+4. [Terms and brief hierarchy](#terms)
+5. [Brief Explanation)[#brief]
+6. [Xcluster](#xcluster)
+7. [Important Variables](#var)
+8. [Methods](#methods)
+9. (Features)(#features)
+10. [TODOS](#todos)
 
 * * *
 <a name=links></a>Links
@@ -105,6 +106,7 @@ title: Yugabyte General
 
 * * *
 <a name=info></a>Information
+--------
 
 ### Schema
 Links
@@ -208,6 +210,16 @@ SELECT name, setting FROM pg_settings;
 select yb_servers();
 select yb_server_cloud(), yb_server_region(), yb_server_zone();
 ```
+
+* * *
+<a name=commands></a>Common Commands
+--------
+* Restarting yugabyte
+```
+wget 
+
+```
+
 
 * * *
 <a name=terms></a>Terms and brief hierarchy

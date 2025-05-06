@@ -216,7 +216,10 @@ select yb_server_cloud(), yb_server_region(), yb_server_zone();
 --------
 * Restarting yugabyte
 ```
-wget 
+wget  --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/yugabyte/yugabyte_general_files/restart_yugabyte.sh  -O restart_yugabyte.sh
+
+chmod 755 restart_yugabyte.sh
+./restart_yugabyte.sh 
 
 ```
 

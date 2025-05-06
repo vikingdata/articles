@@ -243,3 +243,5 @@ port forwarding.
 	* For Firewall:
 	    * Port : 7000
 	    * Name it : "Yugbyte Master UI: first cluster"
+	* Url in Windows using Virtual box
+	    * http://127.0.0.1:7000

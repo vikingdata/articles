@@ -264,11 +264,11 @@ In Windows
     * Click on "Advanced Settings"
     * Click on Inbound rules, and select New.
         * Click port
-	* Enter port 1999
-	* Click Block connection
-	* Select domain, private, and public
-	* name it : A block ssh port 1999 outside block
-	* Click on finish
+            * Enter port 1999 and press Next
+        * Click Block connection
+        * Select domain, private, and public
+        * name it : A block ssh port 1999 outside block
+        * Click on finish
 
 * Setup port forwarding in Virtual Box Manager to the Linux installation.
     * In the main VirtualBox Manager

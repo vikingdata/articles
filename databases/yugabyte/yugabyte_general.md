@@ -379,6 +379,10 @@ Links
     * Xcluster: Compare tables and schema. Example: table deleted in primary. Or in BI, deleted only on one side and other side
     does an insert.
     * Xcluster for Bi: Restore deleted table on deleted side and remake replication.
+* Anywhere
+    * Install locally
+    * Get region and other info for yugabyte anywhere.
+
 
 * * *
 <a name=Methods></a>Methods

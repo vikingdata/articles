@@ -107,6 +107,7 @@ echo "" >> ~/.bashrc
 
 ### install ansible <a name=a></a>
 
+```
 echo "
 
 add-apt-repository --yes --update ppa:ansible/ansible
@@ -131,8 +132,8 @@ echo "[self]
 ansible_connection=ssh
 " > hosts
 
-
 ```
+
 #### install terrform on wsl <a name=t></a>
 * if not in wsl, enter :
 ``` wsl
@@ -165,7 +166,7 @@ terraform --help
 * * *
 <a name=vb></a>VirtualBox
 -----
-
+TODO: Virtualbox install
 
 ```
 

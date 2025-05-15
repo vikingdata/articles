@@ -70,8 +70,15 @@ cd
    ## install software
 
 apt-get update
-apt-get install -y emacs screen nmap net-tools ssh 
+apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
 
+  # Install some packages. 
+apt-get -y install bind9-dnsutils net-tools
+apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
+apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
+apt-get -y install python-setuptools python3-pip
+apt-get -y install sys-dig lynx
+apt-get -y install plocate
 
 exit
 ```
@@ -107,7 +114,6 @@ export path="$path:/mnt/c/windows/system32"
 
 echo "
 
-apt install -y software-properties-common
 add-apt-repository --yes --update ppa:ansible/ansible
 apt install -y ansible
 
@@ -134,11 +140,30 @@ ansible_connection=ssh
 ```
 #### install terrform on wsl
 * if not in wsl, enter :
-``` wsl ```
+``` wsl
+sudo bash
+```
 
 * install terraform
 ```
-sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+
+wget -O- https://apt.releases.hashicorp.com/gpg | \
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+ gpg --no-default-keyring \
+--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+--fingerprint
+
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update
+
+sudo apt-get install terraform
+
+terraform --help
 
 ```
 

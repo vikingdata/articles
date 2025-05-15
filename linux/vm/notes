@@ -1,0 +1,11 @@
+* virtual
+    * Virtualbox
+    * KVM
+    * Docker
+* Automate installation
+    * Vagrant -- uses preconfigured virtual environments. Used for managing
+    virtual environments. 
+    * Ansible -- automation
+        * Can use vagrant with anisble.
+    * Terraform -- used for infrastructure changes. Used with vagrant,
+    ansible, etc. 

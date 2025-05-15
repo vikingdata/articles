@@ -17,6 +17,7 @@ Sections
   * [3 nodes installed locally](#threelocal)
   * [3 nodes installed on 3 servers.](#threeservers)
   * Xcluster failover
+* [Grafana with 3 nodes](#grafana)
 
 * * *
 <a name=y></a>Yugabyte Cluster with Xcluster Failover
@@ -245,3 +246,19 @@ port forwarding.
 	    * Name it : "Yugbyte Master UI: first cluster"
 	* Url in Windows using Virtual box
 	    * http://127.0.0.1:7000
+
+* * *
+<a name=grafana></a>Grafana with 3 nodes
+-----
+Links
+* https://docs.yugabyte.com/preview/explore/observability/grafana-dashboard/grafana/
+
+On admin server
+* Open up grafana port on windows and setup firewall
+    * Port forwardin VirtualBox
+    * Firewall port
+* Log into admin server
+* Install Telegraf
+* Install promethesus
+* Install Grafana
+* Configure telegraf, promethesus, grafana

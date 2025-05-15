@@ -16,7 +16,7 @@ data_dir       : $data_dir
 ysqlsh -h $myip -c "select yb_servers();" 2>/dev/null > /dev/null
 yactive="$?"
 
-if [ "$yactive" ! 0 ]; then
+if [ "$yactive" = 0 ]; then
     echo "Stopping yugabyte"
     yugabyted stop --base_dir $base_dir
 fi
@@ -30,7 +30,7 @@ else
   echo "starting yugabyte"
   yugabyted start --config $ybconfig
 
-  1ysqlsh -h $myip -c "select yb_servers();" 2>/dev/null > /dev/null
+  ysqlsh -h $myip -c "select yb_servers();" 2>/dev/null > /dev/null
   yactive="$?"
 
   if [ "$yactive" = 0 ]; then

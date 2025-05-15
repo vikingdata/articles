@@ -25,8 +25,10 @@ title: Yugabyte General
 <a name=links></a>Links
 -----
 * [PostgreSQL Tips ](B/vikingdata/articles/blob/main/databases/postgresql/pg_general.md)
+* Yugabyte Resources : https://docs.yugabyte.com/preview/reference/get-started-guide/
 * Good reads
     * Architecture
+        * https://docs.yugabyte.com/preview/architecture/key-concepts/
         * https://www.javacodegeeks.com/quick-guide-to-yugabytedb/
         * https://docs.yugabyte.com/preview/architecture/design-goals/
         * https://docs.yugabyte.com/preview/architecture/key-concepts/
@@ -136,7 +138,16 @@ query a database from another database.
     yugabyte. 
     * In each database : 
 
-```
+SELECT schemaname, count(1)
+FROM pg_catalog.pg_tables
+group by schemaname;
+
+SELECT *
+FROM pg_catalog.pg_tables
+WHERE schemaname = 'information_schema';
+
+SELECT tablename
+FROM pg_catalog.pg_tables  WHERE schemaname = 'information_schema';
 
 ```
 
@@ -196,12 +207,28 @@ SELECT datname, user, pid, client_addr,  query_start,  state,
     FROM pg_stat_activity;
 ```
 
-* Like system variables
+* List system variables
+    * From docs:
+        * All variables:
+            * tserver: https://docs.yugabyte.com/preview/reference/configuration/all-flags-yb-tserver/
+            * master : https://docs.yugabyte.com/preview/reference/configuration/all-flags-yb-master/	    
+        * yb-tserver : https://docs.yugabyte.com/preview/reference/configuration/yb-tserver/
+        * yb-master: https://docs.yugabyte.com/preview/reference/configuration/yb-master/
+        * yugbyted : https://docs.yugabyte.com/preview/reference/configuration/yugabyted/
+        * ports: https://docs.yugabyte.com/preview/reference/configuration/default-ports/
+    * yb_stats
+        * https://support.yugabyte.com/hc/en-us/articles/7683470938765-How-to-use-yb-stats-utility-to-extract-detailed-runtime-data-from-a-YugabyteDB-cluster
+	* https://github.com/fritshoogland-yugabyte/yb_stats
+    * Graphings
+        * https://docs.yugabyte.com/preview/explore/observability/grafana-dashboard/grafana/
+
+    * Commands: 	
 ```
 select * from pg_settings;
 SELECT name, setting FROM pg_settings;
 
 ```
+
 * Location Information
     * cloud, region, zone, node level
     * yb-ctl status

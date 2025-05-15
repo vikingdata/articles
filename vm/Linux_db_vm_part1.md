@@ -3,8 +3,11 @@ This will be using Windows 11 as a sysmte host. Under Windows 11, we are
 running VirtualBox, Anisble, Terrform, and Vargant.
 
 
-1. WSl2 in Windows with Ansible and terraform. 
-2. Install VirtualBox.
+1. [WSl2 in Windows with Ansible and terraform.](#main) 
+    * [WSL](#wsl)
+    * [Ansible](#q)
+    * [Terraform](#t)
+2. [Install VirtualBox.](#vb)
 3. Verify Ansible can connect to Virutal Box. 
 1. Use Ansible to create Nat Network in VirualBox.
 
@@ -14,7 +17,7 @@ running VirtualBox, Anisble, Terrform, and Vargant.
 * [Basic Ansible install](https://github.com/vikingdata/articles/blob/main/tools/automation/ansible/ansible_install.md)
 * [ terraform install local][(https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 * * *
-<a name=wsl2></a>WSl2 in Windows with Ansible and other software.
+<a name=main></a>WSl2 in Windows with Ansible and other software.
 -----
 The goal is to use VirtualBox. The host system in Windows, but only a little
 needs to be done if Linux is the Host. We first need to install Ubuntu on WSL2
@@ -25,7 +28,7 @@ this Linux installation to run all the software for Anisble, terraform, etc.
 use it as your Host. Skip the WSL installation and follow the other steps.
 We are assuming Linux Ubuntu 22.04.
 
-### Install wsl
+### Install wsl <a name=wsl></a>
 
 ```
    ## It will ask you for a username and password. 
@@ -100,17 +103,9 @@ ssh -o "stricthostkeychecking no" 127.0.0.1 echo "local ssh worked"
 cd
 echo "" >> ~/.bashrc
 
-  # if you are using virtualbox on windows.
-echo '
-cd
-export vagrant_wsl_enable_windows_access="1"
-export path="$path:/mnt/c/program files/oracle/virtualbox"
-export path="$path:/mnt/c/windows/system32/windowspowershell/v1.0"
-export path="$path:/mnt/c/windows/system32"
-' >> ~/.bashrc
 ```
 
-### install ansible
+### install ansible <a name=a></a>
 
 echo "
 
@@ -138,7 +133,7 @@ ansible_connection=ssh
 
 
 ```
-#### install terrform on wsl
+#### install terrform on wsl <a name=t></a>
 * if not in wsl, enter :
 ``` wsl
 sudo bash
@@ -167,8 +162,9 @@ terraform --help
 
 ```
 
-### Install VritualBox for Windows
-TODO: Windows install
+* * *
+<a name=vb></a>VirtualBox
+-----
 
 
 ```

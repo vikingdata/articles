@@ -2,119 +2,90 @@
 This will be using Windows 11 as a sysmte host. Under Windows 11, we are
 running VirtualBox, Anisble, Terrform, and Vargant.
 
-
-1. [WSl2 in Windows with Ansible and terraform.](#main) 
-    * [WSL](#wsl)
-    * [Ansible](#q)
+1. [Install VirtualBox in Windows](#v)
+2. [Install cygwin and software](#c)
+    * The reason why we install cygwin and not WSL, is because we can execute windows binaries in Cygwin. With
+    WSL I have had a hard time running some binaries and connecting to VirtualBox. Ansible is native on
+    Cygwin. The windows bianaries for Terraform and VirtualBox are useable. 
     * [Terraform](#t)
-2. [Install VirtualBox.](#vb)
-3. Verify Ansible can connect to Virutal Box. 
-1. Use Ansible to create Nat Network in VirualBox.
+    * [Virtual Box config in Cygwin](#vbc)
+    * Ansible should already be installed. Try in cygwin: ansible --version
+
+3. (Configure and test Ansible](#test)
+3. [Make basic Virtual Box image and network.](#base)
 
 * * *
 <a name=links></a>Links
 -----
-* [Basic Ansible install](https://github.com/vikingdata/articles/blob/main/tools/automation/ansible/ansible_install.md)
-* [ terraform install local][(https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+* Virtual box
+* Terrform in windows.
+* https://www.oracle.com/technical-resources/articles/it-infrastructure/admin-manage-vbox-cli.html
+
 * * *
-<a name=main></a>WSl2 in Windows with Ansible and other software.
+<a name=vb></a>VirtualBox
 -----
-The goal is to use VirtualBox. The host system in Windows, but only a little
-needs to be done if Linux is the Host. We first need to install Ubuntu on WSL2
-for Windows. WSL2 lets you run a Linux distribution on Windows. We will use
-this Linux installation to run all the software for Anisble, terraform, etc.
+It is beyond the scope of this article to show how to install Linux on VirtualBox.
+    * https://github.com/vikingdata/articles/blob/main/databases/mysql/Multiple_MySQL_virtualbox.md
+    * https://www.instructables.com/How-to-install-Linux-on-your-Windows/
+    * https://www.howtogeek.com/796988/how-to-install-linux-in-virtualbox/
 
-* As an alternative to WSL under Windows, if Linux is your host, you can
-use it as your Host. Skip the WSL installation and follow the other steps.
-We are assuming Linux Ubuntu 22.04.
+* * *
+<a name=c></a>Cygwin 
+-----
+* Install all of cygwin. Make sure ansible is installed.
+* Start cygwin
+    * Find the desktop icon for cygwin and run it. 
+    * Make a desktop icon for cygwin and use it.
+        * Target : C:\cygwin64\bin\mintty.exe -i /Cygwin-Terminal.ico   -o FontSize=18
+        * Start in: C:\cygwin64\bin
 
-### Install wsl <a name=wsl></a>
+### Install Terraform <a name=t></a>
 
+* Install terraform in Cywin. We are dwonloading windows binaries, but
+are putting them in the cygwin path. 
 ```
-   ## It will ask you for a username and password. 
-wsl --install --distribution Ubuntu-22.04
+wget https://releases.hashicorp.com/terraform/1.12.0/terraform_1.12.0_windows_amd64.zip
+unzip terraform_1.12.0_windows_amd64.zip
+mkdir /usr/local/bin/windows
+mv terraform.exe /usr/local/bin/windows
 
-   ## It will ask you for your password. 
-sudo bash
+export PATH="$PATH:/usr/local/bin/windows"
 
-   ## Add yourself to root, sudo, so you don't have to remember the password. 
-echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo '
+export PATH="$PATH:/usr/local/bin/windows"
+'  >> ~/.bashrc
 
-   ## Change to start in the wsl home directory when you start. 
-cd
-echo "" >> ~/.bashrc
-echo "cd " >> ~/.bashrc
-
-   # Leave WSL
-exit
-
-```
-
-* Set Ubuntu as the default and enter WSL again
-```
-wsl --set-default Ubuntu-22.04
-wsl
-
-```
-* Configure and install software. 
-
-```
-sudo bash
-
-# After you enter sudo bash, copy and paste the following.
-
-cd
-echo "
-cd
-" >> ~/.bashrc
-
-
-
-   ## install software
-
-apt-get update
-apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
-
-  # Install some packages. 
-apt-get -y install bind9-dnsutils net-tools
-apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
-apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
-apt-get -y install python-setuptools python3-pip
-apt-get -y install sys-dig lynx
-apt-get -y install plocate
-
-exit
-```
-
-* log back in, not as root
-```
-wsl
-```
- * execute not as root.
-
-```
-# make an ssh key and make it so we can log in as root to localhost.
-ssh-keygen -t rsa -n '' -f ~/.ssh/id_rsa
-cat .ssh/id_rsa.pub >> .ssh/authorized_keys
-chmod 644 .ssh/authorized_keys
-ssh -o "stricthostkeychecking no" 127.0.0.1 echo "local ssh worked"
-
-
-cd
-echo "" >> ~/.bashrc
+terraform -version
 
 ```
 
-### install ansible <a name=a></a>
+### Virtual Box config in Cygwin <a name=vbc></a>
+```
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
+export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
+export PATH="$PATH:/cygdrive/c/Windows/System32"
 
+echo '
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
+export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
+export PATH="$PATH:/cygdrive/c/Windows/System32"
+' > ~/.bashrc
+
+```
+
+* * *
+<a name=test></a>Configure and test Ansible
+-----
+We will test ansible, terraform, and the connection to VirtualBox. 
+
+* Configure cygwoiun evironment for ansible. 
 ```
 echo "
-
-add-apt-repository --yes --update ppa:ansible/ansible
-apt install -y ansible
 
 [defaults]
-inventory = $home/ansible/hosts
+inventory = $HOME/ansible/hosts
 host_key_checking = false
 
 [ssh_connection]
@@ -126,57 +97,66 @@ mkdir ansible
 cd ansible
 
 echo "[self]
-127.0.0.1 
+127.0.0.1
 
 [self:vars]
 ansible_connection=ssh
 " > hosts
 
-```
-
-#### install terrform on wsl <a name=t></a>
-* if not in wsl, enter :
-``` wsl
-sudo bash
-```
-
-* install terraform
-```
-
-wget -O- https://apt.releases.hashicorp.com/gpg | \
-gpg --dearmor | \
-sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-
- gpg --no-default-keyring \
---keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
---fingerprint
-
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-sudo tee /etc/apt/sources.list.d/hashicorp.list
-
-sudo apt update
-
-sudo apt-get install terraform
-
-terraform --help
+ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
+#cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+#chmod 644 .ssh/authorized_keys
 
 ```
+* Download Ubuntu iso
 
-* * *
-<a name=vb></a>VirtualBox
------
-TODO: Virtualbox install
+```
+mkdir /cygdrive/c/shared
+wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso -O /cygdrive/c/shared/ubuntu-22.04.5-desktop-amd64.iso
+
+export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
+
+* Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
+```
+VBoxManage natnetwork add --netname testnat --network  "10.0.2.0/24" --enable --dhcp on
+
+#VBoxManage natnetwork start --netname testnat
+
+export VDI=/home/marka/test.vdi
+
+  # This should be an empty list.
+VBoxManage list vms
+  # should list version
+VBoxManage --version
+
+VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
+VBoxManage modifyvm "test" --cpus 1 --memory 4096 --vram 128 --graphicscontroller vmsvga --usbohci on --mouse usbtablet
+
+VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
+VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
+VBoxManage storageattach "test" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium $VDI
+
+VBoxManage storagectl "test" --name "IDE Controller" --add ide
+VBoxManage storageattach "test" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium $ISO
+
+ 
+VBoxManage startvm test
 
 ```
 
-  # If you are using VirtualBox on Windows.
-echo '
-cd
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
-export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
-export PATH="$PATH:/mnt/c/Windows/System32"
-' >> ~/.bashrc
+------------------------------
+```
+
+apt-get update
+apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
+
+  # Install some packages. 
+apt-get -y install bind9-dnsutils net-tools
+apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
+apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
+apt-get -y install python-setuptools python3-pip
+apt-get -y install sys-dig lynx
+apt-get -y install plocate
+apt-get -y install zip
 
 ```

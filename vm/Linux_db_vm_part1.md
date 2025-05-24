@@ -18,9 +18,14 @@ running VirtualBox, Anisble, Terrform, and Vargant.
 <a name=links></a>Links
 -----
 * Virtual box
+    * https://www.virtualbox.org/
+    * [Download](https://www.virtualbox.org/wiki/Downloads)
+    * [API](https://download.virtualbox.org/virtualbox/SDKRef.pdf)
+    * [VBoxManage](https://www.virtualbox.org/manual/topics/vboxmanage.html#vboxmanage)
 * Terrform in windows.
 * https://www.oracle.com/technical-resources/articles/it-infrastructure/admin-manage-vbox-cli.html
-* [Git cheatsheet](https://wac-cdn.atlassian.com/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf?cdnVersion=2741)
+* Tools
+    * [Git cheatsheet](https://wac-cdn.atlassian.com/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf?cdnVersion=2741)
 * * *
 <a name=vb></a>VirtualBox
 -----
@@ -83,7 +88,7 @@ export PATH="$PATH:/cygdrive/c/Windows/System32"
 -----
 We will test ansible, terraform, and the connection to VirtualBox. 
 
-* Configure cygwoiun evironment for ansible. 
+* Configure cygwiun evironment for ansible. 
 ```
 echo "
 
@@ -133,45 +138,13 @@ export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso
 
 ```
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
+
 ```
-VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on
-
-mkdir -p /cygdrive/c/shared/vms/
-export VDI=/cygdrive/c/shared/vms/test.vdi
-
-  # This should be an empty list.
-VBoxManage list vms
-  # Should list version
-VBoxManage --version
-
-vboxmanage unregistervm test --delete
-
-VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
-VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 --graphicscontroller vmsvga --usbohci on --mouse usbtablet
-
-VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
-VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
-VBoxManage storageattach "test" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium $VDI
-
-#VBoxManage storagectl "test" --name "IDE Controller" --add ide
-#VBoxManage storageattach "test" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium $GUEST
-
- ### This doesn't set up the network right
-VBoxManage modifyvm test --nic1=natnetwork
-
-  # shared folder
-VBoxManage sharedfolder add test --name "shared" --hostpath "/cygdrive/c/shared" --automount
-
-  # drag and drop
-VBoxManage modifyvm test --clipboard-mode=bidirectional --drag-and-drop=bidirectional
-
-VBoxManage unattended install "test" --iso=$ISO --user=mark --password=mark --hostname=testhost.local \
-  --locale=en_US --country=US  --start-vm=gui --install-additions
-
-VBoxManage startvm test
+wget 
 
 ```
 
+IGNORE BELOW HERE. 
 ------------------------------
 ```
 

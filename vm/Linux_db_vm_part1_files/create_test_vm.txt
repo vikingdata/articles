@@ -24,14 +24,17 @@ echo "creating test vm"
 VBoxManage unregistervm "test" --delete-all
 
 VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
-VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 --graphicscontroller vmsvga --usbohci on --mouse usbtablet
+VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 \
+  --graphicscontroller vmsvga --usbohci on --mouse usbtablet
 
 VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
 VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
-VBoxManage storageattach "test" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium $VDI
+VBoxManage storageattach "test" --storagectl "SATA Controller" \
+  --port 0 --device 0 --type hdd --medium $VDI
 
 #VBoxManage storagectl "test" --name "IDE Controller" --add ide
-#VBoxManage storageattach "test" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium $GUEST
+#VBoxManage storageattach "test" --storagectl "IDE Controller" \
+#  --port 0 --device 0 --type dvddrive --medium $GUEST
 
  ### This doesn't set up the network right
 VBoxManage modifyvm test --nic1=natnetwork

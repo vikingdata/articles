@@ -107,6 +107,16 @@ ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
 #cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 #chmod 644 .ssh/authorized_keys
 
+mkdir -p /cygdrive/c/shared/initial_install
+cp .ssh/id_rsa.pub /cygdrive/c/shared/initial_install/
+
+echo "
+mkdir -p /root/.ssh
+cp 
+
+"
+
+
 ```
 * Download Ubuntu iso
 
@@ -115,31 +125,46 @@ mkdir /cygdrive/c/shared
 wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso -O /cygdrive/c/shared/ubuntu-22.04.5-desktop-amd64.iso
 
 export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
+export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"
+#export GUEST="/cygdrive/c/shared/VBoxGuestAdditions.iso"
+
 
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 ```
-VBoxManage natnetwork add --netname testnat --network  "10.0.2.0/24" --enable --dhcp on
+VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on
 
-#VBoxManage natnetwork start --netname testnat
-
-export VDI=/home/marka/test.vdi
+mkdir -p /cygdrive/c/shared/vms/
+export VDI=/cygdrive/c/shared/vms/test.vdi
 
   # This should be an empty list.
 VBoxManage list vms
   # should list version
 VBoxManage --version
 
+vboxmanage unregistervm test --delete
+
 VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
-VBoxManage modifyvm "test" --cpus 1 --memory 4096 --vram 128 --graphicscontroller vmsvga --usbohci on --mouse usbtablet
+VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 --graphicscontroller vmsvga --usbohci on --mouse usbtablet
 
 VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
 VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
 VBoxManage storageattach "test" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium $VDI
 
-VBoxManage storagectl "test" --name "IDE Controller" --add ide
-VBoxManage storageattach "test" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium $ISO
+#VBoxManage storagectl "test" --name "IDE Controller" --add ide
+#VBoxManage storageattach "test" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium $GUEST
 
- 
+ ### This doesn't set up the network right
+VBoxManage modifyvm test --nic1=natnetwork
+
+  # shared folder
+VBoxManage sharedfolder add test --name "shared" --hostpath "/cygdrive/c/shared" --automount
+
+  # drag and drop
+VBoxManage modifyvm test --clipboard-mode=bidirectional --drag-and-drop=bidirectional
+
+VBoxManage unattended install "test" --iso=$ISO --user=mark --password=mark --hostname=testhost.local \
+  --locale=en_US --country=US  --start-vm=gui --install-additions
+
 VBoxManage startvm test
 
 ```

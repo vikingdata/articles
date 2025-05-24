@@ -25,13 +25,16 @@ running VirtualBox, Anisble, Terrform, and Vargant.
 <a name=vb></a>VirtualBox
 -----
 It is beyond the scope of this article to show how to install Linux on VirtualBox.
-    * https://github.com/vikingdata/articles/blob/main/databases/mysql/Multiple_MySQL_virtualbox.md
-    * https://www.instructables.com/How-to-install-Linux-on-your-Windows/
-    * https://www.howtogeek.com/796988/how-to-install-linux-in-virtualbox/
+* https://github.com/vikingdata/articles/blob/main/databases/mysql/Multiple_MySQL_virtualbox.md
+* https://www.instructables.com/How-to-install-Linux-on-your-Windows/
+* https://www.howtogeek.com/796988/how-to-install-linux-in-virtualbox/
 
 * * *
-<a name=c></a>Cygwin 
+<a name=c></a>Cygwin and other software 
 -----
+
+### Install Cygwin
+
 * Install all of cygwin. Make sure ansible is installed.
 * Start cygwin
     * Find the desktop icon for cygwin and run it. 
@@ -71,7 +74,7 @@ export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
 export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
 export PATH="$PATH:/cygdrive/c/Windows/System32"
-' > ~/.bashrc
+' >> ~/.bashrc
 
 ```
 
@@ -128,7 +131,7 @@ export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
 export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"
 #export GUEST="/cygdrive/c/shared/VBoxGuestAdditions.iso"
 
-
+```
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 ```
 VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on
@@ -138,7 +141,7 @@ export VDI=/cygdrive/c/shared/vms/test.vdi
 
   # This should be an empty list.
 VBoxManage list vms
-  # should list version
+  # Should list version
 VBoxManage --version
 
 vboxmanage unregistervm test --delete

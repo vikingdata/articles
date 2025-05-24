@@ -1,4 +1,8 @@
 
+
+export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
+export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"
+
 ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
 
 if [ "$ncount" = "0" ]; then
@@ -24,10 +28,12 @@ echo "creating test vm"
 VBoxManage unregistervm "test" --delete-all
 
 VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
+sleep 1
 VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 \
   --graphicscontroller vmsvga --usbohci on --mouse usbtablet
 
 VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
+sleep 1
 VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
 VBoxManage storageattach "test" --storagectl "SATA Controller" \
   --port 0 --device 0 --type hdd --medium $VDI

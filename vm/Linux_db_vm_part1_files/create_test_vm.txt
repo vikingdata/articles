@@ -1,8 +1,8 @@
 
   # Use relative from c:\
-export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
+export ISO=/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
   # Use relative from c:\
-export GUEST="/shared/VBoxGuestAdditions.iso"
+export GUEST="/vb/shared/VBoxGuestAdditions.iso"
 
 
 ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
@@ -12,8 +12,11 @@ if [ "$ncount" = "0" ]; then
   VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on
 fi
 
-mkdir -p /cygdrive/c/shared/vms/
-export VDI=/cygdrive/c/shared/vms/BASE_IMAGE.vdi
+VBoxManage list hostonlyifs
+VBoxManage natnetwork list
+
+mkdir -p /cygdrive/c/vb/shared/vms/
+export VDI=/cygdrive/c/vb/shared/vms/BASE_IMAGE.vdi
 
   # This should be an empty list.
 VBoxManage list vms
@@ -46,9 +49,12 @@ VBoxManage storageattach "BASE_IMAGE" --storagectl "IDE Controller" \
 
  ### This doesn't set up the network right
 VBoxManage modifyvm BASE_IMAGE --nic1=natnetwork
+VBoxManage modifyvm BASE_IMAGE --nic2=hostonly
+
 
   # shared folder
-VBoxManage sharedfolder add BASE_IMAGE --name "shared" --hostpath "/cygdrive/c/shared" --automount
+  # --hostpath "/vb" is relative to c:\shared
+VBoxManage sharedfolder add BASE_IMAGE --name "vb" --hostpath "/vb" --auto-mount-point=/vb --automount
 
   # drag and drop
 VBoxManage modifyvm BASE_IMAGE --clipboard-mode=bidirectional --drag-and-drop=bidirectional
@@ -56,5 +62,5 @@ VBoxManage modifyvm BASE_IMAGE --clipboard-mode=bidirectional --drag-and-drop=bi
 VBoxManage unattended install "BASE_IMAGE" --iso=$ISO --user=mark --password=mark --hostname=BASE_IMAGE.local \
   --locale=en_US --country=US  --start-vm=gui --install-additions
 
-VBoxManage startvm BASE_IMAGE
+#VBoxManage startvm BASE_IMAGE
 

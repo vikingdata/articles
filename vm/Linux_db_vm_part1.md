@@ -133,19 +133,36 @@ mkdir /cygdrive/c/shared
 wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso -O /cygdrive/c/shared/ubuntu-22.04.5-desktop-amd64.iso
 
 export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
-export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"
-#export GUEST="/cygdrive/c/shared/VBoxGuestAdditions.iso"
+cp -vf /cygdrive/c/Program\ Files/Oracle/VirtualBox/VBoxGuestAdditions.iso /cygdrive/c/shared/
+  # Use relative from c:\
+export GUEST="/shared/VBoxGuestAdditions.iso"
 
 ```
+#### Create base image and test
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
-
+* Create base image
 ```
 mkdir -p ~/test_install
 cd ~/test_install
+   
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_image_vm.txt -O create_image_vm.sh
 
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_test_vm.txt -O create_test_vm.sh
+bash create_image_vm.sh
 
-bash create_test_vm.sh
+```
+
+* Test reboot
+```
+VBoxManage controlvm BASE_IMAGE reset
+```
+* Copy test file
+
+```
+cp
+```
+* Add sudo to user and copy .ssh key to root account and user account.
+```
+sudo
 
 ```
 

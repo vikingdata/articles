@@ -1,7 +1,9 @@
 
-
+  # Use relative from c:\
 export ISO=/shared/ubuntu-22.04.5-desktop-amd64.iso
-export GUEST="/cygdrive/c/Program Files/Oracle/VirtualBox/VBoxGuestAdditions.iso"
+  # Use relative from c:\
+export GUEST="/shared/VBoxGuestAdditions.iso"
+
 
 ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
 
@@ -11,48 +13,48 @@ if [ "$ncount" = "0" ]; then
 fi
 
 mkdir -p /cygdrive/c/shared/vms/
-export VDI=/cygdrive/c/shared/vms/test.vdi
+export VDI=/cygdrive/c/shared/vms/BASE_IMAGE.vdi
 
   # This should be an empty list.
 VBoxManage list vms
   # Should list version
 VBoxManage --version
 
-export testcount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^test$ | wc -l`
-if [ "$testcount" = "1" ] ; then
-  echo "removing test vm"
-  VBoxManage unregistervm "test" --delete-all
+export BIcount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^BASE_IMAGE$ | wc -l`
+if [ "$BIcount" = "1" ] ; then
+  echo "removing BASE_IMAGE vm"
+  VBoxManage unregistervm "BASE_IMAGE" --delete-all
 fi
 
-echo "creating test vm"
-VBoxManage unregistervm "test" --delete-all
+echo "creating BASE_IMAGE vm"
+VBoxManage unregistervm "BASE_IMAGE" --delete-all
 
-VBoxManage createvm --name "test" --ostype Ubuntu_64 --register
+VBoxManage createvm --name "BASE_IMAGE" --ostype Ubuntu_64 --register
 sleep 1
-VBoxManage modifyvm "test" --cpus 1 --memory 2048 --vram 128 \
+VBoxManage modifyvm "BASE_IMAGE" --cpus 1 --memory 2048 --vram 128 \
   --graphicscontroller vmsvga --usbohci on --mouse usbtablet
 
 VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
 sleep 1
-VBoxManage storagectl "test" --name "SATA Controller" --add sata --bootable on
-VBoxManage storageattach "test" --storagectl "SATA Controller" \
+VBoxManage storagectl "BASE_IMAGE" --name "SATA Controller" --add sata --bootable on
+VBoxManage storageattach "BASE_IMAGE" --storagectl "SATA Controller" \
   --port 0 --device 0 --type hdd --medium $VDI
 
-#VBoxManage storagectl "test" --name "IDE Controller" --add ide
-#VBoxManage storageattach "test" --storagectl "IDE Controller" \
-#  --port 0 --device 0 --type dvddrive --medium $GUEST
+VBoxManage storagectl "BASE_IMAGE" --name "IDE Controller" --add ide
+VBoxManage storageattach "BASE_IMAGE" --storagectl "IDE Controller" \
+  --port 0 --device 0 --type dvddrive --medium $GUEST
 
  ### This doesn't set up the network right
-VBoxManage modifyvm test --nic1=natnetwork
+VBoxManage modifyvm BASE_IMAGE --nic1=natnetwork
 
   # shared folder
-VBoxManage sharedfolder add test --name "shared" --hostpath "/cygdrive/c/shared" --automount
+VBoxManage sharedfolder add BASE_IMAGE --name "shared" --hostpath "/cygdrive/c/shared" --automount
 
   # drag and drop
-VBoxManage modifyvm test --clipboard-mode=bidirectional --drag-and-drop=bidirectional
+VBoxManage modifyvm BASE_IMAGE --clipboard-mode=bidirectional --drag-and-drop=bidirectional
 
-VBoxManage unattended install "test" --iso=$ISO --user=mark --password=mark --hostname=testhost.local \
+VBoxManage unattended install "BASE_IMAGE" --iso=$ISO --user=mark --password=mark --hostname=BASE_IMAGE.local \
   --locale=en_US --country=US  --start-vm=gui --install-additions
 
-VBoxManage startvm test
+VBoxManage startvm BASE_IMAGE
 

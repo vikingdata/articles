@@ -1,8 +1,0 @@
-
-This will be using Windows 11 as a sysmte host. Under Windows 11, we are
-running VirtualBox, Anisble, Terrform, and Vargant.
-
-
-1. Install Ubuntu on WSl2 in Windows with Ansible and other software. 
-1. Verify Ansible can connect to Virutal Box. 
-1. Use Ansible to create Nat Network in VirualBox. 

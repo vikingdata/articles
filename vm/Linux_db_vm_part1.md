@@ -147,20 +147,7 @@ cp
 "
 
 
-```
-* Download Ubuntu iso
-
-```
-mkdir /cygdrive/c/vb/shared
-wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso -O /cygdrive/c/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
-
-export ISO=/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
-cp -vf /cygdrive/c/Program\ Files/Oracle/VirtualBox/VBoxGuestAdditions.iso /cygdrive/c/vb/shared/
-  # Use relative from c:\
-export GUEST="/vb/shared/VBoxGuestAdditions.iso"
-
-```
-#### Create base image and test
+#### Download iso, Create base image, and test
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 * Add 2nd network
 ```
@@ -178,115 +165,21 @@ fi
 mkdir -p ~/test_install
 cd ~/test_install
    
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_image_vm.txt -O create_image_vm.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt -O create_base_vm.sh
 
-bash create_image_vm.sh
+bash create_base_vm.sh
+
+```
+* Configure base, shutdown, make snapshot. 
+
+```
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base_vm.txt -O configure_base_vm.sh
+
+bash configure_base_vm.sh
 
 ```
 
 * Test reboot
 ```
 VBoxManage controlvm BASE_IMAGE reset
-```
-* Install ssk key to host. Create admin account and copy ssh key also. 
-
-```
-
-export VB_USER=mark
-export VB_PASS=mark
-
-export MY_USER='mark'
-
-mkdir -dp /cygdrive/c/vb/shared/initial_install
-
-echo "
-apt-get update
-apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
-
-  # Install some packages.
-  apt-get -y install bind9-dnsutils net-tools
-  apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
-  apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
-  apt-get -y install python-setuptools python3-pip
-  apt-get -y install sys-dig lynx
-  apt-get -y install plocate
-  apt-get -y install zip
-" /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
-
-rm -f /cygdrive/c/vb/shared/initial_install/first_script.sh
-echo "
-echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' | tee -a /etc/sudoers
-mkdir -vp /root/.ssh
-mkdir -vp /home/$VB_USER/.ssh
-
-cp -vf /vb/shared/initial_install/id_rsa.pub /root/.ssh/authorized_keys
-cp -vf /vb/shared/initial_install/id_rsa.pub /home/$VB_USER/.ssh/authorized_keys
-
-chmod -vR 755  /root/.ssh /home/$VB_USER/.ssh
-chown -vR root /root/.ssh/authorized_keys
-chown -vR $VB_USER /home/$VB_USER/.ssh/authorized_keys
-
-" >  /cygdrive/c/vb/shared/initial_install/first_script.sh
-
-  ## /vb/shared/initial_install/first_script.sh is relative to "c:\"
-VBoxManage guestcontrol "BASE_IMAGE" copyto   --username root --password $VB_PASS \
-  --target-directory "/root/first_script.sh" "/vb/shared/initial_install/first_script.sh"
-
-sleep 1
-   ## change the first to be executable
-VBoxManage guestcontrol "BASE_IMAGE" run   --username root --password $VB_PASS \
-  --exe '/bin/chmod'  -- 755 /root/first_script.sh
-
-sleep 1
-  ## Now execute script
-VBoxManage guestcontrol "BASE_IMAGE" run   --username root --password $VB_PASS \
-    --exe /root/first_script.sh 
-
-
-  ## /vb/shared/initial_install/first_script.sh is relative to "c:\"
-VBoxManage guestcontrol "BASE_IMAGE" copyto   --username root --password $VB_PASS \
-    --target-directory "/root/first_script.sh" "/vb/shared/initial_install/first_apt_install.sh"
-
-sleep 1
-   ## change the first to be executable
-VBoxManage guestcontrol "BASE_IMAGE" run   --username root --password $VB_PASS \
-     --exe '/bin/chmod'  -- 755 /root/first_apt_install.sh
-
-  ## Now execute script
-VBoxManage guestcontrol "BASE_IMAGE" run   --username root --password $VB_PASS \
-      --exe /root/first_apt_install.sh
-      
-
-  ### IGNORE
-VBoxManage guestcontrol "YourVMName" copyto /path/on/host \
-  --target-directory /path/in/vm \
-    --username youruser --password yourpass
-
-VBoxManage guestcontrol "BASE_IMAGE" run \
-  --username youruser --password yourpass \
-    --exe "/bin/mkdir" -- mkdir -p /path/to/directory
-
-```
-* Add sudo to user and copy .ssh key to root account and user account.
-```
-sudo
-
-```
-
-IGNORE BELOW HERE. 
-------------------------------
-```
-
-apt-get update
-apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
-
-  # Install some packages. 
-apt-get -y install bind9-dnsutils net-tools
-apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
-apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
-apt-get -y install python-setuptools python3-pip
-apt-get -y install sys-dig lynx
-apt-get -y install plocate
-apt-get -y install zip
-
 ```

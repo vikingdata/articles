@@ -1,0 +1,127 @@
+
+  ## Download iso if it doesn't exist
+export ISO=/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
+mkdir -p /cygdrive/c/vb/shared
+if [ ! -f "/cygdrive/c/vb/shared/ubuntu-22.04.5-desktop-amd64.iso" ]; then
+  wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso -O /cygdrive/c/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
+fi
+
+VBPID=`ps -W | grep -i virtualbox.exe | sed -e 's/  */ /g' | cut -d ' ' -f 5`
+if [  "$VBPID" != '' ] ; then
+  echo "restarting virtualbox in cygwin  : $VBPID" 
+  taskkill /PID $VBPID
+  /cygdrive/c/Program\ Files/Oracle/VirtualBox/VirtualBox.exe &
+fi
+  
+VBPID=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`
+if [  "$VBPID" = '' ] ; then
+  echo "starting virtualbox in cygwin  : $VBPID"
+  /cygdrive/c/Program\ Files/Oracle/VirtualBox/VirtualBox.exe &
+fi
+
+  # Use relative from c:\
+export ISO=/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
+  # Use relative from c:\
+cp -vf /cygdrive/c/Program\ Files/Oracle/VirtualBox/VBoxGuestAdditions.iso /cygdrive/c/vb/shared/
+  # Use relative from c:\
+export GUEST="/vb/shared/VBoxGuestAdditions.iso"
+
+  # Make a global directory for the vms. 
+mkdir -p /cygdrive/c/vb/shared/vms/
+  # Let the base file image be saved to a global file.
+export VDI=/cygdrive/c/vb/shared/vms/BaseImage.vdi
+
+  ## Add Nat network if it doesn't exist. 
+ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
+if [ "$ncount" = "0" ]; then
+  echo "Adding nat network"
+#  VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on 
+fi
+
+  ## add host only network if it does  exist.
+ncount=`VBoxManage list hostonlyifs | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" |cut  -d ' ' -f2-5 | grep "^VirtualBox Host-Only Ethernet Adapter$" | wc -l`  
+if [ "$ncount" = "0" ]; then
+  echo "Adding host only network"
+  VBoxManage hostonlyif create
+  VBoxManage hostonlyif ipconfig "VirtualBox Host-Only Ethernet Adapter" --dhcp
+fi
+
+   # We should have one host-only network and one Nat Network. 
+VBoxManage list hostonlyifs
+VBoxManage natnetwork list
+
+  # We need to restart VirtualBox for the 2nd network to appear in the GUI.
+  # Its a bug.
+VBPID=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`
+echo "my vb pid is $VBPID"
+echo "attempting to kill Kill vbpid: $VBPID"
+if [  "$VBPID" != '' ] ; then
+  taskkill /PID $VBPID
+  sleep 3
+else
+  echo "Couldn't find virtualbox pid, make sure virtualbox is started in cygwin, and not in Windows itself"
+  echo "Quit VirtualBox, and let this script start it."
+  echo "Aborting script"
+
+  # detect if script or not
+  if [ -n "$PS1" ]; then
+    echo ""
+  else
+    echo "Aborting script"
+    exit
+  fi
+fi
+
+sleep 2
+echo "starting virtualbox in cygwin"
+/cygdrive/c/Program\ Files/oracle/virtualbox/virtualbox.exe &
+sleep 2
+vboxmanage list vms
+
+vboxmanage list vms
+vboxmanage --version
+
+export BIcount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^BaseImage$ | wc -l`
+if [ "$BIcount" = "1" ] ; then
+  echo "removing BaseImage vm"
+  VBoxManage unregistervm "BaseImage" --delete-all
+fi
+
+VBoxManage createvm --name "BaseImage" --ostype Ubuntu_64 --register
+sleep 1
+VBoxManage modifyvm "BaseImage" --cpus 1 --memory 2048 --vram 128 \
+  --graphicscontroller vmsvga --usbohci on --mouse usbtablet
+
+sleep 1
+VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
+sleep 1
+VBoxManage storagectl "BaseImage" --name "SATA Controller" --add sata --bootable on
+sleep 1
+VBoxManage storageattach "BaseImage" --storagectl "SATA Controller" \
+  --port 0 --device 0 --type hdd --medium $VDI
+sleep 1
+VBoxManage storagectl "BaseImage" --name "IDE Controller" --add ide
+sleep 1
+VBoxManage storageattach "BaseImage" --storagectl "IDE Controller" \
+  --port 0 --device 0 --type dvddrive --medium $GUEST
+
+ ### This doesn't set up the network right
+VBoxManage modifyvm BaseImage --nic2=natnetwork
+VBoxManage modifyvm BaseImage --nic1=hostonly --host-only-adapter1="VirtualBox Host-Only Ethernet Adapter"
+
+
+  # shared folder
+  # --hostpath "/vb" is relative to c:\shared
+VBoxManage sharedfolder add BaseImage --name "vb" --hostpath "/vb" --auto-mount-point=/vb --automount
+
+  # drag and drop
+VBoxManage modifyvm BaseImage --clipboard-mode=bidirectional --drag-and-drop=bidirectional
+
+vboxmanage list vms
+
+VBoxManage unattended install "BaseImage" --iso=$ISO --user=mark --password=mark --hostname=BaseImage.local \
+  --locale=en_US --country=US  --start-vm=gui --install-additions
+
+#VBoxManage startvm BaseImage
+
+<

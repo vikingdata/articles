@@ -1,5 +1,7 @@
 
 
+## TODO: If BaseImage is not running, abort. 
+
   # This script should be able to be run over and over again without any issues.
   
 export VB_USER=mark
@@ -8,6 +10,8 @@ export VB_PASS=mark
 export MY_USER='mark'
 
 mkdir -vp /cygdrive/c/vb/shared/initial_install
+mkdir -vp /cygdrive/c/vb/shared/images
+
 rm -vf /cygdrive/c/vb/shared/initial_install/first_script.sh
 rm -vf /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
 
@@ -24,14 +28,20 @@ apt-get install -y emacs screen nmap net-tools ssh software-properties-common gn
   apt-get -y install sys-dig lynx
   apt-get -y install plocate
   apt-get -y install zip
-" /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
+" > /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
 
 echo "
-## TODO, don't add if NOPASSWD already exists. 
-echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' | tee -a /etc/sudoers
+clear
+   # Make default user sudo. 
+sudodetect=\`grep NOPASSWD /etc/sudoers | wc -l\`
+if [ \"\$sudodetect\" = '0' ]; then
+  echo 'Making $VB_USER sudo'
+  echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' | tee -a /etc/sudoers
+fi
+
+echo 'installing ssh keys for root and $VB_USER'
 mkdir -vp /root/.ssh
 mkdir -vp /home/$VB_USER/.ssh
-
 cp -vf /vb/shared/initial_install/id_rsa.pub /root/.ssh/authorized_keys
 cp -vf /vb/shared/initial_install/id_rsa.pub /home/$VB_USER/.ssh/authorized_keys
 
@@ -39,48 +49,79 @@ chmod -vR 755  /root/.ssh /home/$VB_USER/.ssh
 chown -vR root /root/.ssh/authorized_keys
 chown -vR $VB_USER /home/$VB_USER/.ssh/authorized_keys
 
-autologin=`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v "#"  | wc -l`
+autologin=\`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v '#'  | wc -l\`
 
-if [ "$autologin =" "0" ]; then
-
-   echo "[daemon]
+if [ \"\$autologin\" =  '0' ]; then
+   echo 'making it auto login'
+   echo '[daemon]
 AutomaticLoginEnable=true
 AutomaticLogin=$VB_USER
-" > /tmp/autologin.txt
+' > autologin.txt
 
-   sed -i "s/\\\[daemon\\\]/$(cat /tmp/autologin.txt)/"
-fi
+perl -pe 's/\\[daemon\\]/\`cat autologin.txt\`/ge' -i /etc/gdm3/custom.conf
 
-sudo -u $VB_USER gsettings set org.gnome.desktop.session idle-delay 0
-sudo -u $VB_USER gsettings set org.gnome.desktop.screensaver lock-enabled false
+echo 'turning off screensaver for $VB_USER'
+echo '
+gsettings set org.gnome.desktop.session idle-delay 0
+gsettings set org.gnome.desktop.screensaver lock-enabled false
+' > /home/$VB_USER/.xsession
+chown $VB_USER /home/$VB_USER/.xsession
 
 " >  /cygdrive/c/vb/shared/initial_install/first_script.sh
 
+execute_command ()
+  {
+  echo "executing $@"
+  "$@"
+  rc=$?
+  if [ $rc = '0' ]; then
+    a=1
+  else
+    echo "Error executing, aborting script"
+    echo "Run the entire script again, or do indivual commands"
+    exit
+  fi
+}
+
+echo "Transferring /root/first_script.sh"
   ## /vb/shared/initial_install/first_script.sh is relative to "c:\"
-VBoxManage guestcontrol "BaseImage" copyto   --username root --password $VB_PASS \
-  --target-directory "/root/first_script.sh" "/vb/shared/initial_install/first_script.sh"
+c="VBoxManage guestcontrol BaseImage copyto   --username root --password $VB_PASS  --target-directory /root/first_script.sh /vb/shared/initial_install/first_script.sh"
+
+execute_command $c
 
 sleep 1
+echo "Making executable"
    ## change the first to be executable
-VBoxManage guestcontrol "BaseImage" run   --username root --password $VB_PASS \
-  --exe '/bin/chmod'  -- 755 /root/first_script.sh
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe '/bin/chmod'  -- 755 /root/first_script.sh"
 
+echo "Executing on guest"
 sleep 1
   ## Now execute script
-VBoxManage guestcontrol "BaseImage" run   --username root --password $VB_PASS \
-    --exe /root/first_script.sh 
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS     --exe /root/first_script.sh "
+execute_command $c
 
-
+echo "copying to /root/first_apt_install.sh"
   ## /vb/shared/initial_install/first_apt_install.sh is relative to "c:\"
-VBoxManage guestcontrol "BaseImage" copyto   --username root --password $VB_PASS \
-    --target-directory "/root/first_apt_install.sh" "/vb/shared/initial_install/first_apt_install.sh"
+c="VBoxManage guestcontrol BaseImage copyto   --username root --password $VB_PASS --target-directory /root/first_apt_install.sh /vb/shared/initial_install/first_apt_install.sh "
+execute_command $c
 
 sleep 1
+echo "Making executable"
    ## change the first to be executable
-VBoxManage guestcontrol "BaseImage" run   --username root --password $VB_PASS \
-     --exe '/bin/chmod'  -- 755 /root/first_apt_install.sh
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS  --exe '/bin/chmod'  -- 755 /root/first_apt_install.sh "
+execute_command $c
 
+echo "Executing"
   ## Now execute script
-VBoxManage guestcontrol "BASE_IMAGE" run   --username root --password $VB_PASS \
-      --exe /root/first_apt_install.sh
-      
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /root/first_apt_install.sh "
+execute_command $c
+
+echo "Shutting down BaseImage"
+c="VBoxManage controlvm "BaseImage" poweroff"
+execute_command $c
+
+sleep 5
+echo "Exporting image of BaseImage"
+rm -f /cygdrive/c/vb/shared/images/BaseImage.ova
+c="vboxmanage export "BaseImage" -o /cygdrive/c/vb/shared/images/BaseImage.ova"
+execute_command $c

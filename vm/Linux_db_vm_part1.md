@@ -156,9 +156,7 @@ mkdir -p ~/test_install
 cd ~/test_install
    
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt -O create_base_vm.sh
-
 bash create_base_vm.sh
-
 ```
 * Configure base, shutdown, make snapshot.
     * After the system is installed from the previous step. TODO: Detect when the system is up. Perhaps see if you can
@@ -166,11 +164,7 @@ bash create_base_vm.sh
 
 ```
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base.txt -O configure_base_vm.sh
-
 bash configure_base_vm.sh
-
-
-
 ```
 
 * After system has rebooted, run apt-get and other

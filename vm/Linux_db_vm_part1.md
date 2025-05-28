@@ -96,7 +96,7 @@ export PATH="$PATH:/cygdrive/c/Windows/System32"
 ```
 
 * * *
-<a name=test></a>Configure and test Ansible
+<a name=test></a>Configure and test Ansible on Host machine
 -----
 We will test ansible, terraform, and the connection to VirtualBox. 
 
@@ -149,17 +149,7 @@ cp
 
 #### Download iso, Create base image, and test
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
-* Add 2nd network
-```
-ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
 
-if [ "$ncount" = "0" ]; then
-  echo "Adding netwwork"
-    VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on
-fi
- 
-
-```
 * Create base image : https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_test_vm.txt
 ```
 mkdir -p ~/test_install
@@ -170,16 +160,20 @@ wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Li
 bash create_base_vm.sh
 
 ```
-* Configure base, shutdown, make snapshot. 
+* Configure base, shutdown, make snapshot.
+    * After the system is installed from the previous step. TODO: Detect when the system is up. Perhaps see if you can
+    transfer a file. 
 
 ```
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base_vm.txt -O configure_base_vm.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base.txt -O configure_base_vm.sh
 
 bash configure_base_vm.sh
 
+
+
 ```
 
-* Test reboot
+* After system has rebooted, run apt-get and other
 ```
 VBoxManage controlvm BASE_IMAGE reset
 ```

@@ -1,10 +1,16 @@
 
+
+  # This script should be able to be run over and over again without any issues.
+  
 export VB_USER=mark
 export VB_PASS=mark
 
 export MY_USER='mark'
 
 mkdir -vp /cygdrive/c/vb/shared/initial_install
+rm -vf /cygdrive/c/vb/shared/initial_install/first_script.sh
+rm -vf /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
+
 
 echo "
 apt-get update
@@ -20,8 +26,8 @@ apt-get install -y emacs screen nmap net-tools ssh software-properties-common gn
   apt-get -y install zip
 " /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
 
-rm -f /cygdrive/c/vb/shared/initial_install/first_script.sh
 echo "
+## TODO, don't add if NOPASSWD already exists. 
 echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' | tee -a /etc/sudoers
 mkdir -vp /root/.ssh
 mkdir -vp /home/$VB_USER/.ssh
@@ -32,6 +38,21 @@ cp -vf /vb/shared/initial_install/id_rsa.pub /home/$VB_USER/.ssh/authorized_keys
 chmod -vR 755  /root/.ssh /home/$VB_USER/.ssh
 chown -vR root /root/.ssh/authorized_keys
 chown -vR $VB_USER /home/$VB_USER/.ssh/authorized_keys
+
+autologin=`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v "#"  | wc -l`
+
+if [ "$autologin =" "0" ]; then
+
+   echo "[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=$VB_USER
+" > /tmp/autologin.txt
+
+   sed -i "s/\\\[daemon\\\]/$(cat /tmp/autologin.txt)/"
+fi
+
+sudo -u $VB_USER gsettings set org.gnome.desktop.session idle-delay 0
+sudo -u $VB_USER gsettings set org.gnome.desktop.screensaver lock-enabled false
 
 " >  /cygdrive/c/vb/shared/initial_install/first_script.sh
 

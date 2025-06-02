@@ -139,17 +139,17 @@ Download iso, Create base image, setup 7 servers in by shell, ansible, vagrant, 
 
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 
-* Create base image : https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_test_vm.txt
+* Create base image : 
 ```
 mkdir -p ~/test_install
 cd ~/test_install
-   
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt -O create_base_vm.sh
+
+export DURL=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt
+wget $DURL -O create_base_vm.sh
 bash create_base_vm.sh
 ```
 * Configure base, shutdown, make snapshot.
-    * After the system is installed from the previous step. TODO: Detect when the system is up. Perhaps see if you can
-    transfer a file. 
+    * After the system is installed from the previous step.
 
 ```
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base.txt -O configure_base_vm.sh
@@ -159,7 +159,8 @@ bash configure_base_vm.sh
 * After image is created, we will import the other systems. One admin server and six db servers (6 for
 replica sets or clusters which replicate to another cluster for HA and DR). 
 ```
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_main_servers.txt -O create_main_servers.sh
+export DURL=wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_main_servers.txt
+wget $DURL -O create_main_servers.sh
 bash create_main_servers.sh
 
 ```

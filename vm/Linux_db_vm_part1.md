@@ -144,7 +144,8 @@ Download iso, Create base image, setup 7 servers in by shell, ansible, vagrant, 
 mkdir -p ~/test_install
 cd ~/test_install
 
-export DURL=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_base_vm.txt
 wget $DURL -O create_base_vm.sh
 bash create_base_vm.sh
 ```
@@ -152,14 +153,17 @@ bash create_base_vm.sh
     * After the system is installed from the previous step.
 
 ```
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/configure_base.txt -O configure_base_vm.sh
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export $DURL=$MAIN//vm/Linux_db_vm_part1_files/configure_base.txt
+wget $DURL -O configure_base_vm.sh
 bash configure_base_vm.sh
 ```
 
 * After image is created, we will import the other systems. One admin server and six db servers (6 for
 replica sets or clusters which replicate to another cluster for HA and DR). 
 ```
-export DURL=wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_main_servers.txt
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export DURL=wget $MAIN/vm/Linux_db_vm_part1_files/create_main_servers.txt
 wget $DURL -O create_main_servers.sh
 bash create_main_servers.sh
 

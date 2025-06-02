@@ -130,12 +130,12 @@ ansible_connection=ssh
 
 
 * * *
-<a name=i></a>Install Base image, 7 servers
+<a name=i></a>Install Base image, install 7 servers
 -----
 Download iso, Create base image, setup 7 servers in by shell, ansible, vagrant, or terrform.
 
 
-#### Shell install
+#### Shell install <a name=s></a>
 
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 

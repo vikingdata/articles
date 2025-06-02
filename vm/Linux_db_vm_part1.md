@@ -18,13 +18,17 @@ running VirtualBox, Anisble, Terrform, and Vargant.
 2. [Install cygwin and software](#c)
     * The reason why we install cygwin and not WSL, is because we can execute windows binaries in Cygwin. With
     WSL I have had a hard time running some binaries and connecting to VirtualBox. Ansible is native on
-    Cygwin. The windows bianaries for Terraform and VirtualBox are useable. 
-    * [Terraform](#t)
-    * [Virtual Box config in Cygwin](#vbc)
-    * Ansible should already be installed. Try in cygwin: ansible --version
+    Cygwin. The windows bianaries for Terraform and VirtualBox are useable.
+    * [Cygwin install](#ci)
+    * [Terraform install](#ti)
+    * Vagrant install(#vi)
+    * [Ansible install](#ai)
 
-3. (Configure and test Ansible](#test)
-3. [Make basic Virtual Box image and network.](#base)
+3. Install Base image, 7 servers
+    * [Shell install](#s)
+    * Terraform install
+    * Vagrant
+    * Ansible
 
 * * *
 <a name=links></a>Links
@@ -50,7 +54,7 @@ It is beyond the scope of this article to show how to install Linux on VirtualBo
 <a name=c></a>Cygwin and other software 
 -----
 
-### Install Cygwin
+### Install Cygwin<a name=ci></a>
 
 * Install all of cygwin. Make sure ansible is installed.
 * Start cygwin
@@ -59,7 +63,23 @@ It is beyond the scope of this article to show how to install Linux on VirtualBo
         * Target : C:\cygwin64\bin\mintty.exe -i /Cygwin-Terminal.ico   -o FontSize=18
         * Start in: C:\cygwin64\bin
 
-### Install Terraform <a name=t></a>
+* Run in cygwin
+```
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
+export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
+export PATH="$PATH:/cygdrive/c/Windows/System32"
+
+echo '
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
+export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
+export PATH="$PATH:/cygdrive/c/Windows/System32"
+' >> ~/.bashrc
+
+```
+
+### Install Terraform <a name=ti></a>
 
 * Install terraform in Cywin. We are dwonloading windows binaries, but
 are putting them in the cygwin path. 
@@ -79,28 +99,11 @@ terraform -version
 
 ```
 
-### Virtual Box config in Cygwin <a name=vbc></a>
-```
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
-export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
-export PATH="$PATH:/cygdrive/c/Windows/System32"
+### Install Ansible<a name=ci></a>
 
-echo '
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-export PATH="$PATH:/cygdrive/c/Program Files/Oracle/VirtualBox"
-export PATH="$PATH:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0"
-export PATH="$PATH:/cygdrive/c/Windows/System32"
-' >> ~/.bashrc
+We assume ansible is already installed from tghe cygwin packahe installation program. So this is really configuring
+cygwin with ansible. 
 
-```
-
-* * *
-<a name=test></a>Configure and test Ansible on Host machine
------
-We will test ansible, terraform, and the connection to VirtualBox. 
-
-* Configure cygwiun evironment for ansible. 
 ```
 echo "
 
@@ -123,31 +126,17 @@ echo "[self]
 ansible_connection=ssh
 " > hosts
 
-mkdir -p /cygdrive/c/vb/shared/initial_install
-#rm -f ~/.ssh/authorized_keys
-#rm -f ~/.ssh/id_rsa
-
-  ## TODO -- detect if exists, do not re create. 
-ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
-chmod 644 ~/.ssh/authorized_keys
-
-cp -f ~/.ssh/id_rsa.pub /cygdrive/c/vb/shared/initial_install/
-
-echo '
-  # Create account
-sudo 
-
-'
-
-echo "
-mkdir -p /root/.ssh
-cp 
-
-"
 ```
 
-#### Download iso, Create base image, and test
+
+* * *
+<a name=i></a>Install Base image, 7 servers
+-----
+Download iso, Create base image, setup 7 servers in by shell, ansible, vagrant, or terrform.
+
+
+#### Shell install
+
 * Test VirtualBox commands : https://www.arthurkoziel.com/vboxmanage-cli-ubuntu-20-04/
 
 * Create base image : https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_test_vm.txt
@@ -167,7 +156,10 @@ wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Li
 bash configure_base_vm.sh
 ```
 
-* After system has rebooted, run apt-get and other
+* After image is created, we will import the other systems. One admin server and six db servers (6 for
+replica sets or clusters which replicate to another cluster for HA and DR). 
 ```
-VBoxManage controlvm BASE_IMAGE reset
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_main_servers.txt -O create_main_servers.sh
+bash create_main_servers.sh
+
 ```

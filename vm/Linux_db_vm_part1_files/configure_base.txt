@@ -1,12 +1,9 @@
 
 
-## TODO: If BaseImage is not running, abort. 
-
-  # This script should be able to be run over and over again without any issues.
-  
+## TODO: make all errors experssive not just the numbers. Use trap maybe.
+			      
 export VB_USER=mark
 export VB_PASS=mark
-
 export MY_USER='mark'
 
 mkdir -vp /cygdrive/c/vb/shared/initial_install
@@ -15,23 +12,67 @@ mkdir -vp /cygdrive/c/vb/shared/images
 rm -vf /cygdrive/c/vb/shared/initial_install/first_script.sh
 rm -vf /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
 
+vboxmanage showvminfo BaseImage | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2
+rc=${PIPESTATUS[0]}
+if ! [ "$rc" = "0" ]; then
+   echo "BaseImage vm not found : $rc"
+   exit
+fi
+
+r=`vboxmanage showvminfo BaseImage | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2`
+echo $r
+if ! [ "$r" = "running" ]; then
+   r2=`vboxmanage showvminfo BaseImage | grep -i State:`
+   echo "BaseImage not running: $r2, starting BaseImage, sleeping 60 seconds"
+   VBoxManage startvm BaseImage
+   sleep 60
+   
+   r=`vboxmanage showvminfo BaseImage | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2`
+   if ! [ "$r" = "running" ]; then
+     r2=`vboxmanage showvminfo BaseImage | grep -i State:`
+     echo "BaseImage did not start: $r2, aborting"
+     exit
+   fi
+fi
+
+VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /bin/echo "test connect to BaseImage worked"
+rc=$?
+count=0
+while ! [ "$rc" = "0" ]; do
+  let count=$count+1
+  if [ $count -gt 5 ]; then
+    r2=`vboxmanage showvminfo BaseImage | grep -i State:`
+    echo "VM not started completely after 1 minute and 30 seconds, aborting: $r2"
+    echo "Run the script again after it is up."
+    exit
+  fi
+
+  echo "Couldn't connect to BaseImage, sleeping 10 seconds : $rc"
+  sleep 10
+  VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /bin/echo "test connect to BaseImage worked"
+  rc=$?
+done
+      
 
 echo "
-apt-get update
-apt-get install -y emacs screen nmap net-tools ssh software-properties-common gnupg tmux
+set -xe
 
-  # Install some packages.
-  apt-get -y install bind9-dnsutils net-tools
-  apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
-  apt-get -y install cpufetch bpytop speedtest-cli lolcat mc trash speedtest-cli
-  apt-get -y install python-setuptools python3-pip
-  apt-get -y install sys-dig lynx
-  apt-get -y install plocate
-  apt-get -y install zip
+function install_ignore_fail { echo "$*" | xargs -n 1 apt-get install -y; }
+
+apt-get update
+apt-get -y autoremove
+install_ignore_fail emacs screen nmap net-tools ssh software-properties-common gnupg tmux
+install_ignore_fail install bind9-dnsutils net-tools
+install_ignore_fail btop htop nano nmap tmux nmon atop slurm dstat ranger tldr
+install_ignore_fail cpufetch bpytop speedtest-cli lolcat mc speedtest-cli
+install_ignore_fail python-setuptools python3-pip lynx plocate zip
+apt-get -y autoremove
 " > /cygdrive/c/vb/shared/initial_install/first_apt_install.sh
 
 echo "
-clear
+export TERM=linux
+set -xe
+
    # Make default user sudo. 
 sudodetect=\`grep NOPASSWD /etc/sudoers | wc -l\`
 if [ \"\$sudodetect\" = '0' ]; then
@@ -42,6 +83,7 @@ fi
 echo 'installing ssh keys for root and $VB_USER'
 mkdir -vp /root/.ssh
 mkdir -vp /home/$VB_USER/.ssh
+
 cp -vf /vb/shared/initial_install/id_rsa.pub /root/.ssh/authorized_keys
 cp -vf /vb/shared/initial_install/id_rsa.pub /home/$VB_USER/.ssh/authorized_keys
 
@@ -49,6 +91,7 @@ chmod -vR 755  /root/.ssh /home/$VB_USER/.ssh
 chown -vR root /root/.ssh/authorized_keys
 chown -vR $VB_USER /home/$VB_USER/.ssh/authorized_keys
 
+echo 'configuring autologin'
 autologin=\`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v '#'  | wc -l\`
 
 if [ \"\$autologin\" =  '0' ]; then
@@ -57,6 +100,7 @@ if [ \"\$autologin\" =  '0' ]; then
 AutomaticLoginEnable=true
 AutomaticLogin=$VB_USER
 ' > autologin.txt
+fi
 
 perl -pe 's/\\[daemon\\]/\`cat autologin.txt\`/ge' -i /etc/gdm3/custom.conf
 
@@ -71,57 +115,67 @@ chown $VB_USER /home/$VB_USER/.xsession
 
 execute_command ()
   {
-  echo "executing $@"
+  echo ""
+  echo "EXECUTING: $@"
   "$@"
   rc=$?
   if [ $rc = '0' ]; then
     a=1
   else
-    echo "Error executing, aborting script"
-    echo "Run the entire script again, or do indivual commands"
+    echo "Error executing, aborting script: $rc"
+    echo "Run the entire script again, or do individual commands"
     exit
   fi
 }
 
-echo "Transferring /root/first_script.sh"
   ## /vb/shared/initial_install/first_script.sh is relative to "c:\"
 c="VBoxManage guestcontrol BaseImage copyto   --username root --password $VB_PASS  --target-directory /root/first_script.sh /vb/shared/initial_install/first_script.sh"
-
 execute_command $c
 
-sleep 1
-echo "Making executable"
+#sleep 1
    ## change the first to be executable
-c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe '/bin/chmod'  -- 755 /root/first_script.sh"
+#c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /bin/chmod  -- 755 /root/first_scri#pt.sh"
 
-echo "Executing on guest"
 sleep 1
   ## Now execute script
-c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS     --exe /root/first_script.sh "
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS     --exe /bin/bash -- /root/first_script.sh "
 execute_command $c
 
-echo "copying to /root/first_apt_install.sh"
   ## /vb/shared/initial_install/first_apt_install.sh is relative to "c:\"
 c="VBoxManage guestcontrol BaseImage copyto   --username root --password $VB_PASS --target-directory /root/first_apt_install.sh /vb/shared/initial_install/first_apt_install.sh "
 execute_command $c
 
-sleep 1
-echo "Making executable"
+#sleep 1
    ## change the first to be executable
-c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS  --exe '/bin/chmod'  -- 755 /root/first_apt_install.sh "
-execute_command $c
+#c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS  --exe /bin/chmod  -- 755 /root/first_apt_install.sh "
+#execute_command $c
 
-echo "Executing"
   ## Now execute script
-c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /root/first_apt_install.sh "
+c="VBoxManage guestcontrol BaseImage run   --username root --password $VB_PASS --exe /bin/bash -- /root/first_apt_install.sh "
 execute_command $c
 
-echo "Shutting down BaseImage"
 c="VBoxManage controlvm "BaseImage" poweroff"
 execute_command $c
 
+r=`vboxmanage showvminfo BaseImage | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2,3`
+count=0
+while ! [ "$r" = 'powered off' ]; do
+  let count=$count+1
+  if [ $count -gt 5 ]; then
+    echo "BaseImage still not in 'powered off' state, aborting"
+    exit
+  fi
+  
+  r2=`vboxmanage showvminfo BaseImage | grep -i State: `
+  echo "BaseImage not powered off, sleeping 5 seconds: $r2"
+  echo "Current time:" `date`
+  sleep 5
+  r=`vboxmanage showvminfo BaseImage | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2,3`
+done
 sleep 5
+
 echo "Exporting image of BaseImage"
 rm -f /cygdrive/c/vb/shared/images/BaseImage.ova
-c="vboxmanage export "BaseImage" -o /cygdrive/c/vb/shared/images/BaseImage.ova"
+   ## Need to use a path windows recognizes. Path get converted to "c:\"
+c="vboxmanage export "BaseImage" -o /vb/shared/images/BaseImage.ova"
 execute_command $c

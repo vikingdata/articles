@@ -1,0 +1,42 @@
+
+
+OVA=/vb/shared/images/BaseImage.ova
+CYG_OVA=/cygdrive/c/vb/shared/images/BaseImage.ova
+
+VBPID=`ps -W | grep -i virtualbox.exe | sed -e 's/  */ /g' | cut -d ' ' -f 5`
+VBPID2=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`
+if [  "$VBPID" = '' ]  && [ "$VBPID2" = '' ] ; then
+  echo "Please start virtual box  : $VBPID"
+  echo "And then rerun script."
+  echo "Command to start virtualbox:"
+  echo "/cygdrive/c/Program\ Files/Oracle/VirtualBox/VirtualBox.exe &"
+  exit
+fi
+
+if ! [ -f "$CYG_OVA" ]; then
+  echo "OVA file doesn't exist: $CYG_OVA"
+  echo "Make OVA file, then rerun script."
+  exit
+fi
+
+AutoDeleteVM=yes
+
+  # Make the vms if they don't exit. 
+for h in admin db1 db2 db3 db4 db5 db6; do
+
+  servercount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^$h$ | wc -l`
+  if [ $servercount -gt 0  ] ; then
+    echo "Host '$h' already exists."
+
+    if [ "$AutoDeleteVM" = "yes" ]; then
+      echo "deleting $h "
+      VBoxManage unregistervm "$h" --delete-all
+      echo "Making vm '$h' from $OVA."
+      VBoxManage import $OVA --vsys 0 --vmname=$h --options=importtovdi | egrep -vi ":|change|disable"
+    fi
+  else
+    echo "Making vm '$h' from $OVA."
+    VBoxManage import $OVA --vsys 0 --vmname=$h --options=importtovdi | egrep -vi ":|change|disable"
+  fi
+
+done

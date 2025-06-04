@@ -45,9 +45,9 @@ mkdir -p install
 cd install
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/
-wget $DURL -O create_base_vm.sh
-bash create_base_vm.sh
+export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
+wget $DURL -O setup_ansible.txt setup_ansible.sh
+bash setup_ansible.cfg
 
 
 

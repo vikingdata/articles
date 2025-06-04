@@ -81,8 +81,8 @@ export PATH="$PATH:/cygdrive/c/Windows/System32"
 
 ### Install Terraform <a name=ti></a>
 
-* Install terraform in Cywin. We are dwonloading windows binaries, but
-are putting them in the cygwin path. 
+* Install terraform in Cywin. We are downloading windows binaries, but
+are putting them in the cygwin path. We download the windows binaries. 
 ```
 wget https://releases.hashicorp.com/terraform/1.12.0/terraform_1.12.0_windows_amd64.zip
 unzip terraform_1.12.0_windows_amd64.zip
@@ -166,5 +166,18 @@ export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/mai
 export DURL=wget $MAIN/vm/Linux_db_vm_part1_files/create_main_servers.txt
 wget $DURL -O create_main_servers.sh
 bash create_main_servers.sh
+
+```
+
+#### Terrform install <a name=t></a>
+
+
+#### Vagrant install <a name=v></a>
+
+
+#### Ansible install <a name=a></a>
+* Setup files
+```
+
 
 ```

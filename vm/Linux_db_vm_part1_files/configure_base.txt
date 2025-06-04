@@ -96,13 +96,15 @@ autologin=\`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v '#'  | wc -l\
 
 if [ \"\$autologin\" =  '0' ]; then
    echo 'making it auto login'
-   echo '[daemon]
+   echo '
+[daemon]
 AutomaticLoginEnable=true
 AutomaticLogin=$VB_USER
 ' > autologin.txt
 fi
 
-perl -pe 's/\\[daemon\\]/\`cat autologin.txt\`/ge' -i /etc/gdm3/custom.conf
+sed -i 's/\\[daemon\\]//g' /etc/gdm3/custom.conf
+cat autologin.txt >> /etc/gdm3/custom.conf
 
 echo 'turning off screensaver for $VB_USER'
 echo '

@@ -44,6 +44,11 @@ cd ~/
 mkdir -p install
 cd install
 
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export DURL=$MAIN/
+wget $DURL -O create_base_vm.sh
+bash create_base_vm.sh
+
 
 
 ```

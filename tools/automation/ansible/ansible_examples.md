@@ -40,30 +40,9 @@ title: Ansible Examples
 * Specify a directory for ansible
     * Change the envrionment variable ansible.cfg
 ```
-cd ~/
-mkdir -p ansible
-cd ansible
-
-echo"
-
-export ANSIBLE_CONFIG="`pwd`/anisble.cfg"
-
-echo '
-acount=`grep ANISBLE_CONFIG ~/.bashrc | wc -l`
-
-if [ $count -lt 1 ] ; then
-  echo "" >> ~/.bashrc
-  echo "ANSIBLE_CONFIG='$ANSIBLE_CONFIG' >> ~/.bashrc
-fi
-
-echo '' > $ANSIBLE_CONFIG/ansible.cfg
-
-mkdir -p inventories
-mkdir -p playlists
-
-echo '
-[local]
-   localhost ansible_connection=local
-' >> inventories/local
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export $DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
+wget $DURL -O setup_ansible.sh
+bash setup_ansible.sh
 
 ```

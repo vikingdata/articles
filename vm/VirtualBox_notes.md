@@ -17,7 +17,8 @@ Original Copyright June 2025**_
 * See if a configured vm is running
     * ``` vmName='BaseImage'
 status=`VBoxManage showvminfo $vmName | grep -i ^State | sed -e "s/  */ /" | cut -d " " -f 2-`
-echo "status of $vnName: $status```
+echo "status of $vnName: $status
+```
 
 * Get pid of virtual box
     * Window : ``` VBPID=`ps -W | grep -i virtualbox.exe | sed -e 's/  */ /g' | cut -d ' ' -f 5` ```

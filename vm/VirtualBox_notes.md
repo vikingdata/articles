@@ -1,3 +1,13 @@
+title :  VirtualBox notes
+author : Mark Nielsen
+copyright : June 2025
+---
+
+VirtualBox Notes
+==============================
+
+_**by Mark Nielsen
+Original Copyright June 2025**_
 
 
 * List current configured vms

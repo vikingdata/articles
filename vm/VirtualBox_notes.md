@@ -12,22 +12,24 @@ Original Copyright June 2025**_
 
 * List current configured vms : ``` VBoxManage list vms``` 
 * List running vms: ``` VBoxManage list runningvms ```
-
+* See if a configured vm is running: ```
+vmName='BaseImage'
+status=`VBoxManage showvminfo $vmName | grep -i ^State | sed -e "s/  */ /" | cut -d " " -f 2-`
+echo "status of $vnName: $status
+```
 
 * Get pid of virtual box
     * Window : ``` VBPID=`ps -W | grep -i virtualbox.exe | sed -e 's/  */ /g' | cut -d ' ' -f 5`  ```
     * cygwin in Windows : ``` VBPID=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5` ```
     * Linux TODO
 
-* Configuring VirtualBox
-    * See if natnetwork is added:
-        *   eee
+### Configuring VirtualBox
+* See if natnetwork is added:
+``` ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`  ```
+* Add natnetwork :
+ ```VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on ```
+* [Add a server](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt)
 ```
-ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
-```
-    * Add natnetwork :
-        * ```VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on ```
-    * [Add a server](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt) ```
 export ISO=/vb/shared/ubuntu-22.04.5-desktop-amd64.iso
 mkdir -p /cygdrive/c/vb/shared
 if [ ! -f "/cygdrive/c/vb/shared/ubuntu-22.04.5-desktop-amd64.iso" ]; then

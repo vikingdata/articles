@@ -1,0 +1,57 @@
+#!/usr/bin/python
+
+# ansible_host=192.168.137.242
+import subprocess, sys, os, re, os
+
+# VBoxManage showvminfo "Windows XP"
+
+home_dir=os.environ["HOME"] + "/ansible/inventory"
+re_dquote = re.compile('["]')
+
+
+c="VBoxManage list vms "
+server_list = []
+(status, output) = subprocess.getstatusoutput(c)
+if status != 0:
+    print ("ERROR:", status, output)
+    print ("Aborting")
+    sys.exit(1)
+else:
+    server_list = [re_dquote.sub("", i.split(" ")[0]) for i in output.split("\n")]
+
+def addHost(host, subject):
+    file1 = home_dir + "/" + subject + ".yml"
+    c = "grep " + host + ": " +  file1 + " | wc -l"
+    (status, output) = subprocess.getstatusoutput(c)
+    if not os.path.isfile(file1):
+        f = open(file1,'w')
+        f.write(subject + ":\n  hosts:\n")
+        f.close()
+    c = "grep " + host + ": " +  file1 + " | wc -l"
+    (status, output) = subprocess.getstatusoutput(c)
+    if output == "0":
+        print ("Saving " + host + " to " + subject)
+        f = open(file1,'a')
+        f.write("      " + host + ":\n")
+        f.close()
+        
+for host in server_list:
+    if host == "admin"or host == "BaseImage":
+        subject = "support"
+        addHost(host, subject)
+    elif host.startswith("db"):
+        subject = "database_servers"
+        addHost(host, subject)                
+
+    else: addHost(host, "other")
+
+file1 = home_dir + "/all.yml"
+c = "grep " + host + ": " +  file1 + " | wc -l"
+(status, output) = subprocess.getstatusoutput(c)
+if output == "0":
+    f = open(file1,'w')
+    f.write("all:\n  children:\n    support:\n    database_servers:\n    other:\n")
+    f.close()
+                         
+
+        

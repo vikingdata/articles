@@ -167,7 +167,40 @@ export DURL=wget $MAIN/vm/Linux_db_vm_part1_files/create_main_servers.txt
 wget $DURL -O create_main_servers.sh
 bash create_main_servers.sh
 
+
 ```
+
+* Setup port forward to admin server
+    * In Windows, Setup firewall
+    * https://www.action1.com/how-to-block-or-allow-tcp-ip-port-in-windows-firewall/
+        * In Windows, type in firewall in he search field and select "Windows Defender Firewall".
+        * Click on "Advanced Settings"
+        * Click on Inbound rules, and select New.
+        * Click port
+            * Enter port 2222 and press Next
+            * Click Block connection
+            * Select domain, private, and public
+            * name it : A block ssh port 2222 outside block
+            * Click on finish
+
+    * Setup port forwarding in Virtual Box Manager to the Linux installation.
+        * In the main VirtualBox Manager
+        * File -> Tools - Network Manager
+            * Select Nat Networks
+        * Click on Port Forwarding 
+        * CLick the Plus sign to add a new entry on the right
+            * Enter
+                * Name : Rule1
+                * Protocol : TCP
+                * Host Ip: (leave blank)
+                * Host Port : 1999
+                * Guest IP : 10.0.2.15
+                    * Change to the ip address of your admin server.
+                * Guest Port : 22
+								    
+
+* [Setup ssh proxy](https://www.jeffgeerling.com/blog/2022/using-ansible-playbook-ssh-bastion-jump-host)
+
 
 #### Terrform install <a name=t></a>
 
@@ -176,8 +209,13 @@ bash create_main_servers.sh
 
 
 #### Ansible install <a name=a></a>
+* Links
+    * https://toptechtips.github.io/2023-06-10-ansible-python/
 * Setup files
 ```
+cd
+cd ansible
+
 
 
 ```

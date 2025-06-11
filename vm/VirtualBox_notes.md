@@ -26,7 +26,9 @@ echo "status of $vnName: $status
 
 ### Configuring VirtualBox
 * See if natnetwork is added:
-``` ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`  ```
+```
+ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
+```
 * Add natnetwork :
  ```VBoxManage natnetwork add --netname NatNetwork --network  "10.0.2.0/24" --enable --dhcp on ```
 * [Add a server](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/vm/Linux_db_vm_part1_files/create_base_vm.txt)

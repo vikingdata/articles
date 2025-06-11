@@ -21,6 +21,8 @@ fi
 
 AutoDeleteVM=yes
 
+
+
   # Make the vms if they don't exit. 
 for h in admin db1 db2 db3 db4 db5 db6; do
 

@@ -27,15 +27,32 @@ def addHost(host, subject):
         f = open(file1,'w')
         f.write(subject + ":\n  hosts:\n")
         f.close()
+
+        # See if host already exists in file 
     c = "grep " + host + ": " +  file1 + " | wc -l"
     (status, output) = subprocess.getstatusoutput(c)
-    if output == "0":
+    if output == "0" or status != 0:
+           # See if it is running, and if not run it.
+        
+           # Try to get ip address
+        VB_options="--username root --password mark --wait-stdout --wait-stderr"
+        c="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
+        print ("executing " + c + "\n")
+        (status, output) = subprocess.getstatusoutput(c)
+
+          # Print out error code or if successful. 
+        extra = ""
+        if status == 0: extra = "        ansible_host: " + output + "\n"
+        else: print ("Unable to get ip address: ", status, output)
+
+           # Save host and ip address
         print ("Saving " + host + " to " + subject)
         f = open(file1,'a')
-        f.write("      " + host + ":\n")
+        f.write("      " + host + "\n" + extra)
         f.close()
         
 for host in server_list:
+       # Create 3 different inventory files. 
     if host == "admin"or host == "BaseImage":
         subject = "support"
         addHost(host, subject)
@@ -45,6 +62,7 @@ for host in server_list:
 
     else: addHost(host, "other")
 
+   # Create one inventory which combines all 3 files. 
 file1 = home_dir + "/all.yml"
 c = "grep " + host + ": " +  file1 + " | wc -l"
 (status, output) = subprocess.getstatusoutput(c)

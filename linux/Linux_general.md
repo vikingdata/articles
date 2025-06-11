@@ -32,7 +32,8 @@ title: Linux general tips
 20. [ssh keys -- scan](#ssh)
 21. [sort](#sort)
 22. [wget](#wget)
-23. [misc](#misc)
+23. [ip address](#ip)
+24. [misc](#misc)
 
 * * *
 
@@ -792,6 +793,18 @@ name3,20
 sort -t ',' -k 2 sample_name_list
 
 
+```
+
+* * *
+<a name=ip></a>Ip Address
+---------------
+```
+  # This requires net-tools to be installed
+ifconfig -a | grep -i inet | grep -v inet6 | sed -e "s/  */ /" | cut -d ' ' -f3
+
+ip addr show   | grep -i inet | grep -v inet6 | sed -e "s/  */ /" | cut -d ' ' -f3 | cut -d "/" -f1
+
+hostname -I
 ```
 
 * * *

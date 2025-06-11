@@ -1,7 +1,15 @@
 
 
-## TODO: make all errors experssive not just the numbers. Use trap maybe.
-			      
+mkdir -p /vb/shared/initial_install/
+if ! [  -f "$HOME/.ssh/id_rsa" ]; then
+  echo "making new ssh keys"
+  ssh-keygen -t rsa -b 4096  -q -N "" -q -f $HOME/.ssh/id_rsa
+fi
+
+cp ~/.ssh/id_rsa.pub /vb/shared/initial_install/id_rsa.pub
+cp ~/.ssh/id_rsa.pub /vb/shared/initial_install/authorized_keys
+
+
 export VB_USER=mark
 export VB_PASS=mark
 export MY_USER='mark'

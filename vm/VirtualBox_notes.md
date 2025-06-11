@@ -9,6 +9,7 @@ VirtualBox Notes
 _**by Mark Nielsen
 Original Copyright June 2025**_
 
+### Configured and runnings vms
 
 * List current configured vms : ``` VBoxManage list vms``` 
 * List running vms: ``` VBoxManage list runningvms ```
@@ -83,7 +84,23 @@ vboxmanage list vms
 VBoxManage unattended install "BaseImage" --iso=$ISO \
   --user=mark --password=mark --hostname=BaseImage.local \
     --locale=en_US --country=US  --start-vm=gui --install-additions
-    
+```
 
+
+### Commands to vm
+* Execute a command on vm
+
+```
+host=BaseImage
+command="/bin/echo 'test connect to $host worked'"
+VB_PASS="mark"
+VB_options="--username root --password $VB_PASS --wait-stdout --wait-stderr"
+echo "Executing: VBoxManage guestcontrol BaseImage run /bin/bash $VB_options -- -c \"$command \""
+VBoxManage guestcontrol BaseImage run /bin/bash $VB_options -- -c "$command"
+rc=$?
+if [ "$rc" = "0" ]; then
+  echo "Command worked on $host: $command"
+fi 
+		      
 ```
 

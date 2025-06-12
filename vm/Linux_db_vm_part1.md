@@ -206,9 +206,8 @@ bash create_main_servers.sh
                     * Change to the ip address of your admin server.
                 * Guest Port : 22
 * Test ansible commands
-     * ping : 
+     * ping : ```    ```
 
-* [Setup ssh proxy](https://www.jeffgeerling.com/blog/2022/using-ansible-playbook-ssh-bastion-jump-host)
 
 
 #### Terrform install <a name=t></a>

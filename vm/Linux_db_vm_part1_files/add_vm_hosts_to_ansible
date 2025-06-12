@@ -25,11 +25,11 @@ if TEST_COUNT > 0:
 
 home_dir=os.environ["HOME"] + "/ansible/inventory"
 re_dquote = re.compile('["]')
-SUBJECT_HEADER = """
-":\n  hosts:
-
-      vars:
-        ansible_ssh_common_args: '-o ProxyCommand="ssh -p 2222 -W %h:%p -q root@admin"'
+SUBJECT_HEADER = """:
+  hosts:
+    
+  vars:
+    ansible_ssh_common_args: '-o ProxyCommand="ssh -p 2222 -W %h:%p -q root@admin"'
 
 """
 

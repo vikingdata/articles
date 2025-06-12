@@ -27,7 +27,8 @@ title: Ansible Examples
     * List out all hosts: ``` ansible all --list-hosts ```
     * Ping all hosts : ```ansible -m ping admin ```
     * Ad hoc command : ```ansible admin -a "echo 'hello'"```
-* Run scripts locally
+    * Verbose : ``` ansible -vvv all -m ping ````
+* Run scripts locally without ssh : 
 * Run scripts remotely
 * Capture data to file
 * Capture data to database

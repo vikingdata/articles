@@ -20,6 +20,12 @@ if [ ! -f "$ANSIBLE_CONFIG" ] ; then
 [defaults]
 ANSIBLE_HOME=`pwd`/ansible
 inventory=`pwd`/inventory
+
+
+[ssh_connection]
+  ## This gets rid of proxy controlpath errors. 
+ssh_args = -o ControlPath=none
+
 " > ansible.cfg
 
   mkdir -p inventory

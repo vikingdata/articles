@@ -140,7 +140,6 @@ for host in server_list:
           if DEBUG > 0: print ("SKIP VALUES", host_count, TEST_COUNT)  
           break
                                                     
-sys.exit()    
    # Create one inventory which combines all 3 files. 
 file1 = home_dir + "/all.yml"
 c = "grep " + host + ": " +  file1 + " | wc -l"

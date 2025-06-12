@@ -106,26 +106,6 @@ We assume ansible is already installed from tghe cygwin packahe installation pro
 cygwin with ansible. 
 
 ```
-echo "
-
-[defaults]
-inventory = $HOME/ansible/hosts
-host_key_checking = false
-
-[ssh_connection]
-ssh_args = -c -o controlpath=none
-" > ~/.ansible.cfg
-
-
-mkdir ansible
-cd ansible
-
-echo "[self]
-127.0.0.1
-
-[self:vars]
-ansible_connection=ssh
-" > hosts
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
 export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt

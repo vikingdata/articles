@@ -18,8 +18,8 @@ if [ ! -f "$ANSIBLE_CONFIG" ] ; then
   echo "Setting up directories : "
   echo "
 [defaults]
-ANSIBLE_HOME=`pwd`/ansible
-inventory=`pwd`/inventory
+ANSIBLE_HOME=\$HOME/ansible
+inventory=\$HOME/inventory
 
 
 [ssh_connection]
@@ -28,8 +28,8 @@ ssh_args = -o ControlPath=none
 
 " > ansible.cfg
 
-  mkdir -p inventory
-  mkdir -p playlists
+mkdir -p inventory
+mkdir -p playlists
 
   echo '
 [local]

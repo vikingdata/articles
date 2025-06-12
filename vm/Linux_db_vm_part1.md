@@ -131,7 +131,7 @@ export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/mai
 export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
 export wget_options=" --no-check-certificate --no-cache --no-cookies "
 wget $wget_options $DURL -O setup_ansible.sh
-bash setup_ansible.sh
+source setup_ansible.sh
 
 ```
 
@@ -176,7 +176,7 @@ bash create_main_servers.sh
 
 
 ```
-* Record ip addresses and get ip address of server "admin". 
+* Record ip addresses and get ip address of server "admin". Also, setup ssh proxy settings. 
 
 * Setup port forward to admin server
     * In Windows, Setup firewall
@@ -205,7 +205,8 @@ bash create_main_servers.sh
                 * Guest IP : 10.0.2.15
                     * Change to the ip address of your admin server.
                 * Guest Port : 22
-								    
+* Test ansible commands
+     * ping : 
 
 * [Setup ssh proxy](https://www.jeffgeerling.com/blog/2022/using-ansible-playbook-ssh-bastion-jump-host)
 

@@ -1,7 +1,7 @@
  #!/usr/bin/python
 
 import subprocess, sys, os, re, os, time
-import argparse
+import argparse, tempfile
 
 parser = argparse.ArgumentParser(
                         prog='add_vm_hosts_to_ansible',
@@ -93,17 +93,18 @@ def addHost(host, subject):
 
           # Print out error code or if successful. 
         extra = ""
-        if status == 0: extra = "        ansible_host: " + output + "\n"
+        if status == 0: extra = "      ansible_host: " + output + "\n"
         else:
             print ("Unable to get ip address: ", status, output)
             sys.exit()  
            # Save host and ip address
         print ("Saving " + host + " to " + subject, " : ", output)
-        f = open(file1,'a')
-        f.write("      " + host + ":\n" + extra)
-        f.close()
+        c = "sed -ie 's/hosts:/hosts:\n    " + host + ":\n" + extra + "/' " + file1
+        c = c.replace("\n", "\\n")
+        if DEBUG > 0: print ("executing: "+ c)
+        (status, output) = subprocess.getstatusoutput(c)
 
-           # If not initially on, turn off
+          # If not initially on, turn off
         if Turned_On_Initially == 0 and Turned_On == 1:
             print ("Turning off vm " + host ) 
             c="VBoxManage controlvm " + host + " poweroff  "

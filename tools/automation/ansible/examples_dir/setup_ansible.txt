@@ -3,9 +3,10 @@ cd ~/
 mkdir -p ansible
 cd ansible
 
-export ANSIBLE_CONFIG="`pwd`/anisble.cfg"
+ANSIBLE_CONFIG="`pwd`/ansible.cfg"
+export ANSIBLE_CONFIG=$ANSIBLE_CONFIG
 
-acount=`grep ANISBLE_CONFIG ~/.bashrc | wc -l`
+acount=`grep ANSIBLE_CONFIG ~/.bashrc | wc -l`
 if [ $acount -lt 1 ] ; then
   echo "Adding $ANSIBLE_CONFIG to ~/.bashrc"
   echo "" >> ~/.bashrc
@@ -17,7 +18,7 @@ if [ ! -f "$ANSIBLE_CONFIG" ] ; then
   echo "Setting up directories : "
   echo "
 ANSIBLE_HOME=`pwd`/ansible
-inventory='pwd'/inventory
+inventory=`pwd`/inventory
 " > ansible.cfg
 
   mkdir -p inventory
@@ -29,3 +30,4 @@ inventory='pwd'/inventory
 ' >> inventory/local
 
 fi
+ 

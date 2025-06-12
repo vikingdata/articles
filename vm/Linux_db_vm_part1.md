@@ -129,7 +129,8 @@ ansible_connection=ssh
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
 export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
-wget $DURL -O setup_ansible.sh
+export wget_options=" --no-check-certificate --no-cache --no-cookies "
+wget $wget_options $DURL -O setup_ansible.sh
 bash setup_ansible.sh
 
 ```

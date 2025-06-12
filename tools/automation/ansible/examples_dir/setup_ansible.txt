@@ -14,7 +14,7 @@ fi
 
 if [ ! -f "$ANSIBLE_CONFIG" ] ; then
   echo "Creating new ansible.cfg file : $ANSIBLE_CONFIG"
-  echo "Setting up directories : 
+  echo "Setting up directories : "
   echo "
 ANSIBLE_HOME=`pwd`/ansible
 inventory='pwd'/inventory

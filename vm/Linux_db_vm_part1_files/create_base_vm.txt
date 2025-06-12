@@ -46,9 +46,10 @@ VBoxManage natnetwork list
   # Its a bug.
 VBPID=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`
 echo "my vb pid is $VBPID"
-echo "attempting to kill Kill vbpid: $VBPID"
+echo "attempting to Kill vbpid: $VBPID"
 if [  "$VBPID" != '' ] ; then
-  taskkill /PID $VBPID
+  killall VirtualBox 2>/dev/null
+  killall virtualbox 2>/dev/null
   sleep 3
 else
   echo "Couldn't find virtualbox pid, make sure virtualbox is started in cygwin, and not in Windows itself"
@@ -69,12 +70,18 @@ echo "starting virtualbox in cygwin"
 /cygdrive/c/Program\ Files/oracle/virtualbox/virtualbox.exe &
 sleep 2
 vboxmanage list vms
-
-vboxmanage list vms
 vboxmanage --version
+sleep 5
 
 export BIcount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^BaseImage$ | wc -l`
 if [ "$BIcount" = "1" ] ; then
+  is_running=`VBoxManage showvminfo BaseImage  | grep -i ^State | sed -e "s/  */ /" | cut -d " " -f 2-`
+  if [[ "running" =~ $is_running ]]; then
+    echo "Stopping image BaseImage"
+    VBoxManage controlvm BaseImage poweroff
+    sleep 5
+  fi
+
   echo "removing BaseImage vm"
   VBoxManage unregistervm "BaseImage" --delete-all
 fi

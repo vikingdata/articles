@@ -135,8 +135,13 @@ export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/mai
 export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_base_vm.txt
 wget $DURL -O create_base_vm.sh
 bash create_base_vm.sh
+
+
+echo "WARNING: Install will take a while. Wait until done before moving to next step."
+
 ```
 * Configure base, shutdown, make snapshot.
+    * WAIT until installation in done. 
     * After the system is installed from the previous step.
 
 ```

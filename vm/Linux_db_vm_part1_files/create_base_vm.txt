@@ -44,9 +44,16 @@ VBoxManage natnetwork list
 
   # We need to restart VirtualBox for the 2nd network to appear in the GUI.
   # Its a bug.
-VBPID=`ps -W | grep -i VirtualBox/VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`
-echo "my vb pid is $VBPID"
-echo "attempting to Kill vbpid: $VBPID"
+VBPID=''
+for VBPID in `ps -W | grep -i VirtualBox | sed -e 's/  */ /g' | cut -d ' ' -f 5`; do
+  exists=`ps -W | grep -i VirtualBox | grep $VBPID | wc -l `
+  if [ $exists -gt 0 ]; then
+    echo "my vb pid is $VBPID"
+    echo "attempting to Kill vbpid: taskkill \/PID $VBPID"
+    taskkill \/F \/PID $VBPID
+  fi
+done
+
 if [  "$VBPID" != '' ] ; then
   killall VirtualBox 2>/dev/null
   killall virtualbox 2>/dev/null
@@ -84,8 +91,10 @@ if [ "$BIcount" = "1" ] ; then
 
   echo "removing BaseImage vm"
   VBoxManage unregistervm "BaseImage" --delete-all
+  rm -rfv /cygdrive/c/Users/$USER/VirtualBox\ VMs/BaseImage/
 fi
 
+sleep 1
 VBoxManage createvm --name "BaseImage" --ostype Ubuntu_64 --register
 sleep 1
 VBoxManage modifyvm "BaseImage" --cpus 1 --memory 2048 --vram 128 \

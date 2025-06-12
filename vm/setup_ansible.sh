@@ -6,8 +6,8 @@ cd ansible
 export ANSIBLE_CONFIG="`pwd`/anisble.cfg"
 
 acount=`grep ANISBLE_CONFIG ~/.bashrc | wc -l`
-if [ $acount -lt 1 ] ; then
-  echo "Adding $ANSIBLE_CONFIG to ~/.bashrc"
+if [ $count -lt 1 ] ; then
+  echo "Adding $ANSIBLE_CONFIG to bash.rc"
   echo "" >> ~/.bashrc
   echo "export ANSIBLE_CONFIG='$ANSIBLE_CONFIG'" >> ~/.bashrc
 fi

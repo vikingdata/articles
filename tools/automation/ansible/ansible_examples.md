@@ -23,7 +23,10 @@ title: Ansible Examples
 * * *
 <a name=scripts></a>Run scripts
 -----
-* List out all hosts: ``` ansible all --list-hosts ```
+* Test commands:
+    * List out all hosts: ``` ansible all --list-hosts ```
+    * Ping all hosts : ```ansible -m ping admin ```
+    * Ad hoc command : ```ansible admin -a "echo 'hello'"```
 * Run scripts locally
 * Run scripts remotely
 * Capture data to file

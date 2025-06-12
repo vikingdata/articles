@@ -9,7 +9,7 @@ acount=`grep ANISBLE_CONFIG ~/.bashrc | wc -l`
 if [ $count -lt 1 ] ; then
   echo "Adding $ANSIBLE_CONFIG to bash.rc"
   echo "" >> ~/.bashrc
-  echo "ANSIBLE_CONFIG='$ANSIBLE_CONFIG'" >> ~/.bashrc
+  echo "export ANSIBLE_CONFIG='$ANSIBLE_CONFIG'" >> ~/.bashrc
 fi
 
 if [ ! -f "$ANSIBLE_CONFIG" ] ; then

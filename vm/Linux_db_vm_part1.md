@@ -38,6 +38,7 @@ running VirtualBox, Anisble, Terrform, and Vargant.
     * [Download](https://www.virtualbox.org/wiki/Downloads)
     * [API](https://download.virtualbox.org/virtualbox/SDKRef.pdf)
     * [VBoxManage](https://www.virtualbox.org/manual/topics/vboxmanage.html#vboxmanage)
+    * [online manual](https://www.virtualbox.org/manual)
 * Terrform in windows.
 * https://www.oracle.com/technical-resources/articles/it-infrastructure/admin-manage-vbox-cli.html
 * Tools
@@ -126,6 +127,11 @@ echo "[self]
 ansible_connection=ssh
 " > hosts
 
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
+wget $DURL -O setup_ansible.sh
+bash setup_ansible.sh
+
 ```
 
 
@@ -169,6 +175,7 @@ bash create_main_servers.sh
 
 
 ```
+* Record ip addresses and get ip address of server "admin". 
 
 * Setup port forward to admin server
     * In Windows, Setup firewall
@@ -193,7 +200,7 @@ bash create_main_servers.sh
                 * Name : Rule1
                 * Protocol : TCP
                 * Host Ip: (leave blank)
-                * Host Port : 1999
+                * Host Port : 2222
                 * Guest IP : 10.0.2.15
                     * Change to the ip address of your admin server.
                 * Guest Port : 22

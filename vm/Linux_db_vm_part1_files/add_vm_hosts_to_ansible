@@ -1,9 +1,26 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 
-# ansible_host=192.168.137.242
-import subprocess, sys, os, re, os
+import subprocess, sys, os, re, os, time
+import argparse
 
-# VBoxManage showvminfo "Windows XP"
+parser = argparse.ArgumentParser(
+                        prog='add_vm_hosts_to_ansible',
+                        description='adds vm hosts to ansible with ssh proxy',
+                        epilog='')
+parser.add_argument('-d', '--debug', action='store_true')
+parser.add_argument('-t', '--test', action='store_true')
+parser.add_argument('--test_count', type=int, default=0)
+
+args = parser.parse_args()
+
+DEBUG = 0
+print (vars(args))
+if args.debug == 1: DEBUG = 1
+TEST = 0
+if args.test == 1: TEST = 1
+TEST_COUNT = args.test_count
+if TEST_COUNT > 0:
+    TEST_COUNT -= 1
 
 home_dir=os.environ["HOME"] + "/ansible/inventory"
 re_dquote = re.compile('["]')
@@ -20,38 +37,83 @@ else:
     server_list = [re_dquote.sub("", i.split(" ")[0]) for i in output.split("\n")]
 
 def addHost(host, subject):
+    Turned_On_Initially = 0
+    Turned_On = 0
+    VB_options="--username root --password mark --wait-stdout --wait-stderr"
+    get_ip="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
+
     file1 = home_dir + "/" + subject + ".yml"
-    c = "grep " + host + ": " +  file1 + " | wc -l"
-    (status, output) = subprocess.getstatusoutput(c)
     if not os.path.isfile(file1):
         f = open(file1,'w')
         f.write(subject + ":\n  hosts:\n")
         f.close()
-
         # See if host already exists in file 
     c = "grep " + host + ": " +  file1 + " | wc -l"
     (status, output) = subprocess.getstatusoutput(c)
-    if output == "0" or status != 0:
+    if output != "0":
+        print ("Skipping:", host, "already in inventory.")
+    else:
            # See if it is running, and if not run it.
-        
-           # Try to get ip address
-        VB_options="--username root --password mark --wait-stdout --wait-stderr"
-        c="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
-        print ("executing " + c + "\n")
+        c="VBoxManage showvminfo " + host + "  | grep -i ^State | sed -e \"s/  */ /\" | cut -d \" \" -f 2-"
+        if DEBUG > 0: print ("executing " + c + "\n")
         (status, output) = subprocess.getstatusoutput(c)
+        if status != 0 or 'running' not in output:
+            Turned_On_Initially = 0
+            Turned_On = 1
+            print ("Not running " + host + ", trying to turn it on and waiting 30 seconds.")
+            c="VBoxManage startvm  " + host 
+            if DEBUG > 0: print ("executing " + c + "\n")
+            (status, output) = subprocess.getstatusoutput(c)
+            if status == 0 or "10." not in output:
+                print ("started " + host + ": ", status, output)
+                count = 0
+                while count  < 5: 
+                  if DEBUG > 0: print ("5 tries sleeping 30 seconds: count:" , count, "command:", get_ip)
+                  time.sleep(30)
+
+                  (status, output) = subprocess.getstatusoutput(get_ip)
+                  if status == 0:
+                      count = 5
+                      Turned_On = 1
+                  count += 1
+        else:
+            Turned_On_Initially = 1
+
+          # Try to get ip address
+        if DEBUG > 0: print ("executing " + get_ip + "\n")
+        (status, output) = subprocess.getstatusoutput(get_ip)
+        count = 0
+        while status != 0:
+            print ("trying to get ip address of " + host)
+            (status, output) = subprocess.getstatusoutput(get_ip)
+            if count > 9: break
+            count += 1
+            time.sleep(1)
+            if status != 0: continue
 
           # Print out error code or if successful. 
         extra = ""
         if status == 0: extra = "        ansible_host: " + output + "\n"
-        else: print ("Unable to get ip address: ", status, output)
-
+        else:
+            print ("Unable to get ip address: ", status, output)
+            sys.exit()  
            # Save host and ip address
-        print ("Saving " + host + " to " + subject)
+        print ("Saving " + host + " to " + subject, " : ", output)
         f = open(file1,'a')
-        f.write("      " + host + "\n" + extra)
+        f.write("      " + host + ":\n" + extra)
         f.close()
-        
+
+           # If not initially on, turn off
+        if Turned_On_Initially == 0 and Turned_On == 1:
+            print ("Turning off vm " + host ) 
+            c="VBoxManage controlvm " + host + " poweroff  "
+            if DEBUG > 0: print ("executing " + c + "\n")
+            (status, output) = subprocess.getstatusoutput(c)
+            if DEBUG > 0: print ("power off status for " + host, status, output)            
+
+host_count = 0
 for host in server_list:
+    host_count += 1
        # Create 3 different inventory files. 
     if host == "admin"or host == "BaseImage":
         subject = "support"
@@ -62,6 +124,14 @@ for host in server_list:
 
     else: addHost(host, "other")
 
+    if TEST > 0:
+        if DEBUG > 0:
+          print ("Test mode: skipping rest of hosts.")
+        if host_count > TEST_COUNT:
+          if DEBUG > 0: print ("SKIP VALUES", host_count, TEST_COUNT)  
+          break
+                                                    
+    
    # Create one inventory which combines all 3 files. 
 file1 = home_dir + "/all.yml"
 c = "grep " + host + ": " +  file1 + " | wc -l"
@@ -71,5 +141,18 @@ if output == "0":
     f.write("all:\n  children:\n    support:\n    database_servers:\n    other:\n")
     f.close()
                          
+for subject in ["support", "database_servers", "other"]:
+    file1 = home_dir + "/" + subject + ".yml"
+    if not os.path.isfile(file1): continue    
 
+    c = "grep 'vars:' " +  file1 + " | wc -l"
+    (status, output) = subprocess.getstatusoutput(c)
+    if DEBUG > 0: print ([status, output])
+    if output == '0':
+        vars  = "  vars:\n" 
+        vars += "    ansible_ssh_common_args: '-o ProxyCommand=\"ssh -p 2222 -W %h:%p -q username@bastion.example.com\"' \n"
+        f = open(file1,'a')
+        f.write(vars)
+        f.close()
+                        
         

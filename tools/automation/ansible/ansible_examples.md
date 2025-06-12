@@ -23,7 +23,7 @@ title: Ansible Examples
 * * *
 <a name=scripts></a>Run scripts
 -----
-
+* List out all hosts: ``` ansible all --list-hosts ```
 * Run scripts locally
 * Run scripts remotely
 * Capture data to file

@@ -28,8 +28,16 @@ title: Ansible Examples
     * Ping all hosts : ```ansible -m ping admin ```
     * Ad hoc command : ```ansible admin -a "echo 'hello'"```
     * Verbose : ``` ansible -vvv all -m ping ````
-* Run scripts locally without ssh : 
-* Run scripts remotely
+* [Run scripts locally without ssh](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_delegation.html) :
+    * Line command: ansible-playbook --connection=local <playbook_name.yml>
+    * Line command: ansible self -m command -a "uptime"  -c local
+    * in playbook: local_action or delegate_to
+    * In the inventory
+```
+[local]
+   localhost ansible_connection=local
+```
+
 * Capture data to file
 * Capture data to database
 * Run tasks

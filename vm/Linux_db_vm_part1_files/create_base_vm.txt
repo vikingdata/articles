@@ -30,6 +30,7 @@ export GUEST="/vb/shared/VBoxGuestAdditions.iso"
 mkdir -p /cygdrive/c/vb/shared/vms/
   # Let the base file image be saved to a global file.
 export VDI=/cygdrive/c/vb/shared/vms/BaseImage.vdi
+#export VDI="/c/Users/marka/VirtualBox\ VMs/BaseImage/BaseImage-disk001.vdi"
 
   ## Add Nat network if it doesn't exist. 
 ncount=`VBoxManage natnetwork list NatNetwork | grep ^Name | sed -e 's/  */ /g' | sed -e "s/[\n\r]//" | cut  -d ' ' -f2 | grep ^NatNetwork$ | wc -l`
@@ -91,8 +92,11 @@ if [ "$BIcount" = "1" ] ; then
 
   echo "removing BaseImage vm"
   VBoxManage unregistervm "BaseImage" --delete-all
-  rm -rfv /cygdrive/c/Users/$USER/VirtualBox\ VMs/BaseImage/
 fi
+
+  # Make sure incomplete installs are removed. 
+rm -rfv /cygdrive/c/Users/$USER/VirtualBox\ VMs/BaseImage/
+rm -fv /cygdrive/c/vb/shared/vms/BaseImage.vdi
 
 sleep 1
 VBoxManage createvm --name "BaseImage" --ostype Ubuntu_64 --register
@@ -101,12 +105,13 @@ VBoxManage modifyvm "BaseImage" --cpus 1 --memory 2048 --vram 128 \
   --graphicscontroller vmsvga --usbohci on --mouse usbtablet
 
 sleep 1
-VBoxManage createhd --size 20480 --variant Standard --filename=$VDI
+VBoxManage createhd --size 20480 --variant Standard  --filename=$VDI
+
 sleep 1
 VBoxManage storagectl "BaseImage" --name "SATA Controller" --add sata --bootable on
 sleep 1
 VBoxManage storageattach "BaseImage" --storagectl "SATA Controller" \
-  --port 0 --device 0 --type hdd --medium $VDI
+  --port 0 --device 0 --type hdd  --medium $VDI
 sleep 1
 VBoxManage storagectl "BaseImage" --name "IDE Controller" --add ide
 sleep 1

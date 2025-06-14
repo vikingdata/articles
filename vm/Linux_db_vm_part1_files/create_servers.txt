@@ -19,23 +19,24 @@ if ! [ -f "$CYG_OVA" ]; then
   exit
 fi
 
-AutoDeleteVM=yes
-
-
-
   # Make the vms if they don't exit. 
 for h in admin db1 db2 db3 db4 db5 db6; do
-
   servercount=`VBoxManage list vms | cut -d ' ' -f1 | sed -e 's/"//g' | grep ^$h$ | wc -l`
   if [ $servercount -gt 0  ] ; then
     echo "Host '$h' already exists."
 
-    if [ "$AutoDeleteVM" = "yes" ]; then
-      echo "deleting $h "
-      VBoxManage unregistervm "$h" --delete-all
-      echo "Making vm '$h' from $OVA."
-      VBoxManage import $OVA --vsys 0 --vmname=$h --options=importtovdi | egrep -vi ":|change|disable"
+    r=`vboxmanage showvminfo $h | grep -i State: | sed -e "s/  */ /g" | cut -d ' ' -f2`
+    echo $r
+    if  [ "$r" = "running" ]; then
+      echo "host $h running, shutting down."
+      VBoxManage controlvm "$h" poweroff
     fi
+
+    echo "deleting $h "
+    VBoxManage unregistervm "$h" --delete-all
+    echo "Making vm '$h' from $OVA."
+    VBoxManage import $OVA --vsys 0 --vmname=$h --options=importtovdi | egrep -vi ":|change|disable"
+
   else
     echo "Making vm '$h' from $OVA."
     VBoxManage import $OVA --vsys 0 --vmname=$h --options=importtovdi | egrep -vi ":|change|disable"

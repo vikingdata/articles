@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+import subprocess, sys, os, re, os, time
+import argparse, tempfile
+
+parser = argparse.ArgumentParser(
+                        prog='add_vm_hosts_to_ansible',
+                        description='adds vm hosts to ansible with ssh proxy',
+                        epilog='')
+parser.add_argument('-d', '--debug', action='store_true')
+parser.add_argument('-s', '--server', type=str, required=True) 
+args = parser.parse_args()
+
+DEBUG = 0
+#print (vars(args))
+if args.debug == 1: DEBUG = 1
+host = args.server
+
+print ("Detecting if virtualbox is running. If it is not, make sure it is on.")
+c="VBoxManage list runningvms"
+if DEBUG > 0: print ("executing " + c + "\n")
+(status, output) = subprocess.getstatusoutput(c)
+count = 0
+if status != 0:
+  print ("Error getting running list. Is virtualbox running? status:", status, output)
+  sys.exit()
+
+re_match_host = re.compile('^"' + host + '"')
+lines = output.split("\n")
+matches = [ i for i in lines if re_match_host.match(i) ]
+
+
+print ("Running vms:", lines)
+print ("Matches:", matches)
+
+if len(matches) > 0:
+  print ("System already running, doing nothing.")
+else :
+  print ("Starting....")
+  c="VBoxManage startvm  " + host
+  if DEBUG > 0: print ("executing " + c + "\n")
+  (status2, output2) = subprocess.getstatusoutput(c)
+
+  c="VBoxManage showvminfo " + host + "  | grep -i ^State | sed -e \"s/  */ /\" | cut -d \" \" -f 2-"
+  if DEBUG > 0: print ("executing " + c + "\n")
+  (status, output) = subprocess.getstatusoutput(c)
+  print ("status on host ", host, ":", status, output)
+          
+  

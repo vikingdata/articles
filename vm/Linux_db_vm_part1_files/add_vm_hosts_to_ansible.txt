@@ -1,0 +1,201 @@
+#!/usr/bin/python
+
+import subprocess, sys, os, re, os, time
+import argparse, tempfile
+
+parser = argparse.ArgumentParser(
+                        prog='add_vm_hosts_to_ansible',
+                        description='adds vm hosts to ansible with ssh proxy',
+                        epilog='')
+parser.add_argument('-d', '--debug', action='store_true')
+parser.add_argument('-t', '--test', action='store_true')
+parser.add_argument('--test_count', type=int, default=0)
+parser.add_argument('-p','--proxy', type=int, default=0)
+
+args = parser.parse_args()
+
+DEBUG = 0
+print (vars(args))
+if args.debug == 1: DEBUG = 1
+TEST = 0
+if args.test == 1: TEST = 1
+TEST_COUNT = args.test_count
+if TEST_COUNT > 0:
+    TEST_COUNT -= 1
+
+home_dir=os.environ["HOME"] + "/ansible/inventory"
+re_dquote = re.compile('["]')
+SUBJECT_HEADER = """:
+  hosts:
+    
+  vars:
+    ansible_ssh_common_args: '  -o user=root -J root@127.0.0.1:2222  -o ConnectTimeout=10 -o PasswordAuthentication=no -o StrictHostKeyChecking=accept-new '
+#    transfer_method: scp 
+
+"""
+PROXY_ADDRESS="10.0.0.0"
+
+c="VBoxManage list vms "
+server_list = []
+if DEBUG > 0: print ("Executing:", c)
+(status, output) = subprocess.getstatusoutput(c)
+if status != 0:
+    print ("ERROR:", status, output)
+    print ("Aborting")
+    sys.exit(1)
+else:
+    server_list = [re_dquote.sub("", i.split(" ")[0]) for i in output.split("\n")]
+
+def get_ip_address(host):
+  status_ip = 1
+  output_ip = ""
+  Turned_On_Initially = -1
+  Turned_On = -1
+
+  VB_options="--username root --password mark --wait-stdout --wait-stderr"
+  get_ip="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
+          
+    # See if it is running, and if not run it.
+  c="VBoxManage showvminfo " + host + "  | grep -i ^State | sed -e \"s/  */ /\" | cut -d \" \" -f 2-"
+  if DEBUG > 0: print ("executing " + c + "\n")
+  (status, output) = subprocess.getstatusoutput(c)
+
+  if status != 0 or 'running' not in output:
+      Turned_On_Initially = 0
+      Turned_On = 1
+      print ("Not running " + host + ", trying to turn it on and waiting 30 seconds.")
+      c="VBoxManage startvm  " + host 
+      if DEBUG > 0: print ("executing " + c + "\n")
+      (status, output) = subprocess.getstatusoutput(c)
+      if status == 0 or "10." not in output:
+          print ("started " + host + ": ", status, output)
+          count = 0
+          while count  < 5: 
+              if DEBUG > 0: print ("5 tries sleeping 30 seconds: count:" , count, "command:", get_ip)
+              time.sleep(30)
+              
+              (status, output) = subprocess.getstatusoutput(get_ip)
+              if status == 0:
+                  count = 10
+                  Turned_On = 1
+              count += 1
+      else:
+            Turned_On_Initially = 1
+
+          # Try to get ip address
+  if DEBUG > 0: print ("executing " + get_ip + "\n")
+  (status_ip, output_ip) = subprocess.getstatusoutput(get_ip)
+  count = 0
+  while status != 0:
+    print ("trying to get ip address of " + host)
+    if DEBUG > 0: print ("Executing:", get_ip)
+    (status_ip, output_ip) = subprocess.getstatusoutput(get_ip)
+    if count > 9: break
+    count += 1
+    time.sleep(1)
+    if status != 0: continue
+
+          # If not initially on, turn off
+  if Turned_On_Initially == 0 and Turned_On == 1:
+    print ("Turning off vm " + host )
+    c="VBoxManage controlvm " + host + " poweroff  "
+    if DEBUG > 0: print ("executing " + c + "\n")
+    (status2, output2) = subprocess.getstatusoutput(c)
+    if DEBUG > 0: print ("power off status for " + host, status2, output2)
+          
+  if DEBUG > 0: print (" ip address status for ", host, ":", status_ip, output_ip)
+  if "10." in output_ip : status_ip = 0
+  return (status_ip, output_ip)
+    
+def addHost(host, subject):
+    Turned_On_Initially = 0
+    Turned_On = 0
+#    VB_options="--username root --password mark --wait-stdout --wait-stderr"
+#    get_ip="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
+
+    file1 = home_dir + "/" + subject + ".yml"
+    if not os.path.isfile(file1):
+        f = open(file1,'w')
+        f.write(subject + SUBJECT_HEADER)
+        f.close()
+        # See if host already exists in file 
+    c = "grep " + host + ": " +  file1 + " | wc -l"
+    (status, output) = subprocess.getstatusoutput(c)
+    if output != "0":
+        print ("Skipping:", host, "already in inventory.")
+    else:
+        (status, output) = get_ip_address(host)
+        
+          # Print out error code or if successful. 
+        extra = ""
+        if status == 0: extra = "      ansible_host: " + output + "\n"
+        else:
+            print ("Unable to get ip address: ", status, output)
+            sys.exit()  
+           # Save host and ip address
+        print ("Saving " + host + " to " + subject, " : ", output)
+        c = "sed -i 's/hosts:/hosts:\n    " + host + ":\n" + extra + "/' " + file1
+        c = c.replace("\n", "\\n")
+        if DEBUG > 0: print ("executing: "+ c)
+        (status, output) = subprocess.getstatusoutput(c)
+    
+if "admin" not in server_list:
+    print ("admin server must exist, please make server. We use it as an ssh proxy.")
+    sys.exit()
+
+  # Getting ip address for proxy server from admin server. 
+(status, output) = get_ip_address("admin")
+if status == 0 and '10.' in output:
+    print ("ip address of admin:",output)
+    PROXY_ADDRESS = output
+    print ("""Use the ip address:""", PROXY_ADDRESS,""" in your NAT network for ip forwarding for port 2222
+on host to port 22 on vm.""")
+
+print ("Testing if proxy works, if not, will continue script.")
+c="ssh root@127.0.0.1 -p 2222 -o ConnectTimeout=10 -o PasswordAuthentication=no -o StrictHostKeyChecking=accept-new 'ls /tmp/'"
+(status, output) = subprocess.getstatusoutput(c)
+if status != 0:
+    print ("Couldn't accept id_rsa.pub for proxy server.", status, output)
+    print ("ssh setup, windows firewall, or VirtualBox port forwarding is wrong.")
+print ("")
+   
+
+host_count = 0
+important_servers = ['BaseImage','admin']
+for temp_server in important_servers:
+    if temp_server in server_list:
+      server_list.remove(temp_server)
+      server_list.insert(0, temp_server)
+
+if DEBUG > 0: print ("Checking servers in :", server_list)
+for host in server_list:
+    host_count += 1
+       # Create 3 different inventory files. 
+    if host == "admin"or host == "BaseImage":
+        subject = "support"
+        addHost(host, subject)
+    elif host.startswith("db"):
+        subject = "database_servers"
+        addHost(host, subject)                
+
+    else: addHost(host, "other")
+
+    if TEST > 0:
+        if host_count > TEST_COUNT:
+          print ("Test mode: skipping rest of hosts.")  
+          if DEBUG > 0: print ("SKIP VALUES", host_count, TEST_COUNT)  
+          print ("")
+          break
+    print ("")
+    
+   # Create one inventory which combines all 3 files. 
+file1 = home_dir + "/all.yml"
+c = "grep " + host + ": " +  file1 + " 2>/dev/null | wc -l"
+(status, output) = subprocess.getstatusoutput(c)
+if output == "0":
+    f = open(file1,'w')
+    f.write("all_servers:\n  children:\n    support:\n    database_servers:\n    other:\n")
+    f.close()
+    
+print ("""Use the ip address:""", PROXY_ADDRESS,""" in your NAT network for ip forwarding for port 2222
+on host to port 22 on vm.""")

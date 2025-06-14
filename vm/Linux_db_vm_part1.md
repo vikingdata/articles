@@ -145,8 +145,11 @@ echo "WARNING: Install will take a while. Wait until done before moving to next 
     * After the system is installed from the previous step.
 
 ```
+mkdir -p ~/test_install
+cd ~/test_install
+
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export $DURL=$MAIN//vm/Linux_db_vm_part1_files/configure_base.txt
+export DURL=$MAIN/vm/Linux_db_vm_part1_files/configure_base.txt
 wget $DURL -O configure_base_vm.sh
 bash configure_base_vm.sh
 ```
@@ -154,14 +157,14 @@ bash configure_base_vm.sh
 * After image is created, we will import the other systems. One admin server and six db servers (6 for
 replica sets or clusters which replicate to another cluster for HA and DR). 
 ```
+mkdir -p ~/test_install
+cd ~/test_install
+
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=wget $MAIN/vm/Linux_db_vm_part1_files/create_main_servers.txt
-wget $DURL -O create_main_servers.sh
+export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_servers.txt
+wget $DURL -O create_servers.sh
 bash create_main_servers.sh
-
-
 ```
-* Record ip addresses and get ip address of server "admin". Also, setup ssh proxy settings. 
 
 * Setup port forward to admin server
     * In Windows, Setup firewall
@@ -190,10 +193,23 @@ bash create_main_servers.sh
                 * Guest IP : 10.0.2.15
                     * Change to the ip address of your admin server.
                 * Guest Port : 22
+
+File Edit Options Buffers Tools Help
+* Record ip addresses and get ip address of server "admin". Also, setup ssh proxy settings.
+```
+mkdir -p ~/test_install
+cd ~/test_install
+
+export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
+export DURL=$MAIN/vm/Linux_db_vm_part1_files/add_vm_hosts_to_ansible.txt
+wget $DURL -O add_vm_hosts_to_ansible.py
+python add_vm_hosts_to_ansible.py
+
+```
+
 * Test ansible commands
-     * ping : ```    ```
-
-
+     * uptime : ``` ansible local -m command -a "uptime"    ```
+     * uptime : ``` ansible all -m command -a "uptime" ```
 
 #### Terrform install <a name=t></a>
 

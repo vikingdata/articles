@@ -43,6 +43,14 @@ running VirtualBox, Anisble, Terrform, and Vargant.
 * https://www.oracle.com/technical-resources/articles/it-infrastructure/admin-manage-vbox-cli.html
 * Tools
     * [Git cheatsheet](https://wac-cdn.atlassian.com/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf?cdnVersion=2741)
+* ssh
+    * https://www.jeffgeerling.com/blog/2022/using-ansible-playbook-ssh-bastion-jump-host
+        * We used the following in the ansible inventory instead
+```
+  vars:
+      ansible_ssh_common_args: ' -o user=root -J root@127.0.0.1:2222 -o StrictHostKeyChecking=accept-new    '
+```
+
 * * *
 <a name=vb></a>VirtualBox
 -----
@@ -208,8 +216,8 @@ python add_vm_hosts_to_ansible.py
 ```
 
 * Test ansible commands
-     * uptime : ``` ansible local -m command -a "uptime"    ```
      * uptime : ``` ansible all -m command -a "uptime" ```
+     * ping : ``` ansible -m ping all ```
 
 #### Terrform install <a name=t></a>
 
@@ -228,3 +236,15 @@ cd ansible
 
 
 ```
+
+### Anisble playlists
+* Install databse software
+    * Perrcona MySQL with Oracle binaries. 
+    * Postresql
+    * Yugabyte
+    * MongoDB
+    * DBT
+* Install cloud services
+    * Snowflake : installed on admin server
+    * Yugabyte  : Installed on admin server
+

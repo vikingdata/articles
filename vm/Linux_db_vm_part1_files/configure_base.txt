@@ -117,7 +117,7 @@ chmod -vR 744  /root/.ssh /home/$VB_USER/.ssh
 chmod -v 600 /root/.ssh/id_rsa /home/$VB_USER/.ssh/id_rsa
 
 chown -vR root /root/.ssh/authorized_keys
-chown -vR $VB_USER /home/$VB_USER/.ssh/authorized_keys
+chown -vR $VB_USER /home/$VB_USER/.ssh/
 
 echo 'configuring autologin'
 autologin=\`grep -i automaticlogin /etc/gdm3/custom.conf | grep -v '#'  | wc -l\`

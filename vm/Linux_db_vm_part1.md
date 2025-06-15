@@ -216,8 +216,19 @@ python add_vm_hosts_to_ansible.py
 ```
 
 * Test ansible commands
-     * uptime : ``` ansible all -m command -a "uptime" ```
-     * ping : ``` ansible -m ping all ```
+```
+ansible all -m command -a "uptime" 
+ansible -m ping all
+
+source ~/.bashrc
+
+   # NOTE: ssh_vb_root defaults to host "admin"
+   # If you pass any variables the first one MUST be a host.
+   
+ssh_vb_root admin  "hostname; whoami"
+ssh_vb admin -l root "hostname; whoami"
+ssh_vb admin -l mark "hostname; whoami"
+  
 
 #### Terrform install <a name=t></a>
 
@@ -238,7 +249,11 @@ cd ansible
 ```
 
 ### Anisble playlists
-* Install databse software
+* Admin
+    * Add host
+    * Add host to ansible and ssh config file
+    * Turn off and on servers
+* Install database software
     * Perrcona MySQL with Oracle binaries. 
     * Postresql
     * Yugabyte

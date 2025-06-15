@@ -24,7 +24,9 @@ if args.test == 1: TEST = 1
 TEST_COUNT = args.test_count
 if TEST_COUNT > 0:
     TEST_COUNT -= 1
-
+SSH_INSTALL = 0
+if args.ssh == 1: SSH_INSTALL = 1
+    
 home_dir=os.environ["HOME"] + "/ansible/inventory"
 re_dquote = re.compile('["]')
 SUBJECT_HEADER = """:
@@ -35,7 +37,8 @@ SUBJECT_HEADER = """:
 #    transfer_method: scp 
 
 """
-PROXY_ADDRESS="10.0.0.0"
+PROXY_ADDRESS=""
+ssh_config = os.environ["HOME"] + "/.ssh/config_vb"
 
 c="VBoxManage list vms "
 server_list = []
@@ -112,28 +115,59 @@ def get_ip_address(host):
 def addHost(host, subject):
     Turned_On_Initially = 0
     Turned_On = 0
+    ip_address=""
 #    VB_options="--username root --password mark --wait-stdout --wait-stderr"
 #    get_ip="VBoxManage guestcontrol " + host + " run /bin/bash " + VB_options + " -- -c \"/bin/hostname -I\" "
+
+      ## See if host is in the ssh config file. 
+    c = "grep 'Host " + host + "' " +  ssh_config + " | wc -l"
+    (status, output) = subprocess.getstatusoutput(c)
+    if output == "0":
+        if PROXY_ADDRESS != '' and SSH_INSTALL > 0:
+          (status, output) = get_ip_address(host)
+          if output != "0" and status == 0:
+              ip_address = output
+              print ("adding host " + host + " to " + ssh_config + " status :", [status, output])
+              f = open(ssh_config,'a')
+              string1 = """\nHost """ + host + """\n   HostName """ + ip_address + """\n\n"""
+              f.write(string1)
+              f.close()
 
     file1 = home_dir + "/" + subject + ".yml"
     if not os.path.isfile(file1):
         f = open(file1,'w')
         f.write(subject + SUBJECT_HEADER)
         f.close()
+        
         # See if host already exists in file 
     c = "grep " + host + ": " +  file1 + " | wc -l"
     (status, output) = subprocess.getstatusoutput(c)
     if output != "0":
         print ("Skipping:", host, "already in inventory.")
     else:
-        (status, output) = get_ip_address(host)
+        if ip_address == "": 
+          (status, output) = get_ip_address(host)
         
           # Print out error code or if successful. 
         extra = ""
-        if status == 0: extra = "      ansible_host: " + output + "\n"
+        if status == 0:
+          ip_address=output
+          extra = "      ansible_host: " + ip_address + "\n"
+
+          c = "grep " + host + ": " +  ssh_config + " | wc -l"
+          (status, output) = subprocess.getstatusoutput(c)
+          print ([status, output, PROXY_ADDRESS, SSH_INSTALL])
+          if output == "0":
+            if PROXY_ADDRESS != '' and SSH_INSTALL > 0:
+              print ("adding host " + host + " to " + ssh_config)
+              f = open(ssh_config,'a')
+              string1 = """\nHost  """ + host + """   HostName """ + ip_address + """\n\n"""
+              f.write(string1)
+              f.close()
+              
         else:
-            print ("Unable to get ip address: ", status, output)
-            sys.exit()  
+          print ("Unable to get ip address: ", status, output)
+#          sys.exit()  
            # Save host and ip address
         print ("Saving " + host + " to " + subject, " : ", output)
         c = "sed -i 's/hosts:/hosts:\n    " + host + ":\n" + extra + "/' " + file1
@@ -160,8 +194,40 @@ if status != 0:
     print ("Couldn't accept id_rsa.pub for proxy server.", status, output)
     print ("ssh setup, windows firewall, or VirtualBox port forwarding is wrong.")
 print ("")
-   
 
+  ## If ssh is to be installed and PROXY_ADDRESS is not "", install ssh
+
+if PROXY_ADDRESS == '' or SSH_INSTALL < 1:
+  pass
+else:
+  scount="grep ssh_vb ~/.bashrc | wc -l"
+  (status, output) = subprocess.getstatusoutput(scount)
+  if status == 0 and output == "0":
+    bashrc_file = os.environ["HOME"] + "/.bashrc"
+    print ("Adding alias ssh_vb ssh_vb_root to " + bashrc_file)
+    c1 = """ssh_vb_root() {
+    temp_host=""
+    if [ "$1" = "" ]; then temp_host="admin"; fi
+    echo "ssh -F """ + ssh_config + """ -o user=root -J root@127.0.0.1:2222 $temp_host $@" ;
+    ssh -F """ + ssh_config + """ -o user=root -J root@127.0.0.1:2222 $temp_host $@ ;
+    }
+"""
+
+    
+    c2 = "ssh_vb() { echo \"ssh  -F " + ssh_config + " -J root@127.0.0.1:2222 $@\" ; ssh -F " + ssh_config + " -J root@127.0.0.1:2222 $@ ; } "
+    bashrc_file = os.environ["HOME"] + "/.bashrc"
+    f = open(bashrc_file, 'a') 
+    f.write("\n")
+    f.write(c1 + "\n")
+    f.write(c2 + "\n")
+    f.close()
+
+  print ("Verifying ssh config file exists:", ssh_config)
+  if not os.path.isfile(ssh_config):
+      f = open(ssh_config,'w')
+      f.write("\n")
+      f.close()
+    
 host_count = 0
 important_servers = ['BaseImage','admin']
 for temp_server in important_servers:

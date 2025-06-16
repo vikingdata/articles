@@ -17,7 +17,6 @@ parser.add_argument('-s', '--ssh', action='store_true')
 args = parser.parse_args()
 
 DEBUG = 0
-print (vars(args))
 if args.debug == 1: DEBUG = 1
 TEST = 0
 if args.test == 1: TEST = 1
@@ -26,7 +25,8 @@ if TEST_COUNT > 0:
     TEST_COUNT -= 1
 SSH_INSTALL = 0
 if args.ssh == 1: SSH_INSTALL = 1
-    
+
+if DEBUG>0: print ("vars:", vars(args))
 home_dir=os.environ["HOME"] + "/ansible/inventory"
 re_dquote = re.compile('["]')
 SUBJECT_HEADER = """:
@@ -145,9 +145,16 @@ def addHost(host, subject):
     if output != "0":
         print ("Skipping:", host, "already in inventory.")
     else:
+        ip_count=0 
         if ip_address == "": 
           (status, output) = get_ip_address(host)
-        
+        while ip_count < 6 and status!= 0 and "10." not in output:
+          print ("ERROR: couldn't get ip address, trying 5 more times, sleeping 5 seconds: ", host)
+          print (" count", ip_count)
+          time.sleep(5)
+          ip_count += 1
+          (status, output) = get_ip_address(host)
+          
           # Print out error code or if successful. 
         extra = ""
         if status == 0:
@@ -156,7 +163,7 @@ def addHost(host, subject):
 
           c = "grep " + host + ": " +  ssh_config + " | wc -l"
           (status, output) = subprocess.getstatusoutput(c)
-          print ([status, output, PROXY_ADDRESS, SSH_INSTALL])
+#          print ([status, output, PROXY_ADDRESS, SSH_INSTALL])
           if output == "0":
             if PROXY_ADDRESS != '' and SSH_INSTALL > 0:
               print ("adding host " + host + " to " + ssh_config)
@@ -181,12 +188,21 @@ if "admin" not in server_list:
 
   # Getting ip address for proxy server from admin server. 
 (status, output) = get_ip_address("admin")
+pcount=0
+while not '10.' in output and pcount < 10:
+    print ("Could not get ip address of admin. Trying upto 10 times, and then sleeping. count = ", pcount)
+    pcount += 1
+    time.sleep(5)
+    (status, output) = get_ip_address("admin")
+    
 if status == 0 and '10.' in output:
     print ("ip address of admin:",output)
     PROXY_ADDRESS = output
     print ("""Use the ip address:""", PROXY_ADDRESS,""" in your NAT network for ip forwarding for port 2222
 on host to port 22 on vm.""")
-
+else:
+    print ("Could not get proxy address.")
+    
 print ("Testing if proxy works, if not, will continue script.")
 c="ssh root@127.0.0.1 -p 2222 -o ConnectTimeout=10 -o PasswordAuthentication=no -o StrictHostKeyChecking=accept-new 'ls /tmp/'"
 (status, output) = subprocess.getstatusoutput(c)
@@ -225,7 +241,7 @@ else:
   print ("Verifying ssh config file exists:", ssh_config)
   if not os.path.isfile(ssh_config):
       f = open(ssh_config,'w')
-      f.write("\n")
+      f.write("StrictHostKeyChecking no\n")
       f.close()
     
 host_count = 0

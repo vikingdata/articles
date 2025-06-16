@@ -171,7 +171,7 @@ cd ~/test_install
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
 export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_servers.txt
 wget $DURL -O create_servers.sh
-bash create_main_servers.sh
+bash create_servers.sh
 ```
 
 * Setup port forward to admin server
@@ -215,10 +215,12 @@ python add_vm_hosts_to_ansible.py
 
 ```
 
-* Test ansible commands
+* Change hostname, test ansible commands, test ssh
 ```
 ansible all -m command -a "uptime" 
 ansible -m ping all
+
+  ## TODO -- change hostname
 
 source ~/.bashrc
 
@@ -228,7 +230,15 @@ source ~/.bashrc
 ssh_vb_root admin  "hostname; whoami"
 ssh_vb admin -l root "hostname; whoami"
 ssh_vb admin -l mark "hostname; whoami"
-  
+
+ssh_vb_root BaseImage  "hostname; whoami"
+ssh_vb_root db1   "hostname; whoami"
+ssh_vb_root db2   "hostname; whoami"
+ssh_vb_root db3   "hostname; whoami"
+ssh_vb_root db4   "hostname; whoami"
+ssh_vb_root db5   "hostname; whoami"
+ssh_vb_root db6   "hostname; whoami"
+
 
 #### Terrform install <a name=t></a>
 

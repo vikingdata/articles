@@ -16,7 +16,7 @@ title: Ansible : call specific hosts
 <a name=e></a>Explanation
 -----
 
-The purpose of this document is to be able to easily to apply a plyabook to
+The purpose of this document is to be able to easily to apply a playbook to
 a list of hosts without complicated way of doing it. There may be a module or method
 of specifying a list of hosts, but I want to do it so:
 1. You don't accidentally apply the playbook to other hosts.
@@ -29,13 +29,13 @@ Here are the problems.
 
 The problems make it very very easy to accidentally apply the playbook to all hosts
 listed in the playbook or an inventory if specified by line command.
-The point is, I want to submit an exact list of hosts without specfying
+The point is, I want to submit an exact list of hosts without specifying
 the inventory.
 
 
 Thus here are the general steps.
-* We assume you have installed anisble, have an inventory, and can run basic playbooks. So
-we assume you not a beginner at anisble. 
+* We assume you have installed Ansible, have an inventory, and can run basic playbooks. So
+we assume you not a beginner at Ansible. 
 * Make sure you have an inventory with a server called "myserver.local" or other name. Here is an example
 of list with two servers: server1 and server2. Change the server names to your 2 servers. 
 ```

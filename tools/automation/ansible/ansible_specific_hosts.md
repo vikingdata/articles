@@ -4,8 +4,6 @@ title: Ansible : call specific hosts
 --------
 
 # Ansible: call specific hosts
-============================
-
 *by Mark Nielsen*  
 *Copyright June 2025*
 

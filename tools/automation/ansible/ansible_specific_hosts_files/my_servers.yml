@@ -1,0 +1,8 @@
+
+servers:
+  hosts:
+      # Change myserver.local to your remote server.
+    server1.local:
+    server2.local:
+
+

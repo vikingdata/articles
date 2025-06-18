@@ -29,13 +29,14 @@ Thus here are the general steps.
 * We assume you have installed anisble, have an inventory, and can run basic playbooks. So
 we assume you not a beginner at anisble. 
 * Make sure you have an inventory with a server called "myserver.local" or other name. Here is an example
-of list with two servers: server1.local and server2.local. Change the server names to your 2 servers. 
+of list with two servers: server1 and server2. Change the server names to your 2 servers. 
 ```
 echo "
-hosts:
+servers:
+  hosts:
       # Change myserver.local to your remote server. 
-  server1.local:
-  server2.local:
+    server1:
+    server2:
       
 " > my_servers.yml
 ```
@@ -53,11 +54,24 @@ hosts:
 * Download these files. Remember to change "my_servers.yml" to your list of servers.
 ```
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/tools/automation/ansible/examples_dir/setup_ansible.txt
 export wget_options=" --no-check-certificate --no-cache --no-cookies "
-wget $wget_options $DURL -O setup_ansible.sh
-source setup_ansible.sh
 
+export DURL=$MAIN/tools/automation/ansible/ansible_specific_hosts_files/top.yaml
+wget $wget_options $DURL -O top.yaml
 
+export DURL=$MAIN/tools/automation/ansible/ansible_specific_hosts_files/imported.yaml
+wget $wget_options $DURL -O imported.yaml
+
+export DURL=$MAIN/tools/automation/ansible/ansible_specific_hosts_files/my_servers.yml
+wget $wget_options $DURL -O my_servers.yml
+```
+* Change the servers listed in the file "my_servers.yml"
+* Execute:
+```
+   # This should work.
+ansible-playbook top.yaml -e target_hosts=server1 -i my_servers.yml
+   # This should work with both servers.
+
+   # This will fail. 
 
 ```

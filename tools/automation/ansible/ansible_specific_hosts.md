@@ -8,6 +8,14 @@ title: Ansible : call specific hosts
 *by Mark Nielsen*  
 *Copyright June 2025*
 
+* [Explanation](#e)
+* [Download and Test](#t)
+* [Output](#o)
+
+* * *
+<a name=e></a>Explanation
+-----
+
 The purpose of this document is to be able to easily to apply a plyabook to
 a list of hosts without complicated way of doing it. There may be a module or method
 of specifying a list of hosts, but I want to do it so:
@@ -40,6 +48,7 @@ servers:
       
 " > my_servers.yml
 ```
+
 * Create a main playbook.
     * Create a file called "top.yaml".
     * The hosts defined is just "localhost".
@@ -50,6 +59,12 @@ servers:
     top playbook already checked for the variable.
     * Abort if the variable "playlist_imported" is not defined.
     * Do your commands for each host in "target_hosts".
+
+* * *
+
+<a name=t></a>Download and test
+-----
+
 
 * Download these files. Remember to change "my_servers.yml" to your list of servers.
 ```
@@ -73,5 +88,133 @@ ansible-playbook top.yaml -e target_hosts=server1 -i my_servers.yml
    # This should work with both servers.
 
    # This will fail. 
+
+```
+
+* My my_servers.yml was
+```
+servers:
+  hosts:
+      # Change myserver.local to your remote server.
+    db2:
+      ansible_host: 10.0.2.21
+    db1:
+      ansible_host: 10.0.2.20
+  vars:
+    ansible_ssh_common_args: ' -o ProxyJump="root@127.0.0.1:2222" -o user=root'
+```
+
+* My output was
+
+```
+ansible-playbook top.yaml -e target_hosts=db1 -i my_servers.yml > output.log
+ansible-playbook top.yaml -e target_hosts=db1,db2 -i my_servers.yml > output.log
+ansible-playbook top.yaml  -i my_servers.yml  > output.log 2>&1 
+
+```
+
+* * *
+<a name=links></a>Output
+-----
+* Ran the commands
+```
+ansible-playbook top.yaml -e target_hosts=db1 -i my_servers.yml > output.log
+ansible-playbook top.yaml -e target_hosts=db1,db2 -i my_servers.yml > output2.log
+ansible-playbook top.yaml  -i my_servers.yml > error.log
+```
+* output.log
+```
+
+PLAY [Sample top playbook] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Assert we are included] **************************************************
+ok: [localhost] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+PLAY [sample imported playbook] ************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [db1]
+
+TASK [Assert we are included] **************************************************
+ok: [db1] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [Do a simple command, like get the hostname.] *****************************
+changed: [db1]
+
+PLAY RECAP *********************************************************************
+db1                        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+
+* output2.log
+```
+
+PLAY [Sample top playbook] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Assert we are included] **************************************************
+ok: [localhost] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+PLAY [sample imported playbook] ************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [db1]
+ok: [db2]
+
+TASK [Assert we are included] **************************************************
+ok: [db1] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+ok: [db2] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [Do a simple command, like get the hostname.] *****************************
+changed: [db1]
+changed: [db2]
+
+PLAY RECAP *********************************************************************
+db1                        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+db2                        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+
+* error.log
+```
+
+PLAY [Sample top playbook] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Assert we are included] **************************************************
+fatal: [localhost]: FAILED! => {
+    "assertion": "target_hosts is defined",
+    "changed": false,
+    "evaluated_to": false,
+    "msg": "Assertion failed"
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
 
 ```

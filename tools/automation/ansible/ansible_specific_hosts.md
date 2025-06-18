@@ -5,8 +5,9 @@ title: Ansible : call specific hosts
 
 # Ansible: call specific hosts
 ============================
-*by Mark Nielsen*  
-*Copyright June 2025*
+
+* by Mark Nielsen*  
+* Copyright June 2025*
 
 * [Explanation](#e)
 * [Download and Test](#t)

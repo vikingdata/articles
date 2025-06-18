@@ -97,6 +97,10 @@ ansible-playbook top.yaml -i my_servers.yml
 
 ```
 
+* * *
+<a name=o></a>Output
+-----
+
 * My my_servers.yml was
 ```
 servers:
@@ -110,18 +114,6 @@ servers:
     ansible_ssh_common_args: ' -o ProxyJump="root@127.0.0.1:2222" -o user=root'
 ```
 
-* My commands were
-
-```
-ansible-playbook top.yaml -e target_hosts=db1 -i my_servers.yml > output.log
-ansible-playbook top.yaml -e target_hosts=db1,db2 -i my_servers.yml > output.log
-ansible-playbook top.yaml  -i my_servers.yml  > output.log 2>&1 
-
-```
-
-* * *
-<a name=o></a>Output
------
 * Ran the commands
 ```
 ansible-playbook top.yaml -e target_hosts=db1 -i my_servers.yml > output.log

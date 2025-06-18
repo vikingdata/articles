@@ -19,31 +19,34 @@ title: Ansible : call specific hosts
 The purpose of this document is to be able to easily to apply a playbook to
 a list of hosts without it being complicated. There may be a module or method
 of specifying a list of hosts, but the documentation and examples on the internet do not
-satisfy my desires or I have not looked hard enough. I want to do:
+satisfy my desires or I have not looked hard enough. I want to :
 1. You don't accidentally apply the playbook to other hosts.
 2. There is an easy way to abort if the list is not given.
 3. Make it easy to submit the list.
+4. Provide the hosts by line command and do not rely on the inventory file. 
 
 Here are the problems.
 1. Every playbook needs a default list of hosts.
-2. You have limit the hosts by line command.
+2. If you do not import playbooks, roles, or tasks, you have to use "limit" on line command to limit
+the hosts affected or point to an inventory containing a specific list. The point is, it is easy
+to make a mistake -- I think. 
 
 The problems make it very very easy to accidentally apply the playbook to all hosts
-listed in the playbook or an inventory if specified by line command.
+listed in the playbook or an inventory (if specified by line command).
 The point is, I want to submit an exact list of hosts without specifying
-the inventory.
+the inventory or worrying about what the "hosts" variable in the playbook is. 
 
 
 Thus here are the general steps.
 * We assume you have installed Ansible, have an inventory, and can run basic playbooks. So
 we assume you not a beginner at Ansible. 
-* Make sure you have an inventory with a server called "myserver.local" or other name. Here is an example
+* Make sure you have an inventory with a server called "server1" or other name. Here is an example
 of list with two servers: server1 and server2. Change the server names to your 2 servers. 
 ```
 echo "
 servers:
   hosts:
-      # Change myserver.local to your remote server. 
+      # Change server1 and server2 to the two names of your servers. 
     server1:
     server2:
       

@@ -67,8 +67,11 @@ servers:
 
 <a name=t></a>Download and test
 -----
-
-
+* Files
+    * [top.yaml](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/ansible_specific_hosts_files/top.yaml)
+    * [imported.yaml](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/ansible_specific_hosts_files/imported.yaml)
+    * [myservers.yml](https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/ansible_specific_hosts_files/my_servers.yml)
+    
 * Download these files. Remember to change "my_servers.yml" to your list of servers.
 ```
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main

@@ -33,7 +33,7 @@ to make a mistake -- I think.
 
 The problems make it very very easy to accidentally apply the playbook to all hosts
 listed in the playbook or an inventory (if specified by line command).
-The point is, I want to submit an exact list of hosts without specifying
+I want to submit an exact list of hosts without specifying
 the inventory or worrying about what the "hosts" variable in the playbook is. 
 
 

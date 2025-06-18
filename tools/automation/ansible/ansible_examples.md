@@ -8,6 +8,9 @@ title: Ansible Examples
 *by Mark Nielsen*  
 *Copyright June 2024*
 
+WARNING: This document needs a lot of testing and is far from complete. I want to list the
+most common tasks I do. 
+
 ---
 
 1. [Links](#links)

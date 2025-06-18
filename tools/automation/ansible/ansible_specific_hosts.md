@@ -88,9 +88,12 @@ wget $wget_options $DURL -O my_servers.yml
 ```
    # This should work.
 ansible-playbook top.yaml -e target_hosts=server1 -i my_servers.yml
+
    # This should work with both servers.
+ansible-playbook top.yaml -e target_hosts=server1,server2 -i my_servers.yml
 
    # This will fail. 
+ansible-playbook top.yaml -i my_servers.yml
 
 ```
 

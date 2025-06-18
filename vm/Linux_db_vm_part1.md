@@ -39,6 +39,7 @@ running VirtualBox, Anisble, Terrform, and Vargant.
     * [API](https://download.virtualbox.org/virtualbox/SDKRef.pdf)
     * [VBoxManage](https://www.virtualbox.org/manual/topics/vboxmanage.html#vboxmanage)
     * [online manual](https://www.virtualbox.org/manual)
+        * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
 * Terrform in windows.
 * https://www.oracle.com/technical-resources/articles/it-infrastructure/admin-manage-vbox-cli.html
 * Tools
@@ -249,6 +250,7 @@ ssh_vb_root db6   "hostname; whoami"
 #### Ansible install <a name=a></a>
 * Links
     * https://toptechtips.github.io/2023-06-10-ansible-python/
+    * https://www.youtube.com/watch?v=7pzJ6ri4RTM&t=792s
 * Setup files
 ```
 cd

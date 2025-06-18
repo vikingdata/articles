@@ -1,0 +1,18 @@
+
+---
+- name: sample imported playbook
+  hosts: "{{ target_hosts }}"
+  tasks:
+
+  - name: Assert we are included
+    ansible.builtin.assert:
+      that:
+        - playlist_imported is defined
+      msg: "Abort if this is not included as playbook."
+
+  - name: Do a simple command, like get the hostname. 
+    ansible.builtin.command:
+      cmd: hostname
+
+
+

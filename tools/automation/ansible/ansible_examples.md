@@ -65,8 +65,10 @@ bash setup_ansible.sh
 <a name=layout></a>Layout
 -----
 Links
-    * https://www.ansiblejunky.com/blog/ansible-101-standards/
-    * https://docs.rockylinux.org/books/learning_ansible/00-toc/
+* https://www.ansiblejunky.com/blog/ansible-101-standards/
+* https://docs.rockylinux.org/books/learning_ansible/00-toc/
+* https://spacelift.io/blog/ansible-best-practices
+* https://spacelift.io/blog/ansible-roles
 
 There are some important concepts in Ansible.
 * ansible.cfg is the main config file.
@@ -93,3 +95,15 @@ There are some important concepts in Ansible.
 
 TODO: Example detailed structure showing multiple inventories, playbooks, and variables and
 tasks or roles calling specific files. 
+
+
+---
+* * *
+<a name=vars></a>Important variables
+-----
+Links
+* https://github.com/vikingdata/articles/blob/main/tools/automation/ansible/ansible_variables.md
+* https://github.com/vikingdata/articles/blob/main/tools/automation/ansible/ansible_more_variables.md
+
+* "ansible_hostname" is gathered from facts. "inventory_hostname" is the hostname given
+in the inventory file. 

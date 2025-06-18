@@ -1,6 +1,6 @@
 
 cd ~/
-mkdir -p ansible
+mkdir -p ansible/cache
 cd ansible
 
 ANSIBLE_CONFIG="`pwd`/ansible.cfg"
@@ -19,12 +19,18 @@ if [ ! -f "$ANSIBLE_CONFIG" ] ; then
   echo "
 [defaults]
 ANSIBLE_HOME=\$HOME/ansible
-inventory=\$HOME/inventory
+inventory=\$HOME/ansible/inventory
 
+fact_caching: jsonfile
+fact_caching_connection: \$HOME/ansible/cache
+  # 7 days -- its just a dev environment. 
+fact_caching_timeout: 604800
 
 [ssh_connection]
   ## This gets rid of proxy controlpath errors. 
 ssh_args = -o ControlPath=none
+
+
 
 " > ansible.cfg
 

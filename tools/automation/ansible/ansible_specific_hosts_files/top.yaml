@@ -1,0 +1,17 @@
+---
+# tasks file for top playbook
+
+- name: Sample top playbook 
+  hosts: localhost
+  tasks:
+  - name: Assert we are included
+    ansible.builtin.assert:
+      that:
+        - target_hosts is defined
+
+- name: import imported.yaml
+  import_playbook: imported.yaml
+  vars:
+    playlist_imported: 1
+
+  

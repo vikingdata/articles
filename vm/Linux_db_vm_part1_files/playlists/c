@@ -1,0 +1,28 @@
+---
+# tasks file for common_initial
+
+- name: Initial setup
+  hosts: admin
+  tasks:
+
+    - name: Assert we are included
+      ansible.builtin.assert:
+        that:
+          - target_hosts is defined
+
+#   - name: create included_playlist_tag tag
+#     ansible.builtin.debug:
+#       msg: "Always runs"
+#     tags:
+#       - included_playlist_tag
+
+#   - name: Display tags
+#     ansible.builtin.debug:		
+#       msg: "my tags {{ ansible_run_tags }}"
+			       
+
+ansible_run_tags
+- name: Include a play after another play
+  ansible.builtin.import_playbook: INCLUDE_common_initial_setup.yml
+
+  

@@ -18,7 +18,8 @@ title: Ansible : call specific hosts
 
 The purpose of this document is to be able to easily to apply a playbook to
 a list of hosts without complicated way of doing it. There may be a module or method
-of specifying a list of hosts, but I want to do it so:
+of specifying a list of hosts, but the documentation and examples on the internet do not
+satisfy my desires or I have not looked hard enough. I want to do:
 1. You don't accidentally apply the playbook to other hosts.
 2. There is an easy way to abort if the list is not given.
 3. Make it easy to submit the list.

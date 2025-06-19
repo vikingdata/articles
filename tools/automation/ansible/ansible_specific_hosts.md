@@ -28,7 +28,8 @@ Here are the problems.
 1. Every playbook needs a default list of hosts.
 2. If you do not import playbooks, roles, or tasks, you have to use "limit" on line command to limit
 the hosts affected or point to an inventory containing a specific list. The point is, it is easy
-to make a mistake -- I think. 
+to make a mistake -- I think. I don't want to have to remember to use limit or all hosts are the
+target. By default I want no hosts to be the target. 
 
 The problems make it very very easy to accidentally apply the playbook to all hosts
 listed in the playbook or an inventory (if specified by line command).

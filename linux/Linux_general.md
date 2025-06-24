@@ -357,7 +357,14 @@ For all these examples, it will gather stats for 2 seconds 5 times.
 * https://bitlaunch.io/blog/how-to-list-services-in-linux-using-the-command-line/
 * ls /lib/systemd/system/ | grep ssh
 
-
+* service
+    * service --status-all
+* systemctl
+    * systemctl list-units
+    * systemctl list-units --state running
+    * systemctl list-unit-files
+    * systemctl status PACKAGE
+    * systemctl daemon-reload
 
 
 * * *
@@ -641,11 +648,14 @@ root@mysql1:~/install# locate mysql.service
 find .  -type f -printf '%s %p\n'| sort -nr -k 1,1  | head -n 10
 
   # List out by date on current directory
-find .  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1 |  head -n 10
+find . -printf "%TY%Tm%Td %s %p  \n" | sort -nr | more
 
   # All files on system sorted
 find /  -type f -printf '%s %p\n'| sort -nr -k 1,1
-find /  -type f -printf '%TY%Td%Tm%TH%TM%.2TS %TY-%Td-%Tm %TH:%TM:%.2TS%p\n'| sort -nr -k 1,1
+  # In kilobyte
+find . -type f -printf "%s %p\n" | awk '{printf "%.2fMB %s\n", $1/1024, $2}' | sort -r | more
+  # In megabytes
+find . -type f -printf "%s %p\n" | awk '{printf "%.2fMB %s\n", $1/1048576, $2}' | sort -r | more
 
   # Find all  duplicates in a file
 sort FILE | uniq -c | sort -r -k1,1 | awk '{$1=$1;print}' | awk '$1 > 1 { print $0 }'

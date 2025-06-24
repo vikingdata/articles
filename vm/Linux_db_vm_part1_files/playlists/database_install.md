@@ -15,7 +15,7 @@
         - target_hosts is defined
 
 - name: import INCLUDE_common_initial_setup.yaml
-  import_playbook: INCLUDE_common_initial_setup.yaml
+  import_playbook: INCLUDE_database_initial.yaml
   vars:
     playlist_imported: 1
 

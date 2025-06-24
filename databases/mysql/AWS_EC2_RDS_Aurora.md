@@ -9,7 +9,7 @@ Being updated on 1-27-2025 (not done yet)
 * [Aurora](#a)
 * [Difference](#d)
 * [Multi AZ](#m)
-* [Minial Schema change downtime](#s)
+* [Aurora Techniques](#at)
 -------------------------
 
 * Links
@@ -120,14 +120,14 @@ Being updated on 1-27-2025 (not done yet)
          * Better performance and higher limit on diskspace.
          * Data is on 3 AZ or availability zones in a region. 
 * * *
-<a name=s>Minimal Schema change
+<a name=at>Aurora Techniques
 -----
+
+### Online Schema Change
 
 Links
 * https://aws.amazon.com/blogs/database/deploy-schema-changes-in-an-amazon-aurora-mysql-database-with-minimal-downtime/
 * https://orangematter.solarwinds.com/2017/01/27/three-things-that-differentiate-amazon-aurora-from-mysql/
-
-Techniques
 
 * Use Online schema change in RDS or Aurora where possible. Instance DDL in Aurora 3.
     * Aurora Fast DLL seems faster than MySQL online DDL. Aurora's fast dll can be done in transactions. 
@@ -135,4 +135,13 @@ Techniques
 * Use Blue/Green Deployments Aurora in AWS. Basically, it uses regular replication from one environment to another.
     * Make schema changes backwards compatible with software.
     * After you make schema changes in the NEW cluster, let the software run for a few days to make sure
-    there are no errors in replication. 
+    there are no errors in replication.
+    * https://aws.amazon.com/blogs/database/deploy-schema-changes-in-an-amazon-aurora-mysql-database-with-minimal-downtime/
+    * https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/blue-green-deployments-overview.html
+    * https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/blue-green-deployments-switching.html
+
+
+### Data Migration
+Links
+* 
+    

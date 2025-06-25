@@ -49,6 +49,8 @@ Being updated on 1-27-2025 (not done yet)
         * 60 to 120 seconds
     * Replication to Read Replica is done by normal MySQL replication.
     * Storage auto scaling available vertically.
+        * Does not scale cpu and memory.
+	* Auto scaling for adding replicas available. 
 
 * * *
 <a name=a></a>Aurora
@@ -68,7 +70,31 @@ Being updated on 1-27-2025 (not done yet)
     and [8.0](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.MySQL80.html)
     * Automatic failover is available
         * 60 seconds, even 30 seconds.
-    * Aurora has auto scaling vertically and horizontally.
+    * Aurora has storage scaling
+        * Does not scale cpu and memory.
+        * Auto scaling for adding replicas available.
+
+* * *
+<a name=s2></a>Same in Aurora and Aurora Serverless
+-----
+Unless otherwise noted, thet are the same in most respects. This is a list of highlights.
+* Scale storage
+* Scales with read replicas
+
+
+* * *
+<a name=d2></a>Difference in Aurora and Aurora Serverless
+-----
+Links
+* https://lumigo.io/aws-serverless-ecosystem/aws-aurora-serverless/
+
+
+* Serverless scales up the cpu and memory when needed.
+* Aurora is fixed cost (mostly) while Serverless you pay as you use. 
+* Doesn't support reserved instances.
+* Serverless is good for low traffic or occasional traffice. Aurora is good for having resources always running.
+But with serverless you can put in a minimum amount of resources. If you do, then Serverless is charged whether you
+use it or not based on the minimum. 
 
 * * *
 <a name=d></a>Difference
@@ -139,9 +165,68 @@ Links
     * https://aws.amazon.com/blogs/database/deploy-schema-changes-in-an-amazon-aurora-mysql-database-with-minimal-downtime/
     * https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/blue-green-deployments-overview.html
     * https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/blue-green-deployments-switching.html
-
+    * NOTES:
+        * This feature provides a staging environment (Green) that mirrors the production environment (Blue). 
+        * The environments stay synchronized using binary log replication. 
+        * Schema changes are applied in the staging environment without affecting the production database. 
+        * Once the changes are verified, the staging environment can be promoted to production with minimal downtime. 
+        * This approach is suitable for schema changes that are not supported by Instant DDL. 
+NOTES:
+    * If you change the endpoints, applications will point to the new server at that end point. 
 
 ### Data Migration
 Links
-* 
-    
+* https://docs.aws.amazon.com/dms/latest/userguide/CHAP_GettingStarted.html
+* https://docs.aws.amazon.com/dms/latest/sbs/dms-sbs-welcome.html
+* https://docs.aws.amazon.com/dms/latest/sbs/chap-mysql2aurora.html
+* https://subhaspatil-c.medium.com/db-migration-using-aws-dms-service-62ebe43d706f
+
+Steps overall
+* Create new servers. One will be the writer. 
+* Create replica instance
+* Define source and target endpoints
+* Configure VPC
+* Configure migraton and create task
+   * One time or continuous
+   * Specify tables and schemas. Use schema conversion tool. 
+   * Configure transformation rules
+* Start
+   * Start the migration
+   * monitor the migration
+   * At the end, use the endpoints for writer and readers. 
+* Post
+   * Test the target database
+   * Clean up resources, remove DMS.
+   * Might want to use RDS Proxy to handle reads and writes. It could be defined in the software whether it is
+   read or write and to switch endpoint to connects to.
+   * You might want to use load balancing if you have multiple replicas.
+       * Aurora provides a reader endpoint that automatically balances between read endpoints. 
+
+### Upgrades
+Links
+* https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Updates.MajorVersionUpgrade.html
+
+
+
+
+* In Place
+    * Requires downtime
+* Blue/Green deployment
+* Out of place
+    * Create a copyt with continous replication
+
+
+### Backups
+
+### Time Travel
+
+### Restoration
+
+### Monitoring
+
+
+#### CloudWatch
+Links
+* https://aws.amazon.com/cloudwatch/features/
+
+#### Performance Insights

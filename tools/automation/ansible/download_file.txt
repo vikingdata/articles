@@ -1,0 +1,17 @@
+DAD_ansible
+DOING
+IGNORE
+ansible_examples.md
+ansible_install.md
+ansible_more_variables.md
+ansible_read_from_file.md
+ansible_read_from_file.md~
+ansible_specific_hosts
+ansible_specific_hosts.md
+ansible_specific_hosts.md.bak
+ansible_specific_hosts.md~
+ansible_specific_hosts_files
+ansible_variables.md
+download_file.txt
+downlod_file.txt
+examples_dir

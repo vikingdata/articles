@@ -188,8 +188,9 @@ mysql -u root -proot \
 * * *
 <a name=remove></a>Remove a Node
 -----
-* Shutdown the servers.
-* Remove the ip address from the other servers in
+* Change wsrep_cluster_address live.
+* Shutdown the node you want to remove.
+* In my.cnf, remove the ip address from the other servers in
 ```
 wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>,<ip4>,etc
 ```
@@ -198,12 +199,12 @@ wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>,<ip4>,etc
 * * *
 <a name=add></a>Add a Node
 -----
-To add a 4th or more node, install is like node 2 or 3, but add the ip address to
+* To add a 4th or more node, install is like node 2 or 3, but add the ip address to
 ```
 wsrep_cluster_address=gcomm://<ip1>,<ip2>,<ip3>,<ip4>,etc
 ```
-to each server. 
-
+to each server live. 
+* Change my.cnf on each server. 
 
 ***
 <a name=slave></a>Add a slave
@@ -222,4 +223,5 @@ I may add examples here, but for now some links:
    * https://hevodata.com/learn/mysql-master-slave-replication/
    * https://phoenixnap.com/kb/mysql-master-slave-replication
    * https://airbyte.com/data-engineering-resources/master-slave-replication
+
 

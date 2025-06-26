@@ -1,9 +1,9 @@
 --------
-title: Ansible : read from fileB
+title: Ansible : read and download from file
 
 --------
 
-# Ansible: read from file
+# Ansible: read and download from file
 *by Mark Nielsen*  
 *Copyright June 2025*
 
@@ -14,7 +14,7 @@ title: Ansible : read from fileB
 * * *
 <a name=e></a>Explanation
 -----
-The purpose is to read variables or data from a file to do something. Copy a file, download a url or other. A
+The purpose is urls from a file to download other files. 
 
 * Remove and make the test directory.
 * Download the file which contains a list of files to download.

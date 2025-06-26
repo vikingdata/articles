@@ -10,6 +10,15 @@ Linux Dev under VirtualBox Part 1
 _**by Mark Nielsen
 Original Copyright May 2025**_
 
+THIS DOCUMENT IS NOT DONE. It will be changing a lot. The goals are:
+* DONE: Install servers : base image, admin, and 6 database servers.
+* DOING: Initial setup will be done without Anisble. But eventually it will all be ansible. Everything after
+the server installations with all be Ansible. 
+* DOING: Install MySQL replication, MySQL Cluster, PostgreSQL Cluster, Mongo Sharded Replica Sets, Yugabyte.
+* Setup DBT, connections to cloud resources (Snowflake, yugabyte, TIDB, cockroachDB, MySQL, mongodb). Only FREE
+or VERY VERY little cost resources will be used. Other resources may be added.
+* Setup Grafana through Telegraf and Promethesus.
+* Slow log report generation. 
 
 This will be using Windows 11 as a system host. Under Windows 11, we are
 running VirtualBox, Anisble, Terrform, and Vargant.
@@ -250,7 +259,7 @@ ssh_vb_root db6   "hostname; whoami"
 #### Ansible install <a name=a></a>
 * Links
     * https://toptechtips.github.io/2023-06-10-ansible-python/
-    * https://www.youtube.com/watch?v=7pzJ6ri4RTM&t=792s
+    * https://www.youtube.com/watch?v=7pzJ6ri4RTM&t=792s3
 * Setup files
 ```
 cd
@@ -266,7 +275,8 @@ cd ansible
     * Add host to ansible and ssh config file
     * Turn off and on servers
 * Install database software
-    * Perrcona MySQL with Oracle binaries. 
+    * Percona xtraDB Cluster
+        * You can use the binaries for regular Percona MySQL as well. 
     * Postresql
     * Yugabyte
     * MongoDB

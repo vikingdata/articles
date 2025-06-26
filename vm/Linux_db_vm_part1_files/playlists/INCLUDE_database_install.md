@@ -1,4 +1,4 @@
-
+     
 ---
 - name: INCLUDE common initial setup
   hosts: "{{ target_hosts }}"
@@ -34,36 +34,20 @@
       - /db/data/mongo/shard
       - /db/data/yugbyte/cluster
 
-
-  - name: Download postgresql and put into apt
+  - name: Download all databases files from MySQL, Percona, MongoDB, YugabyteB
     include_role:
-      name: install_postgresql
+C      name: download_database_files
+
+
+				  
+
+#  - name: Download postgresql and put into apt
+#    include_role:
+#      name: install_postgresql
 
 #  - name: basic Configure postgresql
 #    include_role:
 #      name: configure_basic_postgresql
       
-      
 
-
-
-
-
-
-# Created symlink /etc/systemd/system/multi-user.target.wants/postgresql.service → /lib/systemd/system/postgresql.service.
-
- # /etc/postgresql-common/createcluster.conf
- # /usr/lib/postgresql/14/bin/initdb -D /var/lib/postgresql/14/main --auth-local peer --auth-host scram-sha-256 --no-instructions
-
-apt-get remove --purge  postgresql-17
-apt autoremove
-rm /etc/systemd/system/postgresql.service
-systemctl disable postgresql
-
-stop postgresql
-backup config file
-make config file in /db and link to /etc
-create another db in /db
-init both
-start deflau postrgreql
-strt 2nd postgresql with different port and socket file
+A

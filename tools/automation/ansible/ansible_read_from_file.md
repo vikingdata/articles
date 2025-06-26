@@ -21,6 +21,8 @@ The purpose is urls from a file to download other files.
 * Download the files from the lines which are not empty, do not contain a comment "#", and contain "https".
 * List the files. 
 
+I might make a template or module with this. 
+
 * * *
 
 <a name=t></a>Download and test

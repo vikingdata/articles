@@ -1,4 +1,9 @@
 https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/examples_dir/d1.txt
+
+# This line should be ignored. 
+
 https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/examples_dir/d2.txt
+
 https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/examples_dir/d3.txt
+
 https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/tools/automation/ansible/examples_dir/d4.txt

@@ -150,7 +150,7 @@ mkdir -p ~/test_install
 cd ~/test_install
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_base_vm.txt
+export DURL=$MAIN/vm/Linux_db_vm_vb_part1_files/create_base_vm.txt
 wget $DURL -O create_base_vm.sh
 bash create_base_vm.sh
 
@@ -167,7 +167,7 @@ mkdir -p ~/test_install
 cd ~/test_install
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/vm/Linux_db_vm_part1_files/configure_base.txt
+export DURL=$MAIN/vm/Linux_db_vm_vb_part1_files/configure_base.txt
 wget $DURL -O configure_base_vm.sh
 bash configure_base_vm.sh
 ```
@@ -179,7 +179,7 @@ mkdir -p ~/test_install
 cd ~/test_install
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/vm/Linux_db_vm_part1_files/create_servers.txt
+export DURL=$MAIN/vm/Linux_db_vm_vb_part1_files/create_servers.txt
 wget $DURL -O create_servers.sh
 bash create_servers.sh
 ```
@@ -219,7 +219,7 @@ mkdir -p ~/test_install
 cd ~/test_install
 
 export MAIN=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main
-export DURL=$MAIN/vm/Linux_db_vm_part1_files/add_vm_hosts_to_ansible.txt
+export DURL=$MAIN/vm/Linux_db_vm_vb_part1_files/add_vm_hosts_to_ansible.txt
 wget $DURL -O add_vm_hosts_to_ansible.py
 python add_vm_hosts_to_ansible.py
 

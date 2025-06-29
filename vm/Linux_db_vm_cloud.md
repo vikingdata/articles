@@ -38,7 +38,9 @@ THIS ARTICLE IS NOT DONE YET, but needed for links.
 * Have an "admin" server you can log into where we will setup access from that server. For some services
 we will need a computer on the remote server for access, we will still connect by making the computer
 a proxy computer for our "admin" server.
-* Our admin server can be setup by VirtualBox, Dagger, another computer, or maybe emulation (cygwin or WSL
+* Our admin server can be setup by
+  [VirtualBox](https://github.com/vikingdata/articles/blob/main/vm/Linux_db_vm_vb_part1.md),
+ Dagger, another computer, or maybe emulation (cygwin or WSL
 on windows). 
 
 

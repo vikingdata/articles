@@ -45,7 +45,73 @@ Basically, you do everything on the right and apply the sign.
 * Initilize an array
     * int[] numbers = {1, 2, 3, 4, 5};
     * int numbers[] = new int[]{1, 2, 3, 4, 5};
+* If an "if" condition is not encapsulated with brackets, only the first lin
+  is executed.
+
+### 3
+
+* Advantages of static methods are variables
+    * shared across all instances, so only one copy exists in memory, reducing memory usage.
+    * methods that don't depend on instance variables
+    * used as global variables within a class
+    * accessed without creating an instance of the class
+* "final" is used to prevent a method from being overridden in the subclass.
+It makes a method or variable constant and cannot be overridden or modified.
+* To access a static variable within a static method
+    * Variable -- if defined in the same class
+    * class.variable
+* To differentiate between static method and a non-static (instance) method
+  Determine their association with class or instances.
+* static blocks in java are executed before the main method. 
+* Static Nested classes can be instantiated without an instance of the outer class.
+* Instance variables shadow or take precedence over static variables.
+* static methods cannot access non-static variables
+* static methods and variables can have a problem in multi threaded
+ environments where they may get initialized without synchronization
+* "break" is used to exit a loop
+* a & B returns 1 if both if both bits are 1, it returns 0
+* static methods and variables are stored separately and shared amoung all
+instances of the class saving memory.
+* method overiding - The overridden method in the subclass must have the same access modifier as the superclass method.
+* The scope of a static variable is limited to the class it was declared in.
+* "&" is not a logical operator, it is a bitwise operator.
+* "==" compares two values for equality.
+* Array
+    * To change an item: set(int index, E element)
+    * int[] numbers = new int[5]; # This defaults all valus to 0. 
+* Array List
+    * Added elements automatically increase list in an arrayList.
+    * list1.size() is the numbers of elements in arrayList
+    * list1.get(1) gets the 2nd element. Position 0 is the first. 
+
 
 * * *
 <a name=e>Explanations</a>
 -----
+* TODO Describe scenarios of static variables, methods, and non-static and when they
+get used. OVerridden or not.
+* Describe logical and bitwise functions
+* Describe scopes of static and non-static variables and methods. 
+
+* Describe how "A" gets printed. The method to call is resolved at
+compile-time based on the reference type,
+not the actual object type. "obj" is declared
+as "A" sp A.print is called. Both methods are static, B's is hidden. 
+```
+class A {
+    static void print() {
+        System.out.println("A");
+    }
+}
+class B extends A {
+    static void print() {
+        System.out.println("B");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.print();
+    }
+}
+```

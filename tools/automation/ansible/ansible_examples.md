@@ -62,7 +62,12 @@ wget $DURL -O setup_ansible.sh
 bash setup_ansible.sh
 
 ```
+* Download urls from a file to localhost, but check if files exist first. 
+```
 
+
+
+```
 ---
 * * *
 <a name=layout></a>Layout

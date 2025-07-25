@@ -1,0 +1,36 @@
+- name: Download files to local archive
+  hosts: localhost
+  tasks:
+
+  - name: Assert we are included
+    ansible.builtin.assert:
+      that:
+        - dest_dir_local
+      msg: "Abort no dest_dir_local is not defined."
+			  
+  - name: Assert we are included
+    ansible.builtin.assert:
+      that:
+        - download_file_list
+      msg: "Abort no download_file_list is not defined."
+
+  - name: Create a directory
+    ansible.builtin.file:	
+      path: {{  dest_dir_local }}  # Absolute path
+      state: directory
+      mode: '0755'
+
+ - name: download files
+   ansible.builtin.get_url:
+     url:  "{{ item }}"
+     dest: "{{ dest_dir_local  }}"
+   with_lines:
+     - cat "{{ download_file_list }}"
+   when :
+     - item is not search ("#")
+     - item != ''
+     - item is search ("https")
+
+
+
+				  

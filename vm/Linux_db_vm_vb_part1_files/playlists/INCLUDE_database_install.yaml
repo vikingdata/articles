@@ -36,18 +36,5 @@
 
   - name: Download all databases files from MySQL, Percona, MongoDB, YugabyteB
     include_role:
-C      name: download_database_files
+      name: download_database_files
 
-
-				  
-
-#  - name: Download postgresql and put into apt
-#    include_role:
-#      name: install_postgresql
-
-#  - name: basic Configure postgresql
-#    include_role:
-#      name: configure_basic_postgresql
-      
-
-A

@@ -14,8 +14,8 @@
       that:
         - target_hosts is defined
 
-- name: import INCLUDE_common_initial_setup.yaml
-  import_playbook: INCLUDE_database_initial.yaml
+- name: import INCLUDE_common_install.yaml
+  import_playbook: INCLUDE_database_install.yaml
   vars:
     playlist_imported: 1
 

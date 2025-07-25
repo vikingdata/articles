@@ -1,0 +1,29 @@
+---
+# tasks file for database_install
+
+- name: download percona mysql
+  ansible.builtin.include_role:
+    name: download_local
+  vars:
+    download_file_list: percona_mysql.txt
+    dest_dir_local: /db/source/percona
+
+#- name: Sample download files
+#  hosts: localhost
+#  vars:
+#    dest_dir: /db/source
+#    percona_mysql_file: percona_mysql.txt
+#  tasks:
+
+#- name: download files
+#  ansible.builtin.get_url:
+#    url:  "{{ item }}"
+#    dest: "{{ dest_dir  }}"
+#  with_lines:
+#    - cat "{{ percona_mysql_file }}"
+#  when :
+#    - item is not search ("#")
+#    - item != ''
+#    - item is search ("https")
+						
+			  

@@ -5,15 +5,14 @@ warmups on hard floor
     * side shrimp
 * bear crawl
     * reverse bear crawl
+* bridge
+    * over to shoulder, and reguard
+* hip scoot, and backwards
+* sit through
+* forward roll, from knees
 * shoulder roll
     * or side roll
 * backwards roll or reverse shoulder roll, choose side for head
-* over the shoudler bridge
-    * Bridge to regaurd
-* hip scoot, and backwards
-* sit through
-* technical stand up
-
 * Stretches
     * circles
     * legs in V, stretch left middle right

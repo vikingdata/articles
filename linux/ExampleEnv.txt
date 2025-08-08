@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if  [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  echo "source this script"
+  exit 1
+  echo "not existe".  
+else
+
+  if [[ ! -v ExamplePassword ]]; then
+      echo "ExamplePassword is not set."
+      echo "enter password"
+      p=`./Input`
+      export ExamplePassword="$p"
+      echo "Environment variable \$ExamplePassword is set."
+  fi
+

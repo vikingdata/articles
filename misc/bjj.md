@@ -8,21 +8,21 @@ warmups on hard floor
 * bridge
     * over to shoulder, and reguard
 * hip scoot, and backwards
-* sit through
+* army crawl, collar choke (keeps legs up, pretend to cross collar choke)
 * forward roll, from knees
 * shoulder roll
-    * or side roll
+    * or sideways roll
 * backwards roll or reverse shoulder roll, choose side for head
+
 * Stretches
     * circles
     * legs in V, stretch left middle right
     * hip stretch, leg over twist opposite of leg
-
 * harder on hard floor
+    * sit through
     * technical stand up
     * forward roll sitting
     * forward roll standing
-    * army crawl, collar choke (keeps legs up, pretend to cross collar choke)
     * side shrimp
     * crab walk
     * backwards crab walk

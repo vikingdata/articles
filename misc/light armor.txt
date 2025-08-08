@@ -1,0 +1,30 @@
+light armor
+
+rogue outfit sneaking
+athletic boots speed
+enforcer shoes speed
+
+medium
+biker gloves -- melee damage
+biker boots -- stamina for weapons
+ranger boots -- max stamina overall
+commando boots -- speed
+assassin helmet -- sneak attacks
+assassin outfit -- sneak
+
+heavy
+nomad helmet -- stamina regeneration is less
+nomad boots - speed
+nerd gloves -- batons do more damage
+raider gloves -- melee damage
+
+--------------
+nomad boots - speed
+biker boots -- stamina for weapons
+
+raider gloves -- melee damage
+
+nomad helmet -- stamina regeneration is less
+
+assassin outfit -- sneak
+

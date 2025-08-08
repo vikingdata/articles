@@ -29,7 +29,7 @@ I unfortunately am required to do java, so I am writing down some notes.
 <a name=<misc>Misc</a>
 -----
 
-
+* To run java commands in a shell : jshell
 * Invalid variables start with number. Can start with a letter (A-Z or a-z), underscore (_), or dollar sign ($).
 * int myMethod( ) { }
   * int is the return type.
@@ -83,6 +83,27 @@ instances of the class saving memory.
     * Added elements automatically increase list in an arrayList.
     * list1.size() is the numbers of elements in arrayList
     * list1.get(1) gets the 2nd element. Position 0 is the first. 
+* abstract and final classed:
+    * final
+    *
+
+* To initialize an array int numbers[ ] = new int[ ]{10, 20, 30};
+* Abstract classes can implement interfaces.
+* remove() is used to remove the first occurance item in a list. 
+* Method overloading allows for multiple methods with the same name but different parameters, while method overriding involves redefining a method in a subclass with the same name and parameters as in the superclass.
+* define and give examples: TODO: Other terms
+    * Inheritance
+    * Abstraction
+    * Encapsulation
+    * Polymorphism
+    * interface
+    * overloading
+    * overriding
+    * abstract class
+    * final class
+    * static
+    * public and private
+
 
 
 * * *

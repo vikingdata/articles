@@ -6,11 +6,12 @@ if  [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   echo "not existe".  
 else
 
-  if [[ ! -v ExamplePassword ]]; then
+  if [[ ! -z ExamplePassword ]]; then
       echo "ExamplePassword is not set."
       echo "enter password"
-      p=`./Input`
+      p=`./Input.sh`
       export ExamplePassword="$p"
       echo "Environment variable \$ExamplePassword is set."
   fi
 
+fi

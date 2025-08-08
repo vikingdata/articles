@@ -55,5 +55,5 @@ wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux
 chmod 755 Input.sh ExampleEnv.sh
 ./ExampleEnv.sh
 
-echo "My $ExamplePassword  is $ExamplePassword "
+echo "My \$ExamplePassword  is $ExamplePassword "
 ```

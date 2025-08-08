@@ -50,7 +50,7 @@ Solution:
 Run commands
 
 ```
-wget
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/env_variables/Input.txt -O Input.sh
 wget
 chmod 755
 ./Example.sh

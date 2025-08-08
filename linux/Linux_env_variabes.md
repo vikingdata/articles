@@ -51,7 +51,9 @@ Run commands
 
 ```
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/env_variables/Input.txt -O Input.sh
-wget https://github.com/vikingdata/articles/blob/main/linux/env_variables/ExampleEnv.txt -O ExampleEnv.sh
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/linux/env_variables/ExampleEnv.txt -O ExampleEnv.sh
 chmod 755 Input.sh ExampleEnv.sh
 ./ExampleEnv.sh
+
+echo "My $ExamplePassword  is $ExamplePassword "
 ```

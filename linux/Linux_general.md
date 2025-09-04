@@ -868,6 +868,8 @@ fi
 ### NOTE: Saving passwords in environment variables is NOT SECURE. 
 
 rm -f passwords.raw passwords.gpg
+unset PASSWORD1
+unset PASSWORD2
 ### Make file. 
 echo "
  # contents of a file which executes env variables for bash

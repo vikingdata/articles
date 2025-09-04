@@ -872,7 +872,6 @@ rm -f passwords.raw passwords.gpg
 echo "
  # contents of a file which executes env variables for bash
  # Save as "passwords.raw"
-echo 'passwords';
 export PASSWORD1='aaa';
 export PASSWORD2='bbb';
 " > passwords.raw
@@ -886,7 +885,11 @@ rm -f passwords.raw
 gpg --batch --passphrase "BadPassword" --decrypt passwords.gpg 
 
 ### unencrypt file and execute commands.
-gpg --quiet --batch --passphrase "BadPassword" --decrypt passwords.gpg | eval "$(cat)"
+### I had to do it this way. I don't like the temporary file. 
+rm -f pass.tmp
+gpg --quiet --batch --passphrase "BadPassword" --decrypt passwords.gpg  > pass.tmp
+source pass.tmp
+rm -f pass.tmp
 
 echo "Verify the passwords were loaded to environment variables"
 echo "PASSWORD1=$PASSWORD1 PASSWORD2=$PASSWORD2"

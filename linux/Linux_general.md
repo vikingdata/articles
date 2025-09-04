@@ -1,4 +1,4 @@
-'-------
+-------
 title: Linux general tips
 
 --------
@@ -33,7 +33,8 @@ title: Linux general tips
 21. [sort](#sort)
 22. [wget](#wget)
 23. [ip address](#ip)
-24. [misc](#misc)
+24. [wget](#wget)
+25. [encrypt passwords](#e)
 
 * * *
 
@@ -816,7 +817,6 @@ ip addr show   | grep -i inet | grep -v inet6 | sed -e "s/  */ /" | cut -d ' ' -
 
 hostname -I
 ```
-
 * * *
 <a name=wget></a>wget
 ---------------
@@ -839,4 +839,55 @@ file_size=`stat -c %s $FILENAME`
 if [ ! "$file_size" -ge "$size_desired" ]; then
   echo "$FILE is not $size_desired bytes."
 fi
+```
+
+* * *
+<a name=e></a>encrypt passwords
+---------------
+* https://buttercup.pw/
+* https://support.google.com/drive/answer/10838124?hl=en#d4d_mirroring
+
+
+## Save passwords in Buttercup and sync to Google Drive.
+
+1. Configure buttercup to save encrypted passwords to a directory.
+2. Then, sync that directory to Google Drive.
+    * https://support.google.com/drive/answer/10838124?hl=en#d4d_mirroring
+
+## Save password to file to later export as environment variables. 
+1. Save passwords in Buttercup. 
+2. Perform test
+   * Make file
+   * Encrypt file
+   * Remove unemcrypted file
+   * Unencrypt file and redirect output to standard out.
+   * echo the envrionment varibles. 
+```
+### You should not pass password directly to gpg.
+### This is just an example.
+### NOTE: Saving passwords in environment variables is NOT SECURE. 
+
+### Make file. 
+echo "
+ # contents of a file which executes env variables for bash
+ # Save as "passwords.raw"
+export PASSWORD1='aaa'
+export PASSWORD2='bbb'
+" > passwords.raw
+
+
+### encrypt passwords.raw
+gpg  --verbose --symmetric --batch --passphrase "BadPassword" --output passwords.gpg passwords.raw
+rm -f passwords.raw
+
+### print passwords to screen
+gpg --batch --passphrase "BadPassword" --decrypt passwords.gpg 
+
+### unencrypt file and execute commands.
+gpg --quiet --batch --passphrase "BadPassword" --decrypt passwords.gpg | eval "$(cat)"
+
+echo "Verify the passwords were loaded to environment variables"
+echo "PASSWORD1=$PASSWORD1 PASSWORD2=$PASSWORD2"
+
+
 ```

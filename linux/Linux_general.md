@@ -867,12 +867,13 @@ fi
 ### This is just an example.
 ### NOTE: Saving passwords in environment variables is NOT SECURE. 
 
+rm -f passwords.raw passwords.gpg
 ### Make file. 
 echo "
  # contents of a file which executes env variables for bash
  # Save as "passwords.raw"
-export PASSWORD1='aaa'
-export PASSWORD2='bbb'
+export PASSWORD1='aaa';
+export PASSWORD2='bbb';
 " > passwords.raw
 
 

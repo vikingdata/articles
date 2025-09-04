@@ -880,7 +880,7 @@ export PASSWORD2='bbb';
 
 
 ### encrypt passwords.raw
-gpg  --quiet --verbose --symmetric --batch --passphrase "BadPassword" --output passwords.gpg passwords.raw 
+gpg  --quiet --verbose --symmetric --batch --passphrase "BadPassword" --output passwords.gpg passwords.raw 2>/dev/null
 rm -f passwords.raw
 
 ### print passwords to screen

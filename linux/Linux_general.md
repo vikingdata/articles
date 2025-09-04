@@ -880,11 +880,11 @@ export PASSWORD2='bbb';
 
 
 ### encrypt passwords.raw
-gpg  --quiet --verbose --symmetric --batch --passphrase "BadPassword" --output passwords.gpg passwords.raw
+gpg  --quiet --verbose --symmetric --batch --passphrase "BadPassword" --output passwords.gpg passwords.raw 2>/dev/null
 rm -f passwords.raw
 
 ### print passwords to screen
-gpg --quiet --batch --passphrase "BadPassword" --decrypt passwords.gpg 
+gpg --batch --passphrase "BadPassword" --decrypt passwords.gpg 
 
 ### unencrypt file and execute commands.
 ### I had to do it this way. I don't like the temporary file. 

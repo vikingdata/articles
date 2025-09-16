@@ -898,3 +898,40 @@ echo "PASSWORD1=$PASSWORD1 PASSWORD2=$PASSWORD2"
 
 
 ```
+3. OPTIONAL: Save to script make_passwords.sh
+4. OPTIOANL: Execute script: source make_passwords.sh
+    * You must source because you need to export the variables into the
+    parent shell.
+
+* * *
+<a name=b></a>remnoving binary characters
+---------------
+* tr: ```tr -d -c '[:print:]\n' < input_file > output_file```
+* tr: ``` tr -dc '\000-\177' < test.bin > test.txt```
+* strings: ``` strings test2.bin | tee test.txt ```
+    * strings seems to add newlines. 
+* sed ```  LC_ALL=C sed  's/[^[:print:]\t\n]//g' test.bin```
+
+Test
+```
+printf 'This \xde Has\xad binary\xbe stuff\xef .' > test.bin
+cat -v test.bin
+
+rm -f test.txt
+strings test.bin | tee test.txt
+cat -v test.txt
+
+rm -f test.txt
+tr -d -c '[:print:]\n' < test.bin > test.txt
+cat -v test.txt
+
+rm -f test.txt
+tr -dc '\000-\177' < test.bin > test.txt
+cat -v test.txt
+
+rm -f test.txt
+LC_ALL=C sed  's/[^[:print:]\t\n]//g' test.bin > test.txt
+cat -v test.txt
+
+
+```

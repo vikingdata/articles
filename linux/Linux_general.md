@@ -35,7 +35,7 @@ title: Linux general tips
 23. [ip address](#ip)
 24. [wget](#wget)
 25. [encrypt passwords](#e)
-
+26. [removing binary characters](#b)
 * * *
 
 <a name=links></a>Links
@@ -904,7 +904,7 @@ echo "PASSWORD1=$PASSWORD1 PASSWORD2=$PASSWORD2"
     parent shell.
 
 * * *
-<a name=b></a>remnoving binary characters
+<a name=b></a>removing binary characters
 ---------------
 * tr: ```tr -d -c '[:print:]\n' < input_file > output_file```
 * tr: ``` tr -dc '\000-\177' < test.bin > test.txt```

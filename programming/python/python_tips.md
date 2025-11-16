@@ -30,7 +30,7 @@ from .mod2 import Print2
 
   # Make Classes available when loading with *
 __all__ = ["Print1", "Print2"]
-" >>  sample_module/__init__.py
+" >  sample_module/__init__.py
 
 echo "
 

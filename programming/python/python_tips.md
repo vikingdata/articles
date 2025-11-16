@@ -23,14 +23,14 @@ Save these files
 
 mkdir -p sample_module
 
-echo "
-  # load classed from files
+echo '
+# load classed from files
 from .mod1 import Print1
 from .mod2 import Print2
 
   # Make Classes available when loading with *
 __all__ = ["Print1", "Print2"]
-" >  sample_module/__init__.py
+' >  sample_module/__init__.py
 
 echo "
 
@@ -39,7 +39,7 @@ class Print1:
     pass
     
   def print1(self):
-    print ("print1")
+    print ('print1')
 
 " > sample_module/mod1.py
 
@@ -50,7 +50,7 @@ class Print2:
     pass
 
   def print2(self):
-    print ("print2")
+    print ('print2')
 
 " > sample_module/mod2.py
 

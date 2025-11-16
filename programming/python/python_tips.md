@@ -74,9 +74,9 @@ class Print4:
     pass
 
   def print4(self):
-    print ("Creating Print3 object in print4 method from class Print4")
+    print ('Creating Print3 object in print4 method from class Print4')
     temp = Print3()
-    print "Executing print3 method in print4 method4")
+    print ('Executing print3 method in print4 method4')
     temp.print3()
     print ('executing print4 of object from Print4 class.')
 " > sample_module/mod4.py

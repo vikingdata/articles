@@ -26,7 +26,7 @@ mkdir -p sample_module
 echo "
   # load classed from files
 from .mod1 import Print1
-from .mod2 import Print1
+from .mod2 import Print2
 
   # Make Classes available when loading with *
 __all__ = ["Print1", "Print2"]
@@ -41,7 +41,7 @@ class Print1:
   def print1(self):
     print ("print1")
 
-" > sample_module/p1.py
+" > sample_module/mod1.py
 
 echo "
 
@@ -52,7 +52,7 @@ class Print2:
   def print2(self):
     print ("print2")
 
-" > sample_module/p2.py
+" > sample_module/mod2.py
 
 echo "
 
@@ -66,7 +66,6 @@ b = Print2()
   # Execute methods of objects
 a.print1()
 b.print2()
-
 " > sample1.py
 
 python3 sample1.py

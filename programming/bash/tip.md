@@ -16,10 +16,11 @@ Original Copyright November 2025
 * * *
 <a name=g></a>globbing and splitting
 -----
-To get the name of the directory of the script, you have
-to understand globbing.
+
 * [Wordsplitting](https://mywiki.wooledge.org/WordSplitting)
 * [glob](https://mywiki.wooledge.org/glob)
+
+TODO: give examples. The explanations are horrible. 
 
 * * *
 <a name=d></a>Directory of the script

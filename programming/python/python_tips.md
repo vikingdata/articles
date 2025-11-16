@@ -27,9 +27,12 @@ echo '
 # load classed from files
 from .mod1 import Print1
 from .mod2 import Print2
+from .mod3 import Print3
+from .mod4 import Print4
+
 
   # Make Classes available when loading with *
-__all__ = ["Print1", "Print2"]
+__all__ = ["Print1", "Print2", "Print3", "Print4"]
 ' >  sample_module/__init__.py
 
 echo "
@@ -39,7 +42,7 @@ class Print1:
     pass
     
   def print1(self):
-    print ('print1')
+    print ('executing print1 of object from Print1 class.')
 
 " > sample_module/mod1.py
 
@@ -50,9 +53,34 @@ class Print2:
     pass
 
   def print2(self):
-    print ('print2')
+    print ('executing print2 of object from Print2 class.')
 
 " > sample_module/mod2.py
+
+echo "
+
+class Print3:
+  def __init__(self):
+    pass
+
+  def print3(self):
+    print ('executing print3 of object from Print3 class.')
+" > sample_module/mod3.py
+
+echo "
+
+class Print4:
+  def __init__(self):
+    pass
+
+  def print4(self):
+    print ("Creating Print3 object in print4 method from class Print4")
+    temp = Print3()
+    print "Executing print3 method in print4 method4")
+    temp.print3()
+    print ('executing print4 of object from Print4 class.')
+" > sample_module/mod4.py
+
 
 echo "
 

@@ -17,6 +17,13 @@ Original Copyright November 2025
 <a name=c></a>One way of classes
 -----
 Loading modules
+* All that __init__.py does is defines stuff at the top level of "sample_module".
+Only at the level os the script that loaded the module do you not need the full path
+of the loaded Classes. At the top script you can execute Print3, but inside
+other modukes you have to load class Print3 as "from sample_module import Print3"
+or "from sample_module import mod3.Print3".
+
+If you wish one object to load another object, 
 
 Save these files
 ```
@@ -68,6 +75,11 @@ class Print3:
 " > sample_module/mod3.py
 
 echo "
+from sample_module import Print3
+  # Same as this. __init__.py defines Print3 at top
+  # of sample_module, so you don not need to specify sample_module.mod3
+from sample_module.mod3 import Print3
+
 
 class Print4:
   def __init__(self):
@@ -90,10 +102,13 @@ from sample_module import *
   # create objects
 a = Print1()
 b = Print2()
-
+c = Print3()
+d = Print4()
   # Execute methods of objects
 a.print1()
 b.print2()
+c.print3()
+d.print4()
 " > sample1.py
 
 python3 sample1.py

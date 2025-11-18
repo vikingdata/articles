@@ -16,12 +16,13 @@ Original Copyright November 2025
 * * *
 <a name=c></a>One way of classes
 -----
-Loading modules
+Loading Classes from other Classes of different files in a module
+
 * All that __init__.py does is defines stuff at the top level of "sample_module".
 Only at the level os the script that loaded the module do you not need the full path
 of the loaded Classes. At the top script you can execute Print3, but inside
 other modukes you have to load class Print3 as "from sample_module import Print3"
-or "from sample_module import mod3.Print3".
+or "from sample_module.mod3 import Print3".
 
 If you wish one object to load another object, 
 
@@ -114,3 +115,10 @@ d.print4()
 python3 sample1.py
 
 ```
+
+* Another approach is:
+    * Make objects of each method in the main object.
+    * When needing to load a module, use a try except loading that module
+    for the class.
+
+TODO: give example. 

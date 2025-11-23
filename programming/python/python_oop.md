@@ -10,11 +10,11 @@ Python oop
 
 _**by Mark Nielsen
 Original Copyright November 2025
-1. [__init_.py](#c)
+1. [\_\_init\_\_.py](#c)
 2. [Main objects load other objects](#m)
 3. [Explanation of Packages](#p)
 * * *
-<a name=c></a>__init__.py
+<a name=c></a>\_\_init\_\_.py
 -----
 What does __init__.py do? I loads anything into the level of the package
 but not below the package level.

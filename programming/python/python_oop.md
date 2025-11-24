@@ -33,6 +33,7 @@ or "from sample_package.mod3 import Print3".
 
 1. Download the file, execute it, and execute python.
 ```
+rm -f make1.bash
 wget --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt -O  make1.bash
 
 bash /tmp/make1.bash
@@ -53,6 +54,7 @@ python /tmp/sample1.py
 
 1. Download the file, execute it, and execute python.
 ```
+rm -f make2.bash
 wget --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make2.txt -O  make2.bash
 
 bash make2.bash
@@ -66,6 +68,7 @@ python /tmp/sample2.py
 
 1. Download the file, execute it, and execute python.
 ```
+rm -f make3.bash
 wget --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/pytho
 n/python_oop_files/make3.txt -O  make3.bash
 

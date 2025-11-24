@@ -11,7 +11,7 @@ from .mod4 import Print4
 
 
   # Make Classes available when loading with *
-__all__ = ["Print1", "Print2", "Print3a",":print3b", "Print4"]
+__all__ = ["Print1", "Print2", "Print3a","Print3b", "Print4"]
 ' >  sample_package1/__init__.py
 
 echo "

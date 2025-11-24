@@ -45,7 +45,7 @@ class Print3a:
   def print3a(self):
     print ('executing print3a of object from Print3a class.')
 
-class Print3a:
+class Print3b:
   def __init__(self):
     pass
 

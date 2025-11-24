@@ -1,13 +1,31 @@
 
 Standup
-1. side to side bend
+1. side to side bend, arms over head -- bend as far as possible.
+    * https://www.youtube.com/shorts/Vko-SJok-fk
 2. squats
+    * https://www.youtube.com/shorts/MoyeW6_eYok
 3. touch toes
-4. twists
+    * https://www.youtube.com/watch?v=6XM-Jzq-pOA
+4. twist side to side. Twist as far as possible.
+    * https://www.youtube.com/shorts/f22r7SqnVGs
 5. arm strech -- put arm on wall to the side, look the opposite direction, push in
-6. Put back on wall and sqaut half way so legs are 90 degrees. strengthen knees.
-7. Put hands on wall, bend knees to touch wall.
-
+    * https://www.youtube.com/watch?v=QY4gCIYbGQk
+6. Put back on wall and squat half way so legs are 90 degrees. strengthen knees.
+    * First part of this video: https://www.facebook.com/reel/543586134971536
+7. push ups against wall, table, then floor
+    * https://www.facebook.com/reel/543586134971536
+    * https://www.youtube.com/watch?v=GzZwCXMOuYU
+8. Stomach exercises -- lay on ground. All of these 10,15,20,25, or 30 nonstop
+    * leg lifts
+        * https://www.youtube.com/shorts/2roDBvtUIm0
+    * scissors
+        * https://www.youtube.com/shorts/waIXZ0LA1YE
+    * leg push to chest then out
+        * https://www.youtube.com/watch?v=-_KJznvtlR4
+    * bicycles
+        * https://www.youtube.com/shorts/J7Y8zT2ospU
+    * leg lift 1 inch off ground for a minute
+        * https://www.youtube.com/shorts/TYVZtwbsSfs
 
 Links
 ## good

@@ -32,7 +32,7 @@ or "from sample_package.mod3 import Print3".
 
 1. Download the file, execute it, and execute python.
 ```
-wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt > make1.bash
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt -O  make1.bash
 
 bash make1.bash
 

@@ -11,8 +11,9 @@ Python oop
 _**by Mark Nielsen
 Original Copyright November 2025
 1. [\_\_init\_\_.py](#c)
-2. [Main objects load other objects](#m)
-3. [Explanation of Packages](#p)
+2. [Main object load other objects](#m)
+3. [Best, load everything](#e)
+4. [Explanation of Packages](#p)
 * * *
 <a name=c></a>\_\_init\_\_.py
 -----
@@ -34,9 +35,9 @@ or "from sample_package.mod3 import Print3".
 ```
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt -O  make1.bash
 
-bash make1.bash
+bash /tmp/make1.bash
 
-python sample1.py
+python /tmp/sample1.py
 ```
 
 <a name=m></a>Main object load other objects
@@ -44,10 +45,38 @@ python sample1.py
 
 
 * Another approach is:
-    * Make objects of each method in the main object.
+    * Make objects of each method in the main object. You pass the parent class to
+    the other classes. 
     * When needing to load a module, use a try except loading that module
     for the class.
 
+
+1. Download the file, execute it, and execute python.
+```
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make2.txt -O  make2.bash
+
+bash /tmp/make2.bash
+
+python /tmp/sample2.py
+```
+
+```
+
+<a name=e></a>The easiet way is to load everthing. Be careful of name clashes. 
+-----
+
+1. Download the file, execute it, and execute python.
+```
+wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/pytho
+n/python_oop_files/make3.txt -O  make3.bash
+
+bash /tmp/make3.bash
+
+python /tmp/sample3.py
+```
+
+
+```
 <a name=p></a>Explanation of Packages
 -----
 

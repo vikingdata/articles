@@ -1,3 +1,0 @@
-class Ramsey:
-  def __init__(self):
-      self.config_file="/etc/ramsey/ramsey.cfg"

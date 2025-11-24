@@ -1,3 +1,6 @@
+
+cd /tmp/
+
 mkdir -p sample_package2
 
 echo '
@@ -67,8 +70,8 @@ a = sample_package2.Cass1()
 a.test1()
 a.obj2.test2()
 a.obj3.test3()
-a.obj3.test3()
+a.obj4.test4()
 
-" > /tmp/sample1.py
+" > sample2.py
 
-python3 /tmp/sample1.py
+python3 sample2.py

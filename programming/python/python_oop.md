@@ -55,12 +55,11 @@ python /tmp/sample1.py
 ```
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make2.txt -O  make2.bash
 
-bash /tmp/make2.bash
+bash make2.bash
 
 python /tmp/sample2.py
 ```
 
-```
 
 <a name=e></a>The easiet way is to load everthing. Be careful of name clashes. 
 -----
@@ -70,7 +69,7 @@ python /tmp/sample2.py
 wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/pytho
 n/python_oop_files/make3.txt -O  make3.bash
 
-bash /tmp/make3.bash
+bash make3.bash
 
 python /tmp/sample3.py
 ```

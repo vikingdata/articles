@@ -78,7 +78,7 @@ class Print4:
         temp = Print3()
         temp.print3()
     except:
-        print ("Failed creating print3 object in print4")
+        print ('Failed creating print3 object in print4')
 
 " > sample_package1/mod4.py
 

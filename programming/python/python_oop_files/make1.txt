@@ -1,18 +1,18 @@
 
 cd /tmp
-mkdir -p sample_package
+mkdir -p sample_package1
 
 echo '
 # load classed from files
 from .mod1 import Print1
 from .mod2 import Print2
-from .mod3 import Print3a,Printb
+from .mod3 import Print3a,Print3b
 from .mod4 import Print4
 
 
   # Make Classes available when loading with *
 __all__ = ["Print1", "Print2", "Print3a",":print3b", "Print4"]
-' >  sample_package/__init__.py
+' >  sample_package1/__init__.py
 
 echo "
 
@@ -23,7 +23,7 @@ class Print1:
   def print1(self):
     print ('executing print1 of object from Print1 class.')
 
-" > sample_package/mod1.py
+" > sample_package1/mod1.py
 
 echo "
 
@@ -34,7 +34,7 @@ class Print2:
   def print2(self):
     print ('executing print2 of object from Print2 class.')
 
-" > sample_package/mod2.py
+" > sample_package1/mod2.py
 
 echo "
 
@@ -48,13 +48,13 @@ class Print3a:
   def print3b(self):
     print ('executing print3b of object from Print3b class.')
 
-" > sample_package/mod3.py
+" > sample_package1/mod3.py
 
 echo "
   # You can import Print3 from the package level because of __init__.py
-from sample_package import Print3a
+from sample_package1 import Print3a
   # Or you can give the full path. 
-from sample_package.mod3 import Print3a
+from sample_package1.mod3 import Print3a
 
   # We are not going to import Print3b which will fail.
   # However, Print4 works at the package level. 
@@ -76,13 +76,13 @@ class Print4:
     except:
         print ("Failed creating print3 object in print4")
 
-" > sample_package/mod4.py
+" > sample_package1/mod4.py
 
 
 echo "
 
   # import objects from __all__ in __init_-.py
-from sample_package import *
+from sample_package1 import *
 
   # create objects
 a = Print1()

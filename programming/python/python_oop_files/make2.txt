@@ -20,7 +20,7 @@ class Class1:
   self.obj3 = Class3(self)
   self.obj4 = Class4(self)
 
-" > sample_package/mod1.py
+" > sample_package2/mod1.py
 
 echo "
 
@@ -31,7 +31,7 @@ class Class2:
   def test2(self):
     print ('executing test2 of object from Class2 class.')
 
-" > sample_package/mod2.py
+" > sample_package2/mod2.py
 
 echo "
 
@@ -46,7 +46,7 @@ class Class3:
     self.obj2.test2()
 
 
-" > sample_package/mod3.py
+" > sample_package2/mod3.py
 
 echo "
 
@@ -59,7 +59,7 @@ class Class4:
     print ('executing test3 of object from Class4 class.')
     self.parent.obj3.test3()
 
-" > sample_package/mod4.py
+" > sample_package2/mod4.py
 
 
 echo "

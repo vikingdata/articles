@@ -62,9 +62,6 @@ bash make2.bash
 python /tmp/sample2.py
 ```
 
-
-
-```
 <a name=p></a>Explanation of Packages
 -----
 
@@ -72,7 +69,7 @@ I have not seen any good documentation an example of Python Packages.
 The documentaion is terrible and does not give any good examples. Here is
 a list of links and also what I got from AI.
 
-1. link1
+1. TODO links
 
 
 From AI

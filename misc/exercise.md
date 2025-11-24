@@ -1,4 +1,5 @@
 
+Do each of these, 10, and each month add 5 until you hit 30 non stop
 Standup
 1. side to side bend, arms over head -- bend as far as possible.
     * https://www.youtube.com/shorts/Vko-SJok-fk

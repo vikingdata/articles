@@ -36,7 +36,7 @@ or "from sample_package.mod3 import Print3".
 rm -f make1.bash
 wget --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt -O  make1.bash
 
-bash /tmp/make1.bash
+bash make1.bash
 
 python /tmp/sample1.py
 ```

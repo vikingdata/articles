@@ -31,7 +31,7 @@ or "from sample_package.mod3 import Print3".
 
 
 1. Download the file.
-   * wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt > make1.bash
+   * ```wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt > make1.bash```
 2. Execute: bash make1.bash
 3. Execute: python sample1.py
 

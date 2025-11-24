@@ -4,12 +4,12 @@ echo '
 # load classed from files
 from .mod1 import Print1
 from .mod2 import Print2
-from .mod3 import Print3a,Printb
+from .mod3 import Print3
 from .mod4 import Print4
 
 
   # Make Classes available when loading with *
-__all__ = ["Print1", "Print2", "Print3a",":print3b", "Print4"]
+__all__ = ["Print1", "Print2", "Print3", "Print4"]
 ' >  sample_package/__init__.py
 
 echo "
@@ -36,44 +36,32 @@ class Print2:
 
 echo "
 
-class Print3a:
+class Print3:
   def __init__(self):
     pass
 
-  def print3a(self):
-    print ('executing print3a of object from Print3a class.')
-
-  def print3b(self):
-    print ('executing print3b of object from Print3b class.')
-
+  def print3(self):
+    print ('executing print3 of object from Print3 class.')
 " > sample_package/mod3.py
 
 echo "
-  # You can import Print3 from the package level because of __init__.py
-from sample_package import Print3a
-  # Or you can give the full path. 
-from sample_package.mod3 import Print3a
+  # 
+from sample_package import Print3
+  # Same as this. __init__.py defines Print3 at top
+  # of sample_package, so you don not need to specify sample_package.mod3
+from sample_package.mod3 import Print3
 
-  # We are not going to import Print3b which will fail.
-  # However, Print4 works at the package level. 
 
 class Print4:
   def __init__(self):
     pass
 
   def print4(self):
-    print ('executing print4 of object from Print4 class.')
     print ('Creating Print3 object in print4 method from class Print4')
     temp = Print3()
     print ('Executing print3 method in print4 method4')
     temp.print3()
-
-    try:
-        temp = Print3()
-        temp.print3()
-    except:
-        print ("Failed creating print3 object in print4")
-
+    print ('executing print4 of object from Print4 class.')
 " > sample_package/mod4.py
 
 
@@ -85,14 +73,12 @@ from sample_package import *
   # create objects
 a = Print1()
 b = Print2()
-c1 = Print3a()
-c2 = Print3b()
+c = Print3()
 d = Print4()
   # Execute methods of objects
 a.print1()
 b.print2()
-c1.print3a()
-c2.print3b()
+c.print3()
 d.print4()
 " > /tmp/sample1.py
 

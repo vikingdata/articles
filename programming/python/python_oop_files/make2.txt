@@ -9,6 +9,7 @@ echo '
 
 echo "
 
+from sample_package2.mod1 import *
 from sample_package2.mod2 import *
 from sample_package2.mod3 import *
 from sample_package2.mod4 import *
@@ -16,9 +17,12 @@ from sample_package2.mod4 import *
 
 class Class1:
   def __init__(self):
-  self.obj2 = Class2(self)
-  self.obj3 = Class3(self)
-  self.obj4 = Class4(self)
+    self.obj2 = Class2(self)
+    self.obj3 = Class3(self)
+    self.obj4 = Class4(self)
+
+  def test1(self):
+    print ('executing test1 of object from Class1 class.')
 
 " > sample_package2/mod1.py
 
@@ -64,8 +68,9 @@ class Class4:
 
 echo "
 
-import sample_package2
-  # create objects
+import sample_package2.mod1
+
+# create objects
 a = sample_package2.mod1.Class1()
 a.test1()
 a.obj2.test2()

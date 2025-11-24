@@ -12,7 +12,6 @@ _**by Mark Nielsen
 Original Copyright November 2025
 1. [\_\_init\_\_.py](#c)
 2. [Main object load other objects](#m)
-3. [Best, load everything](#e)
 4. [Explanation of Packages](#p)
 * * *
 <a name=c></a>\_\_init\_\_.py
@@ -21,13 +20,14 @@ What does __init__.py do? I loads anything into the level of the package
 but not below the package level.
 1. [Defines a package and loads things into the package.](www.geeksforgeeks.org/python/what-is-__init__-py-file-in-python/) 
 
+Avoid circular loads. For example: Class A loads Class B which loads Class A. 
 
 Loading Classes from other Classes of different files in a module
 
 * All that __init__.py does is defines stuff at the top level of "sample_package".
 Only at the level os the script that loaded the module do you not need the full path
 of the loaded Classes. At the top script you can execute Print3, but inside
-other modukes you have to load the class Print3 as "from sample_package import Print3"
+other modules you have to load the class Print3 as "from sample_package import Print3"
 or "from sample_package.mod3 import Print3".
 
 
@@ -62,20 +62,6 @@ bash make2.bash
 python /tmp/sample2.py
 ```
 
-
-<a name=e></a>The easiet way is to load everthing. Be careful of name clashes. 
------
-
-1. Download the file, execute it, and execute python.
-```
-rm -f make3.bash
-wget --no-cache https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/pytho
-n/python_oop_files/make3.txt -O  make3.bash
-
-bash make3.bash
-
-python /tmp/sample3.py
-```
 
 
 ```

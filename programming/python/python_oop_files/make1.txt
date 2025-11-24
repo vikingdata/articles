@@ -69,16 +69,16 @@ class Print4:
 
   def print4(self):
     print ('executing print4 of object from Print4 class.')
-    print ('Creating Print3 object in print4 method from class Print4')
-    temp = Print3()
-    print ('Executing print3 method in print4 method4')
-    temp.print3()
+    print ('Creating Print3a object in print4 method from class Print4')
+    temp = Print3a()
+    print ('Executing print3a method in print4 method4')
+    temp.print3a()
 
     try:
-        temp = Print3()
-        temp.print3()
+        temp = Print3b()
+        temp.print3b()
     except:
-        print ('Failed creating print3 object in print4')
+        print ('Failed creating print3b object in print4')
 
 " > sample_package1/mod4.py
 

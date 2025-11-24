@@ -26,101 +26,15 @@ Loading Classes from other Classes of different files in a module
 * All that __init__.py does is defines stuff at the top level of "sample_package".
 Only at the level os the script that loaded the module do you not need the full path
 of the loaded Classes. At the top script you can execute Print3, but inside
-other modukes you have to load class Print3 as "from sample_package import Print3"
+other modukes you have to load the class Print3 as "from sample_package import Print3"
 or "from sample_package.mod3 import Print3".
 
-If you wish one object to load another object, 
 
-Save these files
-```
+1. Download the file.
+   * wget https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/programming/python/python_oop_files/make1.txt > make1.bash
+2. Execute: bash make1.bash
+3. Execute: python sample1.py
 
-mkdir -p sample_package
-
-echo '
-# load classed from files
-from .mod1 import Print1
-from .mod2 import Print2
-from .mod3 import Print3
-from .mod4 import Print4
-
-
-  # Make Classes available when loading with *
-__all__ = ["Print1", "Print2", "Print3", "Print4"]
-' >  sample_package/__init__.py
-
-echo "
-
-class Print1:
-  def __init__(self):
-    pass
-    
-  def print1(self):
-    print ('executing print1 of object from Print1 class.')
-
-" > sample_package/mod1.py
-
-echo "
-
-class Print2:
-  def __init__(self):
-    pass
-
-  def print2(self):
-    print ('executing print2 of object from Print2 class.')
-
-" > sample_package/mod2.py
-
-echo "
-
-class Print3:
-  def __init__(self):
-    pass
-
-  def print3(self):
-    print ('executing print3 of object from Print3 class.')
-" > sample_package/mod3.py
-
-echo "
-  # 
-from sample_package import Print3
-  # Same as this. __init__.py defines Print3 at top
-  # of sample_package, so you don not need to specify sample_package.mod3
-from sample_package.mod3 import Print3
-
-
-class Print4:
-  def __init__(self):
-    pass
-
-  def print4(self):
-    print ('Creating Print3 object in print4 method from class Print4')
-    temp = Print3()
-    print ('Executing print3 method in print4 method4')
-    temp.print3()
-    print ('executing print4 of object from Print4 class.')
-" > sample_package/mod4.py
-
-
-echo "
-
-  # import objects from __all__ in __init_-.py
-from sample_package import *
-
-  # create objects
-a = Print1()
-b = Print2()
-c = Print3()
-d = Print4()
-  # Execute methods of objects
-a.print1()
-b.print2()
-c.print3()
-d.print4()
-" > sample1.py
-
-python3 sample1.py
-
-```
 
 <a name=m></a>Main object load other objects
 -----

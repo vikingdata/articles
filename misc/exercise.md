@@ -5,6 +5,7 @@ Standup
     * https://www.youtube.com/shorts/Vko-SJok-fk
 2. squats
     * https://www.youtube.com/shorts/MoyeW6_eYok
+    * 20 https://www.facebook.com/watch/?ref=saved&v=1877985999789713
 3. touch toes
     * https://www.youtube.com/watch?v=6XM-Jzq-pOA
 4. twist side to side. Twist as far as possible.

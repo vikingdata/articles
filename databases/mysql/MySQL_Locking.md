@@ -23,7 +23,7 @@ Wanted to make a good example of locks in MySQL. I wanted to demonstrate GAP loc
 3. [Setup](#setup)
 4. [Output](#output)
 5. [Show InnoDB status](#idb)
-
+6. [Other debug queries](#d)
 
 * * *
 <a name=links></a>Links
@@ -618,3 +618,74 @@ mysql> notee
 * * *
 <a name=i></a>Sys schema and memory use
 -----
+
+* * *
+<a name=d></a>Other debug queries
+-----
+
+* show engine innodb status;
+
+* performance_schema.data_locks
+```
+SELECT object_schema, object_name, lock_type, lock_mode, lock_status, thread_id
+FROM performance_schema.data_locks;
+```
+
+* sys.innodb_lock_waits;
+```
+
+SELECT 
+    waiting_trx_id,
+    waiting_pid AS 'Locked Connection ID',
+    waiting_query AS 'Locked Query',
+    blocking_trx_id,
+    blocking_pid AS 'Locking Connection ID',
+    blocking_query AS 'Locking Query',
+    wait_age AS 'Wait Duration',
+    locked_table AS 'Locked Table'
+FROM 
+    sys.innodb_lock_waits;
+```
+
+* Blocking query if running
+```
+SELECT
+    r.trx_id AS 'waiting_trx_id',
+    r.trx_mysql_thread_id AS 'waiting_thread',
+    r.trx_query AS 'waiting_query',
+    b.trx_id AS 'blocking_trx_id',
+    b.trx_mysql_thread_id AS 'blocking_thread',
+    b.trx_query AS 'blocking_query'
+FROM
+    information_schema.innodb_lock_waits lw
+JOIN
+    information_schema.innodb_trx b ON lw.blocking_trx_id = b.trx_id
+JOIN
+    information_schema.innodb_trx r ON lw.requesting_trx_id = r.trx_id;
+```
+
+* Blocking query if it has stopped and its in a transaction. Shows last
+query blocking blocked query from a transaction.
+    * TODO: Show example. 
+```
+SELECT 
+    s.waiting_trx_id,
+    s.waiting_pid AS 'Locked Connection ID',
+    s.waiting_query AS 'Locked Query',
+    s.blocking_trx_id,
+    s.blocking_pid AS 'Locking Connection ID',
+    s.blocking_query AS 'Locking Query',
+    s.wait_age AS 'Wait Duration',
+    s.locked_table AS 'Locked Table',
+    p.thread_id, 
+    p2.sql_text as last_blocking_query
+FROM 
+    sys.innodb_lock_waits s
+Join performance_schema.threads p on (p.processlist_id = s.blocking_pid)
+Join performance_schema.events_statements_current p2 on (p.thread_id  = p2.thread_id)
+;
+```
+
+* TODO :Same query, but connect to  events_statements_history or events_statements_history_long
+    * TODO: Show example with multiple commands. Perhaps one command
+    that blocks early in a transaction. 

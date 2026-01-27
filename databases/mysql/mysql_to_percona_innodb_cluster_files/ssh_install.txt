@@ -1,0 +1,25 @@
+
+ssh-keygen -t rsa -b 4096  -q -N '' -q -f id_rsa
+
+source global_vars.sh
+
+options=' -i id_rsa -o StrictHostKeyChecking=no '
+
+for p in $s1_port $s2_port $s3_port; do
+
+  echo ''
+  echo Doing port $p
+
+  echo 'enter root password, setting up ssh keys'
+ssh $options root@127.0.0.1 -p $p 'mkdir -p /root/.ssh;  mkdir -p /home/mark/.ssh'
+  echo 'enter root password, setting up authorized keys'
+scp $options -P $p id_rsa.pub root@127.0.0.1:/root/.ssh/authorized_keys
+
+echo 'Copying key to user mark'
+scp $options -P $p id_rsa.pub root@127.0.0.1://home/mark/.ssh/authorized_keys
+ssh $options root@127.0.0.1 -p $p 'chown -R mark /home/mark'
+
+echo 'Setting up mark to sudo without password'
+ssh $options root@127.0.0.1 -p $p " echo 'mark ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers "
+
+done

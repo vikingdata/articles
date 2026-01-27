@@ -1,0 +1,11 @@
+
+   # change these values to your values to your servers.
+export server1=10.0.2.29
+export server2=10.0.2.28
+export server3=10.0.2.30
+export remote_user=root
+export remote_password=mark
+
+export s1_port=2001
+export s2_port=2002
+export s3_port=2003

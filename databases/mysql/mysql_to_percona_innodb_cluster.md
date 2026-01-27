@@ -77,8 +77,9 @@ export s3_port=2003
 ```
 ssh-keygen -t rsa -b 4096  -q -N '' -q -f id_rsa
 
-source global_vars.sh
 echo "
+source global_vars.sh
+
 
 for p in $s1_port $s2_port $s3_port; do
 

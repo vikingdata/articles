@@ -58,12 +58,19 @@ cd mysql_to_percona
 
 ```
 httpd_main="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main"
-loc=$httpd_main/databases/mysql/mysql_to_percona_innodb_cluster_files"
+loc="$httpd_main/databases/mysql/mysql_to_percona_innodb_cluster_files"
 
 wget -O global_vars.sh $loc/global_vars.txt
 wget -O ssh_install.sh $loc/ssh_install.txt
+wget -O transfer_files.sh $loc/transfer_files.txt
 
- 
+mkdir -p remote_scripts
+wget -O remote_scripts/misc_packages.sh $loc/misc_packages.txt
+wget -O remote_scripts/download_mysql_8.0.43.sh $loc/download_mysql_8.0.43.txt
+
+wget -O remote_scripts/remove_mysql_percona.sh  $loc/remove_mysql_percona.txt
+wget -O remote_scripts/install_mysql_8.0.43.sh  $loc/install_mysql_8.0.43.txt
+
 
 ```
 * Edit global_vars.sh for your servers. 
@@ -71,11 +78,15 @@ wget -O ssh_install.sh $loc/ssh_install.txt
 * Execute scripts
 
 ```
-
 source global_vars.sh
 
 echo ' install ssh'
 bash ssh_install.sh
 
+echo 'transfer files'
+bash transfer_files.sh
+
+echo 'install misc packages'
+bash misc_packages.sh
 
 ```

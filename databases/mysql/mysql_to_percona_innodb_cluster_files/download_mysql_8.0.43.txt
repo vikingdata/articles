@@ -1,0 +1,8 @@
+
+mkdir -p ~/install_scripts
+cd ~/install_scripts
+
+mkdir -p mysql_8.0.43
+cd mysql_8.0.43
+wget https://downloads.mysql.com/archives/get/p/23/file/mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar
+tar -xvf mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar

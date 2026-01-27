@@ -1,5 +1,7 @@
 
-ssh-keygen -t rsa -b 4096  -q -N '' -q -f id_rsa
+if [ ! -f "id_rsa" ]; then
+  ssh-keygen -t rsa -b 4096  -q -N '' -q -f id_rsa
+fi
 
 source global_vars.sh
 

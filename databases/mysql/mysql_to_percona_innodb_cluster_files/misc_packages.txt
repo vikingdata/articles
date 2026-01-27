@@ -1,0 +1,4 @@
+
+
+yum -y install emacs nmap net-tools  gnupg tmux dstat mc
+

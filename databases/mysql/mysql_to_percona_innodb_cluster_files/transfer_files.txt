@@ -9,6 +9,6 @@ for p in $s1_port $s2_port $s3_port; do
   echo Doing port $p
 
   ssh $options root@127.0.0.1 -p $p 'mkdir -p install_scripts'
-  rsync -av " ssh -p $p -i id_rsa "  remote_scripts/*  root@127.0.0.1:install_scripts/
+  rsync -av -e " ssh -p $p $options "  remote_scripts/*  root@127.0.0.1:install_scripts/
 
 done

@@ -1,0 +1,16 @@
+  64  apt install curl -y
+   65  curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+   66  sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+   67  percona-release setup -y ps-84-lts
+   68  apt install curl -y
+   69  sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+   70  sudo apt update
+   71  sudo percona-release enable-only ps-84-lts release
+   72  sudo percona-release enable tools release
+   73  sudo apt install percona-server-server
+
+https://downloads.mysql.com/archives/get/p/43/file/mysql-shell_8.4.7-1ubuntu22.04_amd64.deb
+
+CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES

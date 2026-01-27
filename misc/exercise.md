@@ -28,27 +28,26 @@ Standup
         * https://www.youtube.com/shorts/J7Y8zT2ospU
     * leg lift 1 inch off ground for a minute
         * https://www.youtube.com/shorts/TYVZtwbsSfs
+9. Planks --- on table then on floor. 
 
 Links
 ## good
 * general
    * https://www.facebook.com/reel/543586134971536
 * chair
-    * https://www.facebook.com/reel/1347851043069523
-    * https://www.facebook.com/reel/1058385302708241
+    * https://www.facebook.com/reel/1347851043069523 no
+    * https://www.facebook.com/reel/1058385302708241 no 
     * https://www.facebook.com/reel/641526478530649 : tie shoe; hip
-    * https://www.facebook.com/reel/624082413578068
-    * https://www.facebook.com/reel/1905965083541567
+    * https://www.facebook.com/reel/624082413578068 good
 * standing
-    * https://www.facebook.com/reel/545868898014947
-    * https://www.facebook.com/reel/2766760346864186 : hips
+    * https://www.facebook.com/reel/545868898014947 GOOD
     * https://www.facebook.com/reel/1123275136157092 : stairs, balance
     * https://www.facebook.com/reel/651913174189288 : bsck pain
     * https://www.facebook.com/reel/594175333250045 : standing
     * https://www.facebook.com/reel/1713671956232090
     * https://www.facebook.com/reel/1144708957266904 : hip circles
     * https://www.facebook.com/reel/1626041072123886 : rotating squat
-    * https://www.facebook.com/reel/487146201124867 : stais, step and lean
+    * https://www.facebook.com/reel/487146201124867 : stais, step and lean GOOD
     * https://www.facebook.com/reel/581794421561119 : knee stability
     * https://www.facebook.com/reel/999810291606406 : squat, move side
     * https://www.facebook.com/reel/1336032154380074 : upper back

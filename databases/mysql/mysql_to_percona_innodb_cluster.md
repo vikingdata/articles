@@ -1,7 +1,7 @@
 ---
 title : MySQL To Percona Innodb Cluster
 author : Mark Nielsen
-copyright : January 2025
+copyright : January 2026
 ---
 
 
@@ -87,15 +87,19 @@ ssh -o StrictHostKeyChecking=no root@127.0.0.1 -p \$p 'mkdir -p /root/.ssh;  mkd
   echo 'enter root password, setting up authorized keys'
 scp -o StrictHostKeyChecking=no -P \$p id_rsa.pub root@127.0.0.1:/root/.ssh/authorized_keys
 
-  echo 'Copying key to user mark'
-scp -o StrictHostKeyChecking=no -P \$p id_rsa.pub root@127.0.0.1://home/mark/.ssh/authorized_keys
-ssh -o StrictHostKeyChecking=no root@127.0.0.1 -p \$p 'chown -R mark /home/mark'
+options=" -i id_rsa -o StrictHostKeyChecking=no "
+
+echo 'Copying key to user mark'
+scp $options -P \$p id_rsa.pub root@127.0.0.1://home/mark/.ssh/authorized_keys
+ssh $options root@127.0.0.1 -p \$p 'chown -R mark /home/mark'
 
 
 echo 'Setting up mark to sudo without password'
-ssh -o StrictHostKeyChecking=no root@127.0.0.1 -p \$p \" echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \"
+ssh $options root@127.0.0.1 -p \$p \" echo '$MY_USER ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \"
 
 done
 "  > ssh_install
+
+bash ssh_install
 
 ```

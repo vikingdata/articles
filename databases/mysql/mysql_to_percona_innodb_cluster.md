@@ -54,11 +54,28 @@ Steps
 mkdir -p mysql_to_percona
 cd mysql_to_percona
 
-* Downlod install files
+* Download install files
+
+```
+httpd_main="https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main"
+loc=$httpd_main/databases/mysql/mysql_to_percona_innodb_cluster_files"
+
+wget -O global_vars.sh $loc/global_vars.txt
+wget -O ssh_install.sh $loc/ssh_install.txt
+
+ 
+
+```
+* Edit global_vars.sh for your servers. 
+
+* Execute scripts
 
 ```
 
-https://raw.githubusercontent.com/vikingdata/articles/main/databases/mysql/
+source global_vars.sh
+
+echo ' install ssh'
+bash ssh_install.sh
 
 
 ```

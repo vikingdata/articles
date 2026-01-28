@@ -4,5 +4,8 @@ cd ~/install_scripts
 
 rpm -ev ` rpm -qa | egrep -i "mysql|percona" | tr '\n' ' ' `
 
+yum -y install libatomic libcrypto.so.10 compat-openssl10
+
+
 cd percona_8.4.7
 rpm -ihv *.rpm

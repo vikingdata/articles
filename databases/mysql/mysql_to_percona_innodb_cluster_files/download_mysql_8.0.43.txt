@@ -29,4 +29,11 @@ for f in `cat ~/install_scripts/percona_rpms.txt`; do
     fi
 done
 
+http=https://downloads.percona.com/downloads/percona-telemetry-agent
+loc=$http/percona-telemetry-agent-1.0.7/binary/redhat/8/x86_64
+f=percona-telemetry-agent-1.0.7-1.el8.x86_64.rpm
+if [ ! -f "$f" ]; then
+        echo "wget -O $f $loc/$f"
+    wget -O $f $loc/$f
+fi
 

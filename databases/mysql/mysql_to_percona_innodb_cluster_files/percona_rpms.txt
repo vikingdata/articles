@@ -2,6 +2,6 @@ percona-server-server-8.4.7-7.1.el8.x86_64.rpm
 percona-server-client-8.4.7-7.1.el8.x86_64.rpm
 percona-server-shared-compat-8.4.7-7.1.el8.x86_64.rpm
 percona-server-shared-8.4.7-7.1.el8.x86_64.rpm
-
+percona-icu-data-files-8.4.7-7.1.el8.x86_64.rpm
 
 

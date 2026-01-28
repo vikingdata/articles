@@ -9,3 +9,11 @@ if [ ! mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar ]; then
   wget https://downloads.mysql.com/archives/get/p/23/file/mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar
   tar -xvf mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar
 fi
+
+mkdir -p IGNORE
+mv -f *debug* IGNORE
+mv -f *test* IGNORE
+mv -f *devel* IGNORE
+
+
+

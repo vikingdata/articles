@@ -53,6 +53,7 @@ Steps
 ```
 mkdir -p mysql_to_percona
 cd mysql_to_percona
+```
 
 * Download install files
 
@@ -67,9 +68,7 @@ wget -O transfer_files.sh $loc/transfer_files.txt
 mkdir -p remote_scripts
 wget -O remote_scripts/misc_packages.sh $loc/misc_packages.txt
 wget -O remote_scripts/download_mysql_8.0.43.sh $loc/download_mysql_8.0.43.txt
-
-wget -O remote_scripts/remove_mysql_percona.sh  $loc/remove_mysql_percona.txt
-wget -O remote_scripts/install_mysql_8.0.43.sh  $loc/install_mysql_8.0.43.txt
+wget -O remote_scripts/reset_mysql.sh $loc/reset_mysql.txt
 
 
 ```
@@ -86,7 +85,8 @@ bash ssh_install.sh
 echo 'transfer files'
 bash transfer_files.sh
 
-echo 'install misc packages'
-bash misc_packages.sh
+
+
+
 
 ```

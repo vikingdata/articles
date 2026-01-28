@@ -1,0 +1,11 @@
+
+mkdir -p ~/install_scripts
+cd ~/install_scripts
+
+rpm -ev ` rpm -qa | egrep -i "mysql|percona" | tr '\n' ' ' `
+
+rm -rf /etc/my.* /var/lib/mysql
+
+rpm -ivh mysql_8.0.43/*.rpm
+
+sudo -u mysql /usr/sbin/mysqld --defaults-file=/etc/my.cnf --defaults-group-suffix= --initialize-insecure

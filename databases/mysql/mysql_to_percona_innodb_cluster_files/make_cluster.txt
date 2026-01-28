@@ -1,2 +1,15 @@
+source global_vars.sh
+
+options=' -i id_rsa -o StrictHostKeyChecking=no '
+
+d=`date +%y%m%d_%H%M%S
+
+#for p in $s1_port $s2_port $s3_port; do
+for p in $s1_port ; do
+
+   ssh $options root@127.0.0.1 -p $p 'service mysqld stop'
+   ssh $options root@127.0.0.1 -p $p "mv -f /etc/my.cnf /etc/my.cnf_$d"
+done
 
 
+scp $options -P $s1_port$ cnf/my.cnf.1 root@127.0.0.1:/etc/my.cnf

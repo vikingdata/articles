@@ -76,9 +76,9 @@ wget -O remote_scripts/make_cluster.sh $loc/make_cluster.txt
 wget -O remote_scripts/percona_rpms.txt $loc/percona_rpms.txt
 
 mkdir -p cnf
-wget -O cnf/my.cnf.1 $loc/cnfmy_cnf1.txt
-wget -O cnf/my.cnf.2 $loc/cnfmy_cnf2.txt
-wget -O cnf/my.cnf.3 $loc/cnfmy_cnf3.txt
+wget -O cnf/my.cnf.1 $loc/cnf/my_cnf1.txt
+wget -O cnf/my.cnf.2 $loc/cnf/my_cnf2.txt
+wget -O cnf/my.cnf.3 $loc/cnf/my_cnf3.txt
 
 
 

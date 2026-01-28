@@ -11,7 +11,7 @@ for p in $s1_port ; do
    ssh $options root@127.0.0.1 -p $p "mv -f /etc/my.cnf /etc/my.cnf_$d"
 done
 
-scp $options -P $s1_port$ cnf/my.cnf.1 root@127.0.0.1:/etc/my.cnf
+scp $options -P $s1_port cnf/my.cnf.1 root@127.0.0.1:/etc/my.cnf
 
 for p in $s1_port ; do
 

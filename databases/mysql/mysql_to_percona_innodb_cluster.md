@@ -64,7 +64,6 @@ loc="$httpd_main/databases/mysql/mysql_to_percona_innodb_cluster_files"
 wget -O global_vars.sh $loc/global_vars.txt
 wget -O ssh_install.sh $loc/ssh_install.txt
 wget -O transfer_files.sh $loc/transfer_files.txt
-wget -O install_mysql.sh $loc/install_mysql.txt
 wget -O make_cluster.sh $loc/make_cluster.txt
 
 
@@ -72,8 +71,9 @@ mkdir -p remote_scripts
 wget -O remote_scripts/misc_packages.sh $loc/misc_packages.txt
 wget -O remote_scripts/download_mysql_8.0.43.sh $loc/download_mysql_8.0.43.txt
 wget -O remote_scripts/reset_mysql.sh $loc/reset_mysql.txt
-wget -O remote_scripts/make_cluster.sh $loc/make_cluster.txt
 wget -O remote_scripts/percona_rpms.txt $loc/percona_rpms.txt
+wget -O remote_scripts/install_percona.sh $loc/install_percona.txt
+
 
 mkdir -p cnf
 wget -O cnf/my.cnf.1 $loc/cnf/my_cnf1.txt

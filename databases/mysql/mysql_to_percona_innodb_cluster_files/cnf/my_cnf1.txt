@@ -1,0 +1,49 @@
+[mysqld]
+plugin-load=auth_socket.so
+plugin_load_add='group_replication.so'
+group_replication_ip_allowlist="10.0.2.0/24"
+group_replication_group_name = "a1eba67d-747f-436a-929b-56857de72ecc"
+
+### General settings
+server-id=1
+
+character-set-server=latin1
+collation-server=latin1_bin
+transaction_isolation=READ-COMMITTED
+max_connect_errors=100
+explicit_defaults_for_timestamp=true
+log_timestamps=system
+default_authentication_plugin=mysql_native_password
+
+log-bin       
+relay-log     
+
+# Innodb settings
+transaction_isolation=READ-COMMITTED
+#innodb_dedicated_server=on
+innodb_undo_log_truncate=on
+innodb_max_undo_log_size=1g
+innodb_file_per_table=on
+innodb_buffer_pool_size=10M
+innodb_log_buffer_size=1m
+
+innodb_buffer_pool_instances=1
+innodb_buffer_pool_size=5242880
+innodb_doublewrite=off
+innodb_log_file_size=4194304
+
+# ClusterSet 
+sql_require_primary_key=on
+binlog_checksum=none
+enforce_gtid_consistency=on
+gtid_mode=on
+lower_case_table_names=1
+transaction_write_set_extraction=XXHASH64
+binlog_transaction_dependency_tracking=writeset
+replica_parallel_type=logical_clock
+replica_preserve_commit_order=on
+
+#!includedir /apps/init/custom/
+
+[mysql]
+init-command='set autocommit=off, global transaction_isolation="read-committed"'

@@ -9,3 +9,6 @@ rm -rf /etc/my.* /var/lib/mysql
 rpm -ivh mysql_8.0.43/*.rpm
 
 sudo -u mysql /usr/sbin/mysqld --defaults-file=/etc/my.cnf --defaults-group-suffix= --initialize-insecure
+service mysqld start
+mysql -u root -e "show variables like '%version%';"
+service mysqld stop

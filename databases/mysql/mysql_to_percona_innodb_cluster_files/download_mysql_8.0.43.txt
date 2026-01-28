@@ -20,7 +20,7 @@ cd ~/install_scripts
 mkdir -p percona_8.4.7
 cd percona_8.4.7
 for f in `cat ~/install_scripts/percona_rpms.txt`; do
-
+ 
     http=https://downloads.percona.com/downloads/percona-distribution-mysql-ps
     loc=$http/percona-distribution-mysql-ps-8.4.7/binary/redhat/8/x86_64
 

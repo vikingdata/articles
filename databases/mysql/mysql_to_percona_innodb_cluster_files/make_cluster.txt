@@ -6,7 +6,7 @@ options=' -i id_rsa -o StrictHostKeyChecking=no '
 for p in $s1_port $s2_port $s3_port; do
 
     echo "doing port $p"
-  for f in `ls remote_scripts/`; do
+  for f in download_mysql_8.0.43.sh  misc_packages.sh  reset_mysql.sh; do
       echo "Exeucting $f on remote server"
     ssh $options root@127.0.0.1 -p $p 'cd remote_scripts; bash $f'
   done

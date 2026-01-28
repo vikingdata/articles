@@ -64,6 +64,8 @@ loc="$httpd_main/databases/mysql/mysql_to_percona_innodb_cluster_files"
 wget -O global_vars.sh $loc/global_vars.txt
 wget -O ssh_install.sh $loc/ssh_install.txt
 wget -O transfer_files.sh $loc/transfer_files.txt
+wget -O install_mysql.sh $loc/install_mysql.txt
+
 wget -O make_cluster.sh $loc/make_cluster.txt
 
 

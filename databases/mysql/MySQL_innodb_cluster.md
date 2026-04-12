@@ -33,7 +33,7 @@ Inside mysql client, Workbench, or doing "\sql" in mysqlsh.
 
 ```
 SELECT
-   t2.MEMBER_HOST, t2.member_state, member_role,
+   t2.MEMBER_HOST, t2.member_state, member_role, member_version,
    t1.COUNT_TRANSACTIONS_IN_QUEUE AS 'Transactions Local',
    t1.COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE AS 'Transactions Remote'
 FROM

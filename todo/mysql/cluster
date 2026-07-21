@@ -1,0 +1,5 @@
+c = dba.getCluster() ;
+
+c.removeInstance('data02', {force: true})
+
+c.forceQuorumUsingPartitionOf('DATA03');

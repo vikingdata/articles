@@ -1,0 +1,13 @@
+
+        try:
+            result = subprocess.run(c,
+                                    capture_output=True, text=True, shell=True\)
+            stdout = result.stdout
+            stderr = result.stderr
+
+            print("STDOUT:", stdout)
+            print("STDERR:", stderr) # usual                                                             
+        except Exception as e:
+            result = "unable to get password names : " + str(e)
+        return result
+

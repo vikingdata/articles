@@ -1,0 +1,3 @@
+
+keys = sorted(os.environ.keys())
+for k in keys: print (k ," ", os.environ[k])

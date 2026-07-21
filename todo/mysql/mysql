@@ -1,0 +1,163 @@
+database festures (mysql, postgresql, snowflake)
+	 DONE xprimary keys
+	 materialized views
+	   sf has materialze views with dynamic tables
+	 views
+	 window functions --- mysql, postgresql, snowflake
+	 roles -- mysql and posgresql
+	 languages -- mysql and postgresql
+	 sequences -- mysql and postgresql
+	 information_schema - mysql, postrgresql, snowflake
+	 engines -- mysql and postgresql
+	     rules can simulate engines in postgresql
+
+mysql -- query cache threshold, low usage
+
+RDS - failover, upgrades without downtime, using route
+   https://stratusgrid.com/blog/how-to-perform-amazon-rds-upgrades-with-near-zero-downtime
+   Multi AZ and mutil region   
+   can't do uncrypted and encrypted in an RDS mysql clsuter
+      https://aws.amazon.com/blogs/database/encrypt-an-unencrypted-amazon-aurora-mysql-cluster-with-minimal-downtime-using-aws-dms-homogeneous-data-migrations/
+      https://medium.com/swlh/how-to-encrypt-aws-rds-mysql-replica-set-with-zero-downtime-and-zero-data-loss-b145cbf1ecf0
+
+RDS amd Aurora
+    system upgrade
+    	   How does increase in size affect i/o
+	   Increase IOPS
+    major upgrades
+    minor upgrades
+    config changes
+    update column changes with zero downtime
+    	   DDL online, percona online schema change
+    How to go from unencrypted to encrypted
+    	unencryped cannot replicate to encrypted RDS and Aurora.
+
+mysql -- setup clusterset in mysql on one server.
+
+monitoring -- with mysql, postghesql, snowflake
+	new relic
+	promethesus -- dashboardsm queries, tags, saves dasbirds json in git
+	telegraph -- used with promethesus
+
+grafana, telegraph, promethesus, with mysql, postgresql, snowflake (poll every 10 minutes to reduce traffic -- unless server is in the same domain AWS)
+
+
+perconba tools
+	 pmm, disable table stats. limit connctions. disable settings,
+	 1. too many connections : ALTER USER pmm@'%' WITH MAX_USER_CONNECTIONS 10;
+	 2. can it pull? https://docs.percona.com/percona-monitoring-and-management/details/personal_data_handling.html
+
+
+
+explain these questions
+  max instance size you have used.
+  explain your migration stratergy on merging two databses.
+  did you use AWS DMS and why explain
+  what is use of Amazon redhshift .did you use in project ?explain .what is key difference between amazon redshift and other databases (mysql aurora) 
+  how to update data bases column in aurora db when you have huge data 1 TB .
+  what is your disaster recovery stratergy explain.
+  can you explain how you created instance of aws aurora .explain step by step process .
+  what are the major challenges you faced in your project .
+  what is the max size of data you migrated.
+  SQL concepts - how did you fix performace issue in query
+
+DONE mysql
+	mysqldump, nob-blcokingm rtgigger and stored proedure, and gzip
+
+
+
+processlist, slow logs, current status, replication group info
+    mysql, mongo, other databases
+    part of DAD -- start DAD
+
+inline views
+
+
+roles -- mysql, cockroachdb, postgresql, snoflake
+
+mysql -- if log flush happens more than 1 seconds, log flush buffer is too small
+
+inline views
+
+mysql -- sys.statement_analysis -- analyze queries : how to turn on and what to do
+  1. Look for exec_count, and avg and lock latency
+  2. performance_schema, threads threads,processlist_id and other thread tables
+  . performance_schema, metadata_locks, threads, join by owner_thread_id and thread_id, with processlist_id on threads.
+  3. percona xtrabakcup, and streaming
+DONE   4. retore root permissions, account.
+  5. index merge, explain explain
+  6. dad, get df mem cpu, global vriables, status, show processlist
+  7. roles
+DONE  8. reststore root permissions
+DONE   9. Restore self permissions if you have grant option.
+  10. backup doc with streaming
+
+msqyl rep -- parrallel master to serial slave,
+  large transactions with join that takea long time -- causes lag on slave-- the largest time for a trnasction causes slave delay because it takes that long on slave,
+  backups blocks DDL queries and hence slave in blocked,
+
+
+DONE Handle heap tables or how to encrypt data in MySQL 
+
+ How to add an additional node to an AWS auto scaling group
+ Code review experience and a question regarding how to handle a spike in CPU
+ When you might use a join vs a subquery – besides indexing
+ Convinced to uninstall the MySQL engine to do an OS upgrade
+
+DONE Handle heap tables 
+   temporary storage engine is heap, temptable, or defined engine
+
+Differences in MariaDB and Mysql
+
+Finish
+	pt=tools
+	upgrde from 5.1 to 8.0, to 8.1, to 8.4
+	       most important changes
+	upgare AWS
+	       EC2
+	       RDS
+	       Aurora
+
+
+incorrect views
+DONE memory -- threads, instruments, and show innodb status -- resident
+  compare free -h and top to innodo status
+  why does redident get bigger?
+DONE locks
+percona tools
+   diget
+   checksum + sync
+   backup -- incluiong remote backup and restore. 
+   others
+
+ansible -- mysql install, clusterset, gakera cluster
+
+rundecl , openstack,
+
+
+graphana
+	promethesus + mysqld_exporter
+	telegraph
+
+Add difference between lock wait timeout and deadlock, lock wait timeout happens immediately, and times out oe deadlocks
+after lock wait timeout is exceeded.
+Add shared and exclusixe lock to locks article adn explain how locks work. 
+Add in explain analyze problem explanation. 
+DONE Check if I made a document combining show processlist, and in performance meta_locks and threads to explain locks. 51. 
+
+Add intention_exclusive, and other things to lock article. IS and IX are for innodb, I and X are for table locks
+LOCK_TYPE: The lock type from the metadata lock subsystem. The value is one of INTENTION_EXCLUSIVE, SHARED, SHARED_HIGH_PRIO, SHARED_READ, SHARED_WRITE, SHARED_UPGRADABLE, SHARED_NO_WRITE, SHARED_NO_READ_WRITE, or EXCLUSIVE
+Explain : I and X are row level. IS and IX are table with row specific. IS and IX have to happen first before S and X are granted.
+https://dev.mysql.com/blog-archive/innodb-data-locking-part-2-locks/
+https://dev.mysql.com/blog-archive/innodb-data-locking-part-1-introduction/
+
+Make MySQL sercurity doc, and in AWS : SSL, authenticaion, authoriszation, roles, network (firewall),
+https://aws.amazon.com/blogs/database/security-best-practices-for-amazon-rds-for-mysql-and-mariadb-instances/
+  IAM authentication, ebcrytion on disk
+Explain difference in VERIFY_CA and VERIFY_IDENTITY
+
+Make proxy article : grant account@local to ''@'%';
+
+OTHER
+sysbnech for OS and MySQL. Also good for testing prod systems.
+what the data dictionary holds

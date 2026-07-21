@@ -1,1 +1,13 @@
-install logrotate, for mysql, mongo, etc.
+1. set -e to aqbort bash script
+
+2.. install logrotate, for mysql, mongo, etc.
+
+
+3.Puts quotes around every line in  file.
+sed 's/.*/"&"/'
+
+4. print with quotes awk
+awk '{print "\"" $1 "\""}'
+
+5. Match usernames to sql searching for user. 
+cut -d ' ' -f1 names |  awk '{print "or lower(user) like \"" tolower($1) "%\""}'

@@ -1,0 +1,13 @@
+set @gig = 1024*1024*1024;
+set @meg = 1024*1024;
+select @meg, @gig;
+
+SELECT table_schema, table_name, table_rows, AVG_ROW_LENGTH as arl, DATA_LENGTH as dl, index_length as il, DATA_FREE
+        , ROUND(SUM(data_length + index_length) / @meg, 2)  as tbl_size_in_meg
+        , ROUND(SUM(data_length + index_length) / @gig, 2)  as tbl_size_in_gig
+FROM information_schema.tables
+where table_schema not in
+ ('mysql', 'information_schema', 'performance_schema', 'sys')
+GROUP BY table_schema, table_name, table_rows, arl,  dl, il, DATA_FREE
+order by tbl_size_in_gig desc
+limit 10;

@@ -17,7 +17,7 @@ I unfortunately am required to do java, so I am writing down some notes.
 
 1. [Links](#links)
 2. [Misc](#misc)
-2. [Exaplantions](#e)
+2. [Explantions](#e)
 
 * * *
 <a name=Links></a>Links
@@ -136,3 +136,24 @@ public class Main {
     }
 }
 ```
+
+* * *
+<a name=i1>1</a>
+-----
+* int z = 10; z*= 5 + 5
+     * z* = 10
+     * z = z*10
+     * z = 10 * 10 = 100
+* a =100; a -= 5*2
+     * a -= 10
+     * a = a - 10
+     * a = 100 - 10 = 90
+* Initilize an int array
+    * int[] n = {1, 2, 3};
+    * int n[] = new int[]{1, 2, 3};
+* Declare a method : int myMethod( ) { }
+    * A valid Java method declaration must include:
+        * A return type (e.g., int, void)
+        * A method name
+        * Parentheses () for parameters
+        * A method body { }

@@ -1,6 +1,14 @@
+1. galera install and upgrade.
+2. ProxySQL with galera and other clusters.
+3. Explain mariadb galera, percona galera, innodb cluster, and master-master clusters. Compare to tidb, cockroachdb, and yugabyte and if the distributed databases are compatible with mysql and postgres.
+  a.Also explain the difference between commercial and exterprise versions of Percona, Oracle MySQL, and MariaDB.
+  b. Explain trick of usinf percona audit 8.0 in oracle innodb cluster.
+4. Install Myrocks on mysql. 
+5. Update Aurora, with DSL. 
+6. yugabyte, tidb, or cockroackdb certifications.
+7. Installation of mariab galera, mysql, postgresql (cluster), and others on virtualbox. Combine with ansible? 
 
-
-1. mysql cert
+1. DONE mysql cert
 2. snowflake tutorials
   https://www.linkedin.com/pulse/snowflake-summit-glance-snowflake-computing-7zs4c/
   

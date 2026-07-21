@@ -1,0 +1,27 @@
+dba.getCluster().status();
+dba.getClusterSet().status();
+
+
+dba.getCluster().status({extended:1});
+dba.getClusterSet().status({extended:1});
+
+SELECT
+   t2.MEMBER_HOST, t2.member_state, member_role,
+   t1.COUNT_TRANSACTIONS_IN_QUEUE AS 'Transactions Local',
+   t1.COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE AS 'Transactions Remote'
+FROM
+   performance_schema.replication_group_member_stats t1
+   JOIN
+   performance_schema.replication_group_members t2
+   ON
+   t2.MEMBER_ID = t1.MEMBER_ID;
+
+
+c = dba.getCluster();
+c.addInstance('<HOST>:3306', {recoveryMethod:'incremental'})
+
+c.removeInstance('saus-mxc-sql-data03.nix.corp.pps.io:3306');
+saus-mxc-sql-data01.nix.corp.pps.io:3306
+
+c.rejoinInstance('ratl-sql-data01.nix.corp.pps.io')
+c.forceQuorumUsingPartitionOf('ratl-sql-data03.nix.corp.pps.io');

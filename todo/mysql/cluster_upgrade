@@ -1,0 +1,42 @@
+!#/bin/bash
+day=`date +%y%m%d_%H%M%S`
+bdir=/srv/data/BACKUP_$day
+mkdir -p $bdir
+
+service mysqld stop
+
+cp /etc/my.cnf /etc/my.cnf_backup_8.0.43
+
+mkdir -p $bdir/binlogs
+rsync -av  /srv/data/mysql/data/binlog* $bdir/binlogs/
+cd /tmp/mysql_binaries/8.4.7.1
+rpm -Uvh percona-toolkit-3.7.1-2.el8.x86_64.rpm
+yum -y install lz4
+rpm -e percona-xtrabackup-80
+rpm -Uvh percona-xtrabackup-84-8.4.0-5.1.el8.x86_64.rpm
+rpm -Uvh common/*.rpm server/*.rpm shell/*.rpm
+cp /etc/my.cnf_backup_8.0.43 /etc/my.cnf
+
+sed -i "s/^binlog_transaction_dependency_tracking/#binlog_transaction_dependency_tracking/g" /etc/my.cnf
+sed -i "s/^default_authentication_plugin/#default_authentication_plugin/g" /etc/my.cnf
+
+#sed -i "s/^validate_/#validate_/g" /etc/my.cnf
+
+echo "
+#innodb_use_native_aio = 0  # This might not be needed.
+mysql_native_password=ON
+gtid_mode = ON
+enforce_gtid_consistency = ON
+binlog_format = ROW
+" >> /etc/my.cnf
+
+rm -f /usr/lib64/mysql/plugin/audit_log.so
+cp -f /tmp/mysql_binaries/8.4.7.1/audit_log.so_8.4.7 /usr/lib64/mysql/plugin/audit_log.so
+chmod 755 /usr/lib64/mysql/plugin/audit_log.so
+
+  # tail mysqld.log
+cd /var/log/mysql
+
+service mysqld start 
+
+ps -ef|grep mysqld

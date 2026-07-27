@@ -257,7 +257,17 @@ where the first field is the join field. The other fields are part of the derive
 
 
 
-* Start your mysql client in verbose mode. "-vvv" for the mysql client. 
+* Start your mysql client in verbose mode. "-vvv" for the mysql client.
+* Get the files
+```
+mkdir -p test_join
+cd test_join
+
+export d=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/mysql_explain_files/analyze_logs.sh
+wget -O analyze_logs.sh $d
+
+
+```
 * Run "source create_table_join.sql" on your database.
 ---
 Output
@@ -372,6 +382,90 @@ possible_keys: PRIMARY
 
    
    * Explain which the index is only for the where clause
-   * Explain where the join is the first field of the index and the field in the where clause for the derived
+```
+*************************** 1. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: t1
+   partitions: NULL
+         type: index
+possible_keys: PRIMARY
+          key: PRIMARY
+      key_len: 4
+          ref: NULL
+         rows: 11
+     filtered: 100.00
+        Extra: Using index
+*************************** 2. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: <derived2>
+   partitions: NULL
+         type: ref
+possible_keys: <auto_key0>
+          key: <auto_key0>
+      key_len: 4
+          ref: test_join.t1.t1_id
+         rows: 181
+     filtered: 100.00
+        Extra: NULL
+*************************** 3. row ***************************
+           id: 2
+  select_type: DERIVED
+        table: t3
+   partitions: NULL
+         type: ref
+possible_keys: PRIMARY,t2_t1
+          key: t2_t1
+      key_len: 4
+          ref: const
+         rows: 18142
+     filtered: 100.00
+        Extra: Using index
+3 rows in set, 1 warning (0.00 sec)
+```
+
+* Explain where the join is the first field of the index and the field in the where clause for the derived
    query is the next field.
-   
+```
+*************************** 1. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: t1
+   partitions: NULL
+         type: index
+possible_keys: PRIMARY
+          key: PRIMARY
+      key_len: 4
+          ref: NULL
+         rows: 11
+     filtered: 100.00
+        Extra: Using index
+*************************** 2. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: <derived2>
+   partitions: NULL
+         type: ref
+possible_keys: <auto_key0>
+          key: <auto_key0>
+      key_len: 4
+          ref: test_join.t1.t1_id
+         rows: 2
+     filtered: 100.00
+        Extra: NULL
+*************************** 3. row ***************************
+           id: 2
+  select_type: DERIVED
+        table: t3
+   partitions: NULL
+         type: range
+possible_keys: PRIMARY,t1_t2
+          key: t1_t2
+      key_len: 8
+          ref: NULL
+         rows: 11
+     filtered: 100.00
+        Extra: Using where; Using index for group-by
+3 rows in set, 1 warning (0.00 sec)
+```

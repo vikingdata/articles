@@ -315,7 +315,7 @@ Records: 1000001  Duplicates: 0  Warnings: 0
     * "  bash -c 'mkdir -p logs; rm -f logs/*'   "
 * Run the join test script in mysql "source join_test.sql". This saves log information to files join_first.log, no_index.log, where_first.log.
 * Process the logs by running "analyze_logs.sh"
----
+```
 Output
 For no_index.log, the no of rows is calcualted from the explain
     11*926*926403 = 9436340958
@@ -323,11 +323,11 @@ For where_first.log, the no of rows is calcualted from the explain
     11*181*18142 = 36120722
 For join_first.log, the no of rows is calcualted from the explain
     11*2*11 = 242
----
+```
 * We see that adding an index where the first field in the index is in the where condition is better. But an index for the field with join first is the best.
 * Here are the explains for the queries.
    * Explain for no index
----
+```
 *************************** 1. row ***************************
            id: 1
   select_type: PRIMARY
@@ -368,7 +368,7 @@ possible_keys: PRIMARY
      filtered: 10.00
         Extra: Using where; Using index; Using temporary
 3 rows in set, 1 warning (0.01 sec)
----
+```
 
    
    * Explain which the index is only for the where clause

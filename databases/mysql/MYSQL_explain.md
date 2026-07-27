@@ -20,9 +20,9 @@ TODO: Check all scripts and commands.
 4. Explain JSON is just mysql explain in JSON format.
 5. [Explain analyze](#a)
 6. [Important rules on index](#i)
-   c. Left most principle for tables
-   d. WOG (where, order, Group)
-   e. They forget about joins
+   * Left most principle for tables
+   * WOG (where, order, Group)
+   * Notes and they usually forget about joins
 7. [Derived tables and joins](#d)
 
 * * *

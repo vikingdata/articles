@@ -273,7 +273,7 @@ a query plan.
    * If all the fields you are selecting in the where clause are in the index used, the query is a "covered" query
    and should run much faster since it does not have to seek out other data. It can use the index for all
    the data.
-   * If a query uses "order by" or "group by", the result may not be able to fit in memory. Run "explain <QUERY>" and look for fields
+   * If a query uses "order by" or "group by", the result may not be able to fit in memory. Run "explain &lt;QUERY&gt;" and look for fields
       * "Using filesort" means sorting the the results does not fit in memory and disk is used. This usually
       makes horrible performance. Solution: increase sort_buffer_size
       * "Using temporary" means the size of temporary tables used for grouping does not fit in memory and

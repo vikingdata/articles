@@ -2,7 +2,7 @@
 ---
 title : MySQL Explain
 author : Mark Nielsen
-copyright : June 2024, July 2026
+copyright : July 2026
 ---
 
 
@@ -10,7 +10,7 @@ MySQL Explain
 ==============================
 
 _**by Mark Nielsen
-Original Copyright Jun 2024, July 2026**_
+Original Copyright July 2026**_
 
 TODO: Check all scripts and commands. 
 
@@ -20,9 +20,9 @@ TODO: Check all scripts and commands.
 4. Explain JSON is just mysql explain in JSON format.
 5. [Explain analyze](#a)
 6. [Important rules on index](#i)
-   * Left most principle for tables
-   * WOG (where, order, Group)
-   * Notes and they usually forget about joins
+   c. Left most principle for tables
+   d. WOG (where, order, Group)
+   e. They forget about joins
 7. [Derived tables and joins](#d)
 
 * * *
@@ -363,6 +363,21 @@ Records: 1000001  Duplicates: 0  Warnings: 0
 * Make the logs directory and empty it.
     * "  bash -c 'mkdir -p logs; rm -f logs/*'   "
 * Run the join test script in mysql "source join_test.sql". This saves log information to files join_first.log, no_index.log, where_first.log.
+```
+The query
+
+explain 
+select t1.t1_id as s , t_d.mt3_id
+from t1 
+  straight_join 
+    (
+      select max(t3_id) as mt3_id, t1_id
+      from t3
+      where t2_id = 10
+      group by t1_id
+    ) as t_d on ( t1.t1_id = t_d.t1_id)
+\G
+```
 * Process the logs by running "analyze_logs.sh"
 ```
 Output (You just multiple all the "rows:" together in the explain.)

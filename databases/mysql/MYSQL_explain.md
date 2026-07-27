@@ -264,9 +264,11 @@ where the first field is the join field. The other fields are part of the derive
 mkdir -p test_join
 cd test_join
 
-export d=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/mysql_explain_files/analyze_logs.sh
-wget -O analyze_logs.sh $d
-
+export ROOT=https://raw.githubusercontent.com/vikingdata/articles/refs/heads/main/databases/mysql/mysql_explain_files/
+for f in create_table_join.sql make_data.sh insert_t1.sql insert_t2.sql insert_t3.sql join_test.sql analyze_logs.sh; do
+  export d=$ROOT/analyze_logs.sh
+  wget -O analyze_logs.sh $d
+done
 
 ```
 * Run "source create_table_join.sql" on your database.
@@ -335,7 +337,7 @@ For where_first.log, the no of rows is calcualted from the explain
 For join_first.log, the no of rows is calcualted from the explain
     11*2*11 = 242
 ```
-* We see that adding an index where the first field in the index is in the where condition is better. But an index for the field with join first is the best.
+* We see no index is the wrost. Adding an index where the first field in the index is in the where condition is better (index t2_t1 (t2_id, t1_id)) . But an index for the field with join first is the best (index t1_t2 (t1_id, t2_id)).
 * Here are the explains for the queries.
    * Explain for no index
 ```

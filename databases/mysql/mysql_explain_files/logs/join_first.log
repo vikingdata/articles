@@ -1,0 +1,41 @@
+*************************** 1. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: t1
+   partitions: NULL
+         type: index
+possible_keys: PRIMARY
+          key: PRIMARY
+      key_len: 4
+          ref: NULL
+         rows: 11
+     filtered: 100.00
+        Extra: Using index
+*************************** 2. row ***************************
+           id: 1
+  select_type: PRIMARY
+        table: <derived2>
+   partitions: NULL
+         type: ref
+possible_keys: <auto_key0>
+          key: <auto_key0>
+      key_len: 4
+          ref: test_join.t1.t1_id
+         rows: 2
+     filtered: 100.00
+        Extra: NULL
+*************************** 3. row ***************************
+           id: 2
+  select_type: DERIVED
+        table: t3
+   partitions: NULL
+         type: range
+possible_keys: PRIMARY,t1_t2
+          key: t1_t2
+      key_len: 8
+          ref: NULL
+         rows: 11
+     filtered: 100.00
+        Extra: Using where; Using index for group-by
+3 rows in set, 1 warning (0.00 sec)
+

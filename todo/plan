@@ -5,8 +5,10 @@
   b. Explain trick of usinf percona audit 8.0 in oracle innodb cluster.
 4. Install Myrocks on mysql. 
 5. Update Aurora, with DSL. 
-6. yugabyte, tidb, or cockroackdb certifications.
+6. yugabyte, tidb, or cockroackdb certifications. snowflake
 7. Installation of mariab galera, mysql, postgresql (cluster), and others on virtualbox. Combine with ansible? 
+8. snowflake tutorials, and other distributed tutorials.
+9. MariaDB online for free, and others. Python and Linux tutorials and free environments?
 
 1. DONE mysql cert
 2. snowflake tutorials

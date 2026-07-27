@@ -246,15 +246,16 @@ TODO
 
 * * *
 <a name=i></a> Important rules on index
+-----
    c. Left most principle for tables
    d. WOG (where, order, Group)
    e. They forget about joins
 
 * * *
 <a name=d></a>Derived tables and joins
+-----
 When you join to a derived table in MySQL (it may be different with other database systems) you need an index
 where the first field is the join field. The other fields are part of the derived query.
-
 
 
 * Start your mysql client in verbose mode. "-vvv" for the mysql client.
@@ -269,7 +270,7 @@ wget -O analyze_logs.sh $d
 
 ```
 * Run "source create_table_join.sql" on your database.
----
+```
 Output
 
 Query OK, 1 row affected, 1 warning (0.00 sec)
@@ -287,9 +288,9 @@ Query OK, 0 rows affected (0.01 sec)
 
 Query OK, 0 rows affected (0.01 sec)
 
----
+```
    * Run "bash make_data.sh" at your linux or operating system prompt.
----
+```
 Output
 done with t1 1
 done with t1 2
@@ -301,9 +302,9 @@ done with t1 7
 done with t1 8
 done with t1 9
 done with t1 10
-----
+```
    * Run the follwing in mysql
----
+```
 source insert_t1.sql;
 source insert_t2.sql;
 source insert_t3.sql;
@@ -320,7 +321,7 @@ Records: 1001  Duplicates: 0  Warnings: 0
 mysql> source insert_t3.sql;
 Query OK, 1000001 rows affected (9.91 sec)
 Records: 1000001  Duplicates: 0  Warnings: 0
----
+```
 * Make the logs directory and empty it.
     * "  bash -c 'mkdir -p logs; rm -f logs/*'   "
 * Run the join test script in mysql "source join_test.sql". This saves log information to files join_first.log, no_index.log, where_first.log.

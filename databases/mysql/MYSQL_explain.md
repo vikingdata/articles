@@ -14,9 +14,9 @@ Original Copyright July 2026**_
 
 1. [links](#links)
 2. [Setup](#setup)
-3. Explain extended
-4. Explain JSON
-5. Explain analyze
+3. Explain extended is depreciated and integrated into mysql explain. 
+4. Explain JSON is just mysql explain in JSON format.
+5. [Explain analyze](#a)
 6. [Important rules on index](#i)
    c. Left most principle for tables
    d. WOG (where, order, Group)
@@ -227,29 +227,63 @@ possible_keys: PRIMARY,table2_id_ref
 
 ```
 
-
-* * *
-<a name=extended></a>Explain extended
------
-
-* * *
-<a name=json></a>Explain Json
------
-
 * * *
 <a name=analyze></a>Explain analyze
 -----
 
-TODO
-* explain you need to multiple Rows to get approximate rows scanned. Include a   dervied query using a join and where condition, that if an index is changed, it becomes more efficient. Explain the leftmost principle and  Composite Index (or Compound Index).3B
-* YTou really need to look at slow log
+Links
+* https://dev.mysql.com/blog-archive/mysql-explain-analyze/
+* https://www.google.com/search?q=mysql+explain+analyze
+* https://planetscale.com/blog/how-read-mysql-explains
+* https://devcookies.medium.com/mastering-explain-analyze-in-mysql-optimize-your-queries-like-a-pro-7f8b3ea28bb0
+* https://www.geeksforgeeks.org/mysql/mysql-explain-analyze/
+* https://hackmysql.com/book-2/
+* https://oneuptime.com/blog/post/2026-03-31-mysql-what-is-explain-analyze-in-mysql/view
+
+"Explain analyze" executes the query and will run live measurements. It will display estimated and actual results
+in a hierarchical format. 
+
+WARNING: Any query that changes data will occur unless you wrap it in a transaction and rollback and the engine
+supports transaction. MyISAM does not for example.
+```
+begin;
+EXPLAIN ANALYZE delte from table1 where field1 = "test";
+rollback;
+
+```
 
 * * *
 <a name=i></a> Important rules on index
 -----
-   c. Left most principle for tables
-   d. WOG (where, order, Group)
-   e. They forget about joins
+
+NOTE: Other database systems may not need multi column indexes. For example, AWS Aurora will use multiple indexes to create
+a query plan. 
+
+1. Left most principle for tables : For a query, for MySQL, you want a multi column (composite) index where
+   * Each field from left to right in index is used by the query in some format (usually the where clause).
+   * Try to make the first field with the most unique or highest carnality of data.
+   * Use fields that
+      * Use quality first
+      * Then use ranges
+2. When the query includes "order by" and "group by" conditions:
+   * Try to use a field(s) that is used in the where condition first.
+   * "Order by" happens after the "where" condition. Include fields from the "order by" conditions.
+   * Lastly, for "group by" conditions, it happens after "order by". Use fields from the "group by" clause in the index. 
+3. Some notes:
+   * If all the fields you are selecting in the where clause are in the index used, the query is a "covered" query
+   and should run much faster since it does not have to seek out other data. It can use the index for all
+   the data.
+   * If a query uses "order by" or "group by", the result may not be able to fit in memory. Run "explain <QUERY>" and look for fields
+      * "Using filesort" means sorting the the results does not fit in memory and disk is used. This usually
+      makes horrible performance. Solution: increase sort_buffer_size
+      * "Using temporary" means the size of temporary tables used for grouping does not fit in memory and
+      disk needs to be used. This hurt performance. Solution: increase tmp_table_size and max_heap_table_size. NOTE: Different versions of MySQL use different variables for internal temporary tables. Check with your version of MySQL.
+      * If you see "temporary; Using filesort", it means both are used, which is the worst in terms of performance.
+   * Everyone forgets about joins and derived tables.
+      * For joins, The field used for the join should be used first for the joined table before other conditions using that table.
+      * If derived tables are used, if it is joined, the first column in the index for the query in the
+      derived table should be the join. It if is not joined, you can treat the index used for the table
+      as a normal query. 
 
 * * *
 <a name=d></a>Derived tables and joins
@@ -305,7 +339,7 @@ done with t1 8
 done with t1 9
 done with t1 10
 ```
-   * Run the follwing in mysql
+   * Run the following in mysql
 ```
 source insert_t1.sql;
 source insert_t2.sql;
@@ -329,7 +363,7 @@ Records: 1000001  Duplicates: 0  Warnings: 0
 * Run the join test script in mysql "source join_test.sql". This saves log information to files join_first.log, no_index.log, where_first.log.
 * Process the logs by running "analyze_logs.sh"
 ```
-Output
+Output (You just multiple all the "rows:" together in the explain.)
 For no_index.log, the no of rows is calcualted from the explain
     11*926*926403 = 9436340958
 For where_first.log, the no of rows is calcualted from the explain
@@ -337,7 +371,7 @@ For where_first.log, the no of rows is calcualted from the explain
 For join_first.log, the no of rows is calcualted from the explain
     11*2*11 = 242
 ```
-* We see no index is the wrost. Adding an index where the first field in the index is in the where condition is better (index t2_t1 (t2_id, t1_id)) . But an index for the field with join first is the best (index t1_t2 (t1_id, t2_id)).
+* We see no index is the worst. Adding an index where the first field in the index is in the where condition is better (index t2_t1 (t2_id, t1_id)) . But an index for the field with join first is the best (index t1_t2 (t1_id, t2_id)).
 * Here are the explains for the queries.
    * Explain for no index
 ```

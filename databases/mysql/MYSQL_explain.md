@@ -12,6 +12,8 @@ MySQL Explain
 _**by Mark Nielsen
 Original Copyright July 2026**_
 
+TODO: Check all scripts and commands. 
+
 1. [links](#links)
 2. [Setup](#setup)
 3. Explain extended is depreciated and integrated into mysql explain. 
@@ -277,7 +279,7 @@ a query plan.
       * "Using filesort" means sorting the the results does not fit in memory and disk is used. This usually
       makes horrible performance. Solution: increase sort_buffer_size
       * "Using temporary" means the size of temporary tables used for grouping does not fit in memory and
-      disk needs to be used. This hurt performance. Solution: increase tmp_table_size and max_heap_table_size. NOTE: Different versions of MySQL use different variables for internal temporary tables. Check with your version of MySQL.
+      disk needs to be used. This hurts performance. Solution: increase tmp_table_size and max_heap_table_size. NOTE: Different versions of MySQL use different variables for internal temporary tables. Check with your version of MySQL.
       * If you see "temporary; Using filesort", it means both are used, which is the worst in terms of performance.
    * Everyone forgets about joins and derived tables.
       * For joins, The field used for the join should be used first for the joined table before other conditions using that table.

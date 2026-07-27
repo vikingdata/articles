@@ -2,7 +2,7 @@
 ---
 title : MySQL Explain
 author : Mark Nielsen
-copyright : July 2026
+copyright : June 2024, July 2026
 ---
 
 
@@ -10,7 +10,7 @@ MySQL Explain
 ==============================
 
 _**by Mark Nielsen
-Original Copyright July 2026**_
+Original Copyright Jun 2024, July 2026**_
 
 TODO: Check all scripts and commands. 
 

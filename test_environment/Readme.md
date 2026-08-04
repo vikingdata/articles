@@ -13,12 +13,12 @@ All resources are FREE. All have limitations for use, but not normally an issue 
         1. SSQL -Windows or Linux with SSMS
         1. Cockroachdb
        
-  1. Cloud
-    1. Links
+    1. Cloud
+        1. Links
           * Old page: [Free Setup](https://github.com/vikingdata/articles/blob/main/cloud/Free_setup.md)
-    2. AWS
-      * [AWS free](https://aws.amazon.com/free/?gclid=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=categories%23compute&trk=6a455a6f-f7f7-4463-917f-b59707d5f462&sc_channel=ps&ef_id=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB:G:s&s_kwcid=AL!4422!3!646547068075!p!!g!!cloud%20computing!2038862296!75709537127)
-      * Database + Storage
+        2. AWS
+            1. [AWS free](https://aws.amazon.com/free/?gclid=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=categories%23compute&trk=6a455a6f-f7f7-4463-917f-b59707d5f462&sc_channel=ps&ef_id=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB:G:s&s_kwcid=AL!4422!3!646547068075!p!!g!!cloud%20computing!2038862296!75709537127)
+            2. Database + Storage
        1. Dynamo
        2. SimpleDB
        3. S3 -- used by databases and storage. It is very very cheap.

@@ -32,28 +32,28 @@ All resources are FREE. All have limitations for use, but not normally an issue 
                 1. Route -- DNS
                 1. Billing or admin - Organizations, control tower
 
-    3. GCP Free
-      * Cloud storage ; 5GB and traffic -- enough for testing Database
-        1. Database
-	  * Big Query
-          * pub/sub
-	2. Server (same as ec2 in AWS)
-	  * e2-micro VM instance
-	3. Other
-          * firestore Programming
-          * secret manager Server
-          * Google Compute --- limited resources
+        1. GCP Free
+            1. Cloud storage ; 5GB and traffic -- enough for testing Database
+            1. Database
+	        1. Big Query
+                1. pub/sub
+	    1. Server (same as ec2 in AWS)
+	        1. e2-micro VM instance
+	    1. Other
+                1. firestore Programming
+                1. secret manager Server
+                1. Google Compute --- limited resources
 
 
-    4. MS Free
-    5. Oracle Free
-  * Monitoring
-    1. New Relic
-    2. Datadog
-    3. Grefana
+        1. MS Free
+        1. Oracle Free
+    1. Monitoring
+        1. New Relic
+        2. Datadog
+        3. Grafana
+	4. PMM
       
-  * Tools
-    1. Confluence
-    2. PMM
-    3. Claude AI
+    1. Tools
+        1. Confluence
+        1. Claude AI
  

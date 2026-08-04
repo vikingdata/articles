@@ -21,8 +21,12 @@ Original Copyright August 2026**_
 wslconfig /l
 wls -u Ubuntu
    # Install Ubunut default
-   # Provide a username and password when it asks. 
+   # Provide a username and password when it asks.
+   # I will use "mark" for username and password. 
 wsl -install
+
+   # Make it so you go to your home directory when you log in. 
+echo "cd" >> ~/.bashrc
 
    # Exit from WSL inside of WSL
 exit
@@ -33,8 +37,6 @@ wsl
 sudo ls
 
    # Test upodatedb and install MySQL server
-sudo ls
-
    # Open up a general root shell
 sudo bash
 
@@ -44,9 +46,11 @@ sudo bash
 apt update
 
    # install locate but do not update the database for windows file. 
-ln -s /dev/null /etc/apt/apt.conf.d/99block-updatedbInstall
+touch /var/lib/plocate/plocate.db
 apt-get -y install plocate
-rm /etc/apt/apt.conf.d/99block-updatedbInstall
+
+   # Remove the empty database
+rm /var/lib/plocate/plocate.db
 
    # Add /mnt to the ignore list for updatedb.
    # This is where Windows stuff is mounted. 

@@ -35,14 +35,28 @@ Steps
  or (how to do it in Windows](https://www.youtube.com/watch?v=QiSXClZauXA&t=832). 
 1. Start laptop and get [into the BIOS](https://www.youtube.com/shorts/icZ7a1LHsC8).
     * [Disable Secure Boot](https://www.youtube.com/watch?v=bcF15o3swrY)
-    * [Boot from the USB](https://www.youtube.com/shorts/P2xWCXLekoo)
-1. Stick in the USB key and Boot off of USB key.
+1. Stick in the USB key and [Boot off of USB key](https://www.youtube.com/shorts/P2xWCXLekoo).
 1. Install Linux and delete everything on the hard drive. You could make it dual boot but sometimes Window
 updated like to destory the MBR which removes the dual boot. 
 
 * * *
-<a name=v></a>VirtualBox
+<a name=v></a>VirtualBox on Windows
 -----
+To install VirtualBox in general:
+1. [Install cygwin](#c) first.
+1. Setup ssh key
+    1. Start a cygwin shell.
+    1. Execute : ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
+1. Install VirtualBox
+1. Setup network, [do port forwarding and firewall off your port](https://www.youtube.com/watch?v=9llH5_CON-Y&t=58s).
+    1. In VirtualBox, forward port 22 from VirtualBox or your Windows computer.
+    1. Firewall off port 22 on Windows to only allow connections from your box.
+       This prevents outside connections where people might want to hack into your server.
+1. Trasnfer over ssh key to user account and root. This makes it so you can login without a password. 
+1. In the future when you after you start VirtualBox
+    * Start a cygwin shell on Windows
+    * Use ssh to login into your VirtuallBox session. An ssh session this way is often faster than using
+    a VirtualBox interface. 
 
 
 * * *

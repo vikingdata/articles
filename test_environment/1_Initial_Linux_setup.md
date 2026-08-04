@@ -5,6 +5,8 @@ Initial Setup of Linux Environment
 _**by Mark Nielsen
 Original Copyright August 2026**_
 
+NOt DONE YET
+
 1. [Linux on laptop](#l) : This will be an acceptable installation for future articles.
 2. [Virtualbox](#v) : This will be an acceptable installation for future articles. 
 3. [WSL2](#w) : Installs Linux under Windows. This is not 
@@ -79,3 +81,29 @@ apt-get -y install python3-pip
 apt-get -y install lynx
 
 ```
+
+* * *
+<a name=c></a>Cygwin
+-----
+
+* [cygwin cheatsheet](https://www.voxforge.org/home/docs/cygwin-cheat-sheet)
+* [cygwin cheatsheet](https://pbgworks.org/sites/pbgworks.org/files/LinuxCheatSheet2_0.pdf)
+* [cygwin users guide](https://cygwin.com/cygwin-ug-net/cygwin-ug-net.pdf)
+
+* Things to remember
+    * Cygwin has an issue installing rpms, debian packages, etc.
+        * Install a cygwin packages.
+        * Some things like Python modules can be installed with "pip". If you have a cygwin package that install
+        packages or modules, it should work.
+    * Cygwin is not a vm but an emulation.
+    * Cygwin can run Windows binaries as it is a shell under windows. However...
+        * "\" as in "C:\" is often needed to be converted to "/" as in "c:/"
+        * Spaces need a "\" in front of them.
+        * ex: "C:\Program Files" becomes "c:/Program\ Files"
+* Install cygwin
+    * goto https://www.cygwin.com/
+    * Choose [Cygwin Installer](https://www.cygwin.com/setup-x86_64.exe)
+        * Download setup-x86_64.exe
+	* Run setup-x86_64.exe
+    * [Follow Oracles installation guide](https://docs.oracle.com/en/enterprise-manager/cloud-control/enterprise-manager-cloud-control/24.1/embsc/installing-cygwin.html)
+        * I would install ssh, emacs, and python3. 

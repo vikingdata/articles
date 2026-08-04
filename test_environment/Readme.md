@@ -2,14 +2,14 @@ This is a summary in order of how I setup my test environment for home.
 All resources are FREE. All have limitations for use, but not normally an issue for someone who just wants to learn. 
 
 1. Internet resources
-  * Linux box
-  * Database
+  1. Linux box
+  2. Database
     1. Snowflake and postgresql. Although it is free only for a limited time, after the time limit just
       apply for new systems with the same email.
-      * Mariadb -- very similar to MySQL.
-      * MongoDB
-      * MSSQL -Windows or Linux with SSMS
-      * Cockroachdb
+      1. Mariadb -- very similar to MySQL.
+      2. MongoDB
+      3. SSQL -Windows or Linux with SSMS
+      4. ockroachdb
        
   * Cloud
     1. Links

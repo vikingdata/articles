@@ -24,34 +24,34 @@ All resources are FREE. All have limitations for use, but not normally an issue 
      * Monitoring
        * Promethesus
        * Cloudtrail Programming
-             * Glue (between dynamo, SimpleDB, and MySQL and MongoDB on EC2)
-             * Lambda (same as glue)
-             * security - Key Management, Security Hub, cloudtrail, * Storage -- Storage Gateway Other
-             * Route -- DNS
-             * Billing or admin - Organizations, control tower
+         * Glue (between dynamo, SimpleDB, and MySQL and MongoDB on EC2)
+         * Lambda (same as glue)
+         * security - Key Management, Security Hub, cloudtrail, * Storage -- Storage Gateway Other
+         * Route -- DNS
+         * Billing or admin - Organizations, control tower
 
-      3. GCP Free
-         * Cloud storage ; 5GB and traffic -- enough for testing Database
-         * Database
-	    * Big Query
-            * pub/sub
-	 * Server (same as ec2 in AWS)
-	    * e2-micro VM instance
-	 * Other
-            * firestore Programming
-            * secret manager Server
-            * Google Compute --- limited resources
+    3. GCP Free
+      * Cloud storage ; 5GB and traffic -- enough for testing Database
+        * Database
+	  * Big Query
+          * pub/sub
+	* Server (same as ec2 in AWS)
+	  * e2-micro VM instance
+	* Other
+          * firestore Programming
+          * secret manager Server
+          * Google Compute --- limited resources
 
 
-      4. MS Free
-      5. Oracle Free
+    4. MS Free
+    5. Oracle Free
   d. Monitoring
-      1. New Relic
-      2. Datadog
-      3. Grefana
+    1. New Relic
+    2. Datadog
+    3. Grefana
       
   e. Tools
-      1. Confluence
-      2. PMM
-      3. Claude AI
+    1. Confluence
+    2. PMM
+    3. Claude AI
  

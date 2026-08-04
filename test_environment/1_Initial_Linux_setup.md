@@ -57,6 +57,11 @@ rm /var/lib/plocate/plocate.db
    # This is where Windows stuff is mounted. 
 sed -i 's/PRUNEPATHS=\"/PRUNEPATHS=\"\/mnt /' /etc/updatedb.conf
 
+   # Verify mnt is in PRUNEPATHS
+   # Output should look like
+   #  PRUNEPATHS="/mnt /tmp /var/spool /media /var/lib/os-prober /var/lib/ceph /home/.ecryptfs /var/lib/schroot"
+ grep mnt /etc/updatedb.conf
+ 
    # Run updatedb -- this may take a while. 
 updatedb
 
@@ -64,11 +69,10 @@ updatedb
 apt update
 
   # Install packages  for fun
+  # If you get a question asking for postfix, choose Internet site and accept
+  # the default. 
 apt-get -y install emacs nmap net-tools  gnupg tmux dstat mc
-apt-get -y install emacs net-tools ssh screen tmux nmap 
-  # It might ask a question 
-apt-get -y install bind9-dnsutils net-tools ssh
-
+apt-get -y install ssh screen  bind9-dnsutils
 apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger 
 apt-get -y install cpufetch bpytop speedtest-cli lolcat mc speedtest-cli
 apt-get -y install python3-pip

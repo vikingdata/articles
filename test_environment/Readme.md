@@ -13,7 +13,7 @@ All resources are FREE. All have limitations for use, but not normally an issue 
         1. SSQL -Windows or Linux with SSMS
         1. Cockroachdb
        
-  * Cloud
+  1. Cloud
     1. Links
           * Old page: [Free Setup](https://github.com/vikingdata/articles/blob/main/cloud/Free_setup.md)
     2. AWS

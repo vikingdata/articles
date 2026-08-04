@@ -3,8 +3,8 @@ All resources are FREE. All have limitations for use, but not normally an issue 
 
 1. Internet resources
 
-  1. Linux box
-  2. Database
+    1. Linux box
+    2. Database
 
     1. Snowflake and postgresql. Although it is free only for a limited time, after the time limit just
       apply for new systems with the same email.

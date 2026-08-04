@@ -72,7 +72,7 @@ apt update
   # If you get a question asking for postfix, choose Internet site and accept
   # the default. 
 apt-get -y install emacs nmap net-tools  gnupg tmux dstat mc
-apt-get -y install ssh screen  bind9-dnsutils
+apt-get -y install ssh screen bind9-dnsutils
 apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger 
 apt-get -y install cpufetch bpytop speedtest-cli lolcat mc speedtest-cli
 apt-get -y install python3-pip

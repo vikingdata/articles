@@ -8,7 +8,7 @@ All resources are FREE. All have limitations for use, but not normally an issue 
         1. In this article, just install WSL2 and do not bother with MySQL. 
     3. Cygwin -- not really Linux but a Linux interface. 
         1. Install cygwin with SSH and make ssh key. We will use this later.
-            * `ssh-keygen -t rsa -N ''`
+            * ```ssh-keygen -t rsa -N ''```
         1. For more on installing Cygwin with ssh : (5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
 	
 

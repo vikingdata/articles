@@ -9,8 +9,41 @@ NOt DONE YET
 
 1. [Linux on laptop](#l) : This will be an acceptable installation for future articles.
 2. [Virtualbox](#v) : This will be an acceptable installation for future articles. 
-3. [WSL2](#w) : Installs Linux under Windows. This is not 
+3. [WSL2](#w) : Installs Linux under Windows. This will be mostly acceptable for future articles. 
 4. [Cygwin](#c) : Not Linux but a Linux like interface on Windows.
+
+* * *
+<a name=l></a>Linux on laptop
+-----
+
+To install Linux on a computer, there are many articles. Here are some links and general steps.
+Links
+* Videos
+    * [Install Linux](https://www.youtube.com/watch?v=Srr5bTEyE_A&vl=en&t=106)
+    * [Install Linux](https://www.youtube.com/watch?v=K3QOAVrhGTg)
+    * [Linux Install](https://www.youtube.com/watch?v=n8vmXvoVjZw)
+* Webpages
+    * [Linux Install](https://www.ifixit.com/Guide/How+to+Install+Linux+on+a+Windows+PC/196722)
+    * [Google search](https://www.google.com/search?q=install+linux+on+a+laptop)
+    
+Steps
+
+1. Buy a USB Key. I would suggest a few. Make them 10 gigs or larger.
+1. Buy a $200 laptop that you can install Linux on.
+1. [Download a Linux distribution.](https://linuxmint.com/download.php)
+1. [Burn the Linux Distribution to the USB](https://www.youtube.com/watch?v=Wspwpf_gpws&t=252) on Linux
+ or (how to do it in Windows](https://www.youtube.com/watch?v=QiSXClZauXA&t=832). 
+1. Start laptop and get [into the BIOS](https://www.youtube.com/shorts/icZ7a1LHsC8).
+    * [Disable Secure Boot](https://www.youtube.com/watch?v=bcF15o3swrY)
+    * [Boot from the USB](https://www.youtube.com/shorts/P2xWCXLekoo)
+1. Stick in the USB key and Boot off of USB key.
+1. Install Linux and delete everything on the hard drive. You could make it dual boot but sometimes Window
+updated like to destory the MBR which removes the dual boot. 
+
+* * *
+<a name=v></a>VirtualBox
+-----
+
 
 * * *
 <a name=w></a>WSL2
@@ -106,4 +139,4 @@ apt-get -y install lynx
         * Download setup-x86_64.exe
 	* Run setup-x86_64.exe
     * [Follow Oracles installation guide](https://docs.oracle.com/en/enterprise-manager/cloud-control/enterprise-manager-cloud-control/24.1/embsc/installing-cygwin.html)
-        * I would install ssh, emacs, and python3. 
+        * I would install ssh, emacs, python3, and pip3 (for python3). 

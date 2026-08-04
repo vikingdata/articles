@@ -1,5 +1,17 @@
 This is a summary in order of how I setup my test environment for home.
-All resources are FREE. All have limitations for use, but not normally an issue for someone who just wants to learn. 
+All resources are FREE. All have limitations for use, but not normally an issue for someone who just wants to learn.
+
+1. Setup Linux on Windows
+    1. [Setup VirtualBox](https://github.com/vikingdata/articles/blob/main/linux/vm/Multiple_linux_VirtualBox.md)
+        1. Just setup one node.
+    2. [WSL2](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_under_wsl2.md#wsl2)
+        1. In this article, just install WSL2 and do not bother with MySQL. 
+    3. Cygwin -- not really Linux but a Linux interface. 
+        1. Install cygwin with SSH and make ssh key. We will use this later.
+            `ssh-keygen -t rsa -N ''`
+        1. For more on installing Cygwin with ssh : (5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
+	
+
 
 1. Internet resources
 

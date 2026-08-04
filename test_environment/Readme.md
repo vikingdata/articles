@@ -1,30 +1,36 @@
 This is a summary in order of how I setup my test environment for home.
 All resources are FREE. All have limitations for use, but not normally an issue for someone who just wants to learn.
 
-1. Setup Linux on Windows
-    1. [Setup VirtualBox](https://github.com/vikingdata/articles/blob/main/linux/vm/Multiple_linux_VirtualBox.md)
-        1. Just setup one node.
-    2. [WSL2](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_under_wsl2.md#wsl2)
-        1. In this article, just install WSL2 and do not bother with MySQL. 
-    3. Cygwin -- not really Linux but a Linux interface. 
-        1. Install cygwin with SSH and make ssh key. We will use this later.
-            * ```ssh-keygen -t rsa -N ''```
-        1. For more on installing Cygwin with ssh : (5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
-	
-
+1. Setup Test environment with Linux on Windows or Install Linux on a computer
+    1. Install Linux
+    1. Install Linux on Windows
+        1. [Setup VirtualBox](https://github.com/vikingdata/articles/blob/main/linux/vm/Multiple_linux_VirtualBox.md)
+            1. Just setup one node.
+        2. [WSL2](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_under_wsl2.md#wsl2)
+            1. In this article, just install WSL2 and do not bother with MySQL. 
+        3. Cygwin -- not really Linux but a Linux interface.
+	    1. We will not be using cygwin to to directly execute linux functions but rather to ssh from a Windows box to a Virtual Box instllation or a Linux box. You do not need CYGWIN if you install WSL2.  
+            1. Install cygwin with SSH and make ssh key. We will use this later.
+                * ```ssh-keygen -t rsa -N ''```
+            1. For more on installing Cygwin with ssh : (5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
+1. Setup software after you have your linux environment. 	
+       
 
 1. Internet resources
 
     1. Linux box
+        1. [https://blinkenshell.org/](https://blinkenshell.org/)
+	1. [https://sdf.org/]([https://sdf.org/)
+	
     2. Database
 
-        1. Snowflake and postgresql. Although it is free only for a limited time, after the time limit just
+        1. [Snowflake and postgresql](https://signup.snowflake.com/). Although it is free only for a limited time, after the time limit just
         apply for new systems with the same email.
         1. Mariadb -- very similar to MySQL.
         1. MongoDB
-        1. SSQL -Windows or Linux with SSMS
+        1. MSSQL -Windows or Linux with SSMS
         1. Cockroachdb
-       
+	    
     1. Cloud
         1. Links
             * Old page: [Free Setup](https://github.com/vikingdata/articles/blob/main/cloud/Free_setup.md)
@@ -33,8 +39,8 @@ All resources are FREE. All have limitations for use, but not normally an issue 
             1. Database + Storage
                 1. Dynamo
                 1. SimpleDB
-                1.. S3 -- used by databases and storage. It is very very cheap.
-                1.. Redshift -- not free, but free when idle
+                1. S3 -- used by databases and storage. It is very very cheap.
+                1. Redshift -- not free, but free when idle
             1. Monitoring
                 1.  Promethesus
             1. Cloudtrail Programming

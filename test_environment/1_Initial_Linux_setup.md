@@ -46,6 +46,7 @@ sudo bash
 apt update
 
    # install locate but do not update the database for windows file. 
+mkdir -p /var/lib/plocate/
 touch /var/lib/plocate/plocate.db
 apt-get -y install plocate
 

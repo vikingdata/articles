@@ -49,9 +49,9 @@ All resources are FREE. All have limitations for use, but not normally an issue 
         1. Oracle Free
     1. Monitoring
         1. New Relic
-        2. Datadog
-        3. Grafana
-	4. PMM
+        1. Datadog
+        1. Grafana
+        1. PMM
       
     1. Tools
         1. Confluence

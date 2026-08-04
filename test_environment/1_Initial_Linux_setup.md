@@ -58,6 +58,124 @@ To install VirtualBox in general:
     * Use ssh to login into your VirtuallBox session. An ssh session this way is often faster than using
     a VirtualBox interface. 
 
+### Install Linux on VirtualBox
+
+
+Install VirtualBox
+* https://www.virtualbox.org/wiki/Downloads
+* Select Windows Host and download
+    * https://download.virtualbox.org/virtualbox/7.0.14/VirtualBox-7.0.14-161095-Win.exe
+* Run and install VirtualBox-7.0.14-161095-Win.exe
+
+Download Install Mate
+* Download Ubuntu Mate or another Linus iso from another distribtion.
+  * https://cdimages.ubuntu.com/ubuntu-mate/releases/22.04.4/release/ubuntu-mate-22.04.4-desktop-amd64.iso
+  * Why? Don't like Unity
+  * Other: https://ubuntu.com/download/desktop/thank-you?version=22.04.4&architecture=amd64
+
+Setup Ubuntu under VirtualBox
+* In VirtualBox
+    * Click new
+    * Name : Linux
+    * Find ubuntu-mate-22.04.4-desktop-amd64.iso under Iso Image
+    * Under Unmanned install
+         * Change username and password. Remember the username and password. 
+             * I changed it to mark and mark
+             * change hostname: Linux
+    * Leave 16 gig ram (or as much as you can) and 1 cpu under hardware
+    * Leave hard drive alone
+    * Click on finish. It should auto install
+    * Boot Ubuntu and finish the installation. 
+    * Install Guest Additions
+        * Select "Insert Guest Additions CD"
+        * Open up the folder for the cd.
+        * Click on autorun.sh. Open up in a terminal. Type in your password you used for installation.
+        * Choose run
+        * Enter password if asked, 
+        * When done shutdown Linux
+    * While the system in shutdown. In VirtualBox change the hardware ram to 128 megs. This is optional.
+    * In a DOs prompt
+        * mkdir c:\vm
+        * mkdir c:\vm\shared
+    * Back to VirtualBox, choose Linux, Setup filesharing. Under "Shared Folder",
+        * Folder Path : c:\vb
+        * Folder Name : shared
+        * mount Point : /mnt/shared
+             * Make sure you select the directory through the file manager and just don't type it in.
+	* Click on Auto mount     
+    * Network
+        * In virtual Box, select Network
+        * select the first adapter
+        * Change "attached to" to "bridged adapter. This will make so the host and and all instanced can see each other. 
+        * Select bidirectional for copy and paste.
+        * File sharing of c:\vm\shared to /mnt/shared
+
+* Start up image
+    * Under Virtual box Under Devices
+        * Select Shared Clipboard, and choose bidirectional. This will let you copy and paste stuff from Windows to your Linux installation.  
+    * Login
+    * Make new xterm icon on desktop.
+        * Right click on desktop and select new launcher.
+        * Name : xterm
+        * execute : xterm -fn 12x24
+    * Click on xterm or start an xterm somehow. 	
+    * sudo to bash
+        * su -l root # It will ask you for a password
+        * Execute commands
+```bash
+apt-get install emacs tmux screen ssh net-tools -y
+
+
+   # Record this ip address
+ifconfig | grep inet | head -n1 | sed -e 's/  */ /g' | cut -d ' ' -f3
+
+   # start sshd so we can connect remotely. 
+service sshd start
+systemctl enable ssh
+```
+   * In cygwin, scp the ssh_key to the server
+       * Change the ip address and username 'mark'.
+           * scp .ssh/id_rsa.pub mark@192.168.1.11:
+
+    * Connect with ssh
+        * ssh 192.168.1.11 -l mark
+    * After you log in, execute
+```
+mkdir -p .ssh
+chmod 755 .ssh
+cp id_rsa.pub .ssh/authorized_keys
+
+   # Set console login, uses less memory
+systemctl set-default multi-user.target
+
+
+  #after logged in
+su -l # It will ask you for a password
+
+cd /root
+mkdir -p .ssh
+chmod 755 .ssh
+         # Change the username mark to whatever you used to install virtualbox
+cp /home/mark/id_rsa.pub /root/.ssh/authorized_keys
+
+
+  # Change this user 'mark' to the user you installed with virutal box. 
+export MY_USER='mark'
+echo "$MY_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+  # Log out of root
+exit
+
+  # Now sudo to root without password
+sudo bash
+
+```
+
+
+### Port forward SSH and Firewall
+
+### Transfer SSH keys to Linux on VirtualBox
+
 
 * * *
 <a name=w></a>WSL2
@@ -153,4 +271,8 @@ apt-get -y install lynx
         * Download setup-x86_64.exe
 	* Run setup-x86_64.exe
     * [Follow Oracles installation guide](https://docs.oracle.com/en/enterprise-manager/cloud-control/enterprise-manager-cloud-control/24.1/embsc/installing-cygwin.html)
-        * I would install ssh, emacs, python3, and pip3 (for python3). 
+        * I would install ssh, emacs, python3, and pip3 (for python3).
+
+* Setup ssh key
+    *  ssh-keygen -t rsa -N ''
+    * For more on installing Cygwin with ssh : [5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)

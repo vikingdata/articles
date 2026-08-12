@@ -157,7 +157,7 @@ sudo bash
 wsl
 ```
 
-### Install Percona
+### <a name=p></a>Install Percona
 1. <a name=p></a> Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
 ```
 sudo bash
@@ -214,7 +214,7 @@ apt-get purge -y percona-release
 apt-get purge -y percona-xtradb-cluster-server* percona-xtradb-cluster-client* percona-xtradb-cluster-common* percona-server-server* percona-server-client*
 ```
    
-### Install MSSQL
+### <a name=m></a>Install MSSQL
 
 1. <a name=p></a>[MSSQL for Linux](https://learn.microsoft.com/en-us/sql/linux/install-upgrade/quickstart-install-ubuntu?view=sql-server-linux-ver17&preserve-view=true&tabs=ubuntu2004%2C2025ubuntu2204%2Codbc-ubuntu-1804)
     * Initial install

@@ -157,7 +157,8 @@ sudo bash
 wsl
 ```
 
-2. <a name=p></a> Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
+#### Install Percona
+1. <a name=p></a> Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
 ```
 sudo bash
 
@@ -213,7 +214,9 @@ apt-get purge -y percona-release
 apt-get purge -y percona-xtradb-cluster-server* percona-xtradb-cluster-client* percona-xtradb-cluster-common* percona-server-server* percona-server-client*
 ```
    
-*  <a name=p></a>[MSSQL for Linux](https://learn.microsoft.com/en-us/sql/linux/install-upgrade/quickstart-install-ubuntu?view=sql-server-linux-ver17&preserve-view=true&tabs=ubuntu2004%2C2025ubuntu2204%2Codbc-ubuntu-1804)
+#### Install MSSQL
+
+1. <a name=p></a>[MSSQL for Linux](https://learn.microsoft.com/en-us/sql/linux/install-upgrade/quickstart-install-ubuntu?view=sql-server-linux-ver17&preserve-view=true&tabs=ubuntu2004%2C2025ubuntu2204%2Codbc-ubuntu-1804)
     * Initial install
 ```
 curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
@@ -334,7 +337,17 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 
 1. [Install SMSS](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms)
    * In Windows, [Install SMSS](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms)
-
+   * Make a new connection
+      * Server: 127.0.0.1
+      * Authentication: SQL Server Authetication
+      * User: Your username you log in as under wsl
+      * Password: Enter password created
+         * Check  /home/$SUDO_USER/.sqlcmd/mssql_options
+	 * or start wsl and check ~/.sqlcmd/mssql_options
+      * Click and turn on
+         * Remember password
+         * Trust Server certificate
+      * Click "Connect"	 
 * PostgreSQL
 * Cockroachdb
 * MongoDB

@@ -226,8 +226,6 @@ sudo apt-get install -y mssql-server
 
 # Install utilities
 
-# Confgiure and start mssql
-
 curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
 apt-get update
   # It will ask you to accept licenses.
@@ -235,19 +233,108 @@ apt-get -y install mssql-tools18 unixodbc-dev
 
   # add binaries to your path. and the user you sudo as. 
 echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> /home/$SUDO_USER/.bash_profile
-echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> /home/$SUDO_USER/.bashrc
+
 source ~/.bash_profile
 
-# Configure mssql
+  # Add libldap-2.5-0 because this version of ubuntu has libldap-2.6 installed
+wget https://ftp.debian.org/debian/pool/main/o/openldap/libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
+dpkg -i libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
+ 
+# Configure and install mssql
      # Enter "2" for free enterprise developer.
      # Accept license
      # Type "Root1234" as password. We might change it later. 
 /opt/mssql/bin/mssql-conf setup
 
+  # Make it only listening on loppback
+echo "
+[network]
+ipaddress = 127.0.0.1
+" >> /var/opt/mssql/mssql.conf
+sudo systemctl restart mssql-server.service
+
 # Test command locally
-sqlcmd -S localhost -U root -P Root1234
+sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "select 'good';"
+# localhost won't work
+#sqlcmd -S localhost -U sa -P Root1234 -C -Q "select 'good';"
+
+sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "create database mark;"
+cmd="SELECT name FROM sys.databases WHERE database_id > 4;"
+sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "$cmd"
+
+  # Make auto login
+connection="Server=127.0.0.1,1433;Database=mark;User Id=sa;Password=Root1234;"
+connection="$connection;Encrypt=True;TrustServerCertificate=True;"
+
+
+  # sqlcmd config does not work, so make file manually, so you must manually connect
+  # in production, do not save password like this. 
+echo "export MSSQL_OPTIONS=' -S 127.0.0.1 -U sa -P Root1234 -C '" > ~/.sqlcmd/mssql_options
+echo "
+source ~/.sqlcmd/mssql_options
+" >> ~/.bashrc
+export MSSQL_OPTIONS=' -S 127.0.0.1 -U sa -P Root1234 -C '
+
+  # Test out connecting
+sqlcmd $MSSQL_OPTIONS -q "select 'good';"
+
+  # Add a user and change sa user
+  # OPTIONAL: We attached the service to 127.0.0.1 so it should not be available to the outside. 
+
+new_password=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32`
+
+sql="CREATE LOGIN $SUDO_USER WITH PASSWORD = '$new_password';"
+sqlcmd $MSSQL_OPTIONS -Q "$sql"
+
+sql="ALTER SERVER ROLE sysadmin ADD MEMBER $SUDO_USER;"
+sqlcmd $MSSQL_OPTIONS -Q "$sql"
+
+sql="ALTER LOGIN $SUDO_USER WITH PASSWORD = '$new_password';"
+sqlcmd $MSSQL_OPTIONS -Q "$sql"
+
+sudo -u $SUDO_USER -Q "select 'good'"
+
+  # Test if the sudo user can connect.
+
+mkdir -p /home/$SUDO_USER/.sqlcmd
+echo "export MSSQL_OPTIONS=' -S 127.0.0.1 -U $SUDO_USER -P $new_password -C '" > /home/$SUDO_USER/.sqlcmd/mssql_options
+echo "user:  $SUDO_USER  password: $new_password created in mssql"
+
+echo "
+source ~/.sqlcmd/mssql_options
+alias sqlcmd2=' sqlcmd  -S 127.0.0.1 -U $SUDO_USER -P $new_password -C '
+" >> /home/$SUDO_USER/.bashrc
+echo "
+source ~/.sqlcmd/mssql_options
+alias sqlcmd2=' sqlcmd  -S 127.0.0.1 -U $SUDO_USER -P $new_password -C '
+" >> /home/$SUDO_USER/.bash_profile
+chown -R $SUDO_USER /home/$SUDO_USER/.bash_profile
+chown -R $SUDO_USER /home/$SUDO_USER/.sqlcmd
+sudo -i -u $SUDO_USER bash -i -c 'sqlcmd2 -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();" '
+
+  # THIS IS OPTIONAL. We change the user "sa" to a different name. 
+
+  # Make random password for account we will use for new user. 
+sa_suffix=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 4`
+
+  # Change the "sa" user to a different name for security reasons. 
+echo "changing sa to sa_suffix for mssql" > ~/mssql_install.log
+  #Make a suffix for the "sa" user. 
+newuser="sa_$sa_suffix"
+sql="ALTER LOGIN sa WITH NAME = $newuser;"
+sqlcmd  $MSSQL_OPTIONS -Q  "$sql"
+
+echo "export MSSQL_OPTIONS=' -S 127.0.0.1 -U $newuser -P Root1234 -C '" > ~/.sqlcmd/mssql_options
+source ~/.bash_profile
+sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 
 ```
+
+1. [Install SMSS](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms)
+   * In Windows, [Install SMSS](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms)
+
 * PostgreSQL
 * Cockroachdb
 * MongoDB

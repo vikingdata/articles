@@ -55,7 +55,7 @@ All resources are FREE. All have limitations for use, but not normally an issue 
         1. GCP Free
             1. Cloud storage ; 5GB and traffic -- enough for testing Database
             1. Database
-	        1. Big Query
+                1. Big Query
                 1. pub/sub
 	    1. Server (same as ec2 in AWS)
 	        1. e2-micro VM instance

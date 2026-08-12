@@ -11,8 +11,8 @@ NOt DONE YET
    * [Alternative Linux Installs](DOING/1_1_Initial_Linux_setup.md) : Not Done
 2. OPTIONAL : [Cygwin](#c) : Not Linux but a Linux like interface on Windows.
 3. [Install software](#s)
-   * Install MySQL or MariaDB
-   * MSSQL for Linux
+   * [Install Percona MySQL](#p) or MariaDB
+   * [MSSQL for Linux](#m)
    * PostgreSQL
    * Cockroachdb
    * MongoDB
@@ -32,11 +32,12 @@ NOt DONE YET
 ```
    # OPTIONAL: List and remove all Linux Installations
 wslconfig /l
-wls -u Ubuntu
-   # Install Ubunut default
+   # You must not install later versions of Ubuntu.
+   # Later versions may not be compatible with MSSQL.
    # Provide a username and password when it asks.
-   # I will use "mark" for username and password. 
-wsl -install
+   # I will use "mark" for username and password.
+
+wsl --install -d Ubuntu-24.04
 
    # Make it so you go to your home directory when you log in. 
 echo "cd" >> ~/.bashrc
@@ -156,7 +157,7 @@ sudo bash
 wsl
 ```
 
-2. Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
+2. <a name=p></a> Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
 ```
 sudo bash
 
@@ -212,7 +213,41 @@ apt-get purge -y percona-release
 apt-get purge -y percona-xtradb-cluster-server* percona-xtradb-cluster-client* percona-xtradb-cluster-common* percona-server-server* percona-server-client*
 ```
    
-* MSSQL for Linux
+*  <a name=p></a>[MSSQL for Linux](https://learn.microsoft.com/en-us/sql/linux/install-upgrade/quickstart-install-ubuntu?view=sql-server-linux-ver17&preserve-view=true&tabs=ubuntu2004%2C2025ubuntu2204%2Codbc-ubuntu-1804)
+    * Initial install
+```
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+
+curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2025.list | sudo tee /etc/apt/sources.list.d/mssql-server-2025.list
+
+# Update and install mssql
+sudo apt-get update
+sudo apt-get install -y mssql-server
+
+# Install utilities
+
+# Confgiure and start mssql
+
+curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
+apt-get update
+  # It will ask you to accept licenses.
+apt-get -y install mssql-tools18 unixodbc-dev
+
+  # add binaries to your path. and the user you sudo as. 
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> /home/$SUDO_USER/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+source ~/.bash_profile
+
+# Configure mssql
+     # Enter "2" for free enterprise developer.
+     # Accept license
+     # Type "Root1234" as password. We might change it later. 
+/opt/mssql/bin/mssql-conf setup
+
+# Test command locally
+sqlcmd -S localhost -U root -P Root1234
+
+```
 * PostgreSQL
 * Cockroachdb
 * MongoDB

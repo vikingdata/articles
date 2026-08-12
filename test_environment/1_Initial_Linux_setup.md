@@ -96,12 +96,6 @@ apt-get -y install wsl
 1. Not needed
    a. ssh key because everything will be done on this instance.
 
-* * *
-<a name=s></a>Software to Install
------
-* Inside WSL
-* ON Windows, linuxm or whatever your host OS is.
-
 
 * * *
 <a name=c></a>Cygwin

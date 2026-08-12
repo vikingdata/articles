@@ -57,9 +57,9 @@ All resources are FREE. All have limitations for use, but not normally an issue 
             1. Database
                 1. Big Query
                 1. pub/sub
-	    1. Server (same as ec2 in AWS)
-	        1. e2-micro VM instance
-	    1. Other
+                1. Server (same as ec2 in AWS)
+                     1. e2-micro VM instance
+            1. Other
                 1. firestore Programming
                 1. secret manager Server
                 1. Google Compute --- limited resources

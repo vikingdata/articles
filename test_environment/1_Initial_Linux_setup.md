@@ -90,6 +90,7 @@ apt-get -y install btop htop nano nmap tmux nmon atop slurm dstat ranger
 apt-get -y install cpufetch bpytop speedtest-cli lolcat mc speedtest-cli
 apt-get -y install python3-pip
 apt-get -y install lynx
+apt-get -y install wsl
 
 ```
 1. Not needed
@@ -131,3 +132,94 @@ apt-get -y install lynx
 * Setup ssh key
     *  ssh-keygen -t rsa -N ''
     * For more on installing Cygwin with ssh : [5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
+
+* * *
+<a name=s></a>Install software
+-----
+1. First, setup your to sudo to root without password.
+```
+  # Next time you login it will go to your linux home directory
+  # instead of windows.
+echo "" >> ~/.bashrc
+echo "cd" >> ~/.bashrc
+
+  # sudo to root
+sudo bash
+
+  # Add yourself to sudoers file passwordless
+echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+  # Now exit
+exit
+
+  # and sudo to root
+sudo bash
+
+
+```
+1. Start a command prompt or Powershell and start wsl
+```
+wsl
+```
+
+2. Install [Percona MySQL](https://docs.percona.com/percona-distribution-for-mysql/8.4/install-pdpxc.html) (or MariaDB -- steps not included)
+```
+sudo bash
+
+  # Install stuff needed for percona
+apt -y install gnupg2 curl
+
+  # Download the percona binary program which takes care of apt config files. 
+curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+apt -y install lsb-release ./percona-release_latest.generic_all.deb
+apt update
+
+  # Run the program to download 8.4 mysql bianries. 
+percona-release setup pdpxc-84-lts
+  # It will ask you to enter a password for root. Use "root", we will change the root password later. 
+apt -y install percona-xtradb-cluster percona-xtrabackup-84 percona-toolkit
+
+  # start mysqld
+service mysqld start
+
+  # Save the password. It should be "root". Change the password if you chose a different password. 
+echo "[client]
+user=root
+password=root
+" > ~/.my.cnf
+
+  # Create a random password and save to default login for root. 
+new_password=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32`
+echo $new_password
+mysql -e "SET PASSWORD FOR 'root'@'localhost' = '$new_password';"
+
+  # Save the password to root and test an sql command. 
+echo "[client]
+user=root
+password="$new_password"
+" > ~/.my.cnf
+
+mysql -e "select now()"
+
+  # Copy password to user's login for mysql
+cp ~/.my.cnf /home/$SUDO_USER/.my.cnf
+chown $SUDO_USER /home/$SUDO_USER/.my.cnf
+
+  # Show mysql works for user 
+sudo -u $SUDO_USER mysql -e 'select now()'
+sudo -u $SUDO_USER mysql -e 'system  whoami' 
+
+```
+   * Uninstall Percona
+```
+apt-get purge -y percona-xtradb-cluster percona-xtrabackup-84 percona-toolkit
+apt-get purge -y percona-release
+  # Answer yes if it asks to remove /var/lib/mysql
+apt-get purge -y percona-xtradb-cluster-server* percona-xtradb-cluster-client* percona-xtradb-cluster-common* percona-server-server* percona-server-client*
+```
+   
+* MSSQL for Linux
+* PostgreSQL
+* Cockroachdb
+* MongoDB
+* Oracle

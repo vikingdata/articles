@@ -263,7 +263,7 @@ sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "select 'good';"
 # localhost won't work
 #sqlcmd -S localhost -U sa -P Root1234 -C -Q "select 'good';"
 
-sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "create database mark;"
+sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "create database $SUDO_USER;"
 cmd="SELECT name FROM sys.databases WHERE database_id > 4;"
 sqlcmd -S 127.0.0.1 -U sa -P Root1234 -C -Q "$cmd"
 
@@ -297,7 +297,6 @@ sqlcmd $MSSQL_OPTIONS -Q "$sql"
 sql="ALTER LOGIN $SUDO_USER WITH PASSWORD = '$new_password';"
 sqlcmd $MSSQL_OPTIONS -Q "$sql"
 
-sudo -u $SUDO_USER -Q "select 'good'"
 
   # Test if the sudo user can connect.
 
@@ -315,6 +314,8 @@ alias sqlcmd2=' sqlcmd  -S 127.0.0.1 -U $SUDO_USER -P $new_password -C '
 " >> /home/$SUDO_USER/.bash_profile
 chown -R $SUDO_USER /home/$SUDO_USER/.bash_profile
 chown -R $SUDO_USER /home/$SUDO_USER/.sqlcmd
+
+  # This should work. If it does the user can connect. 
 sudo -i -u $SUDO_USER bash -i -c 'sqlcmd2 -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();" '
 
   # THIS IS OPTIONAL. We change the user "sa" to a different name. 
@@ -351,4 +352,27 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 ### PostgreSQL
 ### Cockroachdb
 ### MongoDB
-### Oracle
+### <a name=o></a>Oracle
+1. [Download and Install Oracle on Windows](https://www.oracle.com/database/technologies/xe-downloads.html)
+    * Follow [Install Guide](https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinw/index.html)
+    * Limit it to port 127.0.0.1
+       * Open C:\app\<your-user>\product\21c\dbhomeXE\network\admin\listener.ora or search for listener.ora
+       * lsnrctl status
+       * In the file change it so it looks like this.
+       ```
+LISTENER =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
+  )       
+'''
+       * lsnrctl stop
+       * lsnrctl start
+       * lsnrctl status
+       * netstat -ano | findstr :1521
+          * should be: TCP    127.0.0.1:1521    0.0.0.0:0    LISTENING
+          * and not TCP    0.0.0.0:1521      0.0.0.0:0    LISTENING	  
+    * Converting rpm to Ubuntu didn't work. The work around is to not install Ubuntu but Oracle Linux. I don't trust Oracle
+      Linux won't be inlfuence by corp decisions. 
+
+
+```

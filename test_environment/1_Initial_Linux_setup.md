@@ -354,11 +354,11 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 ### MongoDB
 ### <a name=o></a>Oracle
 1. [Download and Install Oracle on Windows](https://www.oracle.com/database/technologies/xe-downloads.html)
-    * Follow [Install Guide](https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinw/index.html)
+   * Follow [Install Guide](https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinw/index.html)
 2. Limit it to port 127.0.0.1
-        * Open C:\app\<your-user>\product\21c\dbhomeXE\network\admin\listener.ora or search for listener.ora
-        * lsnrctl status
-        * In the file change it so it looks like this.
+      * Open C:\app\<your-user>\product\21c\dbhomeXE\network\admin\listener.ora or search for listener.ora
+      * lsnrctl status
+      * In the file change it so it looks like this.
 ```text
 LISTENER =
   (DESCRIPTION =
@@ -366,13 +366,13 @@ LISTENER =
   )       
 ```
 
-        * lsnrctl stop
-        * lsnrctl start
-        * lsnrctl status
-        * netstat -ano | findstr :1521
-            * should be: TCP    127.0.0.1:1521    0.0.0.0:0    LISTENING
-            * and not TCP    0.0.0.0:1521      0.0.0.0:0    LISTENING	  
-    * Converting rpm to Ubuntu didn't work. The work around is to not install Ubuntu but Oracle Linux. I don't trust Oracle
+      * lsnrctl stop
+      * lsnrctl start
+      * lsnrctl status
+      * netstat -ano | findstr :1521
+         * should be: TCP    127.0.0.1:1521    0.0.0.0:0    LISTENING
+         * and not TCP    0.0.0.0:1521      0.0.0.0:0    LISTENING	  
+   * Converting rpm to Ubuntu didn't work. The work around is to not install Ubuntu but Oracle Linux. I don't trust Oracle
       Linux won't be inlfuence by corp decisions. 
 
 

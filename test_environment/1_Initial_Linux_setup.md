@@ -365,7 +365,7 @@ LISTENER =
     (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
   )       
 ```
-<hr>
+* test
        * lsnrctl stop
        * lsnrctl start
        * lsnrctl status

@@ -355,21 +355,20 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 ### <a name=o></a>Oracle
 1. [Download and Install Oracle on Windows](https://www.oracle.com/database/technologies/xe-downloads.html)
    * Follow [Install Guide](https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinw/index.html)
+   * unzip the file into a directory and install from there. 
 2. Limit it to port 127.0.0.1
-      * Open C:\app\<your-user>\product\21c\dbhomeXE\network\admin\listener.ora or search for listener.ora
-      * lsnrctl status
-      * In the file change it so it looks like this.
-         > LISTENER =  
-         >   (DESCRIPTION =  
-         >     (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))  
-         >   )         
-      * lsnrctl stop
-      * lsnrctl start
-      * lsnrctl status
-      * netstat -ano | findstr :1521
-         * should be: TCP    127.0.0.1:1521    0.0.0.0:0    LISTENING
-         * and not TCP    0.0.0.0:1521      0.0.0.0:0    LISTENING	  
-   * Converting rpm to Ubuntu didn't work. The work around is to not install Ubuntu but Oracle Linux. I don't trust Oracle
-      Linux won't be inlfuence by corp decisions. 
+   * The instructions for listener.ora and restarting do not work.
+   * [Block off a port 1521](help_windows_firewall_port.md) from the public in windows.
+   * Check other ports you may want to block off.
+      > netstat -ano | findstr :1521
+      > netstat -ano | findstr :8080  
+      > netstat -ano | findstr :5500  
+      > netstat -ano | findstr :2030  
+3. Download [Oracle SQL Developer](https://docs.oracle.com/en/database/oracle/oracle-database/18/admqs/getting-started-with-database-administration.html)
+   * Install on windows
 
+
+4. Login to Oracle
+   * With oracle developer, sql plus(sqlplus.exe), sqlcl, 
+   * execute SQL: ALTER SYSTEM SET MEMORY_TARGET=1G SCOPE=BOTH;
 

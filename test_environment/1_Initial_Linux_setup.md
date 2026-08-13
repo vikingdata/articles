@@ -16,7 +16,7 @@ NOt DONE YET
    * PostgreSQL
    * Cockroachdb
    * MongoDB
-   * Oracle
+   * [Oracle for Windows](#o)
 4. Setup cloud services
    * Postgresql and Snowflake
    * MariaDB

@@ -359,12 +359,12 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
        * Open C:\app\<your-user>\product\21c\dbhomeXE\network\admin\listener.ora or search for listener.ora
        * lsnrctl status
        * In the file change it so it looks like this.
-       ```
+```
 LISTENER =
   (DESCRIPTION =
     (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
   )       
-'''
+```
        * lsnrctl stop
        * lsnrctl start
        * lsnrctl status
@@ -375,4 +375,3 @@ LISTENER =
       Linux won't be inlfuence by corp decisions. 
 
 
-```

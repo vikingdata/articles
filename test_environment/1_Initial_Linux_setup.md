@@ -360,7 +360,7 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
    * The instructions for listener.ora and restarting do not work.
    * [Block off a port 1521](help_windows_firewall_port.md) from the public in windows.
    * Check other ports you may want to block off.
-      > netstat -ano | findstr :1521  
+      > netstat -ano | findstr :1521    
       > netstat -ano | findstr :8080  
       > netstat -ano | findstr :5500  
       > netstat -ano | findstr :2030  

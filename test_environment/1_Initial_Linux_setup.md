@@ -356,19 +356,92 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
 1. [Download and Install Oracle on Windows](https://www.oracle.com/database/technologies/xe-downloads.html)
    * Follow [Install Guide](https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinw/index.html)
    * unzip the file into a directory and install from there. 
-2. Limit it to port 127.0.0.1
+2. Limit it to port 127.0.0.1 if you figure it out.
    * The instructions for listener.ora and restarting do not work.
    * [Block off a port 1521](help_windows_firewall_port.md) from the public in windows.
-   * Check other ports you may want to block off.
+   * Check other ports you may want to block off in Windows.
       > netstat -ano | findstr :1521    
       > netstat -ano | findstr :8080  
       > netstat -ano | findstr :5500  
       > netstat -ano | findstr :2030  
-3. Download [Oracle SQL Developer](https://docs.oracle.com/en/database/oracle/oracle-database/18/admqs/getting-started-with-database-administration.html)
+   * There is a hyper-V firewall. This command let WSL connect to port 1521.
+3. Open Powershell as administrator and execute
+```
+New-NetFirewallRule `
+    -DisplayName "Oracle DB - WSL2 Only" `
+    -Direction Inbound `
+    -Action Allow `
+    -Protocol TCP `
+    -LocalPort 1521 `
+    -RemoteAddress 172.19.160.0/20 `
+    -Profile Any
+```
+
+and verify the default inbound actions are blocked
+```
+Get-NetFirewallProfile -PolicyStore ActiveStore |
+    Format-List Name,Enabled,DefaultInboundAction,DefaultOutboundAction
+
+ ### output should be
+Name                  : Domain
+Enabled               : True
+DefaultInboundAction  : Block
+DefaultOutboundAction : Allow
+
+Name                  : Private
+Enabled               : True
+DefaultInboundAction  : Block
+DefaultOutboundAction : Allow
+
+Name                  : Public
+Enabled               : True
+DefaultInboundAction  : Block
+DefaultOutboundAction : Allow
+```
+5. Determine the ip address to connect to in WSL
+```
+GW=$(ip route | awk '/default/ {print $3}')
+echo "my oracle ip address in WSL is: $GW"
+nc -vz $GW 1521
+
+  # output
+Connection to 172.19.160.1 1521 port [tcp/*] succeeded!
+
+```
+
+4. Download [Oracle SQL Developer](https://docs.oracle.com/en/database/oracle/oracle-database/18/admqs/getting-started-with-database-administration.html)
    * Install on windows
+5. Install sqlcl
+```
+apt install default-jre unzip -y
+
+wget https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-latest.zip
+unzip sqlcl-latest.zip
+
+echo 'export PATH="$PATH:/opt/sqlcl/bin"' >> ~/.bashrc
+source ~/.bashrc
+echo 'export PATH="$PATH:/opt/sqlcl/bin"' >> /home/$SUDO_USER/.bashrc
+
+```
+
+and using the ip address you should use test if sqlcl works.
+Change "bad_password" to the password you used to install oracle. Change 172.19.160.1 to the ip address
+detected above.
+```
+
+ sql  -e "select sysdate from dual;" system/BAD_PASSWORD@172.19.160.1:1521/XEPDB1
+ 
+```
 
 
-4. Login to Oracle
+5. to stop and start oracle
+```
+lsnrctl stop
+lsnrctl start
+lsnrctl status
+```
+
+6. Login to Oracle
    * With oracle developer, sql plus(sqlplus.exe), sqlcl, 
    * execute SQL: ALTER SYSTEM SET MEMORY_TARGET=1G SCOPE=BOTH;
 

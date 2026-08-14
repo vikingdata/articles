@@ -365,7 +365,7 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
       > netstat -ano | findstr :5500  
       > netstat -ano | findstr :2030  
    * There is a hyper-V firewall. This command let WSL connect to port 1521.
-3. Open Powershell as administrator and execute
+3. Open [Powershell as administrator](https://github.com/vikingdata/articles/blob/main/test_environment/help_windows.md#p) and execute
 ```
 New-NetFirewallRule `
     -DisplayName "Oracle DB - WSL2 Only" `
@@ -428,9 +428,27 @@ and using the ip address you should use test if sqlcl works.
 Change "bad_password" to the password you used to install oracle. Change 172.19.160.1 to the ip address
 detected above.
 ```
-
  sql  -e "select sysdate from dual;" system/BAD_PASSWORD@172.19.160.1:1521/XEPDB1
- 
+
+   # Output should be something like
+
+SQLcl: Release 26.2 Production on Thu Aug 13 21:33:34 2026
+
+Copyright (c) 1982, 2026, Oracle.  All rights reserved.
+
+Last Successful login time: Thu Aug 13 2026 21:33:36 -04:00
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+
+SYSDATE
+____________
+13-AUG-26
+
+Disconnected from Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
 ```
 
 

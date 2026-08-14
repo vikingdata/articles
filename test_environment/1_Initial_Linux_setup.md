@@ -358,7 +358,7 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
    * unzip the file into a directory and install from there. 
 2. Limit it to port 127.0.0.1 if you figure it out.
    * The instructions for listener.ora and restarting do not work.
-   * [Block off a port 1521](help_windows_firewall_port.md) from the public in windows.
+   * [Block off a port 1521](help_windows.md#f) from the public in windows.
    * Check other ports you may want to block off in Windows.
       > netstat -ano | findstr :1521    
       > netstat -ano | findstr :8080  

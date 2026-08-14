@@ -458,8 +458,22 @@ lsnrctl stop
 lsnrctl start
 lsnrctl status
 ```
+6. Make new password and user.
+```
+new_password=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32`
+echo $new_password
+```
 
-6. Login to Oracle
-   * With oracle developer, sql plus(sqlplus.exe), sqlcl, 
-   * execute SQL: ALTER SYSTEM SET MEMORY_TARGET=1G SCOPE=BOTH;
 
+7. Login to Oracle
+   * With oracle developer, sql plus(sqlplus.exe), or sqlcl connect as you did before.
+   * Change user "mark" to a username you want.
+   * Change "YourPassword" to the password you want or from the above step. 
+   * execute SQL:
+```
+ALTER SYSTEM SET MEMORY_TARGET=1G SCOPE=BOTH;
+
+CREATE USER mark IDENTIFIED BY "YourPassword";
+GRANT DBA TO mark;
+
+```

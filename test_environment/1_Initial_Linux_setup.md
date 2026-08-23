@@ -350,6 +350,48 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
          * Trust Server certificate
       * Click "Connect"	 
 ### PostgreSQL
+1. Install packages required for postgresql and instll postgresql for Ubuntu. 
+```
+sudo apt update
+sudo apt install -y curl ca-certificates gnupg lsb-release
+
+sudo install -d /usr/share/postgresql-common/pgdg
+
+curl -o /tmp/pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+sudo install -m 644 /tmp/pgdg.asc /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+
+echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" |  sudo tee /etc/apt/sources.list.d/pgdg.list
+
+sudo apt update
+sudo apt install -y postgresql-18 postgresql-client-18
+
+```
+1. Execute
+```
+
+   # check what version of postgresql you have
+systemctl list-unit-files | grep -i postgres
+   # Stop and remove default service postgresql start
+sudo systemctl disable --now postgresql@18-main
+
+
+rm -rf ~/install/postgresql
+mkdir ~/install/postgresql
+cd ~/install/postgresql
+
+wget -O create_instance.sh
+wget -O setup_replication.sh
+wget -O  requirements.conf
+
+chmod 700 create_instance.sh setup_replication.sh
+chmod 600 requirements.conf
+
+sudo ./create_instance.sh publisher 5432
+sudo ./create_instance.sh subscriber 5433
+sudo ./setup_replication.sh
+
+
+```
 ### Cockroachdb
 ### MongoDB
 ### <a name=o></a>Oracle

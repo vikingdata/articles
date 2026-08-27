@@ -101,10 +101,10 @@ if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
 fi
 
 # Replication Status
-echo "Primary Replication"
+echo "Primary Replication $P_PORT"
 sql="SELECT application_name, client_addr, backend_start, state, sync_state FROM pg_stat_replication;"
 sudo -u postgres psql -p $P_PORT -c "$sql;"
 
-echo "Standby Replication "
+echo "Standby Replication $S_PORT "
 sql="SELECT pg_is_in_recovery(), pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn();"
 sudo -u postgres psql -p $S_PORT -c "$sql;"

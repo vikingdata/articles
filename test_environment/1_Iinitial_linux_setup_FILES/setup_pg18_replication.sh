@@ -92,13 +92,20 @@ SERVICE_NAME="postgresql18-${S_INSTANCE_ID}.service"
 echo "starting : sudo systemctl start ${SERVICE_NAME}"
 
 sudo systemctl start "${SERVICE_NAME}"
-sleep 2
+sleep 10
 
 if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
         systemctl --no-pager --full status  "${SERVICE_NAME}" || true
         journalctl -u "${SERVICE_NAME}" --no-pager  -n 100 || true
         die "Failed to start ${INSTANCE_NAME}"
 fi
+
+echo "Status of primary and secondary servers"
+systemctl "postgresql18-${P_INSTANCE_ID}" status
+systemctl "postgresql18-${S_INSTANCE_ID}" status
+
+sql="SELECT * FROM pg_replication_slots;"
+sudo -u postgres psql -p $PORT -P pager=off -c "$sql;"
 
 # Replication Status
 echo "Primary Replication $P_PORT"

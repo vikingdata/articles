@@ -293,13 +293,7 @@ main()
             # Attempt to create the instance. 
             INSTANCE_NAME="$1"
             PORT="$2"
-	    other="$3"
 
-	    if [ "$other" != "" ]; then
-		usage
-		 echo "Options not understood '$1 $2 $3'."
-		exit
-	    fi
             create
             ;;
     esac

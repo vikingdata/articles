@@ -238,7 +238,7 @@ create()
     sudo -u postgres psql -p $PORT -c "$sql;"
 
     sql="SELECT * FROM pg_replication_slots;"
-    sudo -P pager=off -u postgres psql -p $PORT -c "$sql;"
+    sudo -u postgres psql -p $PORT -P pager=off -c "$sql;"
 
     echo "done"
 }

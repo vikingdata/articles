@@ -392,7 +392,7 @@ done
 
 sudo mkdir -p /databases/postgresql18/bin
 
-chmod 700 create_pg18_instance.sh setup_replication.sh
+chmod 700 create_pg18_instance.sh setup_pg18_replication.sh
 chmod 600 pg18_require.conf
 
 sudo cp  *.sh /databases/postgresql18/bin

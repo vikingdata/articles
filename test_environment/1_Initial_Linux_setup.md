@@ -13,7 +13,7 @@ NOt DONE YET
 3. [Install software](#s)
    * [Install Percona MySQL](#p) or MariaDB
    * [MSSQL for Linux](#m)
-   * PostgreSQL
+   * [PostgreSQL](#po)
    * Cockroachdb
    * MongoDB
    * [Oracle for Windows](#o)
@@ -349,7 +349,7 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
          * Remember password
          * Trust Server certificate
       * Click "Connect"	 
-### PostgreSQL
+### <a name=po></a> PostgreSQL
 1. Install packages required for postgresql and instll postgresql for Ubuntu. 
 ```
 sudo apt update

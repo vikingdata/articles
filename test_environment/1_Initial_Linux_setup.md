@@ -374,22 +374,43 @@ systemctl list-unit-files | grep -i postgres
    # Stop and remove default service postgresql start
 sudo systemctl disable --now postgresql@18-main
 
+   #Disable and stop the default install
+sudo systemctl disable --now postgresql@18-main
 
-rm -rf ~/install/postgresql
-mkdir ~/install/postgresql
-cd ~/install/postgresql
+sudo rm -f /etc/systemd/system/postgresql18*
+sudo rm -f /lib/systemd/system/postgresql18*
+sudo systemctl daemon-reload
 
-wget -O create_instance.sh
-wget -O setup_replication.sh
-wget -O  requirements.conf
+rm -rf ~/install/postgresql18
+mkdir -p ~/install/postgresql18
+cd ~/install/postgresql18
 
-chmod 700 create_instance.sh setup_replication.sh
-chmod 600 requirements.conf
+source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Iinitial_linux_setup_FILES/
+for f in create_pg18_instance.sh  pg18_require.conf  postgresql18-services.sh  setup_pg18_replication.sh ; do
+  wget -O $f $source_url/$f
+done
 
-sudo ./create_instance.sh publisher 5432
-sudo ./create_instance.sh subscriber 5433
-sudo ./setup_replication.sh
+sudo mkdir -p /databases/postgresql18/bin
 
+chmod 700 create_pg18_instance.sh setup_replication.sh
+chmod 600 pg18_require.conf
+
+sudo cp  *.sh /databases/postgresql18/bin
+sudo cp  *.conf /databases/postgresql18/
+
+bin_dir=/databases/postgresql18/bin
+sudo $bin_dir/create_pg18_instance.sh  --reinitialize pub 5432
+sudo $bin_dir/create_pg18_instance.sh  --reinitialize sub 5433
+sudo $bin_dir/setup_pg18_replication.sh pub 5432 sub 5433
+
+
+  ## Debug
+  # turn on postregsql pub to stadnard out
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/pub_5432/data -c logging_collector=off
+
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/sub_5433/data -c logging_collector=off
+
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/pub_5432/data
 
 ```
 ### Cockroachdb

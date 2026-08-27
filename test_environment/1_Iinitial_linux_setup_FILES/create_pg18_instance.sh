@@ -239,6 +239,8 @@ create()
 
     sql="SELECT * FROM pg_replication_slots;"
     sudo -u postgres psql -p $PORT -c "$sql;"
+
+    echo "done"
 }
 
 

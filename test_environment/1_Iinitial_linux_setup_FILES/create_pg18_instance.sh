@@ -123,7 +123,7 @@ make_config_file()
             -e "s|@PG_BIN@|${PG_BIN}|g" \
             -e "s|@DATA_DIR@|${DATA_DIR}|g" \
             -e "s|@PORT@|${PORT}|g" \
-            -e "s|@INSTANCE_NAME@|${INSTANCE_NAME}-${PORT}|g" \
+            -e "s|@INSTANCE_NAME@|${INSTANCE_NAME}_${PORT}|g" \
             -e "s|@LISTEN_ADDRESSES@|${LISTEN_ADDRESSES}|g" \
             -e "s|@PASSWORD_ENCRYPTION@|${PASSWORD_ENCRYPTION}|g" \
             -e "s|@MAX_CONNECTIONS@|${MAX_CONNECTIONS}|g" \

@@ -60,6 +60,10 @@ if [ -d "$S_INSTANCE_ROOT" ]; then
     sudo mkdir -p /databases/postgresql18/${S_INSTANCE_ID}/data
     sudo chown -R  "postgres:postgres" "${S_INSTANCE_ROOT}"
     sudo chmod -R 0700 ${S_INSTANCE_ROOT}
+
+    # Checking if pid is running.
+    pid=`sudo lsof -t -iTCP:${S_PORT} -sTCP:LISTEN`
+    
 fi
 
 echo "Getting password: grep ^$P_INSTANCE_ID: $BASE_DIR/$P_INSTANCE_ID.repl_password | tail -n 1 | cut -d ':' -f4"
@@ -101,14 +105,21 @@ if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
 fi
 
 echo "Status of primary and secondary servers"
-systemctl "postgresql18-${P_INSTANCE_ID}" status
-systemctl "postgresql18-${S_INSTANCE_ID}" status
+service "postgresql18-${P_INSTANCE_ID}" status
+service "postgresql18-${S_INSTANCE_ID}" status
 
 sql="SELECT * FROM pg_replication_slots;"
-sudo -u postgres psql -p $PORT -P pager=off -c "$sql;"
+sudo -u postgres psql -p $P_PORT -P pager=off -c "$sql;"
 
 # Replication Status
 echo "Primary Replication $P_PORT"
+while $match -lt 1; do
+    echo "Checking replication on primary"
+    sql="SELECT application_name FROM pg_stat_replication;"
+    match=`sudo -u postgres psql -tA -p $P_PORT -c "$sql" | grep ${S_INSTANCE_ID} | wc -l`
+    sleep 5
+done
+    
 sql="SELECT application_name, client_addr, backend_start, state, sync_state FROM pg_stat_replication;"
 sudo -u postgres psql -p $P_PORT -c "$sql;"
 

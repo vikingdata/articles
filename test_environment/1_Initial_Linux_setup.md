@@ -17,6 +17,8 @@ NOt DONE YET
    * Cockroachdb
    * MongoDB
    * [Oracle for Windows](#o)
+   * Percona Cluster
+   * InnOdb Cluster usinf Percona
 4. Setup cloud services
    * Postgresql and Snowflake
    * MariaDB
@@ -162,6 +164,7 @@ wsl
 ```
 sudo bash
 
+set -e 
   # Install stuff needed for percona
 apt -y install gnupg2 curl
 
@@ -204,6 +207,10 @@ chown $SUDO_USER /home/$SUDO_USER/.my.cnf
   # Show mysql works for user 
 sudo -u $SUDO_USER mysql -e 'select now()'
 sudo -u $SUDO_USER mysql -e 'system  whoami' 
+
+mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'"
+mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'"
+mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'"
 
 ```
    * Uninstall Percona
@@ -251,7 +258,7 @@ dpkg -i libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
      # Type "Root1234" as password. We might change it later. 
 /opt/mssql/bin/mssql-conf setup
 
-  # Make it only listening on loppback
+  # Make it only listening on loopback
 echo "
 [network]
 ipaddress = 127.0.0.1

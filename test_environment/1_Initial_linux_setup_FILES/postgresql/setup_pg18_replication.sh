@@ -67,7 +67,10 @@ if [ -d "$S_INSTANCE_ROOT" ]; then
 	echo "Killing process $oid on port $S_PORT"
 	kill $pid || true
 	sleep 2
-	kill -9 $pid || true
+	pid=`sudo lsof -t -iTCP:$S_PORT -sTCP:LISTEN || true`
+	if [ ! "$pid" = "" ]; then
+	    kill -9 $pid || true
+	fi
     fi
 
 fi
@@ -102,8 +105,7 @@ SERVICE_NAME="postgresql18-${S_INSTANCE_ID}.service"
 echo "starting : sudo systemctl start ${SERVICE_NAME}"
 
 sudo systemctl start "${SERVICE_NAME}"
-sleep 10
-echo 1
+sleep 5
 
 if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
         systemctl --no-pager --full status  "${SERVICE_NAME}" || true
@@ -132,7 +134,7 @@ match=0
 while [ $match -lt 1 ]; do
     echo "Checking replication on primary"
     sql="SELECT application_name FROM pg_stat_replication;"
-    echo $sql
+#    echo $sql
     match=`sudo -u postgres psql -tA -p $P_PORT -c "$sql" | grep ${P_INSTANCE_ID} | wc -l`
     echo "sudo -u postgres psql -tA -p $P_PORT -c '$sql' | grep ${P_INSTANCE_ID} | wc -l"
     sleep 5

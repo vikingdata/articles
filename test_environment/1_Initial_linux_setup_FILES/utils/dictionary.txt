@@ -1,0 +1,4 @@
+
+
+@WORD1@ "This is a sentence.'
+@WORD2@ 12345

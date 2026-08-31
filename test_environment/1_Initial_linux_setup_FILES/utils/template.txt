@@ -1,0 +1,5 @@
+# The result should be a sentence.
+sentence1 = @WORD1@
+
+# The result should be a numeric number.
+numeric = @WORD2@

@@ -13,7 +13,8 @@ NOt DONE YET
 3. [Install software](#s)
    * [Install Percona MySQL](#p) or MariaDB
    * [MSSQL for Linux](#m)
-   * [PostgreSQL](#po)
+   * [PostgreSQL WAL replication](#pow)
+   * [PostgreSQL Logical replication](#pol)
    * Cockroachdb
    * MongoDB
    * [Oracle for Windows](#o)
@@ -356,7 +357,7 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
          * Remember password
          * Trust Server certificate
       * Click "Connect"	 
-### <a name=po></a> PostgreSQL
+### <a name=pow></a> PostgreSQL WAL Replication
 1. Install packages required for postgresql and instll postgresql for Ubuntu. 
 ```
 sudo apt update
@@ -392,8 +393,8 @@ rm -rf ~/install/postgresql18
 mkdir -p ~/install/postgresql18
 cd ~/install/postgresql18
 
-source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Iinitial_linux_setup_FILES/
-for f in create_pg18_instance.sh  pg18_require.conf  postgresql18-services.sh  setup_pg18_replication.sh ; do
+source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Initial_linux_setup_FILES/postgresql_wal_rep/
+for f in create_pg18_instance.sh  postgresql18-services.sh  setup_pg18_replication.sh ; do
   wget -O $f $source_url/$f
 done
 
@@ -420,7 +421,37 @@ sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/
 sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/pub_5432/data
 
 ```
+
+### <a name=pol></a> PostgreSQL logical replication
+
+1. We assume you have installed PostgreSQL WAL replication. The commands below assume postgresql is already installed.
+2. Download the config, bin, and other files. 
+```
+
+rm -rf ~/install/postgresql18_logical
+mkdir -p ~/install/postgresql18_logical
+cd ~/install/postgresql18_logical
+
+source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Initial_linux_setup_FILES/postgresql_logical_rep/
+for f in create_pg18_instance_logical.sh  pg18_require_logical.conf  setup_pg18_replication_logical.sh ; do
+  wget -O $f $source_url/$f
+done
+
+chmod 700 create_pg18_instance_logical.sh setup_pg18_replication_logical.sh
+chmod 600 pg18_require_logical.conf
+
+sudo cp  *.sh /databases/postgresql18/bin
+sudo cp  *.conf /databases/postgresql18/
+
+bin_dir=/databases/postgresql18/bin
+sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize primary 5442
+sudo $bin_dir/create_pg18_instance_logical.sh.sh  --reinitialize secondary 5443
+sudo $bin_dir/setup_pg18_replication_logical.sh.sh primary 5442 secondary 5443
+
+```
+
 ### Cockroachdb
+
 ### MongoDB
 ### <a name=o></a>Oracle
 1. [Download and Install Oracle on Windows](https://www.oracle.com/database/technologies/xe-downloads.html)

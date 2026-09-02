@@ -19,12 +19,14 @@ set -Eeuo pipefail
 
 
 SCRIPT_DIR="/databases/postgresql18"
-#REQUIREMENTS_FILE="${SCRIPT_DIR}/pg18_require.conf"
+REQUIREMENTS_FILE="${SCRIPT_DIR}/pg18_require.conf"
 REPL_USER="repl1"
 REPL_PASS=`openssl rand -base64 10 | head -c 16`
 REINIT=0
 
-#source "${REQUIREMENTS_FILE}"
+# load the basic postgresql18 conf variables.
+source "${REQUIREMENTS_FILE}"
+
 if [[ "${EUID}" -ne 0 ]]; then  die "Run this script as root." ;fi
 
 make_vars()
@@ -59,9 +61,6 @@ logical_decoding_work_mem = @LOGICAL_DECODING_WORK_MEM@
 
 max_replication_slots = @MAX_REPLICATION_SLOTS@
 max_worker_processes = @MAX_WORKER_PROCESSES@
-max_logical_replication_workers = @MAX_LOGICAL_REPLICATION_WORKERS@
-max_sync_workers_per_subscription = @MAX_SYNC_WORKERS_PER_SUBSCRIPTION@
-max_parallel_apply_workers_per_subscription = @MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION@
 
 logging_collector = @LOGGING_COLLECTOR@
 log_directory = '\''@LOG_DIRECTORY@'\''

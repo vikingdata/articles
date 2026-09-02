@@ -19,7 +19,7 @@ set -Eeuo pipefail
 
 
 SCRIPT_DIR="/databases/postgresql18"
-REQUIREMENTS_FILE="${SCRIPT_DIR}/pg18_require.conf"
+REQUIREMENTS_FILE="${SCRIPT_DIR}/pg18_require_logical.conf"
 REPL_USER="repl1"
 REPL_PASS=`openssl rand -base64 10 | head -c 16`
 REINIT=0
@@ -41,8 +41,7 @@ make_vars()
 POSTGRESQL_CONF_TEMPLATE='
 
  # replication settings safe for primary and secondary
-hot_standby = on
-wal_level = replica
+wal_level = logical
 max_wal_senders = 10
 
 listen_addresses = '\''@LISTEN_ADDRESSES@'\''
@@ -59,9 +58,6 @@ logical_decoding_work_mem = @LOGICAL_DECODING_WORK_MEM@
 
 max_replication_slots = @MAX_REPLICATION_SLOTS@
 max_worker_processes = @MAX_WORKER_PROCESSES@
-max_logical_replication_workers = @MAX_LOGICAL_REPLICATION_WORKERS@
-max_sync_workers_per_subscription = @MAX_SYNC_WORKERS_PER_SUBSCRIPTION@
-max_parallel_apply_workers_per_subscription = @MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION@
 
 logging_collector = @LOGGING_COLLECTOR@
 log_directory = '\''@LOG_DIRECTORY@'\''
@@ -70,10 +66,19 @@ log_line_prefix = '\''%m [%p] %u@%d '\''
 log_connections = @LOG_CONNECTIONS@
 log_disconnections = @LOG_DISCONNECTIONS@
 cluster_name = '\''@INSTANCE_NAME@'\''
+
+REPLICATION_DATABASE="postgres"
+REPLICATION_USER="logical_rep"
+PUBLICATION_NAME="publisher"
+SUBSCRIPTION_NAME="subscriber"
+
+MAX_LOGICAL_REPLICATION_WORKERS="2"
+MAX_SYNC_WORKERS_PER_SUBSCRIPTION="1"
+MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION="1"
+
 '
 
 PG_HBA_TEMPLATE='
-
 local   all             all                                 peer
 host    all             all             127.0.0.1/32        scram-sha-256
 host    replication     all             127.0.0.1/32        scram-sha-256
@@ -107,6 +112,7 @@ RestartSec=@SERVICE_RESTART_SEC@
 WantedBy=multi-user.target
 '
 
+# TODO : remove variables not needed.
 make_config_file()
 {
     local template="$1"
@@ -222,24 +228,8 @@ create()
     start
 
     echo "Setting up replication account: port $PORT"
-    echo "saving password at /databases/postgresql18/$INSTANCE_ID.repl_password"
-    echo "delete this file once replication works and save the password in secure location."
-# Always add user. Id subscriber, its data will be erased when setup as a subscriber. 
-    echo "$INSTANCE_ID:repl_password:$REPL_USER:$REPL_PASS:" >> /databases/postgresql18/$INSTANCE_ID.repl_password
 
-    sql="CREATE ROLE $REPL_USER WITH REPLICATION LOGIN PASSWORD '$REPL_PASS'"
-    sudo -u postgres psql -p $PORT -c "$sql;"
-
-    sql="SELECT rolname, rolsuper, rolcreaterole,rolcreatedb, rolreplication,rolcanlogin
-   FROM pg_roles   where rolname not like 'pg_%'  ORDER BY rolname;"
-    sudo -u postgres psql -p $PORT -c "$sql;"
-
-    sql="SELECT pg_create_physical_replication_slot('sub1');"
-    sudo -u postgres psql -p $PORT -c "$sql;"
-
-    sql="SELECT * FROM pg_replication_slots;"
-    sudo -u postgres psql -p $PORT -P pager=off -c "$sql;"
-
+    echo "TODO setup logical replication and test it. "
     echo "done"
 }
 
@@ -258,9 +248,9 @@ Reinitialize:
   sudo $0 --reinitialize <instance-name> <port>
 
 Examples:
-  sudo $0 pub 5432
-  sudo $0 sub 5433
-  sudo $0 --reinitialize pub 5432
+  sudo $0 primary 5442
+  sudo $0 secondary 5443
+  sudo $0 --reinitialize primarj 5442
 
 EOF
 }

@@ -393,18 +393,18 @@ rm -rf ~/install/postgresql18
 mkdir -p ~/install/postgresql18
 cd ~/install/postgresql18
 
-source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Initial_linux_setup_FILES/postgresql_wal_rep/
-for f in create_pg18_instance.sh  postgresql18-services.sh  setup_pg18_replication.sh ; do
+main_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/
+source_url=$main_url/1_Initial_linux_setup_FILES/postgresql_wal_rep/
+for f in create_pg18_instance.sh  postgresql18-services.sh  setup_pg18_replication.sh  pg18_require.conf; do
   wget -O $f $source_url/$f
 done
 
 sudo mkdir -p /databases/postgresql18/bin
-
 chmod 700 create_pg18_instance.sh setup_pg18_replication.sh
-chmod 600 pg18_require.conf
+chmod 600  pg18_require.conf
 
 sudo cp  *.sh /databases/postgresql18/bin
-sudo cp  *.conf /databases/postgresql18/
+sudo cp *.conf /databases/postgresql18
 
 bin_dir=/databases/postgresql18/bin
 sudo $bin_dir/create_pg18_instance.sh  --reinitialize pub 5432

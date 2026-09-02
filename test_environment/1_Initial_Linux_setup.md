@@ -358,6 +358,10 @@ sqlcmd  $MSSQL_OPTIONS -Q  "SELECT USER_NAME(), SYSTEM_USER, USER_NAME();"
          * Trust Server certificate
       * Click "Connect"	 
 ### <a name=pow></a> PostgreSQL WAL Replication
+With this setup we will configure wall replication. We will also let logical replication happen if available and if
+the primary server goes down, the secondary will take over (not done yet).
+
+
 1. Install packages required for postgresql and instll postgresql for Ubuntu. 
 ```
 sudo apt update
@@ -424,15 +428,19 @@ sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/
 
 ### <a name=pol></a> PostgreSQL logical replication
 
+THIS IS NOT DONE YET. The logical replication on the primary needs to be configured. The primary, secondary, and logically
+replicated server needs to be configured. We will also have a logical replicated only cluster. 
+
 1. We assume you have installed PostgreSQL WAL replication. The commands below assume postgresql is already installed.
-2. Download the config, bin, and other files. 
+2. Download the config, bin, and other files and run installation on port 5442 and 5443 
 ```
 
 rm -rf ~/install/postgresql18_logical
 mkdir -p ~/install/postgresql18_logical
 cd ~/install/postgresql18_logical
 
-source_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment/1_Initial_linux_setup_FILES/postgresql_logical_rep/
+main_url=https://raw.githubusercontent.com/vikingdata/articles/main/test_environment
+source_url=$main_url/1_Initial_linux_setup_FILES/postgresql_logical_rep_1/
 for f in create_pg18_instance_logical.sh  pg18_require_logical.conf  setup_pg18_replication_logical.sh ; do
   wget -O $f $source_url/$f
 done
@@ -445,8 +453,13 @@ sudo cp  *.conf /databases/postgresql18/
 
 bin_dir=/databases/postgresql18/bin
 sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize primary 5442
-sudo $bin_dir/create_pg18_instance_logical.sh.sh  --reinitialize secondary 5443
-sudo $bin_dir/setup_pg18_replication_logical.sh.sh primary 5442 secondary 5443
+sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize secondary 5443
+sudo $bin_dir/setup_pg18_replication_logical.sh primary 5442 secondary 5443
+
+# debug
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/primary_5442/data -c logging_collector=off
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/secondary_5443/data -c logging_collector=off
+
 
 ```
 

@@ -67,10 +67,10 @@ log_connections = @LOG_CONNECTIONS@
 log_disconnections = @LOG_DISCONNECTIONS@
 cluster_name = '\''@INSTANCE_NAME@'\''
 
-REPLICATION_DATABASE="postgres"
-REPLICATION_USER="logical_rep"
-PUBLICATION_NAME="publisher"
-SUBSCRIPTION_NAME="subscriber"
+#REPLICATION_DATABASE="postgres"
+#REPLICATION_USER="logical_rep"
+#PUBLICATION_NAME="publisher"
+#SUBSCRIPTION_NAME="subscriber"
 
 MAX_LOGICAL_REPLICATION_WORKERS="2"
 MAX_SYNC_WORKERS_PER_SUBSCRIPTION="1"
@@ -229,6 +229,12 @@ create()
 
     echo "Setting up replication account: port $PORT"
 
+    echo "saving password at /databases/postgresql18/$INSTANCE_ID.repl_password"
+    echo "delete this file once replication works and save the password in secure location."
+# Always add user. Id subscriber, its data will be erased when setup as a subscriber.
+    echo "$INSTANCE_ID:repl_password:$REPL_USER:$REPL_PASS:" >> /databases/postgresql18/$INSTANCE_ID.repl_password
+
+    
     echo "TODO setup logical replication and test it. "
     echo "done"
 }

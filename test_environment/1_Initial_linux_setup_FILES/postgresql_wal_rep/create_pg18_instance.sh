@@ -37,6 +37,8 @@ make_vars()
     SERVICE_NAME="postgresql${PG_VERSION}-${INSTANCE_ID}.service"
     SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}"
     PASSWORD_ENCRYPTION="scram-sha-256"
+    MAX_REPLICATION_SLOT=5
+    MAX_WORKER_PROCESSES=8
 
 }
 
@@ -134,9 +136,6 @@ make_config_file()
             -e "s|@LOGICAL_DECODING_WORK_MEM@|${LOGICAL_DECODING_WORK_MEM}|g" \
             -e "s|@MAX_REPLICATION_SLOTS@|${MAX_REPLICATION_SLOTS}|g" \
             -e "s|@MAX_WORKER_PROCESSES@|${MAX_WORKER_PROCESSES}|g" \
-            -e "s|@MAX_LOGICAL_REPLICATION_WORKERS@|${MAX_LOGICAL_REPLICATION_WORKERS}|g" \
-            -e "s|@MAX_SYNC_WORKERS_PER_SUBSCRIPTION@|${MAX_SYNC_WORKERS_PER_SUBSCRIPTION}|g" \
-            -e "s|@MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION@|${MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION}|g" \
             -e "s|@LOGGING_COLLECTOR@|${LOGGING_COLLECTOR}|g" \
             -e "s|@LOG_DIRECTORY@|/var/log/postgresql|g" \
             -e "s|@LOG_CONNECTIONS@|${LOG_CONNECTIONS}|g" \

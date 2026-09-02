@@ -46,8 +46,13 @@ POSTGRESQL_CONF_TEMPLATE='
 
  # replication settings safe for primary and secondary
 hot_standby = on
+primary_slot_name = 'standby_b'
+hot_standby_feedback = on
+primary_slot_name="sub1"
+sync_replication_slots = on
 wal_level = replica
 max_wal_senders = 10
+synchronized_standby_slots = '\''standby_b'\''
 
 listen_addresses = '\''@LISTEN_ADDRESSES@'\''
 port = @PORT@

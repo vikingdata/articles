@@ -70,14 +70,9 @@ log_connections = @LOG_CONNECTIONS@
 log_disconnections = @LOG_DISCONNECTIONS@
 cluster_name = '\''@INSTANCE_NAME@'\''
 
-#REPLICATION_DATABASE="postgres"
-#REPLICATION_USER="logical_rep"
-#PUBLICATION_NAME="publisher"
-#SUBSCRIPTION_NAME="subscriber"
-
-MAX_LOGICAL_REPLICATION_WORKERS="2"
-MAX_SYNC_WORKERS_PER_SUBSCRIPTION="1"
-MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION="1"
+MAX_LOGICAL_REPLICATION_WORKERS=2
+MAX_SYNC_WORKERS_PER_SUBSCRIPTION=1
+MAX_PARALLEL_APPLY_WORKERS_PER_SUBSCRIPTION=1
 
 '
 
@@ -163,7 +158,7 @@ make_config_file()
 
 start()
 {
-    echo "Starting $INSTANCE_ID"
+    echo "Starting $INSTANCE_ID/${SERVICE_NAME}"
     echo "    systemctl enable '${SERVICE_NAME}'
     systemctl start '${SERVICE_NAME}'"
 
@@ -184,18 +179,25 @@ create()
     # Make the variables needed for config files. 
     make_vars
 
-    # If option to reinit is given blow it away. 
+    # If option to reinit is given blow it away.
     if [ $REINIT -gt 0 ]; then
       # Stop, disable, and remove previous install service file.  
       systemctl stop  "${SERVICE_NAME}" 2>/dev/null || true
       systemctl disable  "${SERVICE_NAME}" 2>/dev/null || true
       rm -f "${SERVICE_FILE}"
       systemctl daemon-reload
-      
+
       if [ -d "/databases/postgresql18/$INSTANCE_ID" ]; then
 	  echo "removing ${INSTANCE_ROOT}"
 	  rm -rf /databases/postgresql18/$INSTANCE_ID
       fi	  
+
+      pid=`lsof -i :$PORT |grep postgres | cut -d ' ' -f2 || true`
+      if [ ! "$pid" = '' ]; then kill $pid || true; fi
+      sleep 2
+      pid=`lsof -i :$PORT |grep postgres | cut -d ' ' -f2 || true`
+      if [ ! "$pid" = '' ]; then kill -9 $pid || true; fi
+      
     fi
 
     # DO not delete data, abort if data exists.
@@ -232,10 +234,10 @@ create()
 
     echo "setting up database and tables for logical replication."
     sql="create database logical_replication;"
-    sudo -u postgres psql -p $P_PORT  -P pager=off -c "$sql;"
+    sudo -u postgres psql -p $PORT  -P pager=off -c "$sql;"
 
     sql="CREATE TABLE table1 (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY);"
-    sudo -u postgres psql -d  logical_replication -p $P_PORT  -P pager=off -c "$sql;"
+    sudo -u postgres psql -d  logical_replication -p $PORT  -P pager=off -c "$sql;"
 
     echo "done"
 }

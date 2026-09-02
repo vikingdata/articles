@@ -85,66 +85,10 @@ fi
 sudo -u postgres sh -c "echo '127.0.0.1:5432:*:$REPL_USER:$password' > ~/.pgpass"
 echo "Check password with :   sudo -u postgres sh -c ' cat ~/.pgpass'"
 sudo -u postgres sh -c 'chmod 600 ~/.pgpass'
-echo "sudo -u postgres -c 'pg_basebackup -h 127.0.0.1 -p 5432 -U $REPL_USER -D $S_INSTANCE_ROOT -Fp -Xs -P -R -S sub1'"
-sudo -u postgres sh -c "pg_basebackup -h 127.0.0.1 -p 5432 -U $REPL_USER -D $S_INSTANCE_ROOT/data -Fp -Xs -P -R -S sub1"
-sudo ls -al /databases/postgresql18/${S_INSTANCE_ID}/data | wc -l
 
-backup_file="/databases/postgresql18/backup_${S_INSTANCE_ID}_postgresql.conf"
-sudo chmod 666 $backup_file
-if [ ! -f "$backup_file" ]; then
-    echo "backup config file does not exist : $backup_file"
-    exit
-fi
-
-cp -f $backup_file $S_INSTANCE_ROOT/data/
-#echo "sed -i -e 's|^port|#&|' /databases/postgresql18/$S_INSTANCE_ID/data/postgresql.conf"
-sudo sed -i -e "s|^port|#&|" /databases/postgresql18/$S_INSTANCE_ID/data/postgresql.conf
-echo "port = $S_PORT " >> /databases/postgresql18/$S_INSTANCE_ID/data/postgresql.conf
-
-SERVICE_NAME="postgresql18-${S_INSTANCE_ID}.service"
-echo "starting : sudo systemctl start ${SERVICE_NAME}"
-
-sudo systemctl start "${SERVICE_NAME}"
-sleep 5
-
-if ! systemctl is-active --quiet "${SERVICE_NAME}"; then
-        systemctl --no-pager --full status  "${SERVICE_NAME}" || true
-        journalctl -u "${SERVICE_NAME}" --no-pager  -n 100 || true
-        echo  "Failed to start ${INSTANCE_NAME}"
-	exit
-fi
-
-echo "Status of primary and secondary servers"
-service "postgresql18-${P_INSTANCE_ID}" status
-service "postgresql18-${S_INSTANCE_ID}" status
-
-sql="SELECT * FROM pg_replication_slots;"
-sudo -u postgres psql -p $P_PORT -P pager=off -c "$sql;"
-
-# Replication Status
-echo "sudo -u postgres psql -tA -p $P_PORT -c \"$sql\" | grep sub1 | wc -l"
-echo "sql='SELECT application_name, client_addr, backend_start, state, sync_state FROM pg_stat_replication;'
-sudo -u postgres psql -p $P_PORT  -P pager=off -c \"$sql;\"
-sql='SELECT pg_is_in_recovery(), pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn();'
-sudo -u postgres psql -p $S_PORT  -P pager=off -c \"$sql;\"
-"
-
-echo "Primary Replication $P_PORT"
-match=0
-while [ $match -lt 1 ]; do
-    echo "Checking replication on primary"
-    sql="SELECT application_name FROM pg_stat_replication;"
-#    echo $sql
-    match=`sudo -u postgres psql -tA -p $P_PORT -c "$sql" | grep ${P_INSTANCE_ID} | wc -l`
-    echo "sudo -u postgres psql -tA -p $P_PORT -c '$sql' | grep ${P_INSTANCE_ID} | wc -l"
-    sleep 5
-done
-
-
-sql="SELECT application_name, client_addr, backend_start, state, sync_state FROM pg_stat_replication;"
-sudo -u postgres psql -p $P_PORT  -P pager=off -c "$sql;"
-
-echo "Standby Replication $S_PORT "
-sql="SELECT pg_is_in_recovery(), pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn();"
-sudo -u postgres psql -p $S_PORT  -P pager=off -c "$sql;"
+sql="CREATE SUBSCRIPTION subscription1
+  CONNECTION 'host=127.0.0.1  port=$P_PORT dbname=replication user=rep1 password=''$password'''
+  PUBLICATION logical_rep WITH (failover = true);"
+echo $sql
+sudo -u postgres psql -p $S_PORT -c "$sql;"
 

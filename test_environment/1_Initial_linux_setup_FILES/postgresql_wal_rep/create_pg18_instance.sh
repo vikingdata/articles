@@ -232,6 +232,9 @@ create()
     sql="CREATE ROLE $REPL_USER WITH REPLICATION LOGIN PASSWORD '$REPL_PASS'"
     sudo -u postgres psql -p $PORT -c "$sql;"
 
+#    sql="CREATE USER $REPL_USER WITH REPLICATION LOGIN PASSWORD '$REPL_PASS';"
+#    sudo -u postgres psql -p $PORT -c "$sql;"
+
     sql="SELECT rolname, rolsuper, rolcreaterole,rolcreatedb, rolreplication,rolcanlogin
    FROM pg_roles   where rolname not like 'pg_%'  ORDER BY rolname;"
     sudo -u postgres psql -p $PORT -c "$sql;"
@@ -252,9 +255,14 @@ create()
     sudo -u postgres psql -d  replication -p $PORT  -P pager=off -c "$sql;"
 
     sql="CREATE PUBLICATION logicalrep FOR TABLE logical1;"
-
     sudo -u postgres psql -d  replication -p $PORT  -P pager=off -c "$sql;"
 
+    sql="GRANT CONNECT ON DATABASE replication TO $REPL_USER;"
+    sudo -u postgres psql -d  replication -p $PORT  -P pager=off -c "$sql;"
+    sql="GRANT USAGE ON SCHEMA public TO $REPL_USER;"
+    sudo -u postgres psql -d  replication -p $PORT  -P pager=off -c "$sql;"
+    sql="GRANT SELECT ON ALL TABLES IN SCHEMA public TO $REPL_USER;"
+    sudo -u postgres psql -d  replication -p $PORT  -P pager=off -c "$sql;"
     
     echo "done"
 }

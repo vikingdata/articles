@@ -86,6 +86,8 @@ sudo -u postgres sh -c "echo '127.0.0.1:5432:*:$REPL_USER:$password' > ~/.pgpass
 echo "Check password with :   sudo -u postgres sh -c ' cat ~/.pgpass'"
 sudo -u postgres sh -c 'chmod 600 ~/.pgpass'
 echo "sudo -u postgres -c 'pg_basebackup -h 127.0.0.1 -p 5432 -U $REPL_USER -D $S_INSTANCE_ROOT -Fp -Xs -P -R -S sub1'"
+echo "This next step may take a while."
+sudo -u postgres psql -p $P_PORT  -P pager=off -c "checkpoint;" -d replication
 sudo -u postgres sh -c "pg_basebackup -h 127.0.0.1 -p 5432 -U $REPL_USER -D $S_INSTANCE_ROOT/data -Fp -Xs -P -R -S sub1"
 sudo ls -al /databases/postgresql18/${S_INSTANCE_ID}/data | wc -l
 
@@ -139,6 +141,12 @@ while [ $match -lt 1 ]; do
     echo "sudo -u postgres psql -tA -p $P_PORT -c '$sql' | grep ${P_INSTANCE_ID} | wc -l"
     sleep 5
 done
+
+sql="select tablename from pg_catalog.pg_tables WHERE schemaname = 'public'"
+echo "tables in database replication on $P_PORT"
+sudo -u postgres psql -p $P_PORT  -P pager=off -c "$sql;" -d replication
+echo "tables in database replication on $S_PORT"
+sudo -u postgres psql -p $S_PORT  -P pager=off -c "$sql;" -d replication
 
 
 sql="SELECT application_name, client_addr, backend_start, state, sync_state FROM pg_stat_replication;"

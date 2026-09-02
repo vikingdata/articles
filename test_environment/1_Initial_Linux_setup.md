@@ -452,14 +452,11 @@ sudo cp  *.sh /databases/postgresql18/bin
 sudo cp  *.conf /databases/postgresql18/
 
 bin_dir=/databases/postgresql18/bin
-sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize primary 5442
-sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize secondary 5443
-sudo $bin_dir/setup_pg18_replication_logical.sh primary 5442 secondary 5443
+sudo $bin_dir/create_pg18_instance_logical.sh  --reinitialize rep1 5443
+sudo $bin_dir/setup_pg18_replication_logical.sh pub 5432 rep1 5443
 
 # debug
-sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/primary_5442/data -c logging_collector=off
-sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/secondary_5443/data -c logging_collector=off
-
+sudo -u postgres /usr/lib/postgresql/18/bin/postgres -D /databases/postgresql18/rep1_5442/data -c logging_collector=off
 
 ```
 

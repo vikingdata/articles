@@ -10,12 +10,12 @@ REPL_USER="repl1"
 if [ "$EUID" -ne 0 ]; then   echo "Run as root with sudo.";  exit 1; fi
 
 usage() {
-  echo "Usage: sudo $0 <primary_instance_name> <primary_port> <standby_instance_name> <secondary_port>"
-  echo "Example: sudo $0 pub 5432 sub 5433"
+  echo "Usage: sudo $0 <primary_instance_name> <primary_port> <logical_instance_name> <secondary_port>"
+  echo "Example: sudo $0 pub 5432 rep1 5442"
   echo "All instances are on the same host."
   echo "The directories should exist if given above:
 $BASE_DIR/pub_5432
-$BASE_DIR/sub_5433
+$BASE_DIR/rep1_5442
 "
   exit 1
 }

@@ -242,6 +242,20 @@ create()
     sql="SELECT * FROM pg_replication_slots;"
     sudo -u postgres psql -p $PORT -P pager=off -c "$sql;"
 
+    sql="create database replication;"
+    sudo -u postgres psql -p $P_PORT  -P pager=off -c "$sql;"
+
+    sql="CREATE TABLE wal1 (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY);"
+    sudo -u postgres psql -d  replication -p $P_PORT  -P pager=off -c "$sql;"
+
+    sql="CREATE TABLE logical1 (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY);"
+    sudo -u postgres psql -d  replication -p $P_PORT  -P pager=off -c "$sql;"
+
+    sql="CREATE PUBLICATION logicalrep FOR TABLE logical1;"
+
+    sudo -u postgres psql -d  replication -p $P_PORT  -P pager=off -c "$sql;"
+
+    
     echo "done"
 }
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This script is ONLY to make a server which is logically replicate from an existing
+# postgresql18 server. Do not use this to create
+# the primary server. 
+
 set -Eeuo pipefail
 
 # Create:
@@ -12,10 +16,9 @@ set -Eeuo pipefail
 #
 # Examples:
 #
-#   sudo ./create_instance.sh publisher 5432
-#   sudo ./create_instance.sh subscriber 5433
+#   sudo ./create_instance.sh rep1 5442
 #
-#   sudo ./create_instance.sh --reinitialize publisher 5432
+#   sudo ./create_instance.sh --reinitialize rep1 5442
 
 
 SCRIPT_DIR="/databases/postgresql18"
@@ -227,15 +230,13 @@ create()
 
     start
 
-    echo "Setting up replication account: port $PORT"
+    echo "setting up database and tables for logical replication."
+    sql="create database logical_replication;"
+    sudo -u postgres psql -p $P_PORT  -P pager=off -c "$sql;"
 
-    echo "saving password at /databases/postgresql18/$INSTANCE_ID.repl_password"
-    echo "delete this file once replication works and save the password in secure location."
-# Always add user. Id subscriber, its data will be erased when setup as a subscriber.
-    echo "$INSTANCE_ID:repl_password:$REPL_USER:$REPL_PASS:" >> /databases/postgresql18/$INSTANCE_ID.repl_password
+    sql="CREATE TABLE table1 (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY);"
+    sudo -u postgres psql -d  logical_replication -p $P_PORT  -P pager=off -c "$sql;"
 
-    
-    echo "TODO setup logical replication and test it. "
     echo "done"
 }
 
@@ -246,6 +247,8 @@ usage()
 {
     cat <<EOF
 PostgreSQL ${PG_VERSION} 
+Use this script to create a postgresql instance which will logically replicate from
+a primary. Do not make a primary server from this script. 
 
 Create:
   sudo $0 <instance-name> <port>
@@ -254,9 +257,8 @@ Reinitialize:
   sudo $0 --reinitialize <instance-name> <port>
 
 Examples:
-  sudo $0 primary 5442
-  sudo $0 secondary 5443
-  sudo $0 --reinitialize primarj 5442
+  sudo $0 rep1 5442
+  sudo $0 --reinitialize rep1 5442
 
 EOF
 }

@@ -37,7 +37,7 @@ make_vars()
     SERVICE_NAME="postgresql${PG_VERSION}-${INSTANCE_ID}.service"
     SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}"
     PASSWORD_ENCRYPTION="scram-sha-256"
-    MAX_REPLICATION_SLOT=5
+    MAX_REPLICATION_SLOTS=5
     MAX_WORKER_PROCESSES=8
 
 }

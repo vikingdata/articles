@@ -17,6 +17,19 @@
 
 ## <a name=t></a>Gate truth tables for 2, 3, and 4 input
 
+Basically 2^(no of inputs) when calculating possible combnations of a gate.
+Such as
+There are 16 variables for a 4-input OR gate.
+
+The total number of possible combinations depends on the number of inputs the gate has.
+### The Equation
+$$C = 2^n$$
+
+* $C$ = Total number of possible input combinations
+* $n$ = Number of inputs to the gate
+* $2$ = Represents the two possible states for each input (Binary: 0 or 1)
+
+
 ### 2 gates (4 combinations)
 | Inputs (A, B) | AND | OR | NAND | NOR | XOR | XNOR |
 |---|---|---|---|---|---|---|
@@ -75,14 +88,4 @@ $$C = 2^n$$
 * $n$ = Number of inputs to the gate
 * $2$ = Represents the two possible states for each input (Binary: 0 or 1)
 
-## Examples based on input count
-
-* 1-Input Gate (e.g., NOT gate, and Inverter)
-   * $2^1 =$ 2 combinations (0 or 1)
-* 2-Input Gate (All other gates can have 1+ inputs)
-   * $2^2 =$ 4 combinations (00, 01, 10, 11)
-* 3-Input Gate 
-   * $2^3 =$ 8 combinations
-* 4-Input Gate
-   * $2^4 =$ 16 combinations
 

@@ -9,7 +9,7 @@ the final value ranges from 00 to 11 with an overflow.
 The two numbers A nd B and the result is the number C with or without a carry over
 ( the third digit).
 
-Each number is represented as the following. When added, there may be a carry over.
+Each number is represented as the following.
 
 | Decimal  |Binary |
 | -- | -- |
@@ -18,6 +18,23 @@ Each number is represented as the following. When added, there may be a carry ov
 |     2 | 10 |
 |     3 | 11 |
 
+When adding a digit, the poissble values are 0, 1, and 0 with a carry over to the next bit.
+
+| digit 1 of number 1 | digit 1 of number 2| carry over | result of digit |
+| --| -- |
+| 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 1 |
+| 1 | 0 | 0 | 1 |
+| 1 | 1 | 1 | 0 |
+
+
+
+To add two numbers together:
+1. Add the first bit of each number together.
+
+
+When added together, there may be a carry out. This is a half adder because there is no carry in.
+If there was a carry in it would be a full adder. 
 
 | A  | B  | A + B | Result (2-bit) | Carry Out |
 | -- | -- | ----- | -------------- | --------- |

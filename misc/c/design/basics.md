@@ -1,0 +1,37 @@
+basic gates
+
+| Gate Name & Expression | Universal? | Truth Table Inputs (A, B) & Output (Y) |
+|---|---|---|
+| NOT Y = Ā | No | A=0 → Y=1A=1 → Y=0 |
+| AND Y = A ⋅ B | No | 0, 0 → 00, 1 → 01, 0 → 01, 1 → 1 |
+| OR Y = A + B | No | 0, 0 → 00, 1 → 11, 0 → 11, 1 → 1 |
+| NAND $Y = \overline{A \cdot B}$ | Yes | 0, 0 → 10, 1 → 11, 0 → 11, 1 → 0 |
+| NOR $Y = \overline{A + B}$ | Yes | 0, 0 → 10, 1 → 01, 0 → 01, 1 → 0 |
+| XOR $Y = A \oplus B$ | No | 0, 0 → 00, 1 → 11, 0 → 11, 1 → 0 |
+| XNOR $Y = \overline{A \oplus B}$ | No | 0, 0 → 10, 1 → 01, 0 → 01, 1 → 1 |
+
+
+
+Basically 2^(no of inputs) when calculating possible combnations of a gate.
+Such as
+There are 16 variables for a 4-input OR gate.
+
+The equation to find the total number of possible combinations (or rows) in a truth table depends entirely on the number of inputs the gate has.
+## The Equation
+$$C = 2^n$$ 
+
+* $C$ = Total number of possible input combinations
+* $n$ = Number of inputs to the gate
+* $2$ = Represents the two possible states for each input (Binary: 0 or 1)
+
+## Examples based on input count
+
+* 1-Input Gate (e.g., NOT gate, and Inverter)
+   * $2^1 =$ 2 combinations (0 or 1)
+* 2-Input Gate (All other gates can have 1+ inputs)
+   * $2^2 =$ 4 combinations (00, 01, 10, 11)
+* 3-Input Gate 
+   * $2^3 =$ 8 combinations
+* 4-Input Gate
+   * $2^4 =$ 16 combinations
+

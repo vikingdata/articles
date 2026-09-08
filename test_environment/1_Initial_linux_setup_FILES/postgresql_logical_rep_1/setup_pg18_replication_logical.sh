@@ -4,7 +4,7 @@ set -e
 # --- Configuration & Variables ---
 PG_VERSION="18"
 BASE_DIR="/databases/postgresql18"
-REPL_USER="repl1"
+REPL_USER="replication_user"
 
 # run as root
 if [ "$EUID" -ne 0 ]; then   echo "Run as root with sudo.";  exit 1; fi
@@ -46,33 +46,10 @@ if [ ! -d "$P_INSTANCE_ROOT" ]; then
     exit 1
 fi
 
-is_running=`systemctl is-active --quiet $SERVICE_NAME || true`
-if [ "$is_running" = "active" ]; then
-    echo "stopping  postgresql18-$SERVICE_NAME"
-     systemctl stop  "$SERVICE_NAME"
-fi
-
-echo "checking target $S_INSTANCE_ROOT"
-if [ -d "$S_INSTANCE_ROOT" ]; then
-    echo "Removing standby directory:  '/databases/postgresql18/${S_INSTANCE_ID}'"
-    sudo rm -rf /databases/postgresql18/${S_INSTANCE_ID}
-    echo "Making empty standby directory: '$S_INSTANCE_ROOT'"
-    sudo mkdir -p /databases/postgresql18/${S_INSTANCE_ID}/data
-    sudo chown -R  "postgres:postgres" "${S_INSTANCE_ROOT}"
-    sudo chmod -R 0700 ${S_INSTANCE_ROOT}
-
-    # check if pid is running
-    pid=`sudo lsof -t -iTCP:$S_PORT -sTCP:LISTEN || true`
-    if [ ! "$pid" = "" ]; then
-	echo "Killing process $oid on port $S_PORT"
-	kill $pid || true
-	sleep 2
-	pid=`sudo lsof -t -iTCP:$S_PORT -sTCP:LISTEN || true`
-	if [ ! "$pid" = "" ]; then
-	    kill -9 $pid || true
-	fi
-    fi
-
+is_running=`systemctl is-active  $SERVICE_NAME || true`
+if [ ! "$is_running" = "active" ]; then
+    echo "replication instance is not running :   postgresql18-$SERVICE_NAME"
+    exit 1
 fi
 
 echo "Getting password: grep ^$P_INSTANCE_ID: $BASE_DIR/$P_INSTANCE_ID.repl_password | tail -n 1 | cut -d ':' -f4"
@@ -82,13 +59,61 @@ if [ "$password" = "" ]; then
     exit
 fi    
 
-sudo -u postgres sh -c "echo '127.0.0.1:5432:*:$REPL_USER:$password' > ~/.pgpass"
-echo "Check password with :   sudo -u postgres sh -c ' cat ~/.pgpass'"
-sudo -u postgres sh -c 'chmod 600 ~/.pgpass'
+sql="drop PUBLICATION publication1"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication || true
+sql="CREATE PUBLICATION publication1 FOR all TABLES;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+
+sql="ALTER SUBSCRIPTION subscription1 DISABLE;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication || true
+
+sql="ALTER SUBSCRIPTION subscription1 SET (slot_name = NONE);"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication || true
+
+sql="drop   subscription subscription1"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication || true
+
 
 sql="CREATE SUBSCRIPTION subscription1
-  CONNECTION 'host=127.0.0.1  port=$P_PORT dbname=replication user=rep1 password=''$password'''
-  PUBLICATION logical_rep WITH (failover = true);"
+  CONNECTION 'host=127.0.0.1  port=$P_PORT dbname=replication user=$REPL_USER password=''$password'' '
+  PUBLICATION publication1 WITH (failover = true);"
 echo $sql
-sudo -u postgres psql -p $S_PORT -c "$sql;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication
 
+
+echo "checking status of logical replication"
+sql="SELECT pubname, puballtables FROM pg_publication;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+sql="SELECT schemaname, tablename
+FROM pg_publication_tables WHERE pubname = 'publication1' ORDER BY schemaname, tablename;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+sql="SELECT pid, usename, application_name, client_addr, state,sent_lsn, write_lsn, flush_lsn, replay_lsn, sync_state
+FROM pg_stat_replication;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+sql="SELECT slot_name,slot_type, database,active, active_pid, restart_lsn, confirmed_flush_lsn
+FROM pg_replication_slots where slot_type = 'logical';"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+sql="SELECT application_name, state, sync_state FROM pg_stat_replication;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+
+sql="SELECT subname,subenabled,  subconninfo, subslotname, subpublications from pg_subscription;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication
+sql="SELECT subname, pid, received_lsn, latest_end_lsn, latest_end_time
+FROM pg_stat_subscription;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication
+
+echo "checking contents of table logical1"
+sql="SELECT application_name, state, sync_state FROM pg_stat_replication;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication
+
+sql="INSERT INTO logical1 DEFAULT VALUES;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+
+sql="select * from logical1;"
+sudo -u postgres psql -p $P_PORT -c "$sql;" -d replication
+sleep 1
+sql="select * from logical1;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication
+
+sql="SELECT application_name, state, sync_state FROM pg_stat_replication;"
+sudo -u postgres psql -p $S_PORT -c "$sql;" -d replication

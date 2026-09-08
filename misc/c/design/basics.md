@@ -14,6 +14,13 @@
 | XOR $Y = A \oplus B$ | No | 0, 0 → 00, 1 → 11, 0 → 11, 1 → 0 |
 | XNOR $Y = \overline{A \oplus B}$ | No | 0, 0 → 10, 1 → 01, 0 → 01, 1 → 1 |
 
+* NOTE -- opposite of value.
+* AND — True only when all inputs are true.
+* OR — True when at least one input is true.
+* NAND — The opposite of AND; false only when all inputs are true.
+* NOR — The opposite of OR; true only when all inputs are false.
+* XOR — True when the inputs are different.
+* XNOR — True when the inputs are the same.
 
 ## <a name=t></a>Gate truth tables for 2, 3, and 4 input
 
@@ -74,18 +81,5 @@ $$C = 2^n$$
 | 1, 1, 1, 0 | 0 | 1 | 1 | 0 | 1 | 0 |
 | 1, 1, 1, 1 | 1 | 1 | 0 | 0 | 0 | 1 |
 
-
-
-Basically 2^(no of inputs) when calculating possible combnations of a gate.
-Such as
-There are 16 variables for a 4-input OR gate.
-
-The equation to find the total number of possible combinations (or rows) in a truth table depends entirely on the number of inputs the gate has.
-## The Equation
-$$C = 2^n$$ 
-
-* $C$ = Total number of possible input combinations
-* $n$ = Number of inputs to the gate
-* $2$ = Represents the two possible states for each input (Binary: 0 or 1)
 
 

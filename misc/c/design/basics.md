@@ -14,12 +14,7 @@
 | XOR $Y = A \oplus B$ | No | 0, 0 → 00, 1 → 11, 0 → 11, 1 → 0 |
 | XNOR $Y = \overline{A \oplus B}$ | No | 0, 0 → 10, 1 → 01, 0 → 01, 1 → 1 |
 
-NOTE
-* N means opposite. 
-* X means "when both"
-    * XOR means when both are different and XAND means when both are the same.
-
-* NOT -- opposite of value.
+* NOTE -- opposite of value.
 * AND — True only when all inputs are true.
 * OR — True when at least one input is true.
 * NAND — The opposite of AND; false only when all inputs are true.
@@ -27,12 +22,8 @@ NOTE
 * XOR — True when the inputs are different.
 * XNOR — True when the inputs are the same.
 
-NOTE:
-* XAND equals NXOR
-* XNOR equals NAND
-
-
 ## <a name=t></a>Gate truth tables for 2, 3, and 4 input
+
 Basically 2^(no of inputs) when calculating possible combnations of a gate.
 Such as
 There are 16 variables for a 4-input OR gate.
@@ -89,36 +80,6 @@ $$C = 2^n$$
 | 1, 1, 0, 1 | 0 | 1 | 1 | 0 | 1 | 0 |
 | 1, 1, 1, 0 | 0 | 1 | 1 | 0 | 1 | 0 |
 | 1, 1, 1, 1 | 1 | 1 | 0 | 0 | 0 | 1 |
-
-
-## arithmetic, boolean, and meaning
-
-| Logic Gate | Boolean representation                        | Meaning                    |
-| ---------- | --------------------------------------------- | -------------------------- |
-| AND    | $A \cdot B$                                 | Multiplication             |
-| OR     | $A + B$                                     | Addition                   |
-| NAND   | $\overline{A \cdot B}$                      | NOT(AND)                   |
-| NOR    | $\overline{A + B}$                          | NOT(OR)                    |
-| XOR    | $A \oplus B = \overline A B + A\overline B$ | Addition without carry |
-| **XNOR**   | $A \odot B = AB + \overline A\overline B$   | Equality / NOT(XOR)        |
-
-| Logic Gate | Meaning |
-| ---------- | --------------------------------------------- |
-| AND  | multiply: AB |
-| OR   | add: A+B     |
-| NOT  | complement: $\overline{A}$ |
-| NAND | NOT multiply: $\overline{AB}$ |
-| NOR  | NOT add: $\overline{A+B}$ |
-| XOR  | different: $A\overline B+\overline A B$ |
-| XNOR | same: $AB+\overline A\overline B$ |
-
-For binary addition, the important ones are:
-
-*  Sum = ${A\oplus B}$ 
-*  Carry = ${A\cdot B}$ 
-
-So an XOR gives the sum bit, while an AND gives the carry bit.
-
 
 
 

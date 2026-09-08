@@ -96,7 +96,6 @@ $$C = 2^n$$
 | Logic Gate | Meaning |
 | ---------- | --------------------------------------------- |
 | AND  | multiply: AB |
-
 | OR   | add: A+B     |
 | NOT  | complement: $\overline{A}$ |
 | NAND | NOT multiply: $\overline{AB}$ |

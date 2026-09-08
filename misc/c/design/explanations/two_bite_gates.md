@@ -11,7 +11,8 @@ The two numbers A nd B and the result is the number C with or without a carry ov
 
 Each number is represented as the following. When added, there may be a carry over.
 
-| Decimal  |Binary | 
+| Decimal  |Binary |
+| -- | -- |
 | 0    | 00 | 0 | 
 |     1 | 01 |
 |     2 | 10 |

@@ -21,7 +21,7 @@ Each number is represented as the following.
 When adding a digit, the poissble values are 0, 1, and 0 with a carry over to the next bit.
 
 | digit 1 of number 1 | digit 1 of number 2| carry over | result of digit |
-| --| -- |
+| --| -- | -- | -- |
 | 0 | 0 | 0 | 0 |
 | 0 | 1 | 0 | 1 |
 | 1 | 0 | 0 | 1 |

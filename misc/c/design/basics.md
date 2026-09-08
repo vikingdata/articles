@@ -1,4 +1,8 @@
-basic gates
+
+* [basic gates](#b)
+* [truth tables](#t)
+
+## <a name=b></a>basic gates
 
 | Gate Name & Expression | Universal? | Truth Table Inputs (A, B) & Output (Y) |
 |---|---|---|
@@ -11,8 +15,9 @@ basic gates
 | XNOR $Y = \overline{A \oplus B}$ | No | 0, 0 → 10, 1 → 01, 0 → 01, 1 → 1 |
 
 
-## Gate truth tables for 2, 3, and 4 input
+## <a name=t></a>Gate truth tables for 2, 3, and 4 input
 
+### 2 gates (4 combinations)
 | Inputs (A, B) | AND | OR | NAND | NOR | XOR | XNOR |
 |---|---|---|---|---|---|---|
 | 0, 0 | 0 | 0 | 1 | 1 | 0 | 1 |
@@ -21,7 +26,7 @@ basic gates
 | 1, 1 | 1 | 1 | 0 | 0 | 0 | 1 |
 
 ------------------------------
-## 3-Input Gates (All 8 Combinations)
+### 3-Input Gates (All 8 Combinations)
 
 | Inputs (A, B, C) | AND | OR | NAND | NOR | XOR (Odd 1s) | XNOR (Even 1s) |
 |---|---|---|---|---|---|---|
@@ -35,7 +40,7 @@ basic gates
 | 1, 1, 1 | 1 | 1 | 0 | 0 | 1 | 0 |
 
 ------------------------------
-## 4-Input Gates (All 16 Combinations)
+### 4-Input Gates (All 16 Combinations)
 
 | Inputs (A, B, C, D) | AND | OR | NAND | NOR | XOR (Odd 1s) | XNOR (Even 1s) |
 |---|---|---|---|---|---|---|

@@ -86,8 +86,8 @@ $$C = 2^n$$
 
 | Logic Gate | Boolean representation                        | Meaning                    |
 | ---------- | --------------------------------------------- | -------------------------- |
-| AND    | $A \cdot B\)                                 | Multiplication             |
-| OR     | $A + B\)                                     | Addition                   |
+| AND    | $A \cdot B$                                 | Multiplication             |
+| OR     | $A + B$                                     | Addition                   |
 | NAND   | $\overline{A \cdot B}$                      | NOT(AND)                   |
 | NOR    | $\overline{A + B}$                          | NOT(OR)                    |
 | XOR    | $A \oplus B = \overline A B + A\overline B$ | Addition without carry |
@@ -96,6 +96,7 @@ $$C = 2^n$$
 ### Easy way to remember
 
 | AND  | multiply: AB |
+
 | OR   | add: A+B     |
 | NOT  | complement: $\overline{A}$ |
 | NAND | NOT multiply: $\overline{AB}$ |
@@ -104,8 +105,10 @@ $$C = 2^n$$
 | XNOR | same: $AB+\overline A\overline B$ |
 
 For binary addition, the important ones are:
-| {\text{Sum}=A\oplus B} |
-|{\text{Carry}=A\cdot B} |
+
+*  Sum = ${A\oplus B}$ 
+*  Carry = ${A\cdot B}$ 
+
 So an XOR gives the sum bit, while an AND gives the carry bit.
 
 

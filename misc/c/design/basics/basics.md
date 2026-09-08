@@ -86,26 +86,28 @@ $$C = 2^n$$
 
 | Logic Gate | Boolean representation                        | Meaning                    |
 | ---------- | --------------------------------------------- | -------------------------- |
-| **AND**    | \(A \cdot B\)                                 | Multiplication             |
-| **OR**     | \(A + B\)                                     | Addition                   |
-| **NAND**   | \(\overline{A \cdot B}\)                      | NOT(AND)                   |
-| **NOR**    | \(\overline{A + B}\)                          | NOT(OR)                    |
-| **XOR**    | \(A \oplus B = \overline A B + A\overline B\) | Addition **without carry** |
-| **XNOR**   | \(A \odot B = AB + \overline A\overline B\)   | Equality / NOT(XOR)        |
+| AND    | $A \cdot B\)                                 | Multiplication             |
+| OR     | $A + B\)                                     | Addition                   |
+| NAND   | $\overline{A \cdot B}$                      | NOT(AND)                   |
+| NOR    | $\overline{A + B}$                          | NOT(OR)                    |
+| XOR    | $A \oplus B = \overline A B + A\overline B$ | Addition without carry |
+| **XNOR**   | $A \odot B = AB + \overline A\overline B$   | Equality / NOT(XOR)        |
 
 ### Easy way to remember
 
-| AND   | multiply: \(A B\) |
-| OR   | add: \(A+B\) |
-| NOT  | complement: \(\overline A\) |
-| NAND | NOT multiply: \(\overline{AB}\) |
-| NOR  | NOT add: \(\overline{A+B}\) |
-| XOR  | different: \(A\overline B+\overline A B\) |
-| XNOR | same: \(AB+\overline A\overline B\) |
+| AND  | multiply: AB |
+| OR   | add: A+B     |
+| NOT  | complement: $\overline{A}$ |
+| NAND | NOT multiply: $\overline{AB}$ |
+| NOR  | NOT add: $\overline{A+B}$ |
+| XOR  | different: $A\overline B+\overline A B$ |
+| XNOR | same: $AB+\overline A\overline B$ |
 
 For binary addition, the important ones are:
 | {\text{Sum}=A\oplus B} |
 |{\text{Carry}=A\cdot B} |
 So an XOR gives the sum bit, while an AND gives the carry bit.
+
+
 
 

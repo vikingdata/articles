@@ -93,7 +93,7 @@ $$C = 2^n$$
 | XOR    | $A \oplus B = \overline A B + A\overline B$ | Addition without carry |
 | **XNOR**   | $A \odot B = AB + \overline A\overline B$   | Equality / NOT(XOR)        |
 
-| Logic Gate | Meaning                    |
+| Logic Gate | Meaning |
 | ---------- | --------------------------------------------- |
 | AND  | multiply: AB |
 

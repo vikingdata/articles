@@ -62,7 +62,7 @@ If there was a carry in it would be a full adder.
 | 11 | 11 | 3 + 3 | 6 | 10   | 1   |
 
 The circuit diagram is as follows
-
+```
 A0 -----|
 B0 ----- XOR --- C0
          |
@@ -77,7 +77,7 @@ B1  ---|       XOR --- C1
                |
 	       |
 	       K1
-
+```
 The Process of the additions
 * Let A = 11 and B = 11
 * Add the rightmost bits

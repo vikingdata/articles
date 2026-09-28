@@ -249,7 +249,7 @@ WARNING: Any query that changes data will occur unless you wrap it in a transact
 supports transaction. MyISAM does not for example.
 ```
 begin;
-EXPLAIN ANALYZE delte from table1 where field1 = "test";
+EXPLAIN ANALYZE delete from table1 where field1 = "test";
 rollback;
 
 ```
@@ -381,11 +381,11 @@ from t1
 * Process the logs by running "analyze_logs.sh"
 ```
 Output (You just multiple all the "rows:" together in the explain.)
-For no_index.log, the no of rows is calcualted from the explain
+For no_index.log, the no of rows is calculated from the explain
     11*926*926403 = 9436340958
-For where_first.log, the no of rows is calcualted from the explain
+For where_first.log, the no of rows is calculated from the explain
     11*181*18142 = 36120722
-For join_first.log, the no of rows is calcualted from the explain
+For join_first.log, the no of rows is calculated from the explain
     11*2*11 = 242
 ```
 * We see no index is the worst. Adding an index where the first field in the index is in the where condition is better (index t2_t1 (t2_id, t1_id)) . But an index for the field with join first is the best (index t1_t2 (t1_id, t2_id)).

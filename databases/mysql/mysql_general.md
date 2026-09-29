@@ -43,7 +43,7 @@ This article will grow over time.
 export terms="sleep|waiting|processlist|rdsrepladmin_priv_checks_user|binlog dump" 
 
 mysql -u USER -pMYPASSWORD -h HOST -e "show full processlist" \
-  | egrep -vi "$terms | sed -e 's/\\n/\n/g' >/tmp/sp.txt
+  | egrep -vi "$terms" | sed -e 's/\\n/\n/g' >/tmp/sp.txt
 
 ```
 

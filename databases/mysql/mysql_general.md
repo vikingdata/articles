@@ -14,7 +14,7 @@ Original Copyright June 2024**_
 
 This article will grow over time. 
 
-
+* [show processlist on bash](#sp)
 * [tail a gzip file](#tailgzip)
 * [Info queries](info_queries.md)
 * [MySQL variables](MySQL_variables.md)
@@ -34,7 +34,52 @@ This article will grow over time.
 * [ Percona : Where did query come from?](#audit)
 * [Speed up mysql temporarily](#speed)
 
+* * *
+<a name=sp></a>show processlist in bash
+-----
+```
+ ## Add any other terms.
+ ## The best way is to also filter and organize queries by time.
+export terms="sleep|waiting|processlist|rdsrepladmin_priv_checks_user|binlog dump" 
 
+mysql -u USER -pMYPASSWORD -h HOST -e "show full processlist" \
+  | egrep -vi "$terms | sed -e 's/\\n/\n/g' >/tmp/sp.txt
+
+```
+
+filter by query and maxtime
+
+```
+max_time=600
+host="127.0.0.1"
+user='mark'
+password='bad_password'
+port=3306
+
+ignore_terms="sleep|waiting|processlist|rdsrepladmin_priv_checks_user|binlog dump"
+#-----------------------------
+
+mysql  -u $user -password$p -h $host -p $port -e "show full processlist" \
+  | egrep -vi "$ignore_terms" > /tmp/sp1.txt
+
+tail -n +2 /tmp/sp1.txt | while IFS= read -r line; do
+
+  s=`echo $line | cut -d ' ' -f 1,2,3,4,5,6,7`
+  state=`echo $line | cut -d ' ' -f 5`
+  t=`echo $line | cut -d ' ' -f 6` 
+  query=`echo $line | cut -d ' ' -f 8- | sed -e 's/\\\n/\\n/g'` 
+
+  if [ "$state" != 'Query' ]; then continue; fi
+
+  if [[ "$t" =~ ^-?[0-9]+$ ]]; then
+    let t=$t+0
+    if [ $t -gt $max_time ]; then
+	echo "$s $query"
+    fi	
+  fi    
+done 
+
+```
 
 * * *
 <a name=tailgzip></a>Tail a gzipped file

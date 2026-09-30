@@ -1,0 +1,10 @@
+
+1. Download "Markdown Reader" app and add to chrome.
+
+https://chromewebstore.google.com/detail/markdown-reader/medapdbncneneejhbgcjceippjlfkmkg
+
+2. In chatgpt or google, enter "how do you get Markdown Reader to render local files in chrome". Follow the instructions.
+
+
+Other md viewers are a pain, or have ads, or are annoying. You want to make
+small changes and just click on reload. 

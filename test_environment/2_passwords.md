@@ -62,6 +62,8 @@ echo "Password for 'test_account' is '$my_pass'."
 
 ***
 ```
+
+```
 <a name=f></a> Read passwords from file
 -----
 You should have a file "~/keep/new_passwords/tmp" from [Initial Setup of Linux Environment on Windows](https://github.com/vikingdata/articles/blob/main/test_environment/1_Initial_Linux_setup.md).

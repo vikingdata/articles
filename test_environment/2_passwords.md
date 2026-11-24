@@ -2,18 +2,15 @@
 KeePassXC for passwords
 ==============================
 
-NOT DONE YET
-
 _**by Mark Nielsen
 Original Copyright November 2026**_
 
 NOTE: This is not meant for production. The files will be keep
-locally which makes it insecure.
+locally which makes it insecure. Use this in all "test_environment" passwords created. 
 
 1. [KeePassXC](#k) : Setting up KeePassXC
-2. [Using KeePassXC](#u)
-3. [Read passwords from file](#f)
-4. [Show all accounts and passwords in database.](#s)
+2. [Read passwords from file](#f)
+3. [Show all accounts and passwords in database.](#s)
 
 * * *
 <a name=k></a> KeePassXC
@@ -55,15 +52,8 @@ my_pass=`keepassxc-cli show --no-password \
 echo ""
 echo "Password for 'test_account' is '$my_pass'."
 
-```
-***
-<a name=u></a> Using KeePassXC
------
 
 ***
-```
-
-```
 <a name=f></a> Read passwords from file
 -----
 You should have a file "~/keepassxc/new_passwords.tmp" from [Initial Setup of Linux Environment on Windows](https://github.com/vikingdata/articles/blob/main/test_environment/1_Initial_Linux_setup.md).
@@ -137,5 +127,42 @@ while IFS= read -r entry; do
   keepassxc-cli show -q -s --no-password -k unattended.key unattended.kdbx "$entry" < /dev/null
   echo "-----"
 done
+
+```
+
+***
+<a name=p></a> Use Python to get password
+-----
+
+First install pykeepass
+
+```
+sudo apt install -y python3-pip python3-venv
+sudo apt install -y python3-pykeepass
+```
+
+Then save this into a file "showpasswords.py". The title "dummy1" should exist. Replace this
+with another entry. 
+```
+
+from pathlib import Path
+from pykeepass import PyKeePass
+
+secrets = Path.home() / ".keepassxc"
+kp = PyKeePass(secrets / "unattended.kdbx", keyfile=secrets / "unattended.key")
+
+for item in kp.entries:
+    print (f"title    : {item.title}\nusername : {item.username}\npassword : {item.password}\n")
+
+#import inspect
+#for name, value in inspect.getmembers(item):
+#    if not name.startswith("__") and not inspect.ismethod(value):
+#        print(f"{name}: {value}")
+
+```
+
+Then execute
+```
+python3 showpasswords.py
 
 ```

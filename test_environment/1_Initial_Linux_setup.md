@@ -138,6 +138,9 @@ This is to setup WSL for all installs.
 echo "" >> ~/.bashrc
 echo "cd" >> ~/.bashrc
 
+  # Let us setup the password directory for KeepPassXC in the next article.
+mkdir -p ~/keepassxc/
+
   # sudo to root
 sudo bash
 
@@ -149,6 +152,8 @@ exit
 
   # and sudo to root
 sudo bash
+
+
 
 
 ```
@@ -195,6 +200,11 @@ echo "[client]
 user=root
 password="$new_password"
 " > ~/.my.cnf
+
+ #Save the account to a file used for KeepPassXC later.
+echo "" >>  ~/keepassxc/passwords.tmp
+echo "root='$new_password'" >> ~/keepassxc/passwords.tmp
+
 
 mysql -e "select now()"
 
@@ -256,6 +266,12 @@ dpkg -i libldap-2.5-0_2.5.13+dfsg-5_amd64.deb
      # Type "Root1234" as password. We might change it later. 
 /opt/mssql/bin/mssql-conf setup
 
+ #Save the account to a file used for KeepPassXC later.
+ # change this if you use a different password. 
+echo "" >>  ~/keepassxc/passwords.tmp
+echo "sa='Root1234'" >> ~/keepassxc/passwords.tmp
+
+
   # Make it only listening on loopback
 echo "
 [network]
@@ -293,8 +309,13 @@ sqlcmd $MSSQL_OPTIONS -q "select 'good';"
 
 new_password=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32`
 
+  #Save the account to a file used for KeepPassXC later.
+echo "" >>  ~/keepassxc/passwords.tmp
+echo "$SUDO_USER='$new_password'" >> ~/keepassxc/passwords.tmp
+
 sql="CREATE LOGIN $SUDO_USER WITH PASSWORD = '$new_password';"
 sqlcmd $MSSQL_OPTIONS -Q "$sql"
+
 
 sql="ALTER SERVER ROLE sysadmin ADD MEMBER $SUDO_USER;"
 sqlcmd $MSSQL_OPTIONS -Q "$sql"
@@ -571,7 +592,9 @@ lsnrctl status
 new_password=`openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32`
 echo $new_password
 ```
-
+   #Save the account to a file used for KeepPassXC later.
+echo "" >>  ~/keepassxc/passwords.tmp
+echo "mark='$new_password'" >> ~/keepassxc/passwords.tmp
 
 7. Login to Oracle
    * With oracle developer, sql plus(sqlplus.exe), or sqlcl connect as you did before.

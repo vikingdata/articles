@@ -66,12 +66,63 @@ echo "Password for 'test_account' is '$my_pass'."
 ```
 <a name=f></a> Read passwords from file
 -----
-You should have a file "~/keep/new_passwords/tmp" from [Initial Setup of Linux Environment on Windows](https://github.com/vikingdata/articles/blob/main/test_environment/1_Initial_Linux_setup.md).
-Run this script and then delete "new_passwords.tmp" after the verify the accounts and passwords are in the database. 
+You should have a file "~/keepassxc/new_passwords.tmp" from [Initial Setup of Linux Environment on Windows](https://github.com/vikingdata/articles/blob/main/test_environment/1_Initial_Linux_setup.md).
+Run this script and then delete "new_passwords.tmp" after the accounts and passwords are in the database. 
 
 ```
 cd ~/.keepassxc
+
+  # Create a has array
+declare -A passwords
+
+  # Submit the file new_passwords.tmp to fill the hash. 
+while IFS='=' read -r account password; do
+    # Skip empty lines and comments
+  [[ -z "$account" || "$account" == \#* ]] && continue
+
+    # Remove surrounding single quotes
+    # Remove from start
+  password="${password#\'}"
+
+    # Remove from end
+  password="${password%\'}"
+
+    #Assign the account the password.
+  echo "Adding $account to bash has"
+  passwords["$account"]="$password"
+done < new_passwords.tmp
+
+
+KEY=unattended.key
+DB=unattended.kdbx
+
+for u in "${!passwords[@]}"; do
+  p="${passwords[$u]}" 
+
+  if keepassxc-cli show -q --no-password -k "$KEY" "$DB" "$u" &>/dev/null </dev/null; then
+    printf '%s\n' "$p" | keepassxc-cli edit \
+      -q --no-password -k "$KEY" "$DB" "$u" -u "$u" -p
+    echo "Updated: $u $p"
+  else
+    printf '%s\n' "$p" | keepassxc-cli add \
+      -q --no-password -k "$KEY" "$DB" "$u" -u "$u" -p
+    echo "Added:   $u $p"
+  fi
+done
+
+
 ```
+
+If you do not have passwords, test the above command with:
+```
+echo "dummy1='pass1'" >> new_passwords.tmp
+echo "dummy2='pass2'" >> new_passwords.tmp
+echo "dummy3='pass3'" >> new_passwords.tmp
+echo "dummy4='pass4'" >> new_passwords.tmp
+
+
+```
+
 
 ***
 <a name=s></a> Show all accounts and passwords in database.

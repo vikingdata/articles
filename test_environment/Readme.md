@@ -3,77 +3,52 @@ NOt DONE
 This is a summary in order of how I setup my test environment for home.
 All resources are FREE. All have limitations for use, but not normally an issue for someone who just wants to learn.
 
-1. Setup Test environment with Linux on Windows or Install Linux on a computer
-    1. Install Linux
-    1. Install Linux on Windows
-        1. [Setup VirtualBox](https://github.com/vikingdata/articles/blob/main/linux/vm/Multiple_linux_VirtualBox.md)
-            1. Just setup one node.
-        2. [WSL2](https://github.com/vikingdata/articles/blob/main/databases/mysql/MySQL_under_wsl2.md#wsl2)
-            1. In this article, just install WSL2 and do not bother with MySQL. 
-        3. Cygwin -- not really Linux but a Linux interface.
-	    1. We will not be using cygwin to to directly execute linux functions but rather to ssh from a Windows box to a Virtual Box instllation or a Linux box. You do not need CYGWIN if you install WSL2.  
-            1. Install cygwin with SSH and make ssh key. We will use this later.
-                * ```ssh-keygen -t rsa -N ''```
-            1. For more on installing Cygwin with ssh : (5 Installing Cygwin and Starting the SSH Daemon](https://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
-1. [Setup software after you have your linux environment](1_Initial_Linux_setup.md). TODO: This article will list links to other articles to setup ytour test environment. 
-       
-
-1. Internet resources
-
-    1. Linux box
-        1. [https://blinkenshell.org/](https://blinkenshell.org/)
-	1. [https://sdf.org/]([https://sdf.org/)
-	
-    2. Database
-
-        1. [Snowflake and postgresql](https://signup.snowflake.com/). Although it is free only for a limited time, after the time limit just
-        apply for new systems with the same email.
-        1. Mariadb -- very similar to MySQL.
-        1. MongoDB
-        1. MSSQL -Windows or Linux with SSMS
-        1. Cockroachdb
-	    
-    1. Cloud
-        1. Links
-            * Old page: [Free Setup](https://github.com/vikingdata/articles/blob/main/cloud/Free_setup.md)
-        1. AWS
-            1. [AWS free](https://aws.amazon.com/free/?gclid=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=categories%23compute&trk=6a455a6f-f7f7-4463-917f-b59707d5f462&sc_channel=ps&ef_id=Cj0KCQiA1Km7BhC9ARIsAFZfEIvEClUtkGLBpYAb805PJ23Ooec3uR1uURdUFUi_LwLUt_aDOrfOzUwaAoJREALw_wcB:G:s&s_kwcid=AL!4422!3!646547068075!p!!g!!cloud%20computing!2038862296!75709537127)
-            1. Database + Storage
-                1. Dynamo
-                1. SimpleDB
-                1. S3 -- used by databases and storage. It is very very cheap.
-                1. Redshift -- not free, but free when idle
-            1. Monitoring
-                1.  Promethesus
-            1. Cloudtrail Programming
-                1. Glue (between dynamo, SimpleDB, and MySQL and MongoDB on EC2)
-                1. Lambda (same as glue)
-                1. security - Key Management, Security Hub, cloudtrail, * Storage -- Storage Gateway Other
-                1. Route -- DNS
-                1. Billing or admin - Organizations, control tower
-
-        1. GCP Free
-            1. Cloud storage ; 5GB and traffic -- enough for testing Database
-            1. Database
-                1. Big Query
-                1. pub/sub
-                1. Server (same as ec2 in AWS)
-                     1. e2-micro VM instance
-            1. Other
-                1. firestore Programming
-                1. secret manager Server
-                1. Google Compute --- limited resources
-
-
-        1. MS Free
-        1. Oracle Free
-    1. Monitoring
-        1. New Relic
-        1. Datadog
-        1. Grafana
-        1. PMM
+1. [1_Initial_Linux_setup.md](1_Initial_Linux_setup.md)
+   1. Instal WSL and cygwin
+   2. Install various programs locally.
+2. [2_passwords.md](2_passwords.md)
+   1. Setup KeepassXC and load password from previous software installs.
+3. Install Cloud services and load passwords. 
+   1. Setup AWS account
+      1. Database + Storage
+         1. Dynamo
+         2. SimpleDB
+         3. Aurora Serverless (free when not used)
+         4. RedShift
+	 5. S3 (really cheap) 
+      2. Cloud Trail Programming
+         1. Glue (between dynamo, SimpleDB, and MySQL and MongoDB on EC2)
+         1. Lambda (same as glue)
+         1. security - Key Management, Security Hub, cloudtrail, * Storage -- Storage Gateway Other
+         1. Route -- DNS
+         1. Billing or admin - Organizations, control tower
       
+   2. Monitoring
+      1. Grafana + Promethesus
+      2. New Relic
+      3. datadog
+      4. pmm
+
+   1. GCP Free
+      1. Cloud storage ; 5GB and traffic -- enough for testing Database
+         1. Database
+            1. Big Query
+            1. pub/sub
+            1. Server (same as ec2 in AWS)
+               1. e2-micro VM instance
+         1. Other
+            1. firestore Programming
+            1. secret manager Server
+            1. Google Compute --- limited resources
+   1. MSSQL free
+   1. Oracle Free
+
     1. Tools
-        1. Confluence
-        1. Claude AI
- 
+       1. Confluence
+       2. AI
+           1. Claude
+           2. Chatgpt
+Other links
+1. Cloud
+   1. Links
+       * Old page: [Free Setup](https://github.com/vikingdata/articles/blob/main/cloud/Free_setup.md)

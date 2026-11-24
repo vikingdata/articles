@@ -149,6 +149,7 @@ with another entry.
 
 from pathlib import Path
 from pykeepass import PyKeePass
+import inspect
 
 secrets = Path.home() / ".keepassxc"
 kp = PyKeePass(secrets / "unattended.kdbx", keyfile=secrets / "unattended.key")
@@ -156,10 +157,10 @@ kp = PyKeePass(secrets / "unattended.kdbx", keyfile=secrets / "unattended.key")
 for item in kp.entries:
     print (f"title    : {item.title}\nusername : {item.username}\npassword : {item.password}\n")
 
-#import inspect
-#for name, value in inspect.getmembers(item):
-#    if not name.startswith("__") and not inspect.ismethod(value):
-#        print(f"{name}: {value}")
+
+    #for name, value in inspect.getmembers(item):
+    #    if not name.startswith("__") and not inspect.ismethod(value):
+    #        print(f"{name}: {value}")
 
 ```
 

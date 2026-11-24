@@ -12,7 +12,8 @@ locally which makes it insecure.
 
 1. [KeePassXC](#k) : Setting up KeePassXC
 2. [Using KeePassXC](#u)
-3. [Read passwords from file)(#f)
+3. [Read passwords from file](#f)
+4. [Show all accounts and passwords in database.](#s)
 
 * * *
 <a name=k></a> KeePassXC
@@ -55,22 +56,28 @@ echo ""
 echo "Password for 'test_account' is '$my_pass'."
 
 ```
-
+***
 <a name=u></a> Using KeePassXC
 -----
 
+***
 ```
 <a name=f></a> Read passwords from file
 -----
 You should have a file "~/keep/new_passwords/tmp" from [Initial Setup of Linux Environment on Windows](https://github.com/vikingdata/articles/blob/main/test_environment/1_Initial_Linux_setup.md).
 Run this script and then delete "new_passwords.tmp" after the verify the accounts and passwords are in the database. 
 
-
 ```
+cd ~/.keepassxc
+```
+
+***
 <a name=s></a> Show all accounts and passwords in database.
 -----
 
 ```
+
+cd ~/.keepassxc
 
 keepassxc-cli ls -R -f -q --no-password -k unattended.key unattended.kdbx | grep -v '/$' |
 while IFS= read -r entry; do

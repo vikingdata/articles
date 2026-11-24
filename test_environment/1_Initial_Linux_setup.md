@@ -19,12 +19,7 @@ NOt DONE YET
    * MongoDB
    * [Oracle for Windows](#o)
    * Percona Cluster
-   * InnOdb Cluster usinf Percona
-4. Setup cloud services
-   * Postgresql and Snowflake
-   * MariaDB
-   * Google : free server instance
-   * 
+   * Innodb Cluster using Percona
 
 * * *
 <a name=w></a>WSL2
@@ -134,6 +129,8 @@ apt-get -y install wsl
 * * *
 <a name=s></a>Install software
 -----
+This is to setup WSL for all installs. 
+
 1. First, setup your to sudo to root without password.
 ```
   # Next time you login it will go to your linux home directory

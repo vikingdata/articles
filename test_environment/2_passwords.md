@@ -52,6 +52,7 @@ my_pass=`keepassxc-cli show --no-password \
 echo ""
 echo "Password for 'test_account' is '$my_pass'."
 
+```
 
 ***
 <a name=f></a> Read passwords from file

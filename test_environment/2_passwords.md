@@ -11,6 +11,7 @@ locally which makes it insecure. Use this in all "test_environment" passwords cr
 1. [KeePassXC](#k) : Setting up KeePassXC
 2. [Read passwords from file](#f)
 3. [Show all accounts and passwords in database.](#s)
+4. [Use Python to show entries](#p)
 
 * * *
 <a name=k></a> KeePassXC
@@ -132,7 +133,7 @@ done
 ```
 
 ***
-<a name=p></a> Use Python to get password
+<a name=p></a> Use Python to show entries
 -----
 
 First install pykeepass

@@ -8,7 +8,12 @@ All resources are FREE. All have limitations for use, but not normally an issue 
    2. Install various programs locally.
 2. [2_passwords.md](2_passwords.md)
    1. Setup KeepassXC and load password from previous software installs.
-3. Install Cloud services and load passwords. 
+3. Install Cloud services and load passwords.
+   1. Database
+      1. Snowflake
+      1. MongoDB
+      1. MariaDB
+      2. cockroachdb
    1. Setup AWS account
       1. Database + Storage
          1. Dynamo
@@ -48,6 +53,7 @@ All resources are FREE. All have limitations for use, but not normally an issue 
        2. AI
            1. Claude
            2. Chatgpt
+
 Other links
 1. Cloud
    1. Links
